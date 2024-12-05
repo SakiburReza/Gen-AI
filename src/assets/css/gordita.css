@@ -1,0 +1,109 @@
+/**
+ * @license
+ *
+ * Font Family: Gordita
+ *
+ * Font Styles:
+ * Gordita Light
+ * Gordita Light Italic
+ * Gordita Regular
+ * Gordita Italic
+ * Gordita Medium
+ * Gordita Medium Italic
+ * Gordita Bold
+ * Gordita Bold Italic
+ * Gordita Black
+ * Gordita Black Italic
+ *
+*/
+
+@font-face {
+    font-family: 'Gordita';
+    src:
+    url('../fonts/Gordita/Gordita-Light.otf') format('opentype');
+    font-weight: 300;
+    font-display: swap;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Gordita';
+    src:
+      url('../fonts/Gordita/Gordita-Light-Italic.otf') format('opentype');
+    font-weight: 300;
+    font-display: swap;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: 'Gordita';
+    src:
+      url('../fonts/Gordita/Gordita-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Gordita';
+    src:
+      url('../fonts/Gordita/Gordita-Italic.otf') format('opentype');
+    font-weight: 400;
+    font-display: swap;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: 'Gordita';
+    src:
+      url('../fonts/Gordita/Gordita-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-display: swap;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Gordita';
+    src:
+      url('../fonts/Gordita/Gordita-Medium-Italic.otf') format('opentype');
+    font-weight: 500;
+    font-display: swap;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: 'Gordita';
+    src:
+      url('../fonts/Gordita/Gordita-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-display: swap;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Gordita';
+    src:
+      url('../fonts/Gordita/Gordita-Bold-Italic.otf') format('opentype');
+    font-weight: 700;
+    font-display: swap;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: 'Gordita';
+    src:
+      url('../fonts/Gordita/Gordita-Black.otf') format('opentype');
+    font-weight: 900;
+    font-display: swap;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Gordita';
+    src:
+      url('../fonts/Gordita/Gordita-Black-Italic.otf') format('opentype');
+    font-weight: 900;
+    font-display: swap;
+    font-style: italic;
+  }
+  
