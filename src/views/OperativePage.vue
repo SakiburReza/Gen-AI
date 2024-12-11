@@ -14,13 +14,13 @@ const faceImage = ref<File | null>(null)
 
 // States
 const description = ref('')
-const images = ref<string[]>([]) // Array to store all images
+const images = ref<{ url: string; type: 'image' | 'video' }[]>([]) // Array to store media
 const loading = ref(false) // Track loading state
 
 // Active functionality state
-const activeFunctionality = ref<'Text to Image' | 'Face Swap' | 'Text to Video' | 'Image to Video'|'Image to Image'>(
-  'Text to Image',
-)
+const activeFunctionality = ref<
+  'Text to Image' | 'Face Swap' | 'Text to Video' | 'Image to Video' | 'Image to Image'
+>('Text to Image')
 
 function changeFunctionality(mode) {
   console.log(mode)
@@ -32,6 +32,12 @@ watch(activeFunctionality, async (newValue) => {
     await fetchImages('face-swap')
   } else if (newValue === 'Text to Image') {
     await fetchImages('text-to-image')
+  } else if (newValue === 'Image to Image') {
+    await fetchImages('image-to-image')
+  } else if (newValue === 'Image to Video') {
+    await fetchImages('image-to-video')
+  } else if (newValue === 'Text to Video') {
+    await fetchImages('text-to-video')
   }
 })
 
@@ -57,7 +63,7 @@ function base64ToBlobUrl(base64: string): string {
   return URL.createObjectURL(blob) // Convert Blob to a URL
 }
 
-// Fetch Images from API
+// Fetch Images / Videos from API
 const fetchImages = async (label: string) => {
   loading.value = true // Start loading
 
@@ -65,20 +71,26 @@ const fetchImages = async (label: string) => {
     const { data: response } = await genAiService.getImages(label)
 
     if (response.status && Array.isArray(response.data)) {
-      // Extract "image" from each object and convert to Blob URLs
-      images.value = response.data.map((item) => base64ToBlobUrl(item.image))
+      // Extract "content" and determine if it's an image or video
+      images.value = response.data.map((item) => {
+        const isVideo = item.content.startsWith('data:video/')
+        return {
+          url: base64ToBlobUrl(item.content),
+          type: isVideo ? 'video' : 'image', // Store type to differentiate later
+        }
+      })
     } else {
-      console.error('Failed to fetch images: Invalid response format')
+      console.error('Failed to fetch media: Invalid response format')
     }
   } catch (error) {
-    console.error('Error fetching images:', error)
+    console.error('Error fetching media:', error)
   } finally {
     loading.value = false // Stop loading
   }
 }
 
 const generateImage = async () => {
-  //Face Swap 
+  //Face Swap
   if (activeFunctionality.value === 'Face Swap') {
     if (!referenceImage.value || !faceImage.value) {
       console.error('Both images are required for face swap')
@@ -122,8 +134,7 @@ const generateImage = async () => {
     } finally {
       loading.value = false // Stop loading
     }
-  }
-  else if (activeFunctionality.value === 'Text to Video') {
+  } else if (activeFunctionality.value === 'Text to Video') {
     // Handle other functionality modes (e.g., Text to Video)
     const payload = { text: description.value }
 
@@ -132,7 +143,7 @@ const generateImage = async () => {
       const { data: response } = await genAiService.textToVideo(payload)
 
       if (response.status) {
-        await fetchImages('text-to-image')
+        await fetchImages('text-to-video')
       } else {
         console.error('Failed to generate Video:', response)
       }
@@ -141,9 +152,8 @@ const generateImage = async () => {
     } finally {
       loading.value = false // Stop loading
     }
-  }
-  else if (activeFunctionality.value === 'Image to Video') {
-     // Handle other functionality modes (e.g., Image to Video)
+  } else if (activeFunctionality.value === 'Image to Video') {
+    // Handle other functionality modes (e.g., Image to Video)
     if (!referenceImage.value) {
       console.error('Images are required for Image to Video')
       return
@@ -158,7 +168,7 @@ const generateImage = async () => {
       const { data: response } = await genAiService.imageToVideo(formData) // Assuming faceSwap is a service function
 
       if (response.status) {
-        await fetchImages('face-swap')
+        await fetchImages('image-to-video')
         console.log('Image to Video successful', response.data)
       } else {
         console.error('Image to Video failed', response)
@@ -168,9 +178,8 @@ const generateImage = async () => {
     } finally {
       loading.value = false // Stop loading
     }
-  }
-  else if (activeFunctionality.value === 'Image to Image') {
-     // Handle other functionality modes (e.g., Image to Image)
+  } else if (activeFunctionality.value === 'Image to Image') {
+    // Handle other functionality modes (e.g., Image to Image)
     if (!referenceImage.value) {
       console.error('Images are required for Image to Image')
       return
@@ -209,19 +218,32 @@ onMounted(() => fetchImages('text-to-image'))
     <div class="flex flex-1 overflow-auto">
       <!-- Left Section: Image Grid -->
       <div class="flex-1 bg-white overflow-y-auto p-10 mt-10 ml-10">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 h-full">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 grid-rows-2 sm:grid-rows-3 md:grid-rows-4">
           <!-- Display spinner while loading images -->
           <div v-if="loading" class="flex justify-center items-center col-span-4">
             <fwb-spinner size="12" />
           </div>
 
-          <!-- Display all images -->
+          <!-- Display all contents -->
           <div
-            v-for="(image, index) in images"
+            v-for="(media, index) in images"
             :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
           >
-            <img :src="image" :alt="'Image ' + index" class="w-full h-full object-contain" />
+            <!-- Render Image -->
+            <img
+              v-if="media.type === 'image'"
+              :src="media.url"
+              :alt="'Media ' + index"
+              class="w-full h-full object-contain"
+            />
+            <!-- Render Video -->
+            <video
+              v-else-if="media.type === 'video'"
+              :src="media.url"
+              controls
+              class="w-full h-full object-contain"
+            ></video>
           </div>
         </div>
       </div>
@@ -229,9 +251,9 @@ onMounted(() => fetchImages('text-to-image'))
       <!-- Right Section: Facility Card and Dynamic Content -->
       <div class="w-full sm:w-[30%] p-6 flex-shrink-0">
         <!-- Facility Card -->
-         <div class="p-6">
-        <fwb-card class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl">
-          <!-- Removed the w-1/4 class, so it takes only the required width -->
+        <div class="p-6">
+          <fwb-card class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl">
+            <!-- Removed the w-1/4 class, so it takes only the required width -->
             <div class="rounded-lg p-5">
               <div class="grid grid-cols-2 gap-4">
                 <!-- Text to Image-->
@@ -243,9 +265,9 @@ onMounted(() => fetchImages('text-to-image'))
                 </div>
 
                 <!-- Image to Video -->
-                <!-- <div
+                <div
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
-                   @click="changeFunctionality('Image to Video')"
+                  @click="changeFunctionality('Image to Video')"
                 >
                   <span class="text-gray-800 font-medium">Image to Video</span>
                   <svg
@@ -277,12 +299,12 @@ onMounted(() => fetchImages('text-to-image'))
                       />
                     </defs>
                   </svg>
-                </div> -->
+                </div>
 
                 <!-- Text to Video -->
-                <!-- <div
+                <div
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
-                   @click="changeFunctionality('Text to Video')"
+                  @click="changeFunctionality('Text to Video')"
                 >
                   <span class="text-gray-800 font-medium">Text to Video</span>
                   <svg
@@ -314,7 +336,7 @@ onMounted(() => fetchImages('text-to-image'))
                       />
                     </defs>
                   </svg>
-                </div> -->
+                </div>
 
                 <!-- Face Swap -->
                 <div
@@ -354,18 +376,17 @@ onMounted(() => fetchImages('text-to-image'))
                     </defs>
                   </svg>
                 </div>
-                 <!-- Image to Image -->
-                 <div
+                <!-- Image to Image -->
+                <div
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
-                   @click="changeFunctionality('Image to Image')"
+                  @click="changeFunctionality('Image to Image')"
                 >
                   <span class="text-gray-800 font-medium">Image to Image</span>
                 </div>
-
               </div>
             </div>
-        </fwb-card>
-      </div>
+          </fwb-card>
+        </div>
         <!-- Dynamic Content Based on Selected Functionality -->
         <div
           v-if="activeFunctionality === 'Text to Image'"
