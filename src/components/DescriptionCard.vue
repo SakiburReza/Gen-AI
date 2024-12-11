@@ -37,7 +37,7 @@ const handleInput = () => {
       <fwb-textarea
         class="w-full h-32 sm:h-40"
         :rows="4"
-        v-model="localDescription"
+        v-model.lazy="localDescription"
         placeholder="Describe an image you want to create"
         @input="handleInput"
       />

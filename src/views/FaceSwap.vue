@@ -5,7 +5,7 @@ import DescriptionCard from '@/components/DescriptionCard.vue'
 import { FwbButton, FwbSpinner } from 'flowbite-vue'
 import { ref, onMounted } from 'vue'
 import genAiService from '@/services/gen-ai'
-import FacilityCard from '@/components/FacilityCard.vue'
+import ImageInputCard from '@/components/ImageInputCard.vue'
 
 const description = ref('')
 const images = ref<string[]>([]) // Array to store all images
@@ -42,7 +42,7 @@ const fetchImages = async () => {
 
     if (response.status && Array.isArray(response.data)) {
       // Extract "image" from each object and convert to Blob URLs
-      images.value = response.data.map((item) => base64ToBlobUrl(item.image))
+      images.value = response.data.map(item => base64ToBlobUrl(item.image))
     } else {
       console.error('Failed to fetch images: Invalid response format')
     }
@@ -58,7 +58,7 @@ const generateImage = async () => {
   const payload = { text: description.value }
 
   try {
-    const { data: response } = await genAiService.textToImage(payload)
+    const { data: response } = await genAiService.getAiGeneratedImage(payload)
 
     if (response.status) {
       // Refetch images to include the newly generated image
@@ -77,7 +77,7 @@ onMounted(fetchImages)
 
 <template>
   <div class="flex flex-col h-screen">
-    <Navbar title="Text to Image" />
+    <Navbar title="Face Swap"/>
 
     <div class="flex flex-1 overflow-auto flex-col sm:flex-row">
       <!-- Image Grid Section -->
@@ -94,15 +94,20 @@ onMounted(fetchImages)
             :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
           >
-            <img :src="image" :alt="'Image ' + index" class="w-full h-full object-contain" />
+            <img
+              :src="image"
+              :alt="'Image ' + index"
+              class="w-full h-full object-contain"
+            />
           </div>
         </div>
       </div>
+
       <!-- Customization and Description Section -->
       <div class="w-full sm:w-1/4 bg-white p-6 space-y-6 flex-shrink-0 mr-20 mt-10">
-        <CustomizationCard />
-        <DescriptionCard @input="(value) => (description = value)" />
-
+        <ImageInputCard title="Insert Reference Image" />
+        <ImageInputCard title="Insert Face Image" />
+        
         <fwb-button @click="generateImage" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
           Zeuxis
         </fwb-button>
