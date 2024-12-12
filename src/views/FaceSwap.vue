@@ -38,11 +38,11 @@ const fetchImages = async () => {
   loading.value = true // Start loading
 
   try {
-    const { data: response } = await genAiService.getImages('text-to-image')
+    const { data: response } = await genAiService.getMedia('text-to-image')
 
     if (response.status && Array.isArray(response.data)) {
       // Extract "image" from each object and convert to Blob URLs
-      images.value = response.data.map(item => base64ToBlobUrl(item.image))
+      images.value = response.data.map((item) => base64ToBlobUrl(item.image))
     } else {
       console.error('Failed to fetch images: Invalid response format')
     }
@@ -77,7 +77,7 @@ onMounted(fetchImages)
 
 <template>
   <div class="flex flex-col h-screen">
-    <Navbar title="Face Swap"/>
+    <Navbar title="Face Swap" />
 
     <div class="flex flex-1 overflow-auto flex-col sm:flex-row">
       <!-- Image Grid Section -->
@@ -94,11 +94,7 @@ onMounted(fetchImages)
             :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
           >
-            <img
-              :src="image"
-              :alt="'Image ' + index"
-              class="w-full h-full object-contain"
-            />
+            <img :src="image" :alt="'Image ' + index" class="w-full h-full object-contain" />
           </div>
         </div>
       </div>
@@ -107,7 +103,7 @@ onMounted(fetchImages)
       <div class="w-full sm:w-1/4 bg-white p-6 space-y-6 flex-shrink-0 mr-20 mt-10">
         <ImageInputCard title="Insert Reference Image" />
         <ImageInputCard title="Insert Face Image" />
-        
+
         <fwb-button @click="generateImage" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
           Zeuxis
         </fwb-button>

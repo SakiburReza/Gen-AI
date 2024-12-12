@@ -38,7 +38,7 @@ const fetchImages = async () => {
   loading.value = true // Start loading
 
   try {
-    const { data: response } = await genAiService.getImages('text-to-image')
+    const { data: response } = await genAiService.getMedia('text-to-image')
 
     if (response.status && Array.isArray(response.data)) {
       // Extract "image" from each object and convert to Blob URLs

@@ -14,7 +14,7 @@ const faceImage = ref<File | null>(null)
 
 // States
 const description = ref('')
-const images = ref<{ url: string; type: 'image' | 'video' }[]>([]) // Array to store media
+const media = ref<{ url: string; type: 'image' | 'video' }[]>([]) // Array to store media
 const loading = ref(false) // Track loading state
 
 // Active functionality state
@@ -29,15 +29,15 @@ function changeFunctionality(mode) {
 // Watcher to trigger fetchImages based on activeFunctionality changes
 watch(activeFunctionality, async (newValue) => {
   if (newValue === 'Face Swap') {
-    await fetchImages('face-swap')
+    await fetchMedia('face-swap')
   } else if (newValue === 'Text to Image') {
-    await fetchImages('text-to-image')
+    await fetchMedia('text-to-image')
   } else if (newValue === 'Image to Image') {
-    await fetchImages('image-to-image')
+    await fetchMedia('image-to-image')
   } else if (newValue === 'Image to Video') {
-    await fetchImages('image-to-video')
+    await fetchMedia('image-to-video')
   } else if (newValue === 'Text to Video') {
-    await fetchImages('text-to-video')
+    await fetchMedia('text-to-video')
   }
 })
 
@@ -64,151 +64,84 @@ function base64ToBlobUrl(base64: string): string {
 }
 
 // Fetch Images / Videos from API
-const fetchImages = async (label: string) => {
-  loading.value = true // Start loading
+const fetchMedia = async (label: string) => {
+  loading.value = true
 
   try {
-    const { data: response } = await genAiService.getImages(label)
+    const { data: response } = await genAiService.getMedia(label)
 
     if (response.status && Array.isArray(response.data)) {
-      // Extract "content" and determine if it's an image or video
-      images.value = response.data.map((item) => {
-        const isVideo = item.content.startsWith('data:video/')
-        return {
+      // Map data with type detection (image/video) for initial load
+      media.value = response.data
+        .map((item) => ({
           url: base64ToBlobUrl(item.content),
-          type: isVideo ? 'video' : 'image', // Store type to differentiate later
-        }
-      })
+          type: item.type || (item.content.includes('video') ? 'video' : 'image'),
+        }))
+        .slice(0, 12) // Ensure maximum of 12 items
     } else {
-      console.error('Failed to fetch media: Invalid response format')
+      console.error('Failed to fetch images: Invalid response format')
     }
   } catch (error) {
-    console.error('Error fetching media:', error)
+    console.error('Error fetching images:', error)
   } finally {
-    loading.value = false // Stop loading
+    loading.value = false
   }
 }
 
 const generateImage = async () => {
-  //Face Swap
-  if (activeFunctionality.value === 'Face Swap') {
-    if (!referenceImage.value || !faceImage.value) {
-      console.error('Both images are required for face swap')
-      return
+  loading.value = true
+
+  try {
+    let response
+
+    if (activeFunctionality.value === 'Face Swap') {
+      // Prepare form data for face swap
+      const formData = new FormData()
+      formData.append('targetImage', referenceImage.value!)
+      formData.append('swapImage', faceImage.value!)
+
+      response = await genAiService.faceSwap(formData)
+    } else if (activeFunctionality.value === 'Text to Image') {
+      response = await genAiService.textToImage({ text: description.value })
+    } else if (activeFunctionality.value === 'Text to Video') {
+      response = await genAiService.textToVideo({ text: description.value })
+    } else if (activeFunctionality.value === 'Image to Video') {
+      const formData = new FormData()
+      formData.append('image', referenceImage.value!)
+      formData.append('prompt', description.value)
+      response = await genAiService.imageToVideo(formData)
+    } else if (activeFunctionality.value === 'Image to Image') {
+      const formData = new FormData()
+      formData.append('image', referenceImage.value!)
+      formData.append('text', description.value)
+      response = await genAiService.imageToImage(formData)
     }
+    if (response?.data?.status) {
+      const base64Content = response.data.data.content
 
-    const formData = new FormData()
-    formData.append('targetImage ', referenceImage.value)
-    formData.append('swapImage ', faceImage.value)
-
-    try {
-      loading.value = true
-      const { data: response } = await genAiService.faceSwap(formData) // Assuming faceSwap is a service function
-
-      if (response.status) {
-        await fetchImages('face-swap')
-        console.log('Face Swap successful', response.data)
-      } else {
-        console.error('Face Swap failed', response)
+      // Determine the media type based on base64 content
+      const mediaType = base64Content.startsWith('data:video/mp4;') ? 'video' : 'image'
+      const newMedia = {
+        url: base64ToBlobUrl(base64Content, mediaType), // Convert base64 to Blob URL
+        type: mediaType,
       }
-    } catch (error) {
-      console.error('Error during face swap:', error)
-    } finally {
-      loading.value = false // Stop loading
+
+      // Prepend the new media and maintain the list size at 12
+      media.value = [newMedia, ...media.value].slice(0, 12)
+    } else {
+      console.error('Failed to generate media:', response)
     }
-  } else if (activeFunctionality.value === 'Text to Image') {
-    // Handle other functionality modes (e.g., Text to Image)
-    const payload = { text: description.value }
-
-    try {
-      loading.value = true
-      const { data: response } = await genAiService.textToImage(payload)
-
-      if (response.status) {
-        await fetchImages('text-to-image')
-      } else {
-        console.error('Failed to generate image:', response)
-      }
-    } catch (error) {
-      console.error('Error generating image:', error)
-    } finally {
-      loading.value = false // Stop loading
-    }
-  } else if (activeFunctionality.value === 'Text to Video') {
-    // Handle other functionality modes (e.g., Text to Video)
-    const payload = { text: description.value }
-
-    try {
-      loading.value = true
-      const { data: response } = await genAiService.textToVideo(payload)
-
-      if (response.status) {
-        await fetchImages('text-to-video')
-      } else {
-        console.error('Failed to generate Video:', response)
-      }
-    } catch (error) {
-      console.error('Error generating Video:', error)
-    } finally {
-      loading.value = false // Stop loading
-    }
-  } else if (activeFunctionality.value === 'Image to Video') {
-    // Handle other functionality modes (e.g., Image to Video)
-    if (!referenceImage.value) {
-      console.error('Images are required for Image to Video')
-      return
-    }
-
-    const formData = new FormData()
-    formData.append('image ', referenceImage.value)
-    formData.append('prompt ', description.value)
-
-    try {
-      loading.value = true
-      const { data: response } = await genAiService.imageToVideo(formData) // Assuming faceSwap is a service function
-
-      if (response.status) {
-        await fetchImages('image-to-video')
-        console.log('Image to Video successful', response.data)
-      } else {
-        console.error('Image to Video failed', response)
-      }
-    } catch (error) {
-      console.error('Error during Image to Video:', error)
-    } finally {
-      loading.value = false // Stop loading
-    }
-  } else if (activeFunctionality.value === 'Image to Image') {
-    // Handle other functionality modes (e.g., Image to Image)
-    if (!referenceImage.value) {
-      console.error('Images are required for Image to Image')
-      return
-    }
-
-    const formData = new FormData()
-    formData.append('image', referenceImage.value)
-    formData.append('text', description.value)
-
-    try {
-      loading.value = true
-      const { data: response } = await genAiService.imageToImage(formData) // Assuming faceSwap is a service function
-
-      if (response.status) {
-        await fetchImages('image-to-image')
-        console.log('Image to Image successful', response.data)
-      } else {
-        console.error('Image to Image failed', response)
-      }
-    } catch (error) {
-      console.error('Error during Image to Image:', error)
-    } finally {
-      loading.value = false // Stop loading
-    }
+  } catch (error) {
+    console.error('Error generating media:', error)
+  } finally {
+    loading.value = false
   }
 }
 
 // Fetch images when the component is mounted
-onMounted(() => fetchImages('text-to-image'))
+onMounted(() => {
+  fetchMedia('text-to-image') // Initial load
+})
 </script>
 
 <template>
@@ -218,7 +151,9 @@ onMounted(() => fetchImages('text-to-image'))
     <div class="flex flex-1 overflow-auto">
       <!-- Left Section: Image Grid -->
       <div class="flex-1 bg-white overflow-y-auto p-10 mt-10 ml-10">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 grid-rows-2 sm:grid-rows-3 md:grid-rows-4">
+        <div
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 grid-rows-2 sm:grid-rows-3 md:grid-rows-4"
+        >
           <!-- Display spinner while loading images -->
           <div v-if="loading" class="flex justify-center items-center col-span-4">
             <fwb-spinner size="12" />
@@ -226,7 +161,7 @@ onMounted(() => fetchImages('text-to-image'))
 
           <!-- Display all contents -->
           <div
-            v-for="(media, index) in images"
+            v-for="(media, index) in media"
             :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
           >
