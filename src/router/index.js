@@ -20,7 +20,17 @@ const router = createRouter({
       path: '/sign-up',
       name: 'signup',
       component: SignUpComponent,
-    }
+    },
+    // {
+    //   path: '/profile',
+    //   name: 'profile',
+    //   component: ProfilePage,
+    // },
+    // {
+    //   path: '/subscription',
+    //   name: 'subscription',
+    //   component: SubscriptionPage,
+    // }
    
   ],
 })
