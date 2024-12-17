@@ -6,7 +6,7 @@ import { defineProps } from 'vue';
 const props = defineProps({
   title: {
     type: String,
-    default: 'Zeuxis', // Default title
+    default: ' ', // Default title
   },
 });
 </script>
