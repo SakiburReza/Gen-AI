@@ -52,7 +52,7 @@ watch(activeMode, async (newValue) => {
     await fetchMedia('text-to-video')
   } else if (newValue === 'image') {
     await fetchMedia('text-to-image')
-  } 
+  }
 })
 
 // Utility: Convert Base64 to Blob URL
@@ -197,8 +197,8 @@ onMounted(() => {
         </div>
         <!-- Floating Buttons Section -->
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex">
-            <!-- Image Button -->
-            <button
+          <!-- Image Button -->
+          <button
             @click="setActive('image')"
             :class="[
               'flex items-center px-4 py-2 rounded-lg font-medium transition',
@@ -229,7 +229,8 @@ onMounted(() => {
             <div class="rounded-lg p-5">
               <div class="grid grid-cols-2 gap-4">
                 <!-- Text to Image-->
-              <div v-if="activeMode === 'image'"
+                <div
+                  v-if="activeMode === 'image'"
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
                   @click="changeFunctionality('Text to Image')"
                 >
@@ -237,7 +238,8 @@ onMounted(() => {
                 </div>
 
                 <!-- Image to Video -->
-                <div v-if="activeMode === 'video'"
+                <div
+                  v-if="activeMode === 'video'"
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
                   @click="changeFunctionality('Image to Video')"
                 >
@@ -274,7 +276,8 @@ onMounted(() => {
                 </div>
 
                 <!-- Text to Video -->
-                <div v-if="activeMode === 'video'"
+                <div
+                  v-if="activeMode === 'video'"
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
                   @click="changeFunctionality('Text to Video')"
                 >
@@ -349,7 +352,8 @@ onMounted(() => {
                   </svg>
                 </div>
                 <!-- Image to Image -->
-                <div v-if="activeMode === 'image'"
+                <div
+                  v-if="activeMode === 'image'"
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
                   @click="changeFunctionality('Image to Image')"
                 >
@@ -377,18 +381,27 @@ onMounted(() => {
 
         <div
           v-if="activeFunctionality === 'Face Swap'"
-          class="bg-white p-6 space-y-6 flex-shrink-0"
+          class="bg-white p-6 space-y-6 flex-shrink-0 relative"
         >
-          <!-- Modify ImageInputCard to bind the selected images -->
-          <ImageInputCard
-            title="Insert Reference Image"
-            @input="(file) => (referenceImage = file)"
-          />
-          <ImageInputCard title="Insert Face Image" @input="(file) => (faceImage = file)" />
-
+          <!-- Image Cards with Stacked Positioning -->
+          <div class="relative w-full h-80 mb-50">
+            <!-- First Image Card (Back) -->
+            <div class="absolute top-0 left-0 lg:w-80 sm:w-60 lg:h-60 sm:h-40 bg-gray-200 rounded-lg shadow-lg z-1">
+              <ImageInputCard
+                title="Insert Reference Image"
+                @input="(file) => (referenceImage = file)"
+              />
+            </div>
+            <!-- Second Image Card (Front) -->
+            <div class="absolute top-30 left-50 w-80 h-60 bg-white rounded-lg shadow-2xl">
+              <ImageInputCard title="Insert Face Image" @input="(file) => (faceImage = file)" />
+            </div>
+          </div>
+          <CustomizationCard/>
+          <!-- Generate Button -->
           <fwb-button
             @click="generateImage"
-            class="w-full sm:w-64 md:w-80 lg:w-full"
+            class="w-full sm:w-64 md:w-80 lg:w-full mt-8"
             color="default"
           >
             Zeuxis
