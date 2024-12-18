@@ -55,7 +55,7 @@ const plans = [
       <SubscriptionCard v-for="(feature, index) in plans" :key="index" :data="feature" :isStyle="index % 2 == 0" />
     </div>
       <!-- Back Button -->
-    <div class="w-full md:w-1/4 md:w-1/3 mx-auto pb-10 pl-50 pr-40">
+    <div class="w-full md:w-1/3 mx-auto pb-10 pl-50 pr-40">
   <button class="w-full bg-blue-600 text-white text-sm py-3 rounded-md hover:bg-gray-800">
     TAKE ME BACK I WANT TO CREATE
   </button>
