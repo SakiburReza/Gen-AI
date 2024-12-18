@@ -17,7 +17,7 @@ const description = ref('')
 const media = ref<{ url: string; type: 'image' | 'video' }[]>([]) // Array to store media
 const loading = ref(false) // Track loading state
 
-const activeMode = ref('video')
+const activeMode = ref('image')
 
 function setActive(button) {
   activeMode.value = button
@@ -45,6 +45,14 @@ watch(activeFunctionality, async (newValue) => {
   } else if (newValue === 'Text to Video') {
     await fetchMedia('text-to-video')
   }
+})
+
+watch(activeMode, async (newValue) => {
+  if (newValue === 'video') {
+    await fetchMedia('text-to-video')
+  } else if (newValue === 'image') {
+    await fetchMedia('text-to-image')
+  } 
 })
 
 // Utility: Convert Base64 to Blob URL
@@ -189,6 +197,16 @@ onMounted(() => {
         </div>
         <!-- Floating Buttons Section -->
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex">
+            <!-- Image Button -->
+            <button
+            @click="setActive('image')"
+            :class="[
+              'flex items-center px-4 py-2 rounded-lg font-medium transition',
+              activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            ]"
+          >
+            <span class="material-icons">image</span>
+          </button>
           <!-- Video Button -->
           <button
             @click="setActive('video')"
@@ -198,17 +216,6 @@ onMounted(() => {
             ]"
           >
             <span class="material-icons">videocam</span>
-          </button>
-
-          <!-- Image Button -->
-          <button
-            @click="setActive('image')"
-            :class="[
-              'flex items-center px-4 py-2 rounded-lg font-medium transition',
-              activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-            ]"
-          >
-            <span class="material-icons">image</span>
           </button>
         </div>
       </div>
