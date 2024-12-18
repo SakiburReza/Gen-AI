@@ -55,7 +55,7 @@ export default {
         white: '#FFFFFF',
         black: '#1C2434',
         parrot:'#2CE126',
-        red: '#FB5454',
+        red: '#E12629',
         'black-2': '#010101',
         body: '#64748B',
         bodydark: '#AEB7C0',

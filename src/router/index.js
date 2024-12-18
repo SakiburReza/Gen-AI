@@ -3,6 +3,7 @@ import OperativePage from '@/views/OperativePage.vue'
 import SignInComponent from '@/components/SignInComponent.vue'
 import SignUpComponent from '@/components/SignUpComponent.vue'
 import SubscriptionPage from '@/views/SubscriptionPage.vue'import PhotoDetailsCard from '@/components/PhotoDetailsCard.vue'
+import ProfilePage from '@/views/ProfilePage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,11 +23,11 @@ const router = createRouter({
       name: 'signup',
       component: SignUpComponent,
     },
-    // {
-    //   path: '/profile',
-    //   name: 'profile',
-    //   component: ProfilePage,
-    // },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfilePage,
+    },
     {
       path: '/subscription',
       name: 'subscription',
@@ -37,7 +38,7 @@ const router = createRouter({
       name: 's',
       component: PhotoDetailsCard,
     },
-   
+
   ],
 })
 
