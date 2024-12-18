@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import OperativePage from '@/views/OperativePage.vue'
 import SignInComponent from '@/components/SignInComponent.vue'
 import SignUpComponent from '@/components/SignUpComponent.vue'
+import FloatingButton from '@/components/FloatingButton.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,11 @@ const router = createRouter({
     //   name: 'subscription',
     //   component: SubscriptionPage,
     // }
+    {
+      path: '/s',
+      name: 's',
+      component: FloatingButton,
+    },
    
   ],
 })

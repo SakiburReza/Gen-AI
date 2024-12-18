@@ -17,6 +17,12 @@ const description = ref('')
 const media = ref<{ url: string; type: 'image' | 'video' }[]>([]) // Array to store media
 const loading = ref(false) // Track loading state
 
+const activeMode = ref('video')
+
+function setActive(button) {
+  activeMode.value = button
+}
+
 // Active functionality state
 const activeFunctionality = ref<
   'Text to Image' | 'Face Swap' | 'Text to Video' | 'Image to Video' | 'Image to Image'
@@ -181,6 +187,30 @@ onMounted(() => {
             ></video>
           </div>
         </div>
+        <!-- Floating Buttons Section -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex">
+          <!-- Video Button -->
+          <button
+            @click="setActive('video')"
+            :class="[
+              'flex items-center px-4 py-2 rounded-lg font-medium transition',
+              activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            ]"
+          >
+            <span class="material-icons">videocam</span>
+          </button>
+
+          <!-- Image Button -->
+          <button
+            @click="setActive('image')"
+            :class="[
+              'flex items-center px-4 py-2 rounded-lg font-medium transition',
+              activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            ]"
+          >
+            <span class="material-icons">image</span>
+          </button>
+        </div>
       </div>
 
       <!-- Right Section: Facility Card and Dynamic Content -->
@@ -192,7 +222,7 @@ onMounted(() => {
             <div class="rounded-lg p-5">
               <div class="grid grid-cols-2 gap-4">
                 <!-- Text to Image-->
-                <div
+              <div v-if="activeMode === 'image'"
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
                   @click="changeFunctionality('Text to Image')"
                 >
@@ -200,7 +230,7 @@ onMounted(() => {
                 </div>
 
                 <!-- Image to Video -->
-                <div
+                <div v-if="activeMode === 'video'"
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
                   @click="changeFunctionality('Image to Video')"
                 >
@@ -237,7 +267,7 @@ onMounted(() => {
                 </div>
 
                 <!-- Text to Video -->
-                <div
+                <div v-if="activeMode === 'video'"
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
                   @click="changeFunctionality('Text to Video')"
                 >
@@ -312,7 +342,7 @@ onMounted(() => {
                   </svg>
                 </div>
                 <!-- Image to Image -->
-                <div
+                <div v-if="activeMode === 'image'"
                   class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
                   @click="changeFunctionality('Image to Image')"
                 >
@@ -408,5 +438,5 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Optional Custom Styles */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 </style>
