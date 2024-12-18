@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import OperativePage from '@/views/OperativePage.vue'
 import SignInComponent from '@/components/SignInComponent.vue'
 import SignUpComponent from '@/components/SignUpComponent.vue'
-
+import SubscriptionPage from '@/views/SubscriptionPage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,11 +26,11 @@ const router = createRouter({
     //   name: 'profile',
     //   component: ProfilePage,
     // },
-    // {
-    //   path: '/subscription',
-    //   name: 'subscription',
-    //   component: SubscriptionPage,
-    // }
+    {
+      path: '/subscription',
+      name: 'subscription',
+      component: SubscriptionPage,
+    }
    
   ],
 })
