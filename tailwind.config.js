@@ -26,7 +26,7 @@ export default {
         // -----------
         primary: '#01AAC1',
         secondary: '#D8F4F8',
-        danger: '#D94242',
+        tertiary: '#DEDEDE',
         coal: {
           200: '#adadad',
           500: '#454546',
