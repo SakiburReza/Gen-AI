@@ -33,7 +33,7 @@ const router = createRouter({
       path: '/subscription',
       name: 'subscription',
       component: SubscriptionPage,
-    }
+    },
     {
       path: '/s',
       name: 's',
