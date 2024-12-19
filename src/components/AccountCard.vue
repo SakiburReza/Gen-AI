@@ -69,13 +69,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-a {
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-a:hover {
-  transform: scale(1);
-}
-</style>
