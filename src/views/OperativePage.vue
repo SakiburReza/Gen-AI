@@ -133,6 +133,8 @@ const generateAiContent = async () => {
       const formData = new FormData()
       formData.append('image', referenceImage.value!)
       formData.append('text', description.value)
+      formData.append('image_size',selectedRatio.value)
+      formData.append('num_images',selectedOutput.value.toString())
       response = await genAiService.imageToImage(formData)
     }
 
@@ -183,62 +185,60 @@ onMounted(() => {
     <Navbar />
 
     <div class="flex flex-1 overflow-auto">
-      <!-- Left Section: Image Grid -->
-      <div class="flex-1 bg-white overflow-y-auto p-10 mt-10 ml-10">
-        <div
-          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 grid-rows-2 sm:grid-rows-3 md:grid-rows-4"
-        >
-          <!-- Display spinner while loading images -->
-          <div v-if="loading" class="flex justify-center items-center col-span-4">
-            <fwb-spinner size="12" />
-          </div>
+  <!-- Left Section: Image Grid -->
+<div class="flex-1 bg-white overflow-hidden p-6">
+  <div
+    class="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 auto-rows-fr"
+    style="max-height: calc(100vh - 80px);"
+  >
+    <!-- Display spinner while loading images -->
+    <div v-if="loading" class="flex justify-center items-center col-span-full">
+      <fwb-spinner size="12" />
+    </div>
 
-          <!-- Display all contents -->
-          <div
-            v-for="(media, index) in media"
-            :key="index"
-            class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
-          >
-            <!-- Render Image -->
-            <img
-              v-if="media.type === 'image'"
-              :src="media.url"
-              :alt="'Media ' + index"
-              class="w-full h-full object-contain"
-            />
-            <!-- Render Video -->
-            <video
-              v-else-if="media.type === 'video'"
-              :src="media.url"
-              controls
-              class="w-full h-full object-contain"
-            ></video>
-          </div>
-        </div>
-        <!-- Floating Buttons Section -->
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex">
-          <!-- Image Button -->
-          <button
-            @click="setActive('image')"
-            :class="[
-              'flex items-center px-4 py-2 rounded-lg font-medium transition',
-              activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-            ]"
-          >
-            <span class="material-icons">image</span>
-          </button>
-          <!-- Video Button -->
-          <button
-            @click="setActive('video')"
-            :class="[
-              'flex items-center px-4 py-2 rounded-lg font-medium transition',
-              activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-            ]"
-          >
-            <span class="material-icons">videocam</span>
-          </button>
-        </div>
-      </div>
+    <!-- Display all contents -->
+    <div
+      v-for="(media, index) in media"
+      :key="index"
+      class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
+    >
+      <!-- Render Image -->
+      <img
+        v-if="media.type === 'image'"
+        :src="media.url"
+        :alt="'Media ' + index"
+        class="w-full h-full object-contain"
+      />
+      <!-- Render Video -->
+      <video
+        v-else-if="media.type === 'video'"
+        :src="media.url"
+        controls
+        class="w-full h-full object-contain"
+      ></video>
+    </div>
+  </div>
+  <!-- Floating Buttons Section -->
+  <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex">
+    <!-- Image Button -->
+    <button
+      @click="setActive('image')"
+      :class="[ 'flex items-center px-4 py-2 rounded-lg font-medium transition',
+      activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500', ]"
+    >
+      <span class="material-icons">image</span>
+    </button>
+    <!-- Video Button -->
+    <button
+      @click="setActive('video')"
+      :class="[ 'flex items-center px-4 py-2 rounded-lg font-medium transition',
+      activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500', ]"
+    >
+      <span class="material-icons">videocam</span>
+    </button>
+  </div>
+</div>
+
 
       <!-- Right Section: Facility Card and Dynamic Content -->
       <div class="w-full sm:w-[30%] p-6 flex-shrink-0">
@@ -484,6 +484,10 @@ onMounted(() => {
           v-if="activeFunctionality === 'Image to Image'"
           class="bg-white p-6 space-y-6 flex-shrink-0"
         >
+        <CustomizationCard
+            @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)"
+          />
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" />
           <DescriptionCard @input="(value) => (description = value)" />
