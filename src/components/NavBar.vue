@@ -5,7 +5,6 @@ import { FwbBadge } from 'flowbite-vue'
 </script>
 
 <template>
-  <fwb-navbar class="flex justify-center items-center">
     <div class="flex flex-col items-center justify-center">
       <!-- Logo -->
       <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="w-30 h-10" />
@@ -44,5 +43,4 @@ import { FwbBadge } from 'flowbite-vue'
         <p class="ml-2">1378</p>
       </fwb-badge>
     </div>
-  </fwb-navbar>
 </template>

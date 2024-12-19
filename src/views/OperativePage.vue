@@ -55,6 +55,9 @@ watch(activeMode, async (newValue) => {
   }
 })
 
+const selectedRatio = ref('Landscape')
+const selectedOutput = ref(1)
+
 // Utility: Convert Base64 to Blob URL
 function base64ToBlobUrl(base64: string): string {
   const arr = base64.split(',')
@@ -102,21 +105,23 @@ const fetchMedia = async (label: string) => {
   }
 }
 
-const generateImage = async () => {
+const generateAiContent = async () => {
   loading.value = true
-
   try {
     let response
 
+    // Handling different types of functionalities
     if (activeFunctionality.value === 'Face Swap') {
-      // Prepare form data for face swap
       const formData = new FormData()
       formData.append('targetImage', referenceImage.value!)
       formData.append('swapImage', faceImage.value!)
-
       response = await genAiService.faceSwap(formData)
     } else if (activeFunctionality.value === 'Text to Image') {
-      response = await genAiService.textToImage({ text: description.value })
+      response = await genAiService.textToImage({
+        text: description.value,
+        image_size: selectedRatio.value,
+        num_images: selectedOutput.value
+      })
     } else if (activeFunctionality.value === 'Text to Video') {
       response = await genAiService.textToVideo({ text: description.value })
     } else if (activeFunctionality.value === 'Image to Video') {
@@ -130,18 +135,32 @@ const generateImage = async () => {
       formData.append('text', description.value)
       response = await genAiService.imageToImage(formData)
     }
+
     if (response?.data?.status) {
-      const base64Content = response.data.data.content
+      const contents = response.data.data.content
 
-      // Determine the media type based on base64 content
-      const mediaType = base64Content.startsWith('data:video/mp4;') ? 'video' : 'image'
-      const newMedia = {
-        url: base64ToBlobUrl(base64Content, mediaType), // Convert base64 to Blob URL
-        type: mediaType,
+      // Check if 'contents' is an array and iterate over each content
+      if (Array.isArray(contents)) {
+        contents.forEach((base64Content) => {
+          // Determine the media type based on base64 content
+          const mediaType = base64Content.startsWith('data:video/mp4;') ? 'video' : 'image'
+          const newMedia = {
+            url: base64ToBlobUrl(base64Content, mediaType), // Convert base64 to Blob URL
+            type: mediaType,
+          }
+
+          // Prepend the new media and maintain the list size at 12
+          media.value = [newMedia, ...media.value].slice(0, 12)
+        })
+      } else {
+        // Handle the case where the content is a single item (fallback for non-array responses)
+        const mediaType = contents.startsWith('data:video/mp4;') ? 'video' : 'image'
+        const newMedia = {
+          url: base64ToBlobUrl(contents, mediaType),
+          type: mediaType,
+        }
+        media.value = [newMedia, ...media.value].slice(0, 12)
       }
-
-      // Prepend the new media and maintain the list size at 12
-      media.value = [newMedia, ...media.value].slice(0, 12)
     } else {
       console.error('Failed to generate media:', response)
     }
@@ -151,6 +170,7 @@ const generateImage = async () => {
     loading.value = false
   }
 }
+
 
 // Fetch images when the component is mounted
 onMounted(() => {
@@ -231,7 +251,10 @@ onMounted(() => {
                 <!-- Text to Image-->
                 <div
                   v-if="activeMode === 'image'"
-                  class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
+                  :class="[
+                    'flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2',
+                    activeFunctionality === 'Text to Image' ? 'border border-blue-600' : '',
+                  ]"
                   @click="changeFunctionality('Text to Image')"
                 >
                   <span class="text-gray-900 font-medium">Text to Image</span>
@@ -240,7 +263,10 @@ onMounted(() => {
                 <!-- Image to Video -->
                 <div
                   v-if="activeMode === 'video'"
-                  class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
+                  :class="[
+                    'flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2',
+                    activeFunctionality === 'Image to Video' ? 'border border-blue-600' : '',
+                  ]"
                   @click="changeFunctionality('Image to Video')"
                 >
                   <span class="text-gray-800 font-medium">Image to Video</span>
@@ -278,7 +304,10 @@ onMounted(() => {
                 <!-- Text to Video -->
                 <div
                   v-if="activeMode === 'video'"
-                  class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
+                  :class="[
+                    'flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2',
+                    activeFunctionality === 'Text to Video' ? 'border border-blue-600' : '',
+                  ]"
                   @click="changeFunctionality('Text to Video')"
                 >
                   <span class="text-gray-800 font-medium">Text to Video</span>
@@ -315,8 +344,12 @@ onMounted(() => {
 
                 <!-- Face Swap -->
                 <div
+                  v-if="activeMode === 'video'"
                   @click="changeFunctionality('Face Swap')"
-                  class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
+                  :class="[
+                    'flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2',
+                    activeFunctionality === 'Face Swap' ? 'border border-blue-600' : '',
+                  ]"
                 >
                   <span class="text-gray-900 font-medium">Face Swap</span>
                   <svg
@@ -354,7 +387,10 @@ onMounted(() => {
                 <!-- Image to Image -->
                 <div
                   v-if="activeMode === 'image'"
-                  class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2"
+                  :class="[
+                    'flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2',
+                    activeFunctionality === 'Image to Image' ? 'border border-blue-600' : '',
+                  ]"
                   @click="changeFunctionality('Image to Image')"
                 >
                   <span class="text-gray-800 font-medium">Image to Image</span>
@@ -368,10 +404,13 @@ onMounted(() => {
           v-if="activeFunctionality === 'Text to Image'"
           class="bg-white p-6 space-y-6 flex-shrink-0"
         >
-          <CustomizationCard />
+          <CustomizationCard
+            @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)"
+          />
           <DescriptionCard @input="(value) => (description = value)" />
           <fwb-button
-            @click="generateImage"
+            @click="generateAiContent"
             class="w-full sm:w-64 md:w-80 lg:w-full"
             color="default"
           >
@@ -386,7 +425,9 @@ onMounted(() => {
           <!-- Image Cards with Stacked Positioning -->
           <div class="relative w-full h-80 mb-50">
             <!-- First Image Card (Back) -->
-            <div class="absolute top-0 left-0 lg:w-80 sm:w-60 lg:h-60 sm:h-40 bg-gray-200 rounded-lg shadow-lg z-1">
+            <div
+              class="absolute top-0 left-0 lg:w-80 sm:w-60 lg:h-60 sm:h-40 bg-gray-200 rounded-lg shadow-lg z-1"
+            >
               <ImageInputCard
                 title="Insert Reference Image"
                 @input="(file) => (referenceImage = file)"
@@ -397,10 +438,13 @@ onMounted(() => {
               <ImageInputCard title="Insert Face Image" @input="(file) => (faceImage = file)" />
             </div>
           </div>
-          <CustomizationCard/>
+          <CustomizationCard
+            @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)"
+          />
           <!-- Generate Button -->
           <fwb-button
-            @click="generateImage"
+            @click="generateAiContent"
             class="w-full sm:w-64 md:w-80 lg:w-full mt-8"
             color="default"
           >
@@ -413,7 +457,7 @@ onMounted(() => {
         >
           <DescriptionCard @input="(value) => (description = value)" />
           <fwb-button
-            @click="generateImage"
+            @click="generateAiContent"
             class="w-full sm:w-64 md:w-80 lg:w-full"
             color="default"
           >
@@ -429,7 +473,7 @@ onMounted(() => {
           <DescriptionCard @input="(value) => (description = value)" />
 
           <fwb-button
-            @click="generateImage"
+            @click="generateAiContent"
             class="w-full sm:w-64 md:w-80 lg:w-full"
             color="default"
           >
@@ -445,7 +489,7 @@ onMounted(() => {
           <DescriptionCard @input="(value) => (description = value)" />
 
           <fwb-button
-            @click="generateImage"
+            @click="generateAiContent"
             class="w-full sm:w-64 md:w-80 lg:w-full"
             color="default"
           >

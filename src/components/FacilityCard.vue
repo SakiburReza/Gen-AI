@@ -1,15 +1,11 @@
-<script setup>
-
-</script>
-
+<script setup></script>
 
 <template>
   <div class="flex items-center justify-center bg-gray-100">
     <div class="bg-white rounded-lg shadow p-6 w-96">
       <div class="grid grid-cols-2 gap-4">
         <!-- Text to Image-->
-        <div 
-        class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2">
+        <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2">
           <span class="text-gray-800 font-medium">Text to Image</span>
         </div>
         <!-- Image to Video -->
@@ -83,8 +79,7 @@
         </div> -->
 
         <!-- Face Swap -->
-        <div 
-        class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2">
+        <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2">
           <span class="text-gray-800 font-medium">Face Swap</span>
           <svg
             width="23"
