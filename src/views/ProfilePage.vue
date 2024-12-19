@@ -1,8 +1,8 @@
 <template>
   <Navbar />
-  <div class="min-h-screen bg-white md:grid md:grid-cols-2 items-center">
+  <div class="bg-white md:grid md:grid-cols-2 items-center">
     <!-- First Column -->
-    <div class="flex flex-col items-end justify-center bg-white w-full p-6">
+    <div class="flex flex-col items-end justify-center bg-white p-6">
       <div class="bg-gray-100 rounded-lg shadow-md p-6 w-full max-w-lg">
         <h2 class="text-2xl font-bold mb-6 text-black-2 text-left md:text-left">
           Manage Profile
