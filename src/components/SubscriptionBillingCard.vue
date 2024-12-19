@@ -1,0 +1,109 @@
+<script setup lang="ts">
+const props = defineProps({
+    cardOne: {
+        type: Object,
+        default: () => ({
+            title: "Next Up Creator",
+            credit: "2000",
+            date: "Jan.11, 2025",
+        }),
+    },
+    cardTwo: {
+        type: Object,
+        default: () => ({
+            credit: "20"
+        })
+    },
+    cardThree: {
+        type: Object,
+        default: () => ({
+            price: "$20.00/month",
+            billingDate: "Jan. 11, 2025"
+        })
+    }
+});
+
+</script>
+<template>
+    <div class="p-8 max-w-6xl mx-auto">
+        <div class="flex items-center justify-between">
+            <h1 class="text-3xl font-bold mb-4">Billing</h1>
+            <button @click="() => $router.push('/')" class="mb-5 bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
+                TAKE ME BACK I WANT TO CREATE
+            </button>
+        </div>
+        <!--  Subscription Section -->
+        <div class="bg-lightWhite p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl text-lightGray mb-4">Your Subscription</h2>
+
+
+
+            <!-- Cards Container -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- Next Up Creator Card -->
+                <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-1">{{ cardOne.title }}</h3>
+                        <p class="text-gray-500 mb-4">Monthly</p>
+                        <p class="font-bold text-md flex items-center">
+                            <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
+                            {{ cardOne.credit }}
+                        </p>
+                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs text-lightGray mt-2">Plan renews on {{ cardOne.date }}</p>
+                            <button class="text-sm bg-gray text-white px-4 py-2 rounded-2xl hover:bg-gray whitespace-nowrap">
+                                Change Plan
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Purchased Credits Card -->
+                <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-1">Purchased</h3>
+                        <p class="text-gray-500 mb-4">Credits</p>
+                        <p class="font-bold text-md flex items-center">
+                            <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
+                            {{ cardTwo.credit }}
+                        </p>
+                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm text-lightGray mt-1">Expires 2 years from date purchased</p>
+                            <button class="text-sm bg-gray text-white px-4 py-2 rounded-2xl hover:bg-gray whitespace-nowrap">
+                                Buy More
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Invoices Card -->
+                <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-1">Invoices</h3>
+
+                       <br><br><br>
+                        <div class="border-solid lg:border-dashed">
+                            <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <p class="text-lightGray mb-2 text-sm">Price</p>
+                            <p class="font-bold text-lg">{{ cardThree.price }}</p>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <p class="text-lightGray mb-2 text-sm">Billing date </p>
+                            <p class="font-bold text-md">{{ cardThree.billingDate }}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped></style>
