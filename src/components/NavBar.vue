@@ -50,7 +50,7 @@ function toggleAccountCard() {
         </defs>
       </svg>
       <p class="ml-2">1378</p>
-      <AccountCard v-if="showAccountCard" @close="toggleAccountCard" />
     </fwb-badge>
+      <AccountCard class="relative -top-5 left-50 right-0" v-if="showAccountCard" @close="toggleAccountCard" />
   </div>
 </template>
