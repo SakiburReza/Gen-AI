@@ -1,25 +1,17 @@
 <script setup>
 import { FwbNavbar } from 'flowbite-vue'
 import { FwbBadge } from 'flowbite-vue'
-import { defineProps } from 'vue';
-// Props
-const props = defineProps({
-  title: {
-    type: String,
-    default: ' ', // Default title
-  },
-});
+
 </script>
 
 <template>
-  <fwb-navbar>
-    <fwb-badge size="xl" class="bg-white border text-col-black">{{ title }}</fwb-badge>
-    <div class="flex flex-col items-center">
+  <fwb-navbar class="flex justify-center items-center">
+    <div class="flex flex-col items-center justify-center">
       <!-- Logo -->
       <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="w-30 h-10" />
       <!-- Text -->
       <fwb-badge class="bg-white text-black" size="xl">
-       <p class="mr-2"> Account  </p>
+        <p class="mr-2">Account</p>
         <svg
           width="20"
           height="23"
@@ -52,8 +44,5 @@ const props = defineProps({
         <p class="ml-2">1378</p>
       </fwb-badge>
     </div>
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 18V16H21V18H3ZM3 13V11H21V13H3ZM3 8V6H21V8H3Z" fill="black" />
-    </svg>
   </fwb-navbar>
 </template>

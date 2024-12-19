@@ -160,7 +160,7 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col h-screen">
-    <Navbar :title="activeFunctionality" />
+    <Navbar />
 
     <div class="flex flex-1 overflow-auto">
       <!-- Left Section: Image Grid -->
