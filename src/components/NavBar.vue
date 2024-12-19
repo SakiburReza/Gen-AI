@@ -1,7 +1,8 @@
 <script setup>
-import { FwbNavbar } from 'flowbite-vue'
-import { FwbBadge } from 'flowbite-vue'
-import { defineProps } from 'vue';
+import { FwbNavbar, FwbBadge } from 'flowbite-vue';
+import { ref } from 'vue';
+import AccountCard from '@/components/AccountCard.vue'
+
 // Props
 const props = defineProps({
   title: {
@@ -9,6 +10,14 @@ const props = defineProps({
     default: ' ', // Default title
   },
 });
+
+
+const showAccountCard = ref(false);
+
+
+function toggleAccountCard() {
+  showAccountCard.value = !showAccountCard.value;
+}
 </script>
 
 <template>
@@ -18,7 +27,7 @@ const props = defineProps({
       <!-- Logo -->
       <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="w-30 h-10" />
       <!-- Text -->
-      <fwb-badge class="bg-white text-black" size="xl">
+      <fwb-badge class="bg-white text-black" size="xl" @click="toggleAccountCard">
        <p class="mr-2"> Account  </p>
         <svg
           width="20"
@@ -56,4 +65,5 @@ const props = defineProps({
       <path d="M3 18V16H21V18H3ZM3 13V11H21V13H3ZM3 8V6H21V8H3Z" fill="black" />
     </svg>
   </fwb-navbar>
+  <AccountCard v-if="showAccountCard" @close="toggleAccountCard" />
 </template>
