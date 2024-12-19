@@ -28,7 +28,9 @@ const props = defineProps({
     <div class="p-8 max-w-6xl mx-auto">
         <div class="flex items-center justify-between">
             <h1 class="text-3xl font-bold mb-4">Billing</h1>
-            <button @click="() => $router.push('/')" class="mb-5 bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
+            <!-- Button Hidden on Mobile and Shown on Medium Screens and Above -->
+            <button @click="() => $router.push('/')"
+                class="hidden md:inline-block mb-5 bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
                 TAKE ME BACK I WANT TO CREATE
             </button>
         </div>
@@ -45,15 +47,21 @@ const props = defineProps({
                 <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
                     <div>
                         <h3 class="text-xl font-semibold mb-1">{{ cardOne.title }}</h3>
-                        <p class="text-gray-500 mb-4">Monthly</p>
-                        <p class="font-bold text-md flex items-center">
-                            <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
-                            {{ cardOne.credit }}
-                        </p>
-                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+                        <div class="flex items-center justify-between">
+                            <p class="text-lightGray mb-4 text-sm">Monthly</p>
+                            <p class="text-md flex items-center text-lightGray">
+                                <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2 ">
+                                {{ cardOne.credit }}
+                            </p>
+                        </div>
+                        <br>
+                        <div class="border-solid lg:border-dashed">
+                            <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+                        </div> <br>
                         <div class="flex items-center justify-between">
                             <p class="text-xs text-lightGray mt-2">Plan renews on {{ cardOne.date }}</p>
-                            <button class="text-sm bg-gray text-white px-4 py-2 rounded-2xl hover:bg-gray whitespace-nowrap">
+                            <button
+                                class="text-sm bg-gray text-white px-4 py-2 rounded-2xl hover:bg-gray whitespace-nowrap">
                                 Change Plan
                             </button>
                         </div>
@@ -66,15 +74,19 @@ const props = defineProps({
                 <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
                     <div>
                         <h3 class="text-xl font-semibold mb-1">Purchased</h3>
-                        <p class="text-gray-500 mb-4">Credits</p>
-                        <p class="font-bold text-md flex items-center">
-                            <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
-                            {{ cardTwo.credit }}
-                        </p>
+                        <div class="flex items-center justify-between">
+                            <p class="text-lightGray mb-4 text-sm">Credits</p>
+                            <p class="text-md flex items-center text-lightGray">
+                                <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
+                                {{ cardTwo.credit }}
+                            </p>
+                        </div>
+                        <br>
                         <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
                         <div class="flex items-center justify-between">
                             <p class="text-sm text-lightGray mt-1">Expires 2 years from date purchased</p>
-                            <button class="text-sm bg-gray text-white px-4 py-2 rounded-2xl hover:bg-gray whitespace-nowrap">
+                            <button
+                                class="text-sm bg-gray text-white px-4 py-2 rounded-2xl hover:bg-gray whitespace-nowrap">
                                 Buy More
                             </button>
                         </div>
@@ -87,10 +99,9 @@ const props = defineProps({
                     <div>
                         <h3 class="text-xl font-semibold mb-1">Invoices</h3>
 
-                       <br><br><br>
-                        <div class="border-solid lg:border-dashed">
-                            <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
-                        </div>
+                        <br><br><br>
+                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+
                         <div class="flex items-center justify-between">
                             <p class="text-lightGray mb-2 text-sm">Price</p>
                             <p class="font-bold text-lg">{{ cardThree.price }}</p>
@@ -103,6 +114,12 @@ const props = defineProps({
                 </div>
 
             </div>
+        </div>
+        <!-- Button Shown Only on Mobile -->
+        <div class="md:hidden mt-6">
+            <button @click="() => $router.push('/')" class="w-full bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
+                TAKE ME BACK I WANT TO CREATE
+            </button>
         </div>
     </div>
 </template>

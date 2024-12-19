@@ -24,10 +24,10 @@ const props = defineProps({
 </script>
 <template>
 
-  <div class="flex flex-col lg:flex-row gap-6">
+  <div class="flex flex-col lg:flex-row gap-6 ">
     <!-- First Card Component -->
     <div :class="{
-      'max-w-xs border rounded-3xl p-6 relative justify-start': true,
+       'w-full max-w-xs border rounded-3xl p-6 relative justify-start mx-auto': true,
       'border-blue-600': isStyle,
       'bg-blue-600': !isStyle
     }">
@@ -62,7 +62,9 @@ const props = defineProps({
           data.price }}</span>
       </div>
 
-      <p>-----------------------------------------------</p>
+      <div class="border-solid lg:border-dashed">
+        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - -  </p>
+      </div>
       <br>
 
       <!-- CTA Button -->
