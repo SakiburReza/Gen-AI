@@ -26,7 +26,7 @@ export default {
         // -----------
         primary: '#01AAC1',
         secondary: '#D8F4F8',
-        danger: '#D94242',
+        tertiary: '#DEDEDE',
         coal: {
           200: '#adadad',
           500: '#454546',
@@ -54,6 +54,7 @@ export default {
         transparent: 'transparent',
         white: '#FFFFFF',
         black: '#1C2434',
+        parrot:'#2CE126',
         red: '#E12629',
         'black-2': '#010101',
         body: '#64748B',
