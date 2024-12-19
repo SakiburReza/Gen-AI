@@ -1,6 +1,15 @@
 <script setup>
 
 import { FwbBadge } from 'flowbite-vue'
+import AccountCard from '@/components/AccountCard.vue'
+import { ref } from 'vue'
+
+const showAccountCard = ref(false);
+
+
+function toggleAccountCard() {
+  showAccountCard.value = !showAccountCard.value;
+}
 
 </script>
 
@@ -9,7 +18,7 @@ import { FwbBadge } from 'flowbite-vue'
     <!-- Logo -->
     <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="w-30 h-10" />
     <!-- Text -->
-    <fwb-badge class="bg-white text-black" size="xl">
+    <fwb-badge class="bg-white text-black" size="xl" @click="toggleAccountCard">
       <p class="mr-2">Account</p>
       <svg
         width="20"
@@ -41,6 +50,7 @@ import { FwbBadge } from 'flowbite-vue'
         </defs>
       </svg>
       <p class="ml-2">1378</p>
+      <AccountCard v-if="showAccountCard" @close="toggleAccountCard" />
     </fwb-badge>
   </div>
 </template>

@@ -6,6 +6,7 @@ import SubscriptionPage from '@/views/SubscriptionPage.vue'
 import PhotoDetailsCard from '@/components/PhotoDetailsCard.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
+import InvoiceCard from '@/components/InvoiceCard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,12 @@ const router = createRouter({
       path: '/accountcard',
       name: 'accountcard',
       component: AccountCard,
+    },
+
+    {
+      path: '/invoicecard',
+      name: 'invoicecard',
+      component: InvoiceCard
     }
 
   ],
