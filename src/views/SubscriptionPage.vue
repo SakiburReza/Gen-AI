@@ -46,11 +46,13 @@ const plans = [
 <template>
   <div class="flex flex-col h-screen">
     <Navbar :title="activeFunctionality" />
-    <div class="pt-15 pl-15">
-      <h2 class="pl-80 text-3xl font-bold">
-        Subscription
-      </h2>
-    </div>
+    <div class="pt-6 sm:pt-10 lg:pt-15 flex justify-center mb-5">
+  <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-center">
+    Subscription
+  </h2>
+</div>
+
+
     <div class="flex flex-col lg:flex-row gap-40 items-center justify-center flex-1 pl-15">
       <SubscriptionCard v-for="(feature, index) in plans" :key="index" :data="feature" :isStyle="index % 2 == 0" />
     </div>
