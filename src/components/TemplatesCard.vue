@@ -24,7 +24,7 @@
           <video
             :src="video.src"
             controls
-            class="w-full h-[500px] object-contain rounded-lg shadow-md"
+            class="w-full h-[400px] object-contain rounded-lg shadow-md"
           ></video>
 
           <!-- Overlay for Title and Description -->
