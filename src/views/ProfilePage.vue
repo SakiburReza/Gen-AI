@@ -198,7 +198,7 @@ export default {
       }
     },
     goBack() {
-      this.$router.go(-1); // Go back one route
+      window.location.href = 'http://localhost:3000/';
     },
   },
 };
