@@ -7,6 +7,7 @@ import PhotoDetailsCard from '@/components/PhotoDetailsCard.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
 import InvoiceCard from '@/components/InvoiceCard.vue'
+import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +36,11 @@ const router = createRouter({
       path: '/subscription',
       name: 'subscription',
       component: SubscriptionPage,
+    },
+    {
+      path: '/subscription-billing',
+      name: 'subscriptionbilling',
+      component: SubscriptionBillingCard,
     },
     {
       path: '/s',

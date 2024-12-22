@@ -21,17 +21,14 @@ const props = defineProps({
     default: true,
   }
 });
-
-
 </script>
 <template>
 
-  <div class="flex flex-col lg:flex-row gap-6">
+  <div class="flex flex-col lg:flex-row gap-6 ">
     <!-- First Card Component -->
     <div :class="{
-      'max-w-xs border rounded-3xl p-6 relative justify-start': true,
-      'border-blue-500': isStyle,
-      'border-red-500': !isStyle,
+       'w-full max-w-xs border rounded-3xl p-6 relative justify-start mx-auto': true,
+      'border-blue-600': isStyle,
       'bg-blue-600': !isStyle
     }">
       <h2 class="text-2xl font-bold mb-4" :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">{{
@@ -41,11 +38,11 @@ const props = defineProps({
 
       <div class="space-y-1 mb-6 ">
         <label v-for="(feature, index) in data.featureList" :key="index"
-          class="flex items-center space-x-2 cursor-not-allowed">
-
-          <input v-if="feature.isActive" type="radio" disabled checked
-            class="h-4 w-4 cursor-not-allowed disabled:bg-blue-600" />
-          <input v-else type="radio" disabled checked class="h-4 w-4 cursor-not-allowed disabled:bg-red" />
+          class="flex items-center space-x-2">
+          <img v-if="feature.isActive && !isStyle" class="h-4 w-4 " src="/images/icon/radio_button_checked.svg" alt="">
+          <img v-else-if="feature.isActive && isStyle" class="h-4 w-4 " src="/images/icon/radio_button_checked_blue.svg"
+            alt="">
+          <img v-else class="h-4 w-4 " src="/images/icon/radio_button_checked_red.svg" alt="">
           <span :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">
             {{ feature.name }}
           </span>
@@ -65,13 +62,16 @@ const props = defineProps({
           data.price }}</span>
       </div>
 
-      <p>-----------------------------------------------</p>
+      <div class="border-solid lg:border-dashed">
+        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - -  </p>
+      </div>
       <br>
 
       <!-- CTA Button -->
       <button class="w-full bg-black text-white text-sm py-3 rounded-lg hover:bg-gray-800">
         Zeux It Now
       </button>
+
     </div>
 
   </div>
