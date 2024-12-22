@@ -55,13 +55,13 @@
         <!-- Navigation Buttons (Right) -->
         <div class="flex space-x-4 ml-6">
           <button
-            class="text-black text-4xl focus:outline-none"
+            class="text-black text-5xl focus:outline-none"
             @click="scrollLeft"
           >
             &lt;
           </button>
           <button
-            class="text-black text-4xl focus:outline-none"
+            class="text-black text-5xl focus:outline-none"
             @click="scrollRight"
           >
             &gt;
