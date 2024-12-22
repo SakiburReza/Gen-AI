@@ -36,7 +36,7 @@ const props = defineProps({
         </div>
         <!--  Subscription Section -->
         <div class="bg-lightWhite p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl text-lightGray mb-4">Your Subscription</h2>
+            <h2 class="text-2xl text-silverChalice mb-4">Your Subscription</h2>
 
 
 
@@ -48,8 +48,8 @@ const props = defineProps({
                     <div>
                         <h3 class="text-xl font-semibold mb-1">{{ cardOne.title }}</h3>
                         <div class="flex items-center justify-between">
-                            <p class="text-lightGray mb-4 text-sm">Monthly</p>
-                            <p class="text-md flex items-center text-lightGray">
+                            <p class="text-silverChalice mb-4 text-sm">Monthly</p>
+                            <p class="text-md flex items-center text-silverChalice">
                                 <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2 ">
                                 {{ cardOne.credit }}
                             </p>
@@ -59,9 +59,9 @@ const props = defineProps({
                             <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
                         </div> <br>
                         <div class="flex items-center justify-between">
-                            <p class="text-xs text-lightGray mt-2">Plan renews on {{ cardOne.date }}</p>
+                            <p class="text-xs text-silverChalice mt-2">Plan renews on {{ cardOne.date }}</p>
                             <button
-                                class="text-sm bg-gray text-white px-4 py-2 rounded-2xl hover:bg-gray whitespace-nowrap">
+                                class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
                                 Change Plan
                             </button>
                         </div>
@@ -75,18 +75,19 @@ const props = defineProps({
                     <div>
                         <h3 class="text-xl font-semibold mb-1">Purchased</h3>
                         <div class="flex items-center justify-between">
-                            <p class="text-lightGray mb-4 text-sm">Credits</p>
-                            <p class="text-md flex items-center text-lightGray">
+                            <p class="text-silverChalice mb-4 text-sm">Credits</p>
+                            <p class="text-md flex items-center text-silverChalice">
                                 <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
                                 {{ cardTwo.credit }}
                             </p>
                         </div>
                         <br>
                         <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+                        <br>
                         <div class="flex items-center justify-between">
-                            <p class="text-sm text-lightGray mt-1">Expires 2 years from date purchased</p>
+                            <p class="text-xs text-silverChalice mt-1">Expires 2 years from date purchased</p> 
                             <button
-                                class="text-sm bg-gray text-white px-4 py-2 rounded-2xl hover:bg-gray whitespace-nowrap">
+                                class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
                                 Buy More
                             </button>
                         </div>
@@ -103,11 +104,11 @@ const props = defineProps({
                         <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
 
                         <div class="flex items-center justify-between">
-                            <p class="text-lightGray mb-2 text-sm">Price</p>
+                            <p class="text-silverChalice mb-2 text-sm">Price</p>
                             <p class="font-bold text-lg">{{ cardThree.price }}</p>
                         </div>
                         <div class="flex items-center justify-between">
-                            <p class="text-lightGray mb-2 text-sm">Billing date </p>
+                            <p class="text-silverChalice mb-2 text-sm">Billing date </p>
                             <p class="font-bold text-md">{{ cardThree.billingDate }}</p>
                         </div>
                     </div>

@@ -38,7 +38,7 @@ const props = defineProps({
 
       <div class="space-y-1 mb-6 ">
         <label v-for="(feature, index) in data.featureList" :key="index"
-          class="flex items-center space-x-2 cursor-not-allowed">
+          class="flex items-center space-x-2">
           <img v-if="feature.isActive && !isStyle" class="h-4 w-4 " src="/images/icon/radio_button_checked.svg" alt="">
           <img v-else-if="feature.isActive && isStyle" class="h-4 w-4 " src="/images/icon/radio_button_checked_blue.svg"
             alt="">

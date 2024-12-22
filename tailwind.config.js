@@ -37,7 +37,14 @@ export default {
         blue:{
           600:'#3526E1',
         },
+        
+        // Color Code added by Abeer 22/12/2024
         lightGray: '#EAEAEA',
+        silverChalice: '#A2A2A2',
+        ravenBlack: '#3D3D3D',
+        // Color Code added by Abeer 22/12/2024
+
+
         lightBg:'#FBF9FA',
         cardBg: 'var(--cardBg)',
         bodyColor: 'var(--bodyColor)',
