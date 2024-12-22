@@ -141,6 +141,7 @@ const generateAiContent = async () => {
     }
 
     if (response?.data?.status) {
+      toastStore.success(response?.data.message)
       const contents = response.data.data.content
       // Check if 'contents' is an array and iterate over each content
       if (Array.isArray(contents)) {
@@ -184,11 +185,11 @@ onMounted(() => {
   <div class="flex flex-col h-screen">
     <Navbar />
 
-    <div class="flex flex-1 overflow-auto">
+    <div class="flex flex-col sm:flex-row sm:flex-wrap w-full overflow-auto">
       <!-- Left Section: Image Grid -->
       <div class="flex-1 bg-white overflow-hidden p-6">
         <div
-          class="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 auto-rows-fr"
+          class="grid grid-cols-2 gap-4 md:grid-cols-4 auto-rows-fr"
           style="max-height: calc(100vh - 80px)"
         >
           <!-- Display spinner while loading images -->
@@ -207,14 +208,14 @@ onMounted(() => {
               v-if="media.type === 'image'"
               :src="media.url"
               :alt="'Media ' + index"
-              class="w-full h-full object-contain"
+              class="w-full h-full object-contain max-w-full"
             />
             <!-- Render Video -->
             <video
               v-else-if="media.type === 'video'"
               :src="media.url"
               controls
-              class="w-full h-full object-contain"
+              class="w-full h-full object-contain max-w-full"
             ></video>
           </div>
         </div>
@@ -535,6 +536,20 @@ onMounted(() => {
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" />
           <DescriptionCard @input="(value) => (description = value)" />
 
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
+            Zeuxis
+          </fwb-button>
+        </div>
+        <div
+          v-if="activeFunctionality === 'Templates'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
+          <!-- Modify ImageInputCard to bind the selected images -->
+          <ImageInputCard title="Face Image" @input="(file) => (referenceImage = file)" />
           <fwb-button
             @click="generateAiContent"
             class="w-full sm:w-64 md:w-80 lg:w-full"
