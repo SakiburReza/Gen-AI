@@ -7,6 +7,9 @@ import ImageInputCard from '@/components/ImageInputCard.vue'
 import { FwbButton, FwbSpinner, FwbCard } from 'flowbite-vue'
 import { ref, onMounted, watch } from 'vue'
 import genAiService from '@/services/gen-ai'
+import { useToastStore } from '@/stores/toast'
+
+const toastStore = useToastStore()
 
 // States to store images from the ImageInputCard components
 const referenceImage = ref<File | null>(null)
@@ -25,7 +28,7 @@ function setActive(button) {
 
 // Active functionality state
 const activeFunctionality = ref<
-  'Text to Image' | 'Face Swap' | 'Text to Video' | 'Image to Video' | 'Image to Image'
+  'Text to Image' | 'Face Swap' | 'Text to Video' | 'Image to Video' | 'Image to Image'|'Templates'
 >('Text to Image')
 
 function changeFunctionality(mode) {
@@ -83,7 +86,6 @@ function base64ToBlobUrl(base64: string): string {
 // Fetch Images / Videos from API
 const fetchMedia = async (label: string) => {
   loading.value = true
-
   try {
     const { data: response } = await genAiService.getMedia(label)
 
@@ -120,7 +122,7 @@ const generateAiContent = async () => {
       response = await genAiService.textToImage({
         text: description.value,
         image_size: selectedRatio.value,
-        num_images: selectedOutput.value
+        num_images: selectedOutput.value,
       })
     } else if (activeFunctionality.value === 'Text to Video') {
       response = await genAiService.textToVideo({ text: description.value })
@@ -133,14 +135,14 @@ const generateAiContent = async () => {
       const formData = new FormData()
       formData.append('image', referenceImage.value!)
       formData.append('text', description.value)
-      formData.append('image_size',selectedRatio.value)
-      formData.append('num_images',selectedOutput.value.toString())
+      formData.append('image_size', selectedRatio.value)
+      formData.append('num_images', selectedOutput.value.toString())
       response = await genAiService.imageToImage(formData)
     }
 
     if (response?.data?.status) {
+      toastStore.success(response?.data.message)
       const contents = response.data.data.content
-
       // Check if 'contents' is an array and iterate over each content
       if (Array.isArray(contents)) {
         contents.forEach((base64Content) => {
@@ -173,7 +175,6 @@ const generateAiContent = async () => {
   }
 }
 
-
 // Fetch images when the component is mounted
 onMounted(() => {
   fetchMedia('text-to-image') // Initial load
@@ -184,61 +185,64 @@ onMounted(() => {
   <div class="flex flex-col h-screen">
     <Navbar />
 
-    <div class="flex flex-1 overflow-auto">
-  <!-- Left Section: Image Grid -->
-<div class="flex-1 bg-white overflow-hidden p-6">
-  <div
-    class="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 auto-rows-fr"
-    style="max-height: calc(100vh - 80px);"
-  >
-    <!-- Display spinner while loading images -->
-    <div v-if="loading" class="flex justify-center items-center col-span-full">
-      <fwb-spinner size="12" />
-    </div>
+    <div class="flex flex-col sm:flex-row sm:flex-wrap w-full overflow-auto">
+      <!-- Left Section: Image Grid -->
+      <div class="flex-1 bg-white overflow-hidden p-6">
+        <div
+          class="grid grid-cols-2 gap-4 md:grid-cols-4 auto-rows-fr"
+          style="max-height: calc(100vh - 80px)"
+        >
+          <!-- Display spinner while loading images -->
+          <div v-if="loading" class="flex justify-center items-center col-span-full">
+            <fwb-spinner size="12" />
+          </div>
 
-    <!-- Display all contents -->
-    <div
-      v-for="(media, index) in media"
-      :key="index"
-      class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
-    >
-      <!-- Render Image -->
-      <img
-        v-if="media.type === 'image'"
-        :src="media.url"
-        :alt="'Media ' + index"
-        class="w-full h-full object-contain"
-      />
-      <!-- Render Video -->
-      <video
-        v-else-if="media.type === 'video'"
-        :src="media.url"
-        controls
-        class="w-full h-full object-contain"
-      ></video>
-    </div>
-  </div>
-  <!-- Floating Buttons Section -->
-  <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex">
-    <!-- Image Button -->
-    <button
-      @click="setActive('image')"
-      :class="[ 'flex items-center px-4 py-2 rounded-lg font-medium transition',
-      activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500', ]"
-    >
-      <span class="material-icons">image</span>
-    </button>
-    <!-- Video Button -->
-    <button
-      @click="setActive('video')"
-      :class="[ 'flex items-center px-4 py-2 rounded-lg font-medium transition',
-      activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500', ]"
-    >
-      <span class="material-icons">videocam</span>
-    </button>
-  </div>
-</div>
-
+          <!-- Display all contents -->
+          <div
+            v-for="(media, index) in media"
+            :key="index"
+            class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
+          >
+            <!-- Render Image -->
+            <img
+              v-if="media.type === 'image'"
+              :src="media.url"
+              :alt="'Media ' + index"
+              class="w-full h-full object-contain max-w-full"
+            />
+            <!-- Render Video -->
+            <video
+              v-else-if="media.type === 'video'"
+              :src="media.url"
+              controls
+              class="w-full h-full object-contain max-w-full"
+            ></video>
+          </div>
+        </div>
+        <!-- Floating Buttons Section -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex">
+          <!-- Image Button -->
+          <button
+            @click="setActive('image')"
+            :class="[
+              'flex items-center px-4 py-2 rounded-lg font-medium transition',
+              activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            ]"
+          >
+            <span class="material-icons">image</span>
+          </button>
+          <!-- Video Button -->
+          <button
+            @click="setActive('video')"
+            :class="[
+              'flex items-center px-4 py-2 rounded-lg font-medium transition',
+              activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            ]"
+          >
+            <span class="material-icons">videocam</span>
+          </button>
+        </div>
+      </div>
 
       <!-- Right Section: Facility Card and Dynamic Content -->
       <div class="w-full sm:w-[30%] p-6 flex-shrink-0">
@@ -384,6 +388,46 @@ onMounted(() => {
                     </defs>
                   </svg>
                 </div>
+                <!-- Templates -->
+                <div
+                  v-if="activeMode === 'video'"
+                  :class="[
+                    'flex items-center space-x-2 cursor-pointer hover:bg-gray-200 rounded-md p-2',
+                    activeFunctionality === 'Templates' ? 'border border-blue-600' : '',
+                  ]"
+                  @click="changeFunctionality('Templates')"
+                >
+                  <span class="text-gray-800 font-medium">Templates</span>
+                  <svg
+                    width="27"
+                    height="26"
+                    viewBox="0 0 27 26"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                  >
+                    <rect width="27" height="26" fill="url(#pattern0_107_1451)" />
+                    <defs>
+                      <pattern
+                        id="pattern0_107_1451"
+                        patternContentUnits="objectBoundingBox"
+                        width="1"
+                        height="1"
+                      >
+                        <use
+                          xlink:href="#image0_107_1451"
+                          transform="matrix(0.00591716 0 0 0.00614474 0 -0.000796541)"
+                        />
+                      </pattern>
+                      <image
+                        id="image0_107_1451"
+                        width="169"
+                        height="163"
+                        xlink:href="data:image/png;base64,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"
+                      />
+                    </defs>
+                  </svg>
+                </div>
                 <!-- Image to Image -->
                 <div
                   v-if="activeMode === 'image'"
@@ -484,7 +528,7 @@ onMounted(() => {
           v-if="activeFunctionality === 'Image to Image'"
           class="bg-white p-6 space-y-6 flex-shrink-0"
         >
-        <CustomizationCard
+          <CustomizationCard
             @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectOutput="(output) => (selectedOutput = output)"
           />
@@ -492,6 +536,20 @@ onMounted(() => {
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" />
           <DescriptionCard @input="(value) => (description = value)" />
 
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
+            Zeuxis
+          </fwb-button>
+        </div>
+        <div
+          v-if="activeFunctionality === 'Templates'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
+          <!-- Modify ImageInputCard to bind the selected images -->
+          <ImageInputCard title="Face Image" @input="(file) => (referenceImage = file)" />
           <fwb-button
             @click="generateAiContent"
             class="w-full sm:w-64 md:w-80 lg:w-full"

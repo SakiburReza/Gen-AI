@@ -3,12 +3,12 @@ import OperativePage from '@/views/OperativePage.vue'
 import SignInComponent from '@/components/SignInComponent.vue'
 import SignUpComponent from '@/components/SignUpComponent.vue'
 import SubscriptionPage from '@/views/SubscriptionPage.vue'
-import PhotoDetailsCard from '@/components/PhotoDetailsCard.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
 import InvoiceCard from '@/components/InvoiceCard.vue'
 import VideoTampletCard from '@/components/TemplatesCard.vue'
 
+import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,11 +39,10 @@ const router = createRouter({
       component: SubscriptionPage,
     },
     {
-      path: '/s',
-      name: 's',
-      component: PhotoDetailsCard,
+      path: '/subscription-billing',
+      name: 'subscriptionbilling',
+      component: SubscriptionBillingCard,
     },
-
     {
       path: '/accountcard',
       name: 'accountcard',

@@ -47,23 +47,25 @@ const plans = [
   <div class="flex flex-col h-screen">
     <Navbar :title="activeFunctionality" />
     <div class="pt-6 sm:pt-10 lg:pt-15 flex justify-center mb-5">
-  <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-center">
-    Subscription
-  </h2>
-</div>
+      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-center">
+        Subscription
+      </h2>
+    </div>
 
 
-    <div class="flex flex-col lg:flex-row gap-40 items-center justify-center flex-1 pl-15">
+    <div class="flex flex-col lg:flex-row gap-40 items-center justify-center flex-1 pl-5">
       <SubscriptionCard v-for="(feature, index) in plans" :key="index" :data="feature" :isStyle="index % 2 == 0" />
     </div>
-      <!-- Back Button -->
-    <div class="w-full md:w-1/3 mx-auto pb-10 pl-50 pr-40">
-  <button class="w-full bg-blue-600 text-white text-sm py-3 rounded-md hover:bg-gray-800">
-    TAKE ME BACK I WANT TO CREATE
-  </button>
-  <br>
-</div>
-</div>
+    <!-- Back Button -->
+    <div class="w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
+      <button @click="() => $router.push('/')"
+        class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block">
+        TAKE ME BACK I WANT TO CREATE
+      </button>
+    </div>
+
+
+  </div>
 
 </template>
 
