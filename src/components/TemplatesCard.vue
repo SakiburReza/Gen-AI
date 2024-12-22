@@ -47,7 +47,7 @@
             class="w-3 h-3 rounded-full transition-transform duration-300"
             :class="{
               'bg-black-2 scale-150 font-bold': index === activeIndex,
-              'bg-gray-400': index !== activeIndex,
+              'bg-black-2': index !== activeIndex,
             }"
           ></span>
         </div>
