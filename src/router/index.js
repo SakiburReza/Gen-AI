@@ -7,7 +7,7 @@ import PhotoDetailsCard from '@/components/PhotoDetailsCard.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
 import InvoiceCard from '@/components/InvoiceCard.vue'
-import VideoTampletCard from '@/components/TemplatesCard.vue'
+import TemplatesCard from '@/components/TemplatesCard.vue'
 
 
 const router = createRouter({
@@ -59,7 +59,7 @@ const router = createRouter({
     {
       path: '/template',
       name: 'template',
-      component: VideoTampletCard
+      component: TemplatesCard
     }
 
   ],
