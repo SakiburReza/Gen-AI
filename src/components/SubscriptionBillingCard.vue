@@ -143,7 +143,7 @@ const images = "/public/images/carImage.png"
         </div>
         <br>
         <div @click="openModal">
-            <img :src="images" alt="Doggy">
+            <img :src="images" alt="Images">
         </div>
         <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="images" />
     </div>
