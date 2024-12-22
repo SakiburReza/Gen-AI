@@ -37,7 +37,14 @@ export default {
         blue:{
           600:'#3526E1',
         },
+        
+        // Color Code added by Abeer 22/12/2024
         lightGray: '#EAEAEA',
+        silverChalice: '#A2A2A2',
+        ravenBlack: '#3D3D3D',
+        // Color Code added by Abeer 22/12/2024
+
+
         lightBg:'#FBF9FA',
         cardBg: 'var(--cardBg)',
         bodyColor: 'var(--bodyColor)',
@@ -95,7 +102,8 @@ export default {
         'title-md2': ['26px', '30px'],
         'title-sm': ['20px', '26px'],
         'title-sm2': ['22px', '28px'],
-        'title-xsm': ['18px', '24px']
+        'title-xsm': ['18px', '24px'],
+        'title-2xsm': ['12px', '18px']
       },
       spacing: {
         2: '0.75rem',
