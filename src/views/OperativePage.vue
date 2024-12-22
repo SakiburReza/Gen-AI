@@ -8,8 +8,23 @@ import { FwbButton, FwbSpinner, FwbCard } from 'flowbite-vue'
 import { ref, onMounted, watch } from 'vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
+import ShowModalForImage from '@/components/ShowModalForImage.vue'
 
 const toastStore = useToastStore()
+
+const selectedImage = ref(null); // Selected image or video
+const showModal = ref(false); // Modal visibility
+
+// Functions to open/close modal
+const openImageModal = (mediaItem) => {
+  selectedImage.value = mediaItem
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+  selectedImage.value = null
+}
 
 // States to store images from the ImageInputCard components
 const referenceImage = ref<File | null>(null)
@@ -201,6 +216,7 @@ onMounted(() => {
             v-for="(media, index) in media"
             :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
+                 @click="openImageModal(media)"
           >
             <!-- Render Image -->
             <img
@@ -505,6 +521,8 @@ onMounted(() => {
         </div>
       </div>
     </div>
+ <!-- Modal Component -->
+ <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="selectedImage" />
   </div>
 </template>
 
