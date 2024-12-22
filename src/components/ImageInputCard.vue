@@ -51,16 +51,16 @@ const handleDragOver = (event) => {
 </script>
 
 <template>
-  <fwb-card href="#" class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl">
-    <div class="p-5">
+  <fwb-card href="#" class="max-w-sm mx-auto sm:max-w-md md:max-w-lg">
+    <div class="p-4">
       <!-- Title -->
-      <h6 class="mb-2 text-xl font-bold tracking-tight text-black dark:text-white sm:text-2xl">
+      <h6 class="mb-2 text-lg font-bold tracking-tight text-black dark:text-white sm:text-xl">
         {{ title }}
       </h6>
 
       <!-- Image Input Block -->
       <div
-        class="relative block w-full text-sm border border-gray-300 rounded-lg h-64 sm:h-72 cursor-pointer bg-gray-100 flex items-center justify-center overflow-hidden"
+        class="relative block w-full text-sm border border-gray-300 rounded-lg h-48 sm:h-56 cursor-pointer bg-gray-100 flex items-center justify-center overflow-hidden"
         @dragover="handleDragOver"
         @drop="handleDrop"
       >

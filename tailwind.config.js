@@ -101,6 +101,8 @@ export default {
         'title-2xsm': ['12px', '18px']
       },
       spacing: {
+        2: '0.75rem',
+        3.5: '0.875rem',
         4.5: '1.125rem',
         5.5: '1.375rem',
         6.5: '1.625rem',

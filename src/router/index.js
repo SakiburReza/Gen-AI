@@ -5,6 +5,8 @@ import SignUpComponent from '@/components/SignUpComponent.vue'
 import SubscriptionPage from '@/views/SubscriptionPage.vue'
 import PhotoDetailsCard from '@/components/PhotoDetailsCard.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
+import AccountCard from '@/components/AccountCard.vue'
+import InvoiceCard from '@/components/InvoiceCard.vue'
 import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
 
 const router = createRouter({
@@ -45,6 +47,18 @@ const router = createRouter({
       name: 's',
       component: PhotoDetailsCard,
     },
+
+    {
+      path: '/accountcard',
+      name: 'accountcard',
+      component: AccountCard,
+    },
+
+    {
+      path: '/invoicecard',
+      name: 'invoicecard',
+      component: InvoiceCard
+    }
 
   ],
 })
