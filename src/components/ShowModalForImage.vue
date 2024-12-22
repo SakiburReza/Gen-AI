@@ -5,7 +5,8 @@ const props = defineProps({
     isOpen: {
         type: Boolean,
         required: true,
-    }
+    },
+    image: String,
 });
 const emit = defineEmits(["close"]);
 
@@ -13,27 +14,26 @@ const emit = defineEmits(["close"]);
 const closeModal = () => {
     emit("close");
 };
+
+
 </script>
 <template>
     <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" v-if="isOpen">
-        <div class="bg-tertiary rounded-lg shadow-lg w-full max-w-5xl h-[50vh] p-6 relative">
+        <div class="bg-tertiary rounded-lg shadow-lg w-full max-w-5xl p-6 relative">
             <!-- Close Button -->
             <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
                 ✕
             </button>
 
             <!-- Two Column Layout -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
-                <!-- Image Section -->
+            <div class="grid md:grid-cols-3 gap-6 h-full">
                 <!-- Image Section -->
                 <div class="h-full md:h-auto md:col-span-1 w-full">
                     <div class="w-full h-full">
-                        <img src="/images/carImage.png" alt="Generated Image"
-                            class="rounded-lg w-full h-full object-fill" />
+                        <img :src="image" alt="Generated Image"
+                            class="rounded-lg w-full h-full object-contain" />
                     </div>
                 </div>
-
-
                 <!-- Details Section -->
                 <div class="md:col-span-2 bg-white shadow-lg rounded-lg p-15">
                     <!-- Title -->
@@ -62,9 +62,9 @@ const closeModal = () => {
 
                     <!-- Download Link -->
                     <div class="mt-5 text-center">
-                        <a href="#"
-                            class="flex items-start justify-start text-black text-xs px-1 font-semibold py-3">
-                            <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-5 h-5 mr-1.5">
+                        <a href="#" class="flex items-start justify-start text-black text-xs px-1 font-semibold py-3">
+                            <img src="/public/images/icon/downloadButton.svg" alt="Download Icon"
+                                class="w-5 h-5 mr-1.5">
                             DOWNLOAD
                         </a>
                     </div>
