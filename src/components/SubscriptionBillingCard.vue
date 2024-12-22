@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import ShowModalForImage from './ShowModalForImage.vue';
+
 const props = defineProps({
     cardOne: {
         type: Object,
@@ -22,6 +25,19 @@ const props = defineProps({
         })
     }
 });
+
+
+// State for modal visibility
+const showModal = ref(false);
+
+// Functions to open/close modal
+const openModal = () => {
+    showModal.value = true;
+};
+
+const closeModal = () => {
+    showModal.value = false;
+};
 
 </script>
 <template>
@@ -85,7 +101,7 @@ const props = defineProps({
                         <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
                         <br>
                         <div class="flex items-center justify-between">
-                            <p class="text-xs text-silverChalice mt-1">Expires 2 years from date purchased</p> 
+                            <p class="text-xs text-silverChalice mt-1">Expires 2 years from date purchased</p>
                             <button
                                 class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
                                 Buy More
@@ -122,6 +138,13 @@ const props = defineProps({
                 TAKE ME BACK I WANT TO CREATE
             </button>
         </div>
+        <br>
+        <div @click="openModal">
+            <img src="/images/carImage.png" alt="Doggy">
+        </div>
+        <ShowModalForImage :isOpen="showModal" @close="closeModal" />
     </div>
+
+
 </template>
 <style scoped></style>
