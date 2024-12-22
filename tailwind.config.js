@@ -37,9 +37,7 @@ export default {
         blue:{
           600:'#3526E1',
         },
-        lightWhite:'#FAFAFA',
-        lightGray: '#A2A2A2',
-        gray:'#3D3D3D',
+        lightGray: '#EAEAEA',
         lightBg:'#FBF9FA',
         cardBg: 'var(--cardBg)',
         bodyColor: 'var(--bodyColor)',
