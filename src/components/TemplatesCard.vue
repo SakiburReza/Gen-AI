@@ -2,7 +2,7 @@
   <div class="w-full max-w-screen-lg mx-auto p-4 bg-white">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-lg font-bold">Templates</h2>
+      <h2 class="text-lg font-bold">Video Carousel</h2>
       <span>{{ videos.length }} total</span>
     </div>
 
@@ -16,15 +16,16 @@
         style="max-width: 100%;"
       >
         <div
-          v-for="(video, index) in videos"
+          v-for="(video, index) in visibleVideos"
           :key="index"
-          class="flex-shrink-0 w-full sm:w-[45%] md:w-[30%] relative"
+          class="flex-shrink-0 w-full sm:w-[45%] md:w-[45%] relative"
         >
           <!-- Video Section -->
           <video
+            ref="videoRef"
             :src="video.src"
             controls
-            class="w-full h-[400px] object-contain rounded-lg shadow-md"
+            class="w-full h-[300px] object-contain rounded-lg shadow-md"
           ></video>
 
           <!-- Overlay for Title and Description -->
@@ -42,9 +43,9 @@
         <!-- Pagination Dots (Center) -->
         <div class="flex space-x-2 justify-center flex-grow">
           <span
-            v-for="(video, index) in videos"
+            v-for="(video, index) in visibleVideos"
             :key="index"
-            class="w-3 h-3 rounded-full transition-transform duration-300"
+            class="w-3 h-3 rounded-full transition-transform duration-100"
             :class="{
               'bg-black-2 scale-150 font-bold': index === activeIndex,
               'bg-black-2': index !== activeIndex,
@@ -55,13 +56,13 @@
         <!-- Navigation Buttons (Right) -->
         <div class="flex space-x-4 ml-6">
           <button
-            class="text-black text-5xl focus:outline-none"
+            class="text-black-2 text-4xl focus:outline-none"
             @click="scrollLeft"
           >
             &lt;
           </button>
           <button
-            class="text-black text-5xl focus:outline-none"
+            class="text-black-2 text-4xl focus:outline-none"
             @click="scrollRight"
           >
             &gt;
@@ -73,7 +74,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 
 export default {
   setup() {
@@ -90,6 +91,13 @@ export default {
     const activeIndex = ref(0);
     const carousel = ref(null);
 
+    // Computed property to determine the visible videos (2 at a time)
+    const visibleVideos = computed(() => {
+      const start = activeIndex.value * 2;
+      return videos.value.slice(start, start + 2);
+    });
+
+    // Scroll functions
     const scrollLeft = () => {
       if (carousel.value) {
         carousel.value.scrollBy({
@@ -112,10 +120,35 @@ export default {
 
     const updateActiveIndex = (direction) => {
       const newIndex = activeIndex.value + direction;
-      if (newIndex >= 0 && newIndex < videos.value.length) {
+      if (newIndex >= 0 && newIndex * 2 < videos.value.length) {
         activeIndex.value = newIndex;
       }
     };
+
+    // Intersection Observer to detect when video comes into view
+    const videoRefs = ref([]);
+    const observeVideos = () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const video = entry.target;
+            video.play(); // Play video when it comes into view
+          } else {
+            const video = entry.target;
+            video.pause(); // Pause video when it goes out of view
+          }
+        });
+      }, { threshold: 0.5 }); // Trigger when 50% of the video is visible
+
+      // Observe all video elements
+      videoRefs.value.forEach((video) => observer.observe(video));
+    };
+
+    onMounted(() => {
+      nextTick(() => {
+        observeVideos();
+      });
+    });
 
     return {
       videos,
@@ -124,7 +157,10 @@ export default {
       scrollLeft,
       scrollRight,
       updateActiveIndex,
+      visibleVideos,
+      videoRefs,
     };
   },
 };
 </script>
+

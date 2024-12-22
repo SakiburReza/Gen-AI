@@ -8,6 +8,7 @@ import { FwbButton, FwbSpinner, FwbCard } from 'flowbite-vue'
 import { ref, onMounted, watch } from 'vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
+import TemplatesCard from '@/components/TemplatesCard.vue'
 
 const toastStore = useToastStore()
 
@@ -549,6 +550,8 @@ onMounted(() => {
           class="bg-white p-6 space-y-6 flex-shrink-0"
         >
           <!-- Modify ImageInputCard to bind the selected images -->
+          <TemplatesCard />
+
           <ImageInputCard title="Face Image" @input="(file) => (referenceImage = file)" />
           <fwb-button
             @click="generateAiContent"
