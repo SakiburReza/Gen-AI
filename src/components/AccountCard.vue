@@ -1,8 +1,8 @@
 <template >
-  <div class=" flex items-center justify-center bg-gray-100">
+  <div class=" flex items-center justify-center bg-white">
     <!-- Sidebar container adjusted for responsiveness -->
     <div class="sm:w-64 bg-white shadow rounded-lg">
-      <ul class="divide-y divide-gray-200">
+      <ul class="divide-y divide-white">
         <li>
           <a
             @click="navigateTo('/profile')"
@@ -60,12 +60,18 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
+
 export default {
-  methods: {
-    navigateTo(url) {
+  setup() {
+    const router = useRouter();
+
+    const navigateTo = (url) => {
       console.log(`Navigating to: ${url}`);
-      this.$router.push(url);
-    },
+      router.push(url);
+    };
+
+    return { navigateTo };
   },
 };
 </script>

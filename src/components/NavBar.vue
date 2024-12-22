@@ -2,7 +2,7 @@
 
 import { FwbBadge } from 'flowbite-vue'
 import AccountCard from '@/components/AccountCard.vue'
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 const showAccountCard = ref(false);
 
@@ -11,10 +11,30 @@ function toggleAccountCard() {
   showAccountCard.value = !showAccountCard.value;
 }
 
+function closeAccountCard() {
+  showAccountCard.value = false;
+}
+
+// Close AccountCard when clicking outside
+function handleClickOutside(event) {
+  const accountCard = document.querySelector('.account-card');
+  if (accountCard && !accountCard.contains(event.target)) {
+    closeAccountCard();
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
+
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div class="relative flex flex-col items-center justify-center">
     <!-- Logo -->
     <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="w-30 h-10" />
     <!-- Text -->
@@ -51,6 +71,18 @@ function toggleAccountCard() {
       </svg>
       <p class="ml-2">1378</p>
     </fwb-badge>
-      <AccountCard class="relative -top-5 left-50 right-0" v-if="showAccountCard" @close="toggleAccountCard" />
+
+    <div v-if="showAccountCard">
+      <div
+        class="fixed inset-0 bg-white bg-opacity-25 z-0"
+        @click="closeAccountCard"
+      ></div>
+
+    <AccountCard
+      class="absolute top-10 right-132.5 z-10 max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl"
+      v-if="showAccountCard"
+      @close="toggleAccountCard"
+    />
+  </div>
   </div>
 </template>
