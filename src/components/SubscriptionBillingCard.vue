@@ -112,23 +112,32 @@ const closeModal = () => {
                 </div>
 
                 <!-- Invoices Card -->
-                <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-1">Invoices</h3>
+              <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
+                <div>
+                  <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-semibold mb-1">Invoices</h3>
+                    <button
+                      class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap"
+                      @click="() => $router.push('/invoicecard')"
+                    >
+                      Preview
+                    </button>
+                  </div>
 
-                        <br><br><br>
-                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+                  <br><br><br>
+                  <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
 
-                        <div class="flex items-center justify-between">
-                            <p class="text-silverChalice mb-2 text-sm">Price</p>
-                            <p class="font-bold text-lg">{{ cardThree.price }}</p>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <p class="text-silverChalice mb-2 text-sm">Billing date </p>
-                            <p class="font-bold text-md">{{ cardThree.billingDate }}</p>
-                        </div>
-                    </div>
+                  <div class="flex items-center justify-between">
+                    <p class="text-silverChalice mb-2 text-sm">Price</p>
+                    <p class="font-bold text-lg">{{ cardThree.price }}</p>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <p class="text-silverChalice mb-2 text-sm">Billing date</p>
+                    <p class="font-bold text-md">{{ cardThree.billingDate }}</p>
+                  </div>
                 </div>
+              </div>
+
 
             </div>
         </div>
