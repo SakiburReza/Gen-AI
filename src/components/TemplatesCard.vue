@@ -25,14 +25,14 @@
             ref="videoRef"
             :src="video.src"
             controls
-            class="w-full h-[300px] object-contain rounded-lg shadow-md"
+            class="w-full h-[200px] object-contain rounded-lg shadow-md"
           ></video>
 
           <!-- Overlay for Title and Description -->
           <div
             class="absolute top-0 left-0 w-full h-full flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/50 to-transparent text-white p-4 rounded-lg"
           >
-            <h3 class="text-lg font-bold">{{ video.title }}</h3>
+            <h5 class="text-lg font-bold">{{ video.title }}</h5>
             <p class="text-sm">{{ video.description }}</p>
           </div>
         </div>
@@ -45,7 +45,7 @@
           <span
             v-for="(video, index) in visibleVideos"
             :key="index"
-            class="w-3 h-3 rounded-full transition-transform duration-100"
+            class="w-1 h-1 rounded-full transition-transform duration-300"
             :class="{
               'bg-black-2 scale-150 font-bold': index === activeIndex,
               'bg-black-2': index !== activeIndex,
