@@ -12,8 +12,8 @@ import { onMounted, ref, watch } from 'vue'
 
 const toastStore = useToastStore()
 
-const selectedImage = ref(null) // Selected image or video
-const showModal = ref(false) // Modal visibility
+const selectedImage = ref(null); // Selected image or video
+const showModal = ref(false); // Modal visibility
 
 // Functions to open/close modal
 const openImageModal = (mediaItem) => {
@@ -43,12 +43,7 @@ function setActive(button) {
 
 // Active functionality state
 const activeFunctionality = ref<
-  | 'Text to Image'
-  | 'Face Swap'
-  | 'Text to Video'
-  | 'Image to Video'
-  | 'Image to Image'
-  | 'Templates'
+  'Text to Image' | 'Face Swap' | 'Text to Video' | 'Image to Video' | 'Image to Image'|'Templates'
 >('Text to Image')
 
 function changeFunctionality(mode) {
@@ -72,10 +67,8 @@ watch(activeFunctionality, async (newValue) => {
 
 watch(activeMode, async (newValue) => {
   if (newValue === 'video') {
-    activeFunctionality.value = 'Text to Video'
     await fetchMedia('text-to-video')
   } else if (newValue === 'image') {
-    activeFunctionality.value = 'Text to Image'
     await fetchMedia('text-to-image')
   }
 })
@@ -224,7 +217,7 @@ onMounted(() => {
             v-for="(media, index) in media"
             :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
-             @click="activeFunctionality === 'Face Swap' && openImageModal(media)"
+                 @click="openImageModal(media)"
           >
             <!-- Render Image -->
             <img
@@ -585,8 +578,8 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <!-- Modal Component -->
-    <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="selectedImage" />
+ <!-- Modal Component -->
+ <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="selectedImage" />
   </div>
 </template>
 
