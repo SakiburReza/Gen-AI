@@ -10,6 +10,7 @@ import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import TemplatesCard from '@/components/TemplatesCard.vue'
 import ShowModalForImage from '@/components/ShowModalForImage.vue'
+import VideoCarousel from '@/components/VideoCarousel.vue'
 
 const toastStore = useToastStore()
 
@@ -573,7 +574,7 @@ onMounted(() => {
           class="bg-white p-6 space-y-6 flex-shrink-0"
         >
           <!-- Modify ImageInputCard to bind the selected images -->
-          <TemplatesCard />
+          <VideoCarousel />
 
           <ImageInputCard title="Face Image" @input="(file) => (referenceImage = file)" />
           <fwb-button
