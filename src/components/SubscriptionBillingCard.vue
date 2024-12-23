@@ -39,6 +39,9 @@ const closeModal = () => {
     showModal.value = false;
 };
 
+const images = "/public/images/carImage.png"
+
+
 </script>
 <template>
     <div class="p-8 max-w-6xl mx-auto">
@@ -140,9 +143,9 @@ const closeModal = () => {
         </div>
         <br>
         <div @click="openModal">
-            <img src="/images/carImage.png" alt="Doggy">
+            <img :src="images" alt="Images">
         </div>
-        <ShowModalForImage :isOpen="showModal" @close="closeModal" />
+        <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="images" />
     </div>
 
 
