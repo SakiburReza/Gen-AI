@@ -7,6 +7,8 @@ import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
 import InvoiceCard from '@/components/InvoiceCard.vue'
 import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
+import TemplatesCard from '@/components/TemplatesCard.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,6 +53,12 @@ const router = createRouter({
       path: '/invoicecard',
       name: 'invoicecard',
       component: InvoiceCard
+    },
+
+    {
+      path: '/template',
+      name: 'template',
+      component: TemplatesCard
     }
 
   ],
