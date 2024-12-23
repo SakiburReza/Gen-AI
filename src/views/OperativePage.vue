@@ -201,7 +201,7 @@ onMounted(() => {
   <div class="flex flex-col h-screen">
     <Navbar />
 
-    <div class="flex flex-col sm:flex-row sm:flex-wrap w-full overflow-auto">
+    <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Image Grid -->
       <div class="flex-1 bg-white overflow-hidden p-6">
         <div
