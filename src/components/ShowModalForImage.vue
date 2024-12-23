@@ -20,6 +20,12 @@ const emit = defineEmits(['close'])
 const close = () => {
   emit('close')
 }
+
+// Helper to extract filename from URL
+const getFilename = (url: string): string => {
+  const parts = url.split('/')
+  return parts[parts.length - 1] || 'download'
+}
 </script>
 
 <template>
@@ -27,12 +33,11 @@ const close = () => {
     v-if="isOpen"
     class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
   >
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-5xl p-6 relative flex flex-col md:flex-row">
+    <div
+      class="bg-white rounded-lg shadow-lg w-full max-w-5xl p-6 relative flex flex-col md:flex-row"
+    >
       <!-- Close Button -->
-      <button
-        @click="close"
-        class="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-      >
+      <button @click="close" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
         ✕
       </button>
 
@@ -61,14 +66,10 @@ const close = () => {
 
         <!-- Action Buttons -->
         <div class="flex flex-col md:flex-row gap-4 mb-6">
-          <button
-            class="bg-blue-600 text-white text-sm px-6 py-2 rounded-lg hover:bg-blue-700"
-          >
+          <button class="bg-blue-600 text-white text-sm px-6 py-2 rounded-lg hover:bg-blue-700">
             Turn into Video
           </button>
-          <button
-            class="bg-gray-200 text-sm text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300"
-          >
+          <button class="bg-gray-200 text-sm text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300">
             Image Reference
           </button>
         </div>
@@ -76,7 +77,8 @@ const close = () => {
         <!-- Download Link -->
         <div class="text-center">
           <a
-            href="#"
+            :href="image?.url"
+            :download="image?.url ? getFilename(image.url) : null"
             class="inline-flex items-center justify-center text-blue-600 font-semibold text-sm"
           >
             <img
