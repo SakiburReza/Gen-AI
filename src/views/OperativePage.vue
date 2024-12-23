@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import Navbar from '@/components/Navbar.vue'
-import FacilityCard from '@/components/FacilityCard.vue'
 import CustomizationCard from '@/components/CustomizationCard.vue'
 import DescriptionCard from '@/components/DescriptionCard.vue'
 import ImageInputCard from '@/components/ImageInputCard.vue'
-import { FwbButton, FwbSpinner, FwbCard } from 'flowbite-vue'
-import { ref, onMounted, watch } from 'vue'
+import Navbar from '@/components/Navbar.vue'
+import ShowModalForImage from '@/components/ShowModalForImage.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import TemplatesCard from '@/components/TemplatesCard.vue'
-import ShowModalForImage from '@/components/ShowModalForImage.vue'
+import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
+import { onMounted, ref, watch } from 'vue'
 
 const toastStore = useToastStore()
 
@@ -214,7 +213,7 @@ onMounted(() => {
           </div>
 
           <!-- Display all contents -->
-          <div
+          <div 
             v-for="(media, index) in media"
             :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
