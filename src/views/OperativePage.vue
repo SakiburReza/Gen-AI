@@ -217,7 +217,7 @@ onMounted(() => {
             v-for="(media, index) in media"
             :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
-                 @click="openImageModal(media)"
+                @click="activeFunctionality === 'Face Swap' && openImageModal(media)"
           >
             <!-- Render Image -->
             <img
