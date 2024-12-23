@@ -55,11 +55,18 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
+
 export default {
-  methods: {
-    downloadInvoice() {
-      console.log("Downloading invoice...");
-    },
+  setup() {
+    const router = useRouter();
+
+    const navigateTo = (url) => {
+      console.log(`Navigating to: ${url}`);
+      router.push(url);
+    };
+
+    return { navigateTo };
   },
 };
 </script>

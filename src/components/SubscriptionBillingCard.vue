@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue'
 import ShowModalForImage from './ShowModalForImage.vue';
+import InvoiceCard from '@/components/InvoiceCard.vue'
 
 const props = defineProps({
     cardOne: {
@@ -38,6 +39,33 @@ const openModal = () => {
 const closeModal = () => {
     showModal.value = false;
 };
+
+const showInvoiceCard = ref(false);
+
+
+function toggleInvoiceCard() {
+  showInvoiceCard.value = !showInvoiceCard.value;
+}
+
+function closeInvoiceCard() {
+  showInvoiceCard.value = false;
+}
+
+// Close AccountCard when clicking outside
+function handleClickOutside(event) {
+  const invoiceCard = document.querySelector('.account-card');
+  if (invoiceCard && !invoiceCard.contains(event.target)) {
+    closeInvoiceCard();
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 
 </script>
 <template>
@@ -117,10 +145,10 @@ const closeModal = () => {
                   <div class="flex justify-between items-center">
                     <h3 class="text-xl font-semibold mb-1">Invoices</h3>
                     <button
-                      class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap"
-                      @click="() => $router.push('/invoicecard')"
+                      class="text-sm  text-blue-600 px-4 py-2 rounded-2xl whitespace-nowrap"
+                      @click="toggleInvoiceCard"
                     >
-                      Preview
+                      Get invoice
                     </button>
                   </div>
 
@@ -154,6 +182,20 @@ const closeModal = () => {
         <ShowModalForImage :isOpen="showModal" @close="closeModal" />
     </div>
 
+  <div v-if="showInvoiceCard">
+    <!-- Overlay -->
+    <div
+      class="fixed inset-0 bg-opacity-25 z-40"
+      @click="closeInvoiceCard"
+    ></div>
+
+    <!-- Invoice Card -->
+    <InvoiceCard
+      class="fixed top-10 z-50 max-w-xs sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl bg-white shadow-lg rounded-md p-4"
+      v-if="showInvoiceCard"
+      @close="toggleInvoiceCard"
+    />
+  </div>
 
 </template>
 <style scoped></style>
