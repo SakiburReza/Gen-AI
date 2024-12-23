@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref } from 'vue';
 
 // Props
 defineProps({
@@ -8,24 +8,63 @@ defineProps({
     required: true,
   },
   image: {
-    type: Object,
+    type: Object as () => { url: string; type: string } | null,
     default: null,
   },
-})
+});
 
 // Emits
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close']);
 
-// Methods
-const close = () => {
-  emit('close')
-}
+// State
+const prompt = ref<string | null>(null);
+const isLoading = ref(false);
 
 // Helper to extract filename from URL
 const getFilename = (url: string): string => {
-  const parts = url.split('/')
-  return parts[parts.length - 1] || 'download'
-}
+  const parts = url.split('/');
+  return parts[parts.length - 1] || 'download';
+};
+
+// API call to convert the image to a video
+const turnIntoVideoAction = async () => {
+  if (!image || !image.url) {
+    alert('No image selected.');
+    return;
+  }
+  if (!prompt.value) {
+    alert('Please enter a prompt.');
+    return;
+  }
+
+  isLoading.value = true; // Show loading state
+  try {
+    const formData = new FormData();
+    formData.append('image', image.url); // Correctly use `image.url`
+    formData.append('prompt', prompt.value);
+
+    // Replace `genAiService.imageToVideo` with your actual API service
+    const response = await genAiService.imageToVideo(formData);
+
+    if (response && response.success) {
+      alert('Video generated successfully!');
+      // Handle the response, e.g., display the video or download it
+    } else {
+      console.error(response);
+      alert('Failed to generate video. Please try again.');
+    }
+  } catch (error) {
+    console.error('API Error:', error);
+    alert('An error occurred while processing your request.');
+  } finally {
+    isLoading.value = false; // Hide loading state
+  }
+};
+
+// Close the modal
+const close = () => {
+  emit('close');
+};
 </script>
 
 <template>
@@ -59,17 +98,26 @@ const getFilename = (url: string): string => {
         <!-- Prompt -->
         <div class="mb-6">
           <p class="text-gray-600 font-bold text-sm mb-1">Prompt:</p>
-          <p class="text-sm text-gray-600">
-            A bottom-up image of a girl walking confidently down the city streets
-          </p>
+          <input
+            v-model="prompt"
+            type="text"
+            class="w-full p-2 border border-gray-300 rounded-lg text-sm text-gray-600"
+            placeholder="Enter your prompt here"
+          />
         </div>
 
         <!-- Action Buttons -->
         <div class="flex flex-col md:flex-row gap-4 mb-6">
-          <button class="bg-blue-600 text-white text-sm px-6 py-2 rounded-lg hover:bg-blue-700">
-            Turn into Video
+          <button
+            @click="turnIntoVideoAction"
+            :disabled="isLoading"
+            class="bg-blue-600 text-white text-sm px-6 py-2 rounded-lg hover:bg-blue-700"
+          >
+            {{ isLoading ? 'Processing...' : 'Turn into Video' }}
           </button>
-          <button class="bg-gray-200 text-sm text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300">
+          <button
+            class="bg-gray-200 text-sm text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300"
+          >
             Image Reference
           </button>
         </div>
