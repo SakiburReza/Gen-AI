@@ -27,19 +27,8 @@ const props = defineProps({
 });
 
 
-// State for modal visibility
-const showModal = ref(false);
 
-// Functions to open/close modal
-const openModal = () => {
-    showModal.value = true;
-};
 
-const closeModal = () => {
-    showModal.value = false;
-};
-
-const images = "/public/images/carImage.png"
 
 
 </script>
@@ -141,11 +130,7 @@ const images = "/public/images/carImage.png"
                 TAKE ME BACK I WANT TO CREATE
             </button>
         </div>
-        <br>
-        <div @click="openModal">
-            <img :src="images" alt="Images">
-        </div>
-        <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="images" />
+      
     </div>
 
 
