@@ -9,6 +9,7 @@ import { ref, onMounted, watch } from 'vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import TemplatesCard from '@/components/TemplatesCard.vue'
+import TemplatesCard from '@/components/TemplatesCard.vue'
 
 const toastStore = useToastStore()
 

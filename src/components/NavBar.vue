@@ -74,12 +74,12 @@ onUnmounted(() => {
 
     <div v-if="showAccountCard">
       <div
-        class="fixed inset-0 bg-white bg-opacity-25 z-0"
+        class="fixed inset-0 bg-opacity-25 z-0"
         @click="closeAccountCard"
       ></div>
 
     <AccountCard
-      class="absolute top-10 right-132.5 z-10 max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl"
+      class="absolute top-10 right-0 sm:right-10 md:right-20 lg:right-32 xl:right-40 z-10 max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl"
       v-if="showAccountCard"
       @close="toggleAccountCard"
     />

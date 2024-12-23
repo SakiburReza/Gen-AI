@@ -2,7 +2,7 @@
   <div class="w-full max-w-screen-lg mx-auto p-4 bg-white">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-lg font-bold">Templates</h2>
+      <h2 class="text-lg font-bold">Video Carousel</h2>
       <span>{{ videos.length }} total</span>
     </div>
 
@@ -16,22 +16,23 @@
         style="max-width: 100%;"
       >
         <div
-          v-for="(video, index) in videos"
+          v-for="(video, index) in visibleVideos"
           :key="index"
-          class="flex-shrink-0 w-full sm:w-[45%] md:w-[30%] relative"
+          class="flex-shrink-0 w-full sm:w-[45%] md:w-[45%] relative"
         >
           <!-- Video Section -->
           <video
+            ref="videoRef"
             :src="video.src"
             controls
-            class="w-full h-[500px] object-contain rounded-lg shadow-md"
+            class="w-full h-[200px] object-contain rounded-lg shadow-md"
           ></video>
 
           <!-- Overlay for Title and Description -->
           <div
             class="absolute top-0 left-0 w-full h-full flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/50 to-transparent text-white p-4 rounded-lg"
           >
-            <h3 class="text-lg font-bold">{{ video.title }}</h3>
+            <h5 class="text-lg font-bold">{{ video.title }}</h5>
             <p class="text-sm">{{ video.description }}</p>
           </div>
         </div>
@@ -42,12 +43,12 @@
         <!-- Pagination Dots (Center) -->
         <div class="flex space-x-2 justify-center flex-grow">
           <span
-            v-for="(video, index) in videos"
+            v-for="(video, index) in visibleVideos"
             :key="index"
-            class="w-3 h-3 rounded-full transition-transform duration-300"
+            class="w-1 h-1 rounded-full transition-transform duration-300"
             :class="{
-              'bg-black-2 scale-150 font-bold': index === activeIndex,
-              'bg-black-2': index !== activeIndex,
+              'bg-black-2 scale-150 font-bold': index === activeIndex || index < 1,
+              'bg-black-2': index !== activeIndex && index >= 1,
             }"
           ></span>
         </div>
@@ -55,13 +56,13 @@
         <!-- Navigation Buttons (Right) -->
         <div class="flex space-x-4 ml-6">
           <button
-            class="text-black text-5xl focus:outline-none"
+            class="text-black-2 text-2xl focus:outline-none"
             @click="scrollLeft"
           >
             &lt;
           </button>
           <button
-            class="text-black text-5xl focus:outline-none"
+            class="text-black-2 text-2xl focus:outline-none"
             @click="scrollRight"
           >
             &gt;
@@ -73,27 +74,35 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 
 export default {
   setup() {
-    // Define the video list and active index
     const videos = ref([
-      { src: "video1.mp4", title: "Video 1", description: "Description 1" },
-      { src: "video2.mp4", title: "Video 2", description: "Description 2" },
-      { src: "video3.mp4", title: "Video 3", description: "Description 3" },
-      { src: "video4.mp4", title: "Video 4", description: "Description 4" },
-      { src: "video5.mp4", title: "Video 5", description: "Description 5" },
-      { src: "video5.mp4", title: "Video 6", description: "Description 6" },
-      { src: "video5.mp4", title: "Video 7", description: "Description 7" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 1", description: "sample 1" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 2", description: "sample 2" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 3", description: "sample 3" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 4", description: "sample 4" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 5", description: "sample 5" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 7", description: "sample 7" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 8", description: "sample 8" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 9", description: "sample 9" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 10", description: "sample 10" },
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Big 11", description: "sample 11" },
     ]);
+
     const activeIndex = ref(0);
     const carousel = ref(null);
+
+    const visibleVideos = computed(() => {
+      const start = activeIndex.value * 2;
+      return videos.value.slice(start, start + 2);
+    });
 
     const scrollLeft = () => {
       if (carousel.value) {
         carousel.value.scrollBy({
-          left: -200,
+          left: -100,
           behavior: "smooth",
         });
       }
@@ -103,7 +112,7 @@ export default {
     const scrollRight = () => {
       if (carousel.value) {
         carousel.value.scrollBy({
-          left: 200,
+          left: 100,
           behavior: "smooth",
         });
       }
@@ -112,10 +121,44 @@ export default {
 
     const updateActiveIndex = (direction) => {
       const newIndex = activeIndex.value + direction;
-      if (newIndex >= 0 && newIndex < videos.value.length) {
+      if (newIndex >= 0 && newIndex * 2 < videos.value.length) {
         activeIndex.value = newIndex;
       }
     };
+
+    const videoRefs = ref([]);
+
+    const observeVideos = () => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const video = entry.target;
+            if (entry.isIntersecting) {
+              video.muted = true; // Ensure videos are muted for autoplay to work
+              video
+                .play()
+                .catch((err) => console.warn("Autoplay failed:", err.message));
+            } else {
+              video.pause();
+            }
+          });
+        },
+        { threshold: 0.5 } // Trigger when 50% of the video is visible
+      );
+
+      // Observe all video elements
+      videoRefs.value.forEach((video) => {
+        if (video) observer.observe(video);
+      });
+    };
+
+    onMounted(() => {
+      nextTick(() => {
+        // Ensure all video elements are attached to the DOM before observing
+        videoRefs.value = Array.from(document.querySelectorAll("video"));
+        observeVideos();
+      });
+    });
 
     return {
       videos,
@@ -124,7 +167,10 @@ export default {
       scrollLeft,
       scrollRight,
       updateActiveIndex,
+      visibleVideos,
+      videoRefs,
     };
   },
 };
 </script>
+

@@ -6,7 +6,8 @@ import SubscriptionPage from '@/views/SubscriptionPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
 import InvoiceCard from '@/components/InvoiceCard.vue'
-import VideoTampletCard from '@/components/TemplatesCard.vue'
+import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
+import TemplatesCard from '@/components/TemplatesCard.vue'
 
 import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
 
@@ -58,7 +59,7 @@ const router = createRouter({
     {
       path: '/template',
       name: 'template',
-      component: VideoTampletCard
+      component: TemplatesCard
     }
 
   ],
