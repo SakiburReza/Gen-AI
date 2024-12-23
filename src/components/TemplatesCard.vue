@@ -47,8 +47,8 @@
             :key="index"
             class="w-1 h-1 rounded-full transition-transform duration-300"
             :class="{
-              'bg-black-2 scale-150 font-bold': index === activeIndex,
-              'bg-black-2': index !== activeIndex,
+              'bg-black-2 scale-150 font-bold': index === activeIndex || index < 1,
+              'bg-black-2': index !== activeIndex && index >= 1,
             }"
           ></span>
         </div>
