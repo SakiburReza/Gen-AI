@@ -7,7 +7,6 @@ import ShowModalForImage from '@/components/ShowModalForImage.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
-import VideoCarousel from '@/components/VideoCarousel.vue'
 import { ref,watch,onMounted  } from 'vue'
 import { FwbButton, FwbCard } from 'flowbite-vue'
 import { base64ToBlobUrl } from '@/utils/utils'; // Adjust the path based on the file structure
