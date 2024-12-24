@@ -25,7 +25,7 @@ const submitForm = async () => {
     if (response.data.status) {
       toastStore.success('Sign-In successful')
       localStorage.setItem('authToken', response.data.data.token)
-      router.push('/'); 
+      router.push('/operativepage'); 
     } else {
       // Handle the case when the response doesn't indicate success
       //toastStore.error("Sign-In failed, please try again.");
@@ -136,7 +136,7 @@ const submitForm = async () => {
         <!-- Register Link -->
         <p class="text-sm text-gray-600 text-center mt-4">
           Don't have an account yet?
-          <a href="#" class="text-blue-600 hover:underline">Sign Up</a>
+          <router-link to="/sign-up" class="text-blue-600 hover:underline">Sign Up</router-link>
         </p>
       </div>
     </div>
