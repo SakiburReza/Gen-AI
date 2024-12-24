@@ -4,11 +4,11 @@ import DescriptionCard from '@/components/DescriptionCard.vue'
 import ImageInputCard from '@/components/ImageInputCard.vue'
 import Navbar from '@/components/Navbar.vue'
 import ShowModalForImage from '@/components/ShowModalForImage.vue'
+import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
-import TemplatesCard from '@/components/TemplatesCard.vue'
-import ShowModalForImage from '@/components/ShowModalForImage.vue'
-import VideoCarousel from '@/components/VideoCarousel.vue'
+import { onMounted, ref, watch } from 'vue';
+import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 
 const toastStore = useToastStore()
 
