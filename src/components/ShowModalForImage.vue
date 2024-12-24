@@ -37,8 +37,7 @@ const getFilename = (url: string): string => {
 
 // API call to convert the image to a video
 const turnIntoVideoAction = async () => {
-
-  
+  console.log("Executing turnIntoVideoAction");
   if (!props.image || !props.image.url) {
     alert('No image selected.');
     return;
@@ -54,17 +53,22 @@ const turnIntoVideoAction = async () => {
     formData.append('image', props.image.url); // Correctly use `image.url`
     formData.append('prompt', prompt.value);
 
-    // Replace `genAiService.imageToVideo` with your actual API service
-    const response = await genAiService.imageToVideo(formData);
+    console.log("Sending formData:", { image: props.image.url, prompt: prompt.value });
 
-    if (response && response.success) {
+   // Assuming `genAiService.imageToVideo` is an API client that handles requests
+   const response = await genAiService.imageToVideo(formData);
+
+   console.log("API Response:", response);
+
+    if (response?.success) {
       alert('Video generated successfully!');
       // Handle the response, e.g., display the video or download it
     } else {
-      console.error(response);
+      console.error("Error in API response:", response);
       alert('Failed to generate video. Please try again.');
     }
   } catch (error) {   
+    console.error("Error occurred:", error);
     alert('An error occurred while processing your request.');
   } finally {
     isLoading.value = false; // Hide loading state

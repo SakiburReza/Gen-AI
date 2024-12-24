@@ -125,11 +125,11 @@ const props = defineProps({
             </div>
         </div>
         <!-- Button Shown Only on Mobile -->
-        <div class="md:hidden mt-6">
+        <!-- <div class="md:hidden mt-6">
             <button @click="() => $router.push('/')" class="w-full bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
                 TAKE ME BACK I WANT TO CREATE
             </button>
-        </div>
+        </div> -->
       
     </div>
 
