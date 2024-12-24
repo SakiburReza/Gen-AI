@@ -257,11 +257,11 @@ onMounted(() => {
       <!-- Right Section: Facility Card and Dynamic Content -->
       <div class="w-full sm:w-[30%] p-6 flex-shrink-0">
         <!-- Facility Card -->
-        <div class="p-6">
-          <fwb-card class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl">
+        <div class="p-6 max-w-md mx-auto sm:max-w-lg md:max-w-2xl flex justify-center">
+         
             <!-- Removed the w-1/4 class, so it takes only the required width -->
             <div class="rounded-lg p-5">
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 gap-2">
                 <!-- Text to Image-->
                 <div
                   v-if="activeMode === 'image'"
@@ -451,7 +451,6 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-          </fwb-card>
         </div>
         <!-- Dynamic Content Based on Selected Functionality -->
         <div

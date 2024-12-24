@@ -4,7 +4,7 @@ import genAiService from '@/services/gen-ai'
 
 // Reactive form data object
 const formData = ref({
-  fullName: '',
+  name: '',
   email: '',
   password: '',
 })
@@ -80,7 +80,7 @@ const submitForm = async () => {
             <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
             <input
               id="fullName"
-              v-model="formData.fullName"
+              v-model="formData.name"
               type="text"
               placeholder="Enter your full name"
               class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"

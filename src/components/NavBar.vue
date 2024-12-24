@@ -36,7 +36,7 @@ onUnmounted(() => {
 <template>
   <div class="relative flex flex-col items-center justify-center">
     <!-- Logo -->
-    <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="w-30 h-10" />
+    <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-20" />
     <!-- Text -->
     <fwb-badge class="bg-white text-black" size="xl" @click="toggleAccountCard">
       <p class="mr-2">Account</p>

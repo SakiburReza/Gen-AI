@@ -1,29 +1,46 @@
 <script setup>
 import { ref } from 'vue'
-import genAiService from '@/services/gen-ai'// Replace with your actual API service
+import { useToastStore } from '@/stores/toast'
+import genAiService from '@/services/gen-ai'
+import { useRouter } from 'vue-router'; 
 
+const router = useRouter();
+
+const toastStore = useToastStore()
 // Reactive form inputs
-const email = ref('')
+const username = ref('')
 const password = ref('')
 
 // Form submission handler
 const submitForm = async () => {
   try {
     // Prepare the user data for the sign-in request
-    const data = { email: email.value, password: password.value }
+    const data = { username: username.value, password: password.value };
+    
     // Make the API call to the sign-in endpoint
-    const response = await genAiService.logIn(data)
+    const response = await genAiService.logIn(data);
+    console.log(response)
 
-    // Handle the response (e.g., save token, redirect user)
-    console.log('Sign-In successful:', response)
-    // Optionally, you can redirect the user after successful login
-    // Example: router.push('/dashboard')
+    // Assuming the response contains a token or status indicating success
+    if (response.data.status) {
+      // Handle the successful response (e.g., save token, show success message)
+      toastStore.success("Sign-In successful");
 
+      // Optionally, you can save the token to localStorage or Vuex
+      localStorage.setItem('authToken', response.data.data.token); // Save token to localStorage
+
+      // Redirect the user to the root page (or dashboard if needed)
+      router.push('/'); // Navigate to the root or dashboard after successful login
+    } else {
+      // Handle the case when the response doesn't indicate success
+      //toastStore.error("Sign-In failed, please try again.");
+    }
   } catch (error) {
-    console.error('Sign-In failed:', error)
+    console.error('Sign-In failed:', error);
     // Handle the error (e.g., show error message)
+    toastStore.error("An error occurred during sign-in.");
   }
-}
+};
 </script>
 
 <template>
@@ -83,7 +100,7 @@ const submitForm = async () => {
           <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
           <input
             id="email"
-            v-model="email"
+            v-model="username"
             type="email"
             placeholder="Enter your email"
             class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
