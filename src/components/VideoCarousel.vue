@@ -10,15 +10,15 @@ const videos = [
   { id: 3, src: '/public/videos/3.mp4', alt: 'Video 3' },
 ];
 
-// Current selected video index
-const currentIndex = ref(0);
+// Current selected video id
+const currentId = ref(1); // Default to the first video's id
 
 // Emit event to notify parent of video selection
 const emit = defineEmits(['video-selected']);
-const selectVideo = (index) => {
-    console.log(currentIndex.value)
-  currentIndex.value = index;
-  emit('video-selected', index);
+const selectVideo = (id) => {
+  currentId.value = id; // Update the selected video id
+  console.log('Selected Video ID:', id);
+  emit('video-selected', currentId.value); // Emit the video id instead of index
 };
 </script>
 
@@ -44,10 +44,10 @@ const selectVideo = (index) => {
     class="rounded-lg"
   >
     <SplideSlide
-      v-for="(video, index) in videos"
+      v-for="(video) in videos"
       :key="video.id"
-      :class="{ 'border-4 border-blue-500': index === currentIndex }"
-      @click="selectVideo(index)"
+      :class="{ 'border-4 border-blue-500': video.id === currentId }"
+      @click="selectVideo(video.id)"
     >
       <video
         controls

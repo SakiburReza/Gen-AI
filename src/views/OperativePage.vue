@@ -14,6 +14,8 @@ import VideoCarousel from '@/components/VideoCarousel.vue'
 
 const toastStore = useToastStore()
 
+const selectedVideoIndex = ref(0)
+
 const selectedImage = ref(null) // Selected image or video
 const showModal = ref(false) // Modal visibility
 
@@ -162,6 +164,17 @@ const generateAiContent = async () => {
       formData.append('image_size', selectedRatio.value)
       formData.append('num_images', selectedOutput.value.toString())
       response = await genAiService.imageToImage(formData)
+    } else if (activeFunctionality.value === 'Templates') {
+      // Create form data for file and video index
+      const formData = new FormData()
+      formData.append('template_id ', selectedVideoIndex.value.toString()) // Assuming videoIndex is expected by server
+      formData.append('image ', referenceImage.value) // Assuming faceImage is expected by server
+
+      // Make the API call
+      response = await genAiService.templateVideo(formData)
+
+      // Handle response
+      console.log('Server Response:', response.data)
     }
 
     if (response?.data?.status) {
@@ -226,7 +239,7 @@ onMounted(() => {
             v-for="(media, index) in media"
             :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
-             @click="activeFunctionality === 'Face Swap' && openImageModal(media)"
+            @click="activeFunctionality === 'Face Swap' && openImageModal(media)"
           >
             <!-- Render Image -->
             <img
@@ -573,8 +586,8 @@ onMounted(() => {
           v-if="activeFunctionality === 'Templates'"
           class="bg-white p-6 space-y-6 flex-shrink-0"
         >
-          <!-- Modify ImageInputCard to bind the selected images -->
-          <VideoCarousel />
+          <!-- Video Carousel -->
+          <VideoCarousel @video-selected="(index) => (selectedVideoIndex = index)" />
 
           <ImageInputCard title="Face Image" @input="(file) => (referenceImage = file)" />
           <fwb-button
