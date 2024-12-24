@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onBeforeUnmount, onUnmounted, ref } from 'vue';
 import genAiService from '@/services/gen-ai';
 
 
@@ -26,6 +26,8 @@ const emit = defineEmits(['close'])
 
 // State
 const prompt = ref<string | null>(null);
+
+
 const isLoading = ref(false);
 
 
@@ -55,10 +57,10 @@ const turnIntoVideoAction = async () => {
 
     console.log("Sending formData:", { image: props.image.url, prompt: prompt.value });
 
-   // Assuming `genAiService.imageToVideo` is an API client that handles requests
-   const response = await genAiService.imageToVideo(formData);
+    // Assuming `genAiService.imageToVideo` is an API client that handles requests
+    const response = await genAiService.imageToVideo(formData);
 
-   console.log("API Response:", response);
+    console.log("API Response:", response);
 
     if (response?.success) {
       alert('Video generated successfully!');
@@ -67,7 +69,7 @@ const turnIntoVideoAction = async () => {
       console.error("Error in API response:", response);
       alert('Failed to generate video. Please try again.');
     }
-  } catch (error) {   
+  } catch (error) {
     console.error("Error occurred:", error);
     alert('An error occurred while processing your request.');
   } finally {
@@ -78,22 +80,22 @@ const turnIntoVideoAction = async () => {
 // Close the modal
 const close = () => {
   emit('close');
+  prompt.value = "";
 };
 
 const handleOutsideClick = (event) => {
-  if(event.target === event.currentTarget){
+  if (event.target === event.currentTarget) {
     close();
   }
 }
+
 
 
 </script>
 <template>
   <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" @click="handleOutsideClick"
     v-if="isOpen">
-    <div
-      class="bg-tertiary rounded-lg shadow-lg w-full max-w-5xl p-6 relative"
-    >
+    <div class="bg-tertiary rounded-lg shadow-lg w-full max-w-5xl p-6 relative">
       <!-- Close Button -->
       <button @click="close"
         class=" top-2 right-1 bg-gray-200 hover:bg-gray-300 text-gray-500 hover:text-gray-800 rounded-full p-1 shadow-md float-end">
@@ -120,34 +122,27 @@ const handleOutsideClick = (event) => {
           <!-- Prompt -->
           <div class="mb-7">
             <p class="text-gray-600 font-bold text-xs ">Prompt :</p>
-            <input
-            v-model="prompt"
-            type="text"
-            class="w-full p-2 border border-silverChalice rounded-lg text-sm text-silverChalice"
-            placeholder="Enter your prompt here"
-          />
+            <input v-model="prompt" type="text"
+              class="w-full p-2 border border-silverChalice rounded-lg text-sm text-silverChalice "
+              placeholder="Enter your prompt here" />
           </div>
           <!-- Action Buttons -->
           <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-start">
-              <button
-            @click="turnIntoVideoAction"
-            :disabled="isLoading"
-            class="bg-blue-600 text-white text-xs px-16 py-2 rounded-lg hover:bg-blue-600  md:w-auto"
-          >
-            {{ isLoading ? 'Processing...' : 'Turn into Video' }}
+            <button @click="turnIntoVideoAction" :disabled="isLoading"
+              class="bg-blue-600 text-white text-xs px-16 py-2 rounded-lg hover:bg-blue-600  md:w-auto">
+              {{ isLoading ? 'Processing...' : 'Turn into Video' }}
             </button>
-              <button
-            class="bg-silverChalice text-xs text-black px-16 py-2 rounded-lg hover:bg-silverChalice  md:w-auto mt-4 md:mt-0"
-            >
-            Image Reference
+            <button
+              class="bg-silverChalice text-xs text-black px-16 py-2 rounded-lg hover:bg-silverChalice  md:w-auto mt-4 md:mt-0">
+              Image Reference
             </button>
           </div>
 
 
           <!-- Download Link -->
           <div class="mt-5 text-center">
-            <a :href="image?.url"
-            :download="image?.url ? getFilename(image.url) : null" class="flex items-start justify-start text-black text-xs px-1 font-semibold py-3">
+            <a :href="image?.url" :download="image?.url ? getFilename(image.url) : null"
+              class="flex items-start justify-start text-black text-xs px-1 font-semibold py-3">
               <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-5 h-5 mr-1.5">
               DOWNLOAD
             </a>
