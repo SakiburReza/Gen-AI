@@ -185,13 +185,13 @@ onUnmounted(() => {
   <div v-if="showInvoiceCard">
     <!-- Overlay -->
     <div
-      class="fixed inset-0 bg-opacity-25 z-40"
+      class="fixed inset-0 bg-opacity-25 z-10"
       @click="closeInvoiceCard"
     ></div>
 
     <!-- Invoice Card -->
     <InvoiceCard
-      class="absolute-middle z-50 max-w-xs sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl rounded-md p-4"
+      class="absolute-middle z-10 mx-auto sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl rounded-md p-4"
       v-if="showInvoiceCard"
       @close="toggleInvoiceCard"
     />
