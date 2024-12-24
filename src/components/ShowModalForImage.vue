@@ -85,7 +85,7 @@ const handleOutsideClick = (event) => {
 
 </script>
 <template>
-  <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" @click="h"
+  <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" @click="handleOutsideClick"
     v-if="isOpen">
     <div
       class="bg-tertiary rounded-lg shadow-lg w-full max-w-5xl p-6 relative"
