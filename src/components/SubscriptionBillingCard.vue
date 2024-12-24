@@ -27,19 +27,8 @@ const props = defineProps({
 });
 
 
-// State for modal visibility
-const showModal = ref(false);
 
-// Functions to open/close modal
-const openModal = () => {
-    showModal.value = true;
-};
 
-const closeModal = () => {
-    showModal.value = false;
-};
-
-const images = "/public/images/carImage.png"
 
 
 </script>
@@ -136,16 +125,12 @@ const images = "/public/images/carImage.png"
             </div>
         </div>
         <!-- Button Shown Only on Mobile -->
-        <div class="md:hidden mt-6">
+        <!-- <div class="md:hidden mt-6">
             <button @click="() => $router.push('/')" class="w-full bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
                 TAKE ME BACK I WANT TO CREATE
             </button>
-        </div>
-        <br>
-        <div @click="openModal">
-            <img :src="images" alt="Images">
-        </div>
-        <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="images" />
+        </div> -->
+      
     </div>
 
 

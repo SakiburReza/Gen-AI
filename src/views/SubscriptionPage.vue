@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SubscriptionCard from '@/components/SubscriptionCard.vue'
 import Navbar from '@/components/Navbar.vue'
+import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue';
 
 const plans = [
   {
@@ -46,10 +47,9 @@ const plans = [
 <template>
   <div class="flex flex-col h-screen">
     <Navbar :title="activeFunctionality" />
+
     <div class="pt-6 sm:pt-10 lg:pt-15 flex justify-center mb-5">
-      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-center">
-        Subscription
-      </h2>
+      <SubscriptionBillingCard />
     </div>
 
 
@@ -57,11 +57,21 @@ const plans = [
       <SubscriptionCard v-for="(feature, index) in plans" :key="index" :data="feature" :isStyle="index % 2 == 0" />
     </div>
     <!-- Back Button -->
-    <div class="w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
+    <!-- <div class="w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
       <button @click="() => $router.push('/')"
         class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block">
         TAKE ME BACK I WANT TO CREATE
       </button>
+    </div> -->
+
+    <!-- Button Shown Only on Mobile -->
+    <div class="md:hidden w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
+      <button @click="() => $router.push('/')" class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block">
+        TAKE ME BACK I WANT TO CREATE
+      </button>
+    </div>
+    <div class="w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
+
     </div>
 
 

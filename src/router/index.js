@@ -37,11 +37,11 @@ const router = createRouter({
       name: 'subscription',
       component: SubscriptionPage,
     },
-    {
-      path: '/subscription-billing',
-      name: 'subscriptionbilling',
-      component: SubscriptionBillingCard,
-    },
+    // {
+    //   path: '/subscription-billing',
+    //   name: 'subscriptionbilling',
+    //   component: SubscriptionBillingCard,
+    // },
     {
       path: '/accountcard',
       name: 'accountcard',
