@@ -6,13 +6,15 @@ import Navbar from '@/components/Navbar.vue'
 import ShowModalForImage from '@/components/ShowModalForImage.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
-import TemplatesCard from '@/components/TemplatesCard.vue'
-import ShowModalForImage from '@/components/ShowModalForImage.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
+import { ref,watch,onMounted  } from 'vue'
+import { FwbButton, FwbCard } from 'flowbite-vue'
+import { base64ToBlobUrl } from '@/utils/utils'; // Adjust the path based on the file structure
+
 
 const toastStore = useToastStore()
 
-const selectedVideoIndex = ref(0)
+const selectedVideo = ref(null)
 
 const selectedImage = ref(null) // Selected image or video
 const showModal = ref(false) // Modal visibility
@@ -78,28 +80,6 @@ watch(activeMode, async (newValue) => {
 const selectedRatio = ref('Landscape')
 const selectedOutput = ref(1)
 
-// Utility: Convert Base64 to Blob URL
-function base64ToBlobUrl(base64: string): string {
-  const arr = base64.split(',')
-  const mimeMatch = arr[0].match(/:(.*?);/)
-
-  if (!mimeMatch) {
-    throw new Error('Invalid base64 string')
-  }
-
-  const mime = mimeMatch[1]
-  const bstr = atob(arr[1])
-  let n = bstr.length
-  const u8arr = new Uint8Array(n)
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n)
-  }
-
-  const blob = new Blob([u8arr], { type: mime })
-  return URL.createObjectURL(blob) // Convert Blob to a URL
-}
-
 // Fetch Images / Videos from API
 const fetchMedia = async (label: string) => {
   loading.value = true
@@ -156,11 +136,12 @@ const generateAiContent = async () => {
       formData.append('num_images', selectedOutput.value.toString())
       response = await genAiService.imageToImage(formData)
     } else if (activeFunctionality.value === 'Templates') {
+      console.log("ss",selectedVideo.value)
       // Create form data for file and video index
       const formData = new FormData()
-      formData.append('template_id ', selectedVideoIndex.value.toString()) // Assuming videoIndex is expected by server
-      formData.append('image ', referenceImage.value) // Assuming faceImage is expected by server
-
+      formData.append('template_id', selectedVideo.value.id) // Assuming videoIndex is expected by server
+      formData.append('image', referenceImage.value) // Assuming faceImage is expected by server
+      formData.append('prompt', selectedVideo.value.prompt)
       // Make the API call
       response = await genAiService.templateVideo(formData)
 
@@ -578,7 +559,7 @@ onMounted(() => {
           class="bg-white p-6 space-y-6 flex-shrink-0"
         >
           <!-- Video Carousel -->
-          <VideoCarousel @video-selected="(index) => (selectedVideoIndex = index)" />
+          <VideoCarousel @video-selected="(object) => (selectedVideo = object)" />
 
           <ImageInputCard title="Face Image" @input="(file) => (referenceImage = file)" />
           <fwb-button
