@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue'
 import ShowModalForImage from './ShowModalForImage.vue';
 import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue';
+import InvoiceCard from '@/components/InvoiceCard.vue'
 
 const props = defineProps({
     cardOne: {
@@ -41,6 +42,33 @@ const closeBuyMoreCreditsModal = () => {
 
 
 
+
+const showInvoiceCard = ref(false);
+
+
+function toggleInvoiceCard() {
+  showInvoiceCard.value = !showInvoiceCard.value;
+}
+
+function closeInvoiceCard() {
+  showInvoiceCard.value = false;
+}
+
+// Close AccountCard when clicking outside
+function handleClickOutside(event) {
+  const invoiceCard = document.querySelector('.account-card');
+  if (invoiceCard && !invoiceCard.contains(event.target)) {
+    closeInvoiceCard();
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 
 </script>
 <template>
@@ -115,23 +143,32 @@ const closeBuyMoreCreditsModal = () => {
                 </div>
 
                 <!-- Invoices Card -->
-                <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-1">Invoices</h3>
+              <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
+                <div>
+                  <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-semibold mb-1">Invoices</h3>
+                    <button
+                      class="text-sm  text-blue-600 px-4 py-2 rounded-2xl whitespace-nowrap"
+                      @click="toggleInvoiceCard"
+                    >
+                      Get invoice
+                    </button>
+                  </div>
 
-                        <br><br><br>
-                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+                  <br><br><br>
+                  <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
 
-                        <div class="flex items-center justify-between">
-                            <p class="text-silverChalice mb-2 text-sm">Price</p>
-                            <p class="font-bold text-lg">{{ cardThree.price }}</p>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <p class="text-silverChalice mb-2 text-sm">Billing date </p>
-                            <p class="font-bold text-md">{{ cardThree.billingDate }}</p>
-                        </div>
-                    </div>
+                  <div class="flex items-center justify-between">
+                    <p class="text-silverChalice mb-2 text-sm">Price</p>
+                    <p class="font-bold text-lg">{{ cardThree.price }}</p>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <p class="text-silverChalice mb-2 text-sm">Billing date</p>
+                    <p class="font-bold text-md">{{ cardThree.billingDate }}</p>
+                  </div>
                 </div>
+              </div>
+
 
             </div>
         </div>
@@ -141,6 +178,20 @@ const closeBuyMoreCreditsModal = () => {
       
     </div>
 
+  <div v-if="showInvoiceCard">
+    <!-- Overlay -->
+    <div
+      class="fixed inset-0 bg-opacity-25 z-40"
+      @click="closeInvoiceCard"
+    ></div>
+
+    <!-- Invoice Card -->
+    <InvoiceCard
+      class="absolute-middle z-50 mx-auto sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl rounded-md p-4"
+      v-if="showInvoiceCard"
+      @close="toggleInvoiceCard"
+    />
+  </div>
 
 </template>
 <style scoped></style>

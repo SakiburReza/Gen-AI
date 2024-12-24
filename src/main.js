@@ -33,7 +33,7 @@ axiosInstance.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 app.config.globalProperties.$axios = axiosInstance
 
-let userData = JSON.parse(localStorage.getItem('user'))
+let token = JSON.parse(localStorage.getItem('authToken'))
 
 //----------------------------------------Request interceptor for API calls-------------------------
 
@@ -45,11 +45,11 @@ axios.interceptors.request.use(
     } else {
       config.params.dontLoad = null
     }
-    if (!userData) {
-      userData = JSON.parse(localStorage.getItem('user'))
+    if (!token) {
+      token = JSON.parse(localStorage.getItem('authToken'))
     }
-    if (userData) {
-      config.headers.Authorization = `Bearer ${userData.token}`
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },
