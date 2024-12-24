@@ -15,7 +15,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
-app.mount('#app')
+
 app.use(createPinia());
 app.use(Vue3Toastify, {
     autoClose: 3000,
@@ -26,41 +26,39 @@ app.use(Vue3Toastify, {
     }
   })
   
+  app.mount('#app')
   
-  const axiosInstance = axios.create()
-axiosInstance.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
-axiosInstance.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-
-app.config.globalProperties.$axios = axiosInstance
-
-let token = JSON.parse(localStorage.getItem('authToken'))
-
-//----------------------------------------Request interceptor for API calls-------------------------
-
-axios.interceptors.request.use(
-  (config) => {
-    if (!(config.params && config.params.dontLoad === true)) {
-      //   loaderStore.setShowLoader(true)
-      // loaderStore.setIsLoading(true)
-    } else {
-      config.params.dontLoad = null
-    }
-    if (!token) {
-      token = JSON.parse(localStorage.getItem('authToken'))
-    }
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  (error) => {
-    toast.error('Something went wrong!', {
-      autoClose: 2500,
-      theme: 'dark'
-    })
-    return Promise.reject(error)
-  }
-)
+  const axiosInstance = axios.create();
+  axiosInstance.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+  axiosInstance.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+  
+  // Register axiosInstance globally
+  app.config.globalProperties.$axios = axiosInstance;
+  
+  // Request interceptor for API calls
+  // axiosInstance.interceptors.request.use(
+  //   (config) => {
+  //     console.log("11111111"); // This should print now
+  
+  //     // Retrieve the token inside the interceptor to ensure the latest value
+  //     const token = localStorage.getItem('authToken'); 
+  
+  //     if (token) {
+  //       config.headers.Authorization = `Bearer ${token}`; // Add token to request headers
+  //     } else {
+  //       console.log('Token not found in localStorage');
+  //       // Optionally, redirect to login page if needed:
+  //       // router.push('/login');
+  //     }
+  
+  //     return config; // Return config to continue with the request
+  //   },
+  //   (error) => {
+  //     return Promise.reject(error); // Handle request error
+  //   }
+  // );
+  
+  
 
 axios.interceptors.response.use(
   (config) => {

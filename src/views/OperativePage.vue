@@ -9,8 +9,13 @@ import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref,watch,onMounted  } from 'vue'
 import { FwbButton, FwbCard } from 'flowbite-vue'
-import { base64ToBlobUrl } from '@/utils/utils'; // Adjust the path based on the file structure
+import { base64ToBlobUrl } from '@/utils/utils'; 
 
+
+// const router = useRouter();
+// const creditsFromQuery = router.currentRoute.value.query.credits || 10;
+
+// console.log("lll",creditsFromQuery)
 
 const toastStore = useToastStore()
 
@@ -192,7 +197,7 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col h-screen">
-    <Navbar />
+    <Navbar  />
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Image Grid -->

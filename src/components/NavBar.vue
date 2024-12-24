@@ -3,9 +3,11 @@
 import { FwbBadge } from 'flowbite-vue'
 import AccountCard from '@/components/AccountCard.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
+import genAiService from '@/services/gen-ai'
+
+const credits = ref(0); // Reactive state for credits
 
 const showAccountCard = ref(false);
-
 
 function toggleAccountCard() {
   showAccountCard.value = !showAccountCard.value;
@@ -23,7 +25,18 @@ function handleClickOutside(event) {
   }
 }
 
+// Fetch credits from API
+async function fetchCredits() {
+  try {
+    const response = await genAiService.getCreditInfo() // Replace with your API endpoint
+    credits.value = response.data.credits; // Assuming the API response has a `credits` field
+  } catch (error) {
+    console.error('Error fetching credits:', error);
+  }
+}
+
 onMounted(() => {
+  fetchCredits(); // Fetch credits on component mount
   document.addEventListener('click', handleClickOutside);
 });
 
@@ -69,7 +82,7 @@ onUnmounted(() => {
           />
         </defs>
       </svg>
-      <p class="ml-2">1378</p>
+      <p class="ml-2">{{credits}}</p>
     </fwb-badge>
 
     <div v-if="showAccountCard">
