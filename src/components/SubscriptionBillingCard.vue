@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ShowModalForImage from './ShowModalForImage.vue';
+import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue';
 
 const props = defineProps({
     cardOne: {
@@ -25,6 +26,16 @@ const props = defineProps({
         })
     }
 });
+const showBuyMoreCreditsModal = ref(false) // Modal visibility
+const BuyMoreCredits = async () => {
+    console.log("Executing More Credits");
+    showBuyMoreCreditsModal.value = true
+};
+const closeBuyMoreCreditsModal = () => {
+    showBuyMoreCreditsModal.value = false
+
+}
+
 
 
 
@@ -94,7 +105,7 @@ const props = defineProps({
                         <br>
                         <div class="flex items-center justify-between">
                             <p class="text-xs text-silverChalice mt-1">Expires 2 years from date purchased</p>
-                            <button
+                            <button @click="BuyMoreCredits"
                                 class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
                                 Buy More
                             </button>
@@ -124,12 +135,9 @@ const props = defineProps({
 
             </div>
         </div>
-        <!-- Button Shown Only on Mobile -->
-        <!-- <div class="md:hidden mt-6">
-            <button @click="() => $router.push('/')" class="w-full bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
-                TAKE ME BACK I WANT TO CREATE
-            </button>
-        </div> -->
+
+         <!-- Modal Component -->
+ <BuyMoreCreditsModal :isOpen="showBuyMoreCreditsModal" @close="closeBuyMoreCreditsModal" />
       
     </div>
 
