@@ -12,6 +12,7 @@ class GenAIService {
       },
     })
   }
+
   textToVideo(reqData) {
     return axios.post(this.url + '/text-to-video', reqData, {
       headers: {
@@ -19,6 +20,7 @@ class GenAIService {
       },
     })
   }
+
   getMedia(params) {
     return axios.get(this.url + '/get-images?type=' + params, {
       headers: {
@@ -26,6 +28,7 @@ class GenAIService {
       },
     })
   }
+
   faceSwap(reqData) {
     return axios.post(this.url + '/swap-to-image', reqData, {
       headers: {
@@ -33,6 +36,7 @@ class GenAIService {
       },
     })
   }
+
   imageToVideo(reqData) {
     return axios.post(this.url + '/image-to-video', reqData, {
       headers: {
@@ -40,6 +44,7 @@ class GenAIService {
       },
     })
   }
+
   imageToImage(reqData) {
     return axios.post(this.url + '/image-to-image', reqData, {
       headers: {
@@ -47,6 +52,7 @@ class GenAIService {
       },
     })
   }
+
   templateVideo(reqData) {
     return axios.post(this.url + '/template-video', reqData, {
       headers: {
@@ -54,18 +60,39 @@ class GenAIService {
       },
     })
   }
+
   fetchTemplateVideo() {
-    return axios.get(this.url + '/get-template-video',{
+    return axios.get(this.url + '/get-template-video', {
       headers: {
         Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJsYXN0QWNjZXNzZWQiOjE3MzM2MzgzNjA5NzEsInVzZXJJZCI6ImFkbWluIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MzM2MzgzNjAsImV4cCI6MTczNzUyNjM2MH0.9GV87RADi9vuVBAoXIfRcvXhQDEQfJN-IdrLZbu5jCB7eL2Qjr_Y-vGLdhLyMOo5cVJhkWmBZe_yy9grRH-jQA`, // Add the token here
       },
     })
   }
-  register(reqData){
-    return axios.post(this.url + '/user/register',reqData)
+
+  register(reqData) {
+    return axios.post(this.url + '/user/register', reqData)
   }
-  logIn(reqData){
-    return axios.post(this.url + '/user/login',reqData)
+
+  logIn(reqData) {
+    return axios.post(this.url + '/user/login', reqData)
+  }
+
+  fetchUserProfile() {
+    return axios.get(this.url +'/user/user-profile', {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJsYXN0QWNjZXNzZWQiOjE3MzM2MzgzNjA5NzEsInVzZXJJZCI6ImFkbWluIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MzM2MzgzNjAsImV4cCI6MTczNzUyNjM2MH0.9GV87RADi9vuVBAoXIfRcvXhQDEQfJN-IdrLZbu5jCB7eL2Qjr_Y-vGLdhLyMOo5cVJhkWmBZe_yy9grRH-jQA`,
+      },
+    });
+
+  }
+
+  saveProfile(data) {
+    return axios.post(this.url +'/user/user-profile-update', data,{
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJsYXN0QWNjZXNzZWQiOjE3MzM2MzgzNjA5NzEsInVzZXJJZCI6ImFkbWluIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MzM2MzgzNjAsImV4cCI6MTczNzUyNjM2MH0.9GV87RADi9vuVBAoXIfRcvXhQDEQfJN-IdrLZbu5jCB7eL2Qjr_Y-vGLdhLyMOo5cVJhkWmBZe_yy9grRH-jQA`,
+      },
+    });
+
   }
 }
 

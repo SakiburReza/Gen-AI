@@ -1,7 +1,6 @@
 <template>
   <Navbar />
   <div class="bg-gray-50 min-h-screen p-4 sm:p-6 lg:p-8">
-
     <!-- Back Button -->
     <div class="absolute top-10 left-4 md:left-10 lg:left-20">
       <button
@@ -13,9 +12,11 @@
     </div>
 
     <!-- Profile Form -->
-    <div class="max-w-2xl mx-auto p-4 sm:p-6 bg-white shadow-md rounded-md mt-1">
-    <h2 class="text-2xl font-bold mb-8 text-black-2">Manage Profile</h2>
 
+    <div class="max-w-2xl mx-auto p-4 sm:p-6 bg-white shadow-md rounded-md mt-1">
+      <h2 class="text-2xl font-bold mb-8 text-black-2">Manage Profile</h2>
+
+      <form @submit.prevent="saveProfile" class="mt-6">
       <!-- Profile Picture Section -->
       <h5 class="text-xl mb-6 text-black-2">Profile Picture</h5>
       <div class="flex items-center flex-wrap sm:flex-nowrap">
@@ -40,9 +41,7 @@
           >
             Upload Photo
           </label>
-          <p class="text-xs text-black-2 mt-1">
-            Min. 200x200px, PNG or JPG
-          </p>
+          <p class="text-xs text-black-2 mt-1">Min. 200x200px, PNG or JPG</p>
           <input
             id="upload-photo"
             type="file"
@@ -54,7 +53,6 @@
       </div>
 
 
-      <form @submit.prevent="saveProfile" class="mt-6">
         <!-- Account Name -->
         <div class="mb-4">
           <label for="name" class="block text-sm font-medium text-black-2">
@@ -80,6 +78,7 @@
             v-model="profile.email"
             class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 p-2"
             placeholder="Enter your email"
+            readonly
           />
         </div>
 
@@ -125,66 +124,122 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref,  onMounted } from "vue";
 import Navbar from "@/components/Navbar.vue";
+import genAiService from "@/services/gen-ai";
 
-export default {
-  name: "ManageProfile",
-  components: {
-    Navbar,
-  },
-  data() {
-    return {
-      profile: {
-        name: "Henrique Baffi",
-        email: "Henrique@zeuxistalent.com",
-        password: "*****************",
-        logo: null,
-        logoPreview: null,
-      },
-    };
-  },
-  methods: {
-    uploadLogo(event) {
-      const file = event.target.files[0];
-      if (!file) return alert("No file selected!");
+const profile = ref({
+  name: "",
+  email: "",
+  password: "",
+  logo: null,
+  logoPreview: null,
+});
 
-      // Validate file type and dimensions
-      if (!file.type.match("image/png") && !file.type.match("image/jpeg")) {
-        return alert("Please upload a PNG or JPG image.");
-      }
+const fetchUserProfile = async () => {
+  try {
+    const response = await genAiService.fetchUserProfile();
+    if (response.data.status) {
+      profile.value.name = response.data.data.userProfile.name;
+      profile.value.email = response.data.data.userProfile.email;
 
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = () => {
-        if (img.width >= 200 && img.height >= 200) {
-          this.profile.logo = file;
-          this.profile.logoPreview = img.src;
-        } else {
-          alert("Image must be at least 200x200 pixels.");
-        }
-      };
-    },
-    saveProfile() {
-      alert("Profile saved successfully!");
-    },
-    cancelChanges() {
-      this.profile = {
-        name: "",
-        email: "",
-        password: "",
-        logo: null,
-        logoPreview: null,
-      };
-    },
-    deleteAccount() {
-      if (confirm("Are you sure you want to delete your account?")) {
-        alert("Account deleted successfully.");
-      }
-    },
-    goBack() {
-      window.location.href = "http://localhost:3000/";
-    },
-  },
+    } else {
+      console.error("Invalid response structure:", response);
+    }
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+  }
 };
+
+
+
+// Upload logo method
+const uploadLogo = (event) => {
+  const file = event.target.files[0];
+
+  // Validate file existence
+  if (!file) {
+    alert("No file selected!");
+    return;
+  }
+
+  // Validate file type
+  if (!file.type.match("image/png") && !file.type.match("image/jpeg")) {
+    alert("Please upload a PNG or JPG image.");
+    return;
+  }
+
+  // Validate dimensions
+  const img = new Image();
+  img.src = URL.createObjectURL(file);
+  img.onload = () => {
+    if (img.width >= 200 && img.height >= 200) {
+      profile.value.logo = file;
+      profile.value.logoPreview = img.src;
+      console.log("Logo uploaded:", file.name);
+    } else {
+      alert("Image must be at least 200x200 pixels.");
+    }
+  };
+  img.onerror = () => {
+    alert("Invalid image file. Please try again.");
+  };
+};
+
+
+const saveProfile = async () => {
+  try {
+    console.log(profile.value.name)
+    const formData = new FormData()
+    formData.append(
+      'userProfileInfo',
+      JSON.stringify({
+        name: profile.value.name,
+        email: null,
+        password: profile.value.password,
+      })
+    )
+    if (profile.value.logo) {
+      console.log("Logo file:", profile.value.logo);
+      formData.append("profilePicture", profile.value.logoPreview);
+    }
+    console.log("FormData contents:");
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+    // // const response = await genAiService.saveProfile(formData);
+    // // console.log(response);
+    // if (response.data.status) {
+    //   profile.value.name = response.data.data.userProfile.name;
+    //   profile.value.email = response.data.data.userProfile.email;
+    //
+    // } else {
+    //   console.error("Invalid response structure:", response);
+    // }
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+  }
+  alert("Profile saved successfully!");
+};
+
+const cancelChanges = () => {
+  profile.value.name = "";
+  profile.value.email = "";
+  profile.value.password = "";
+  profile.value.logo = null;
+  profile.value.logoPreview = null;
+};
+
+const deleteAccount = () => {
+  if (confirm("Are you sure you want to delete your account?")) {
+    alert("Account deleted successfully.");
+  }
+};
+
+const goBack = () => {
+  window.location.href = "http://localhost:3000/";
+};
+
+onMounted(fetchUserProfile);
 </script>

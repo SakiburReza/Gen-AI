@@ -6,7 +6,6 @@ import SubscriptionPage from '@/views/SubscriptionPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
 import InvoiceCard from '@/components/InvoiceCard.vue'
-import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
 import BuyMoreCreditsModal from '@/components/BuyMoreCreditsModal.vue'
 
@@ -20,7 +19,7 @@ const router = createRouter({
     },
     {
       path: '/sign-in',
-      name: 'signin',
+      name: 'userLogin',
       component: SignInComponent,
     },
     {
