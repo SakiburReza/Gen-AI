@@ -1,10 +1,10 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="flex items-center justify-center">
     <div class="w-full max-w-md mx-auto bg-white border rounded-lg shadow-md p-4">
       <h2 class="text-lg font-semibold text-black-2 mb-4">Invoices</h2>
 
       <!-- Header Row with underline -->
-      <div class="grid grid-cols-5 gap-2 text-sm font-medium text-black-2 border-b border-black-2 pb-2">
+      <div class="grid grid-cols-5 gap-7 text-sm font-medium text-black-2 border-b border-black-2 pb-2">
         <div class="col-span-1">Product</div>
         <div class="col-span-1">Reference</div>
         <div class="col-span-1">Date</div>
@@ -13,7 +13,7 @@
       </div>
 
       <!-- Data Row with underline and gap -->
-      <div class="grid grid-cols-5 gap-2 text-sm text-black-2 items-center py-3 border-b border-black-2">
+      <div class="grid grid-cols-5 gap-7 text-sm text-black-2 items-center py-3 border-b border-black-2">
         <div class="col-span-1 font-medium">Premium</div>
         <div class="col-span-1 truncate">INV_C_2024-345678</div>
         <div class="col-span-1">Dec 11, 2024</div>

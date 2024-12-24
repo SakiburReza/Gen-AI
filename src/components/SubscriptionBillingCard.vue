@@ -191,7 +191,7 @@ onUnmounted(() => {
 
     <!-- Invoice Card -->
     <InvoiceCard
-      class="fixed top-10 z-50 max-w-xs sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl bg-white shadow-lg rounded-md p-4"
+      class="absolute-middle z-50 max-w-xs sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl rounded-md p-4"
       v-if="showInvoiceCard"
       @close="toggleInvoiceCard"
     />
