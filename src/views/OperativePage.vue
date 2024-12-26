@@ -11,6 +11,9 @@ import { ref, watch, onMounted } from 'vue'
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { base64ToBlobUrl } from '@/utils/utils'
 import { useRoute } from 'vue-router'
+import { useCredits } from '@/utils/utils';
+
+const { fetchCredits } = useCredits();
 
 const route = useRoute()
 
@@ -165,6 +168,7 @@ const generateAiContent = async () => {
 
     if (response?.data?.status) {
       toastStore.success(response?.data.message)
+      await fetchCredits();
       const contents = response.data.data.content
       // Check if 'contents' is an array and iterate over each content
       if (Array.isArray(contents)) {
@@ -188,6 +192,8 @@ const generateAiContent = async () => {
         }
         media.value = [newMedia, ...media.value].slice(0, 12)
       }
+      // Update credits after successful content generation
+      await fetchCredits();
     } else {
       console.error('Failed to generate media:', response)
     }
