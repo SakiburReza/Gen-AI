@@ -12,21 +12,16 @@ const handleInput = () => {
 </script>
 
 <template>
-  <fwb-card href="#" class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl">
+  <fwb-card class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white">
     <div class="p-5">
       <!-- Title -->
-      <h6 class="mb-2 text-xl font-bold tracking-tight text-black dark:text-white sm:text-2xl">
+      <h6 class="mb-2 text-sm font-bold tracking-tight text-black dark:text-white sm:text-md">
         Describe
       </h6>
-
       <!-- Textarea -->
-      <fwb-textarea
-        class="w-full h-16 sm:h-20"
-        :rows="2"
-        v-model.lazy="localDescription"
-        placeholder="Describe an image you want to create"
-        @input="handleInput"
-      />
+      <fwb-textarea class="w-full h-16 sm:h-40 sm:w-120 text-dimGray text-xs" :rows="2"
+      label=""
+        v-model.lazy="localDescription" placeholder="Describe an image you want to create..." @input="handleInput" />
     </div>
   </fwb-card>
 </template>
