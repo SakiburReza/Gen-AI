@@ -273,7 +273,7 @@ onMounted(async () => {
             <!-- Text to Image-->
             <div v-if="activeMode === 'image'" :class="[
               'flex items-center cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-              activeFunctionality === 'Text to Image' ? 'border border-white' : '',
+              activeFunctionality === 'Text to Image' ? 'border border-blue-600' : '',
             ]" @click="changeFunctionality('Text to Image')">
               <span class="text-gray-900 text-md mx-auto">Text to Image</span>
             </div>
@@ -317,7 +317,7 @@ onMounted(async () => {
             <!-- Image to Image -->
             <div v-if="activeMode === 'image'" :class="[
               'flex items-center cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-              activeFunctionality === 'Image to Image' ? 'border border-white' : '',
+              activeFunctionality === 'Image to Image' ? 'border border-blue-600' : '',
             ]" @click="changeFunctionality('Image to Image')">
               <span class="text-gray-800 text-md mx-auto">Image to Image</span>
             </div>
