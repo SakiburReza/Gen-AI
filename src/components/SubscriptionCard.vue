@@ -85,16 +85,16 @@ const ZeuxItNow = async () => {
       </div>
 
       <div class="border-solid lg:border-dashed">
-        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
+        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
       </div>
 
       <!-- CTA Button -->
       <button @click="ZeuxItNow" class="w-full bg-black text-white text-sm py-3 rounded-lg hover:bg-gray-800">
         Zeux It Now
       </button>
-
     </div>
   </div>
+
 </template>
 
 <style scoped>
