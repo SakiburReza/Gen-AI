@@ -6,6 +6,7 @@ import SubscriptionPage from '@/views/SubscriptionPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
 import InvoiceCard from '@/components/InvoiceCard.vue'
+import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
 import BuyMoreCreditsModal from '@/components/BuyMoreCreditsModal.vue'
 
@@ -13,13 +14,13 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: '/operativepage',
+      name: 'operativepage',
       component: OperativePage,
     },
     {
-      path: '/sign-in',
-      name: 'userLogin',
+      path: '/',
+      name: 'signin',
       component: SignInComponent,
     },
     {
