@@ -1,17 +1,17 @@
 <template>
-  <div class="flex items-center justify-center">
-    <div class="w-full max-w-2xl mx-auto bg-white border rounded-lg shadow-md p-4">
+  <div class="flex items-center justify-center min-h-screen p-6 sm:p-6 lg:p-6">
+    <div class="w-full max-w-4xl mx-auto bg-white border rounded-lg shadow-md p-2 sm:p-6 lg:p-2">
       <h2 class="text-lg font-semibold text-black-2 mb-4">Invoices</h2>
 
       <!-- Header Row with underline -->
       <div
-        class="grid grid-cols-6 gap-6 text-sm font-medium text-black-2 border-b border-black-2 pb-2"
+        class="grid grid-cols-6 gap-6 text-sm font-medium text-black-2 border-b border-black-2 pb-4"
       >
         <div class="col-span-1">Product</div>
         <div class="col-span-1">Reference</div>
-        <div class="col-span-1">Date</div>
+        <div class="col-span-1 ml-4">Date</div>
         <div class="col-span-1 text-center">Status</div>
-        <div class="col-span-1 text-center">Amount</div>
+        <div class="col-span-1 text-center ml-2">Amount</div>
         <div class="col-span-1 text-center">Download</div>
       </div>
 
@@ -19,13 +19,13 @@
       <div
         v-for="(invoice, index) in invoices"
         :key="index"
-        class="grid grid-cols-6 gap-10 text-sm text-black-2 items-center py-3 border-b border-black-2"
+        class="grid grid-cols-6 gap-10 text-sm text-black-2 items-center py-3 border-b border-black-2 pb-4"
       >
         <div class="col-span-1 font-medium">{{ invoice.product }}</div>
         <div class="col-span-1 truncate">{{ invoice.transactionId }}</div>
-        <div class="col-span-1">{{ invoice.billingTime }}</div>
-        <div class="col-span-1 text-center">{{ invoice.STATUS }}</div>
-        <div class="col-span-1 text-center font-medium">{{ invoice.AMOUNT }} USD</div>
+        <div class="col-span-1 ml-2">{{ invoice.billingTime }}</div>
+        <div class="col-span-1 text-center ">{{ invoice.STATUS }}</div>
+        <div class="col-span-1 text-center font-medium ml-2">{{ invoice.AMOUNT }} USD</div>
         <div class="col-span-1 flex justify-center">
           <a
             :href="invoice.receiptUrl"
