@@ -3,9 +3,9 @@
 import { FwbBadge } from 'flowbite-vue'
 import AccountCard from '@/components/AccountCard.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
-import genAiService from '@/services/gen-ai'
+import { useCredits } from '@/utils/utils';
 
-const credits = ref(0); // Reactive state for credits
+const { credits, fetchCredits } = useCredits();
 
 const showAccountCard = ref(false);
 const isClicked = ref(false);
@@ -26,16 +26,6 @@ function handleClickOutside(event) {
   const accountCard = document.querySelector('.account-card');
   if (accountCard && !accountCard.contains(event.target)) {
     closeAccountCard();
-  }
-}
-
-// Fetch credits from API
-async function fetchCredits() {
-  try {
-    const response = await genAiService.getCreditInfo() // Replace with your API endpoint
-    credits.value = response.data.credits; // Assuming the API response has a `credits` field
-  } catch (error) {
-    console.error('Error fetching credits:', error);
   }
 }
 
