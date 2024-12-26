@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onUnmounted, ref } from 'vue';
 import genAiService from '@/services/gen-ai';
+import { useToastStore } from '@/stores/toast'
 
+const toastStore = useToastStore()
 
 // Props
 const props = defineProps({
@@ -71,15 +73,15 @@ const turnIntoVideoAction = async () => {
     console.log("API Response:", response);
 
     if (response?.success) {
-      alert('Video generated successfully!');
+      toastStore.success(response.data.message || 'Video generated successfully!');
       // Handle the response, e.g., display the video or download it
     } else {
       console.error("Error in API response:", response);
-      alert('Failed to generate video. Please try again.');
+      toastStore.error(response.data.message || 'Failed to generate video. Please try again.');
     }
   } catch (error) {
     console.error("Error occurred:", error);
-    alert('An error occurred while processing your request.');
+    toastStore.error(error || 'Failed to generate video. Please try again.');
   } finally {
     isLoading.value = false; // Hide loading state
   }
