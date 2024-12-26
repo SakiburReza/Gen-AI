@@ -147,6 +147,7 @@ const fetchUserProfile = async () => {
     if (response.data.status) {
       profile.value.name = response.data.data.userProfile.name;
       profile.value.email = response.data.data.userProfile.email;
+      profile.value.logoPreview = response.data.data.profilePicture
     } else {
       console.error("Invalid response structure:", response);
     }

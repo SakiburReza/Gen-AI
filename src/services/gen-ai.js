@@ -110,6 +110,12 @@ class GenAIService {
     });
 
   }
+  fetchPaymentInfo() {
+    return axios.get(this.url +'/paymentInfo', {
+      headers: this.getAuthHeaders(),
+    });
+
+  }
 }
 
 export default new GenAIService()

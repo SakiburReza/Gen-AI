@@ -1,32 +1,35 @@
 <template>
   <div class="flex items-center justify-center">
-    <div class="w-full max-w-md mx-auto bg-white border rounded-lg shadow-md p-4">
+    <div class="w-full max-w-2xl mx-auto bg-white border rounded-lg shadow-md p-4">
       <h2 class="text-lg font-semibold text-black-2 mb-4">Invoices</h2>
 
       <!-- Header Row with underline -->
-      <div class="grid grid-cols-5 gap-6 text-sm font-medium text-black-2 border-b border-black-2 pb-2">
+      <div
+        class="grid grid-cols-6 gap-6 text-sm font-medium text-black-2 border-b border-black-2 pb-2"
+      >
         <div class="col-span-1">Product</div>
         <div class="col-span-1">Reference</div>
         <div class="col-span-1">Date</div>
         <div class="col-span-1 text-center">Status</div>
+        <div class="col-span-1 text-center">Amount</div>
         <div class="col-span-1 text-center">Download</div>
       </div>
 
-      <!-- Data Row with underline and gap -->
-      <div class="grid grid-cols-5 gap-10 text-sm text-black-2 items-center py-3 border-b border-black-2">
-        <div class="col-span-1 font-medium">Premium</div>
-        <div class="col-span-1 truncate">INV_C_2024-345678</div>
-        <div class="col-span-1">Dec 11, 2024</div>
+      <!-- Data Rows -->
+      <div
+        v-for="(invoice, index) in invoices"
+        :key="index"
+        class="grid grid-cols-6 gap-10 text-sm text-black-2 items-center py-3 border-b border-black-2"
+      >
+        <div class="col-span-1 font-medium">{{ invoice.product }}</div>
+        <div class="col-span-1 truncate">{{ invoice.transactionId }}</div>
+        <div class="col-span-1">{{ invoice.billingTime }}</div>
+        <div class="col-span-1 text-center">{{ invoice.STATUS }}</div>
+        <div class="col-span-1 text-center font-medium">{{ invoice.AMOUNT }} USD</div>
         <div class="col-span-1 flex justify-center">
-          <input
-            type="checkbox"
-            class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-300"
-            checked
-          />
-        </div>
-        <div class="col-span-1 flex justify-center">
-          <button
-            @click="downloadInvoice"
+          <a
+            :href="invoice.receiptUrl"
+            download
             class="text-blue-600 hover:text-blue-800 transition"
           >
             <svg
@@ -44,7 +47,7 @@
                 d="M3 16a2 2 0 002 2h10a2 2 0 002-2v-1a1 1 0 112 0v1a4 4 0 01-4 4H5a4 4 0 01-4-4v-1a1 1 0 112 0v1z"
               />
             </svg>
-          </button>
+          </a>
         </div>
       </div>
 
@@ -54,19 +57,23 @@
   </div>
 </template>
 
-<script>
-import { useRouter } from 'vue-router';
+<script setup>
+import { ref, onMounted } from 'vue'
+import genAiService from '@/services/gen-ai'
+// State to hold the invoice data
+const invoices = ref([])
 
-export default {
-  setup() {
-    const router = useRouter();
+// Fetch invoices data from API
+const fetchInvoices = async () => {
+  try {
+    const response = await genAiService.fetchPaymentInfo() // Replace with your API endpoint
+    invoices.value = response.data
+    console.log('Invoices fetched successfully:', invoices.value)
+  } catch (error) {
+    console.error('Error fetching invoices:', error)
+  }
+}
 
-    const navigateTo = (url) => {
-      console.log(`Navigating to: ${url}`);
-      router.push(url);
-    };
-
-    return { navigateTo };
-  },
-};
+// Fetch data when the component is mounted
+onMounted(fetchInvoices)
 </script>
