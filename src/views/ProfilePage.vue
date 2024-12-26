@@ -128,7 +128,6 @@
 import { ref,  onMounted } from "vue";
 import Navbar from "@/components/Navbar.vue";
 import genAiService from "@/services/gen-ai";
-import { createRouter as $router } from 'vue-router'
 import router from '@/router/index.js'
 import { useToastStore } from '@/stores/toast'
 
@@ -138,8 +137,8 @@ const profile = ref({
   name: "",
   email: "",
   password: "",
-  logo: null,
-  logoPreview: null,
+  logo: "",
+  logoPreview: "",
 });
 
 const fetchUserProfile = async () => {
@@ -148,7 +147,6 @@ const fetchUserProfile = async () => {
     if (response.data.status) {
       profile.value.name = response.data.data.userProfile.name;
       profile.value.email = response.data.data.userProfile.email;
-
     } else {
       console.error("Invalid response structure:", response);
     }
@@ -207,7 +205,7 @@ const saveProfile = async () => {
     )
     if (profile.value.logo) {
       console.log("Logo file:", profile.value.logo);
-      formData.append("profilePicture", profile.value.logoPreview);
+      formData.append("profilePicture", profile.value.logo, profile.value.logo.name);
     }
     console.log("FormData contents:");
     for (let [key, value] of formData.entries()) {
@@ -216,8 +214,6 @@ const saveProfile = async () => {
      const response = await genAiService.saveProfile(formData);
      console.log(response);
      if (response?.data.status) {
-    //   profile.value.name = response.data.data.userProfile.name;
-    //   profile.value.email = response.data.data.userProfile.email;
      toastStore.success(response?.data.message)
     //
     } else {
