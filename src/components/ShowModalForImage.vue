@@ -52,12 +52,20 @@ const turnIntoVideoAction = async () => {
   isLoading.value = true; // Show loading state
   try {
     const formData = new FormData();
-    formData.append('image', props.image.url); // Correctly use `image.url`
+
+    const imgResponse = await fetch(props.image.url);
+    const blob = await imgResponse.blob();
+
+    // Convert the Blob to a File with a filename
+    const file = new File([blob], getFilename(props.image.url), { type: blob.type });
+
+
+    formData.append('image', file); // Correctly use image.url
     formData.append('prompt', prompt.value);
 
     console.log("Sending formData:", { image: props.image.url, prompt: prompt.value });
 
-    // Assuming `genAiService.imageToVideo` is an API client that handles requests
+    // Assuming genAiService.imageToVideo is an API client that handles requests
     const response = await genAiService.imageToVideo(formData);
 
     console.log("API Response:", response);
