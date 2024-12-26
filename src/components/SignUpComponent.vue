@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import genAiService from '@/services/gen-ai'
+import { useToastStore } from '@/stores/toast'
+
+const toastStore = useToastStore()
 
 // Reactive form data object
 const formData = ref({
@@ -12,19 +15,33 @@ const formData = ref({
 // Modal visibility
 const showTermsModal = ref(false)
 
-// Form submission handler
 const submitForm = async () => {
   // Create a new object excluding termsAccepted from the payload
-  const { termsAccepted, ...formPayload } = formData.value
+  const { termsAccepted, ...formPayload } = formData.value;
 
-  console.log(formPayload) // Check form data without termsAccepted
+  console.log('Submitting form data:', formPayload); // Debug: Check form data
+
   try {
-    const { data: response } = await genAiService.register(formPayload)
-    console.log('Form submission successful:', response)
+    // Send form data to the API
+    const response = await genAiService.register(formPayload);
+    console.log('Response:', response.data);
+
+    // Check for success based on the response structure
+    if (response.data?.status && response.data?.code === 200) {
+      // Show success toast message if the response indicates success
+      toastStore.success(response.data.message || 'Registration successful!');
+    } else {
+      // Show error toast message for unexpected scenarios
+      toastStore.error(response.data?.message || 'Failed to register.');
+    }
   } catch (error) {
-    console.error('Error submitting form:', error)
+    // Log the error and provide feedback to the user
+    console.error('Error submitting form:', error);
+    toastStore.error('An unexpected error occurred. Please try again later.');
   }
-}
+};
+
+
 </script>
 
 <template>
