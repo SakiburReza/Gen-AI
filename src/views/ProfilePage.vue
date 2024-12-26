@@ -130,6 +130,9 @@ import Navbar from "@/components/Navbar.vue";
 import genAiService from "@/services/gen-ai";
 import { createRouter as $router } from 'vue-router'
 import router from '@/router/index.js'
+import { useToastStore } from '@/stores/toast'
+
+const toastStore = useToastStore()
 
 const profile = ref({
   name: "",
@@ -212,9 +215,10 @@ const saveProfile = async () => {
     }
      const response = await genAiService.saveProfile(formData);
      console.log(response);
-     if (response.data.status) {
+     if (response?.data.status) {
     //   profile.value.name = response.data.data.userProfile.name;
     //   profile.value.email = response.data.data.userProfile.email;
+     toastStore.success(response?.data.message)
     //
     } else {
       console.error("Invalid response structure:", response);
@@ -222,7 +226,6 @@ const saveProfile = async () => {
   } catch (error) {
     console.error("Error fetching user profile:", error);
   }
-  alert("Profile update successfully!");
 };
 
 const cancelChanges = () => {
