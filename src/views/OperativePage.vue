@@ -79,7 +79,7 @@ watch(activeFunctionality, async (newValue) => {
   } else if (newValue === 'Text to Video') {
     await fetchMedia('text-to-video')
   } else if (newValue === 'Templates') {
-    await fetchMedia('templates')
+    await fetchMedia('template-video')
   }
 })
 
