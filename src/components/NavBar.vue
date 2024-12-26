@@ -3,18 +3,22 @@
 import { FwbBadge } from 'flowbite-vue'
 import AccountCard from '@/components/AccountCard.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
-import genAiService from '@/services/gen-ai'
+import { useCredits } from '@/utils/utils';
 
-const credits = ref(0); // Reactive state for credits
+const { credits, fetchCredits } = useCredits();
 
 const showAccountCard = ref(false);
+const isClicked = ref(false);
+
 
 function toggleAccountCard() {
   showAccountCard.value = !showAccountCard.value;
+  isClicked.value = !isClicked.value;
 }
 
 function closeAccountCard() {
   showAccountCard.value = false;
+  isClicked.value = false;
 }
 
 // Close AccountCard when clicking outside
@@ -22,16 +26,6 @@ function handleClickOutside(event) {
   const accountCard = document.querySelector('.account-card');
   if (accountCard && !accountCard.contains(event.target)) {
     closeAccountCard();
-  }
-}
-
-// Fetch credits from API
-async function fetchCredits() {
-  try {
-    const response = await genAiService.getCreditInfo() // Replace with your API endpoint
-    credits.value = response.data.credits; // Assuming the API response has a `credits` field
-  } catch (error) {
-    console.error('Error fetching credits:', error);
   }
 }
 
@@ -47,11 +41,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative flex flex-col items-center justify-center">
+  <div class="relative flex flex-col items-center justify-center p-4">
     <!-- Logo -->
     <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-20" />
     <!-- Text -->
-    <fwb-badge class="bg-white text-black" size="xl" @click="toggleAccountCard">
+    <fwb-badge class="bg-white text-black" size="xl" @click="toggleAccountCard" :class="{'text-': isClicked}">
       <p class="mr-2">Account</p>
       <svg
         width="20"
@@ -86,16 +80,19 @@ onUnmounted(() => {
     </fwb-badge>
 
     <div v-if="showAccountCard">
+      <!-- Overlay background -->
       <div
         class="fixed inset-0 bg-opacity-25 z-0"
         @click="closeAccountCard"
       ></div>
 
-    <AccountCard
-      class="absolute top-10 z-10 max-w-* sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl"
-      v-if="showAccountCard"
-      @close="toggleAccountCard"
-    />
-  </div>
+      <!-- Account Card with responsive positioning -->
+      <AccountCard
+        class="fixed top-12 right-80 z-10 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+        v-if="showAccountCard"
+        @close="toggleAccountCard"
+      />
+    </div>
+
   </div>
 </template>

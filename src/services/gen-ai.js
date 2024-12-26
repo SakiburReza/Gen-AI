@@ -96,6 +96,26 @@ class GenAIService {
       },
     )
   }
+
+  fetchUserProfile() {
+    return axios.get(this.url +'/user/user-profile', {
+      headers: this.getAuthHeaders(),
+    });
+
+  }
+
+  saveProfile(data) {
+    return axios.post(this.url +'/user/user-profile-update', data,{
+      headers: this.getAuthHeaders(),
+    });
+
+  }
+  fetchPaymentInfo() {
+    return axios.get(this.url +'/paymentInfo', {
+      headers: this.getAuthHeaders(),
+    });
+
+  }
 }
 
 export default new GenAIService()
