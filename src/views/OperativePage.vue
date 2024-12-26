@@ -278,17 +278,6 @@ onMounted(async () => {
               <span class="text-gray-900 text-md mx-auto">Text to Image</span>
             </div>
 
-            <!-- Image to Video -->
-            <div v-if="activeMode === 'video'" :class="[
-              'flex items-center justify-center space-x-2 cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-              activeFunctionality === 'Image to Video' ? 'border border-blue-600' : '',
-            ]" @click="changeFunctionality('Image to Video')">
-              <span class="text-gray-800 font-medium">Image to Video</span>
-              <img src="/public/images/imageToVideo.png" alt="Image to Video" class="h-6 w-6" />
-            </div>
-
-
-
             <!-- Text to Video -->
             <div v-if="activeMode === 'video'" :class="[
               'flex items-center justify-center space-x-2 cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
@@ -296,6 +285,15 @@ onMounted(async () => {
             ]" @click="changeFunctionality('Text to Video')">
               <span class="text-gray-800 font-medium">Text to Video</span>
               <img src="/public/images/textToVideo.png" alt="Text to Video" class="h-6 w-6" />
+            </div>
+
+            <!-- Image to Video -->
+            <div v-if="activeMode === 'video'" :class="[
+              'flex items-center justify-center space-x-2 cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
+              activeFunctionality === 'Image to Video' ? 'border border-blue-600' : '',
+            ]" @click="changeFunctionality('Image to Video')">
+              <span class="text-gray-800 font-medium">Image to Video</span>
+              <img src="/public/images/imageToVideo.png" alt="Image to Video" class="h-6 w-6" />
             </div>
 
             <!-- Face Swap -->
