@@ -18,47 +18,47 @@ app.use(router)
 
 app.use(createPinia());
 app.use(Vue3Toastify, {
-    autoClose: 3000,
-    hideProgressBar: true,
-    transition: 'slide',
-    style: {
-      zIndex: '9999999'
-    }
-  })
-  
-  app.mount('#app')
-  
-  const axiosInstance = axios.create();
-  axiosInstance.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-  axiosInstance.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-  
-  // Register axiosInstance globally
-  app.config.globalProperties.$axios = axiosInstance;
-  
-  // Request interceptor for API calls
-  // axiosInstance.interceptors.request.use(
-  //   (config) => {
-  //     console.log("11111111"); // This should print now
-  
-  //     // Retrieve the token inside the interceptor to ensure the latest value
-  //     const token = localStorage.getItem('authToken'); 
-  
-  //     if (token) {
-  //       config.headers.Authorization = `Bearer ${token}`; // Add token to request headers
-  //     } else {
-  //       console.log('Token not found in localStorage');
-  //       // Optionally, redirect to login page if needed:
-  //       // router.push('/login');
-  //     }
-  
-  //     return config; // Return config to continue with the request
-  //   },
-  //   (error) => {
-  //     return Promise.reject(error); // Handle request error
-  //   }
-  // );
-  
-  
+  autoClose: 3000,
+  hideProgressBar: true,
+  transition: 'slide',
+  style: {
+    zIndex: '9999999'
+  }
+})
+
+app.mount('#app')
+
+const axiosInstance = axios.create();
+axiosInstance.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axiosInstance.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+// Register axiosInstance globally
+app.config.globalProperties.$axios = axiosInstance;
+
+// Request interceptor for API calls
+// axiosInstance.interceptors.request.use(
+//   (config) => {
+//     console.log("11111111"); // This should print now
+
+//     // Retrieve the token inside the interceptor to ensure the latest value
+//     const token = localStorage.getItem('authToken');
+
+//     if (token) {
+//       config.headers.Authorization = Bearer ${token}; // Add token to request headers
+//     } else {
+//       console.log('Token not found in localStorage');
+//       // Optionally, redirect to login page if needed:
+//       // router.push('/login');
+//     }
+
+//     return config; // Return config to continue with the request
+//   },
+//   (error) => {
+//     return Promise.reject(error); // Handle request error
+//   }
+// );
+
+
 
 axios.interceptors.response.use(
   (config) => {
@@ -109,7 +109,7 @@ axios.interceptors.response.use(
       toast.error(errMsg, {
         theme: 'dark',
         onClose: () => {
-            //authService.logout()
+          //authService.logout()
         },
       })
     }

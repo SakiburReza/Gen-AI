@@ -4,7 +4,7 @@
     <!-- Back Button -->
     <div class="absolute top-10 left-4 md:left-10 lg:left-20">
       <button
-        @click="goBack"
+        @click="() => $router.push('/operativepage')"
         class="px-4 py-2 text-sm bg-blue-600 text-white rounded-md shadow-lg hover:bg-blue-700 transition-all"
       >
         TAKE ME BACK I WANT TO CREATE
@@ -25,11 +25,11 @@
             v-if="profile.logoPreview"
             :src="profile.logoPreview"
             alt="Profile Picture"
-            class="h-20 w-20 rounded-full object-cover"
+            class="h-30 w-30 rounded-full object-cover"
           />
           <div
             v-else
-            class="bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl font-bold text-black-2"
+            class="bg-gray-300 h-30 w-30 rounded-full flex items-center justify-center text-6xl font-bold text-black-2"
           >
             H
           </div>
@@ -37,7 +37,7 @@
         <div class="ml-4 flex flex-col mt-4 sm:mt-0">
           <label
             for="upload-photo"
-            class="mt-2 px-4 py-2 bg-gray-300 text-black-2 rounded-md hover:bg-gray-400 cursor-pointer"
+            class="mt-2 px-7 py-1.5 bg-gray-300 text-black-2 rounded-md hover:bg-gray-400 cursor-pointer"
           >
             Upload Photo
           </label>
@@ -54,7 +54,7 @@
 
 
         <!-- Account Name -->
-        <div class="mb-4">
+        <div class="mb-4 mt-8">
           <label for="name" class="block text-sm font-medium text-black-2">
             Account Name
           </label>
@@ -128,6 +128,7 @@
 import { ref,  onMounted } from "vue";
 import Navbar from "@/components/Navbar.vue";
 import genAiService from "@/services/gen-ai";
+import { createRouter as $router } from 'vue-router'
 
 const profile = ref({
   name: "",
@@ -197,7 +198,7 @@ const saveProfile = async () => {
       JSON.stringify({
         name: profile.value.name,
         email: null,
-        password: profile.value.password,
+        password: profile.value.password != null ? profile.value.password : null,
       })
     )
     if (profile.value.logo) {
@@ -208,19 +209,19 @@ const saveProfile = async () => {
     for (let [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
-    // // const response = await genAiService.saveProfile(formData);
-    // // console.log(response);
-    // if (response.data.status) {
+     const response = await genAiService.saveProfile(formData);
+     console.log(response);
+     if (response.data.status) {
     //   profile.value.name = response.data.data.userProfile.name;
     //   profile.value.email = response.data.data.userProfile.email;
     //
-    // } else {
-    //   console.error("Invalid response structure:", response);
-    // }
+    } else {
+      console.error("Invalid response structure:", response);
+    }
   } catch (error) {
     console.error("Error fetching user profile:", error);
   }
-  alert("Profile saved successfully!");
+  alert("Profile update successfully!");
 };
 
 const cancelChanges = () => {
@@ -237,9 +238,6 @@ const deleteAccount = () => {
   }
 };
 
-const goBack = () => {
-  window.location.href = "http://localhost:3000/";
-};
 
 onMounted(fetchUserProfile);
 </script>
