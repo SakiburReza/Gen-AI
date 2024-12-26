@@ -334,17 +334,21 @@ onMounted(async () => {
         </div>
 
         <div v-if="activeFunctionality === 'Face Swap'" class="bg-white p-6 space-y-6 flex-shrink-0 relative">
-          <!-- Image Cards with Stacked Positioning -->
-          <div class="relative w-full h-80 mb-50">
-            <!-- First Image Card (Back) -->
-            <div class="absolute top-0 left-0 lg:w-80 sm:w-60 lg:h-60 sm:h-40 bg-gray-200 rounded-lg shadow-lg z-1">
-              <ImageInputCard title="Insert Reference Image" @input="(file) => (referenceImage = file)" />
+          <!-- Image Cards with Sequencial Positioning -->
+          <div class="w-full space-y-6">
+            <!-- First Image Card -->
+            <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-gray-200 rounded-lg shadow-lg">
+              <ImageInputCard
+                title="Insert Reference Image"
+                @input="(file) => (referenceImage = file)"
+              />
             </div>
             <!-- Second Image Card -->
             <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white rounded-lg shadow-2xl">
               <ImageInputCard title="Insert Face Image" @input="(file) => (faceImage = file)" />
             </div>
           </div>
+
           <CustomizationCard @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectOutput="(output) => (selectedOutput = output)" />
           <!-- Generate Button -->
