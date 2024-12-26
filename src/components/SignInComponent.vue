@@ -1,24 +1,48 @@
 <script setup>
 import { ref } from 'vue'
+import { useToastStore } from '@/stores/toast'
+import genAiService from '@/services/gen-ai'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+
+const toastStore = useToastStore()
 // Reactive form inputs
-const fullName = ref('')
-const email = ref('')
+const username = ref('')
 const password = ref('')
-const termsAccepted = ref(false)
 
 // Form submission handler
-const submitForm = () => {
-  console.log({
-    fullName: fullName.value,
-    email: email.value,
-    password: password.value,
-    termsAccepted: termsAccepted.value,
-  })
+const submitForm = async () => {
+  try {
+    // Prepare the user data for the sign-in request
+    const data = { username: username.value, password: password.value }
+
+    // Make the API call to the sign-in endpoint
+    const response = await genAiService.logIn(data)
+    console.log(response)
+
+    // Assuming the response contains a token or status indicating success
+    if (response.data.status) {
+      toastStore.success('Sign-In successful')
+      localStorage.setItem('authToken', response.data.data.token)
+      router.push('/operativepage'); 
+    } else {
+      // Handle the case when the response doesn't indicate success
+      //toastStore.error("Sign-In failed, please try again.");
+    }
+  } catch (error) {
+    console.error('Sign-In failed:', error)
+    // Handle the error (e.g., show error message)
+    toastStore.error('An error occurred during sign-in.')
+  }
 }
 </script>
 
 <template>
+  <div class="relative flex flex-col items-center justify-center">
+    <!-- Logo -->
+    <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-25" />
+  </div>
   <div class="flex justify-center items-center min-h-screen">
     <!-- Left Side - Image and Text -->
     <div class="relative lg:w-1/4 hidden sm:flex justify-center h-full items-center">
@@ -45,73 +69,77 @@ const submitForm = () => {
       />
     </div>
 
-   <!-- Right Side - Sign-Up Form -->
-<div class="lg:w-1/4 flex flex-col justify-center items-center px-4 h-full">
-  <!-- Form Container -->
-  <div class="w-full max-w-md">
-    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Sign In</h2>
+    <!-- Right Side - Sign-In Form -->
+    <div class="lg:w-1/4 flex flex-col justify-center items-center px-4 h-full">
+      <!-- Form Container -->
+      <div class="w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Sign In</h2>
 
-    <!-- Social Buttons -->
-    <button
-      class="w-full flex items-center justify-center mb-4 p-3 bg-black text-white rounded-full hover:bg-opacity-80 transition"
-      aria-label="Sign in with Apple"
-    >
-      <img src="/public/images/icon/apple-icon.svg" alt="Apple Icon" class="w-5 h-5 mr-2" />
-      Sign in with Apple
-    </button>
-    <button
-      class="w-full flex items-center justify-center mb-6 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
-      aria-label="Sign in with Google"
-    >
-      <img src="/public/images/icon/google-icon.svg" alt="Google Icon" class="w-5 h-5 mr-2" />
-      Sign in with Google
-    </button>
+        <!-- Social Buttons -->
+        <!-- <button
+        class="w-full flex items-center justify-center mb-4 p-3 bg-black text-white rounded-full hover:bg-opacity-80 transition"
+        aria-label="Sign in with Apple"
+      >
+        <img src="/public/images/icon/apple-icon.svg" alt="Apple Icon" class="w-5 h-5 mr-2" />
+        Sign in with Apple
+      </button>
+      <button
+        class="w-full flex items-center justify-center mb-6 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+        aria-label="Sign in with Google"
+      >
+        <img src="/public/images/icon/google-icon.svg" alt="Google Icon" class="w-5 h-5 mr-2" />
+        Sign in with Google
+      </button> -->
 
-    <!-- Sign-Up Form -->
-    <form @submit.prevent="submitForm" class="space-y-6">
+        <!-- Sign-In Form -->
+        <form @submit.prevent="submitForm" class="space-y-6">
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              id="email"
+              v-model="username"
+              type="email"
+              placeholder="Enter your email"
+              class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
+              aria-label="Email"
+              required
+            />
+          </div>
 
-      <!-- Email -->
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-        <input
-          id="email"
-          v-model="email"
-          type="email"
-          placeholder="Enter your email"
-          class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
-          aria-label="Email"
-          required
-        />
+          <!-- Password -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <input
+              id="password"
+              v-model="password"
+              type="password"
+              placeholder="Enter your password"
+              class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
+              aria-label="Password"
+              required
+            />
+          </div>
+
+          <!-- Submit Button -->
+          <div class="flex justify-center">
+            <button
+              type="submit"
+              class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition"
+              aria-label="Sign In"
+            >
+              Sign In
+            </button>
+          </div>
+        </form>
+
+        <!-- Register Link -->
+        <p class="text-sm text-gray-600 text-center mt-4">
+          Don't have an account yet?
+          <router-link to="/sign-up" class="text-blue-600 hover:underline">Sign Up</router-link>
+        </p>
       </div>
-
-      <!-- Password -->
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-        <input
-          id="password"
-          v-model="password"
-          type="password"
-          placeholder="Enter your password"
-          class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
-          aria-label="Password"
-          required
-        />
-      </div>
-
-      <!-- Submit Button -->
-      <div class="flex justify-center">
-        <button
-          type="submit"
-          class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition"
-          aria-label="Sign In"
-        >
-          Sign In
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
+    </div>
   </div>
 </template>
 

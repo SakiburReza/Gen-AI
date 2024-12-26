@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import ShowModalForImage from './ShowModalForImage.vue';
+import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue';
 import InvoiceCard from '@/components/InvoiceCard.vue'
 
 const props = defineProps({
@@ -26,19 +27,21 @@ const props = defineProps({
         })
     }
 });
-
-
-// State for modal visibility
-const showModal = ref(false);
-
-// Functions to open/close modal
-const openModal = () => {
-    showModal.value = true;
+const showBuyMoreCreditsModal = ref(false) // Modal visibility
+const BuyMoreCredits = async () => {
+    console.log("Executing More Credits");
+    showBuyMoreCreditsModal.value = true
 };
+const closeBuyMoreCreditsModal = () => {
+    showBuyMoreCreditsModal.value = false
 
-const closeModal = () => {
-    showModal.value = false;
-};
+}
+
+
+
+
+
+
 
 const showInvoiceCard = ref(false);
 
@@ -130,7 +133,7 @@ onUnmounted(() => {
                         <br>
                         <div class="flex items-center justify-between">
                             <p class="text-xs text-silverChalice mt-1">Expires 2 years from date purchased</p>
-                            <button
+                            <button @click="BuyMoreCredits"
                                 class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
                                 Buy More
                             </button>
@@ -169,17 +172,10 @@ onUnmounted(() => {
 
             </div>
         </div>
-        <!-- Button Shown Only on Mobile -->
-        <div class="md:hidden mt-6">
-            <button @click="() => $router.push('/')" class="w-full bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
-                TAKE ME BACK I WANT TO CREATE
-            </button>
-        </div>
-        <br>
-        <div @click="openModal">
-            <img src="/images/carImage.png" alt="Doggy">
-        </div>
-        <ShowModalForImage :isOpen="showModal" @close="closeModal" />
+
+         <!-- Modal Component -->
+ <BuyMoreCreditsModal :isOpen="showBuyMoreCreditsModal" @close="closeBuyMoreCreditsModal" />
+      
     </div>
 
   <div v-if="showInvoiceCard">
@@ -191,7 +187,7 @@ onUnmounted(() => {
 
     <!-- Invoice Card -->
     <InvoiceCard
-      class="absolute-middle z-50 max-w-xs sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl rounded-md p-4"
+      class="absolute-middle z-50 mx-auto sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl rounded-md p-4"
       v-if="showInvoiceCard"
       @close="toggleInvoiceCard"
     />

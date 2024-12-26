@@ -7,20 +7,19 @@ import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
 import InvoiceCard from '@/components/InvoiceCard.vue'
 import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
-import TemplatesCard from '@/components/TemplatesCard.vue'
-
-import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
+import VideoCarousel from '@/components/VideoCarousel.vue'
+import BuyMoreCreditsModal from '@/components/BuyMoreCreditsModal.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: '/operativepage',
+      name: 'operativepage',
       component: OperativePage,
     },
     {
-      path: '/sign-in',
+      path: '/',
       name: 'signin',
       component: SignInComponent,
     },
@@ -39,15 +38,20 @@ const router = createRouter({
       name: 'subscription',
       component: SubscriptionPage,
     },
-    {
-      path: '/subscription-billing',
-      name: 'subscriptionbilling',
-      component: SubscriptionBillingCard,
-    },
+    // {
+    //   path: '/subscription-billing',
+    //   name: 'subscriptionbilling',
+    //   component: SubscriptionBillingCard,
+    // },
     {
       path: '/accountcard',
       name: 'accountcard',
       component: AccountCard,
+    },
+    {
+      path: '/morecredit',
+      name: 'morecredit',
+      component: BuyMoreCreditsModal,
     },
 
     {
@@ -59,7 +63,7 @@ const router = createRouter({
     {
       path: '/template',
       name: 'template',
-      component: TemplatesCard
+      component: VideoCarousel
     }
 
   ],
