@@ -8,7 +8,7 @@ import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted } from 'vue'
-import { FwbButton, FwbCard } from 'flowbite-vue'
+import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { base64ToBlobUrl } from '@/utils/utils'
 import { useRoute } from 'vue-router'
 
@@ -78,11 +78,14 @@ watch(activeFunctionality, async (newValue) => {
     await fetchMedia('image-to-video')
   } else if (newValue === 'Text to Video') {
     await fetchMedia('text-to-video')
+  } else if (newValue === 'Templates') {
+    await fetchMedia('template-video')
   }
 })
 
 watch(activeMode, async (newValue) => {
   if (newValue === 'video') {
+    activeFunctionality.value = 'Text to Video'
     await fetchMedia('text-to-video')
   } else if (newValue === 'image') {
     await fetchMedia('text-to-image')
@@ -148,7 +151,6 @@ const generateAiContent = async () => {
       formData.append('num_images', selectedOutput.value.toString())
       response = await genAiService.imageToImage(formData)
     } else if (activeFunctionality.value === 'Templates') {
-      console.log('ss', selectedVideo.value)
       // Create form data for file and video index
       const formData = new FormData()
       formData.append('template_id', selectedVideo.value.id) // Assuming videoIndex is expected by server
@@ -204,12 +206,14 @@ onMounted(async () => {
       const checkoutId = route.query.checkoutId
       const transactionId = route.query.transactionId
       console.log('checkoutId :', checkoutId, 'transactionId:', transactionId)
-      const response = await genAiService.getPaymentSync(checkoutId, transactionId)
 
-      window.location.reload();
-      toastStore.success(response.data)
+      if (checkoutId && transactionId) {
+        const response = await genAiService.getPaymentSync(checkoutId, transactionId)
+        toastStore.success(response.data)
+      }
 
-    } catch (error) { }
+      //window.location.reload();
+    } catch (error) {}
   }
 
   fetchMedia('text-to-image') // Initial load
@@ -336,8 +340,8 @@ onMounted(async () => {
             <div class="absolute top-0 left-0 lg:w-80 sm:w-60 lg:h-60 sm:h-40 bg-gray-200 rounded-lg shadow-lg z-1">
               <ImageInputCard title="Insert Reference Image" @input="(file) => (referenceImage = file)" />
             </div>
-            <!-- Second Image Card (Front) -->
-            <div class="absolute top-30 left-50 w-80 h-60 bg-white rounded-lg shadow-2xl">
+            <!-- Second Image Card -->
+            <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white rounded-lg shadow-2xl">
               <ImageInputCard title="Insert Face Image" @input="(file) => (faceImage = file)" />
             </div>
           </div>
