@@ -2,9 +2,9 @@
   <Navbar />
   <div class="bg-gray-50 min-h-screen p-4 sm:p-6 lg:p-8">
     <!-- Back Button -->
-    <div class="absolute top-10 left-4 md:left-10 lg:left-20">
+    <div class="absolute top-10 left-4 md:left-10 lg:left-40">
       <button
-        @click="() => $router.push('/operativepage')"
+        @click="goBack"
         class="px-4 py-2 text-sm bg-blue-600 text-white rounded-md shadow-lg hover:bg-blue-700 transition-all"
       >
         TAKE ME BACK I WANT TO CREATE
@@ -129,6 +129,7 @@ import { ref,  onMounted } from "vue";
 import Navbar from "@/components/Navbar.vue";
 import genAiService from "@/services/gen-ai";
 import { createRouter as $router } from 'vue-router'
+import router from '@/router/index.js'
 
 const profile = ref({
   name: "",
@@ -238,6 +239,9 @@ const deleteAccount = () => {
   }
 };
 
+const goBack = () => {
+  router.push("/operativepage");
+};
 
 onMounted(fetchUserProfile);
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <div class="flex items-center justify-center bg-white">
+  <div class="relative flex items-center justify-center bg-white">
     <!-- Sidebar container adjusted for responsiveness -->
-    <div class="sm:w-64 bg-white shadow rounded-lg">
+    <div class="w-64 bg-white shadow rounded-lg" :class="{'absolute left-95': true}">
       <ul class="divide-y divide-white">
         <li>
           <a
