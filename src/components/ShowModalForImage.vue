@@ -98,6 +98,20 @@ const handleOutsideClick = (event) => {
 }
 
 
+const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: string): Promise<File> => {
+  try {
+    // Fetch the Blob data from the Blob URL
+    const response = await fetch(blobUrl);
+    const blob = await response.blob();
+
+    // Create a File object from the Blob
+    return new File([blob], fileName, { type: mimeType });
+  } catch (error) {
+    console.error('Error converting blob URL to File:', error);
+    throw error; // Rethrow the error for higher-level handling
+  }
+};
+
 
 </script>
 <template>

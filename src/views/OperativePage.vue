@@ -308,14 +308,10 @@ onMounted(async () => {
           <!-- Removed the w-1/4 class, so it takes only the required width -->
           <div class="grid grid-cols-1 gap-2 w-full sm:w-64 md:w-80 lg:w-full">
             <!-- Text to Image-->
-            <div
-              v-if="activeMode === 'image'"
-              :class="[
-                'flex items-center cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-                activeFunctionality === 'Text to Image' ? 'border border-white' : '',
-              ]"
-              @click="changeFunctionality('Text to Image')"
-            >
+            <div v-if="activeMode === 'image'" :class="[
+              'flex items-center cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
+              activeFunctionality === 'Text to Image' ? 'border border-blue-600' : '',
+            ]" @click="changeFunctionality('Text to Image')">
               <span class="text-gray-900 text-md mx-auto">Text to Image</span>
             </div>
 
@@ -370,14 +366,10 @@ onMounted(async () => {
               <img src="/public/images/templates.png" alt="Image to Video" class="h-6 w-6" />
             </div>
             <!-- Image to Image -->
-            <div
-              v-if="activeMode === 'image'"
-              :class="[
-                'flex items-center cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-                activeFunctionality === 'Image to Image' ? 'border border-white' : '',
-              ]"
-              @click="changeFunctionality('Image to Image')"
-            >
+            <div v-if="activeMode === 'image'" :class="[
+              'flex items-center cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
+              activeFunctionality === 'Image to Image' ? 'border border-blue-600' : '',
+            ]" @click="changeFunctionality('Image to Image')">
               <span class="text-gray-800 text-md mx-auto">Image to Image</span>
             </div>
           </div>
