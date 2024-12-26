@@ -172,7 +172,7 @@ onMounted(() => {
     <!-- Button Shown Only on Mobile -->
     <div class="md:hidden w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
       <button
-        @click="() => $router.push('/')"
+        @click="() => $router.push('/operativepage')"
         class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block"
       >
         TAKE ME BACK I WANT TO CREATE
