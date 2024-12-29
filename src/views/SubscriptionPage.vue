@@ -112,22 +112,22 @@ const fetchPlans = async () => {
     plans.value = response.data.map((plan) => {
       // Check if both storageLimit and planTier are not null
       if (plan.storageLimit != null && plan.planTier != null) {
-        return {   
+        return {
           title: plan.planName || 'No Name Provided',
           featureList: [
             { name: `${plan.credits || 0} Credits`, isActive: true },
             { name: `${plan.storageLimit || 0} GB of Storage`, isActive: plan.storageLimit != null },
-            { 
-              name: plan.faceSwapAccess ? plan.faceSwapAccess.replace(/"/g, '') : 'No Access to Face Swap', 
-              isActive: (plan.faceSwapAccess && !plan.faceSwapAccess.includes('No')) 
+            {
+              name: plan.faceSwapAccess ? plan.faceSwapAccess.replace(/"/g, '') : 'No Access to Face Swap',
+              isActive: (plan.faceSwapAccess && !plan.faceSwapAccess.includes('No'))
             },
-            { 
-              name: plan.templateAccess ? plan.templateAccess.replace(/"/g, '') : 'No Access to Template', 
-              isActive: (plan.templateAccess && !plan.templateAccess.includes('No')) 
+            {
+              name: plan.templateAccess ? plan.templateAccess.replace(/"/g, '') : 'No Access to Template',
+              isActive: (plan.templateAccess && !plan.templateAccess.includes('No'))
             },
-            { 
-              name: plan.creatorAccess ? plan.creatorAccess.replace(/"/g, '') : 'No Access to Creator', 
-              isActive: (plan.creatorAccess && !plan.creatorAccess.includes('No')) 
+            {
+              name: plan.creatorAccess ? plan.creatorAccess.replace(/"/g, '') : 'No Access to Creator',
+              isActive: (plan.creatorAccess && !plan.creatorAccess.includes('No'))
             },
           ],
           comments: plan.planTier || 'No Tier Provided',
@@ -138,7 +138,7 @@ const fetchPlans = async () => {
         return null;
       }
     }).filter(plan => plan != null);  // Filter out null plans
-    console.log("ssaa",plans.value)
+    console.log("ssaa", plans.value)
   } catch (error) {
     console.error('Error fetching plans:', error);
   }
@@ -159,22 +159,16 @@ onMounted(() => {
       <SubscriptionBillingCard />
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-center flex-1 pl-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-3 lg:gap-2 p-4">
       <!-- Loop through the plans dynamically -->
-      <SubscriptionCard
-        v-for="(feature, index) in plans"
-        :key="index"
-        :data="feature"
-        :isStyle="index % 2 == 0"
-      />
+      <SubscriptionCard v-for="(feature, index) in plans" :key="index" :data="feature" :isStyle="index % 2 == 0" />
     </div>
+
 
     <!-- Button Shown Only on Mobile -->
     <div class="md:hidden w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
-      <button
-        @click="() => $router.push('/operativepage')"
-        class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block"
-      >
+      <button @click="() => $router.push('/operativepage')"
+        class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block">
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
