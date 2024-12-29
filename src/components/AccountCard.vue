@@ -13,7 +13,7 @@
               height="20"
               viewBox="0 0 16 20"
               xmlns="http://www.w3.org/2000/svg"
-              class="fill-current text-[#474747] group-hover:text-white transition-colors"
+              class="fill-current text-[#000000] group-hover:text-white transition-colors"
             >
               <g clip-path="url(#clip0_2242_875)">
                 <path
@@ -40,7 +40,7 @@
               height="21"
               viewBox="0 0 19 21"
               xmlns="http://www.w3.org/2000/svg"
-              class="fill-current text-[#474747] group-hover:text-white transition-colors"
+              class="fill-current text-[#000000] group-hover:text-white transition-colors"
             >
               <g clip-path="url(#clip0_2242_871)">
                 <path
@@ -67,7 +67,7 @@
               height="18"
               viewBox="0 0 18 18"
               xmlns="http://www.w3.org/2000/svg"
-              class="fill-current text-[#474747] group-hover:text-white transition-colors"
+              class="fill-current text-[#000000] group-hover:text-white transition-colors"
             >
               <g clip-path="url(#clip0_2242_867)">
                 <path
