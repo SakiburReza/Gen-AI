@@ -1,25 +1,25 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen p-6 sm:p-6 lg:p-6">
-    <div class="w-full max-w-4xl mx-auto bg-white border rounded-lg shadow-md p-2 sm:p-6 lg:p-2">
+  <div class="flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="w-full max-w-4xl mx-auto bg-white border rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
       <h2 class="text-lg font-semibold text-black-2 mb-4">Invoices</h2>
 
-      <!-- Header Row with underline -->
+      <!-- Header Row -->
       <div
-        class="grid grid-cols-6 gap-6 text-sm font-medium text-black-2 border-b border-black-2 pb-4"
+        class="grid grid-cols-6 gap-2 text-xs sm:text-sm font-medium text-black-2 border-b border-black-2 pb-4"
       >
-        <div class="col-span-1">Product</div>
-        <div class="col-span-1">Reference</div>
-        <div class="col-span-1 ml-4">Date</div>
-        <div class="col-span-1 text-center">Status</div>
-        <div class="col-span-1 text-center ml-2">Amount</div>
-        <div class="col-span-1 text-center">Download</div>
+        <div class="col-span-2 sm:col-span-1">Product</div>
+        <div class="col-span-2 sm:col-span-1">Reference</div>
+        <div class="col-span-2 sm:col-span-1 ml-4">Date</div>
+        <div class="hidden sm:block text-center">Status</div>
+        <div class="hidden sm:block text-center">Amount</div>
+        <div class="hidden sm:block text-center">Download</div>
       </div>
 
       <!-- Data Rows -->
       <div
         v-for="(invoice, index) in invoices"
         :key="index"
-        class="grid grid-cols-6 gap-10 text-sm text-black-2 items-center py-3 border-b border-black-2 pb-4"
+        class="grid grid-cols-6 gap-2 text-xs sm:text-sm text-black-2 items-center py-3 border-b border-black-2"
       >
         <div class="col-span-1 font-medium">{{ invoice.product }}</div>
         <div class="col-span-1 truncate">{{ invoice.transactionId }}</div>
@@ -51,18 +51,17 @@
           </a>
         </div>
       </div>
-
-      <!-- Add spacing below the card -->
-      <div class="mt-8"></div>
     </div>
   </div>
 </template>
 
+
 <script setup>
-import { ref, onMounted } from 'vue'
-import genAiService from '@/services/gen-ai'
+import { ref, onMounted } from 'vue';
+import genAiService from '@/services/gen-ai';
+
 // State to hold the invoice data
-const invoices = ref([])
+const invoices = ref([]);
 
 // Fetch invoices data from API
 const fetchInvoices = async () => {
@@ -90,5 +89,6 @@ const handleDownload = (url) => {
   // Ensure the URL is downloadable
 }
 // Fetch data when the component is mounted
-onMounted(fetchInvoices)
+onMounted(fetchInvoices);
 </script>
+
