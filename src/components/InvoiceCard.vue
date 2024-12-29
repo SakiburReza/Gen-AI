@@ -1,35 +1,34 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen p-6 sm:p-6 lg:p-6">
-    <div class="w-full max-w-4xl mx-auto bg-white border rounded-lg shadow-md p-2 sm:p-6 lg:p-2">
+  <div class="flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="w-full max-w-4xl mx-auto bg-white border rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
       <h2 class="text-lg font-semibold text-black-2 mb-4">Invoices</h2>
 
-      <!-- Header Row with underline -->
+      <!-- Header Row -->
       <div
-        class="grid grid-cols-6 gap-6 text-sm font-medium text-black-2 border-b border-black-2 pb-4"
+        class="grid grid-cols-6 gap-2 text-xs sm:text-sm font-medium text-black-2 border-b border-black-2 pb-4"
       >
-        <div class="col-span-1">Product</div>
-        <div class="col-span-1">Reference</div>
-        <div class="col-span-1 ml-4">Date</div>
-        <div class="col-span-1 text-center">Status</div>
-        <div class="col-span-1 text-center ml-2">Amount</div>
-        <div class="col-span-1 text-center">Download</div>
+        <div class="col-span-2 sm:col-span-1">Product</div>
+        <div class="col-span-2 sm:col-span-1">Reference</div>
+        <div class="col-span-2 sm:col-span-1 ml-4">Date</div>
+        <div class="hidden sm:block text-center">Status</div>
+        <div class="hidden sm:block text-center">Amount</div>
+        <div class="hidden sm:block text-center">Download</div>
       </div>
 
       <!-- Data Rows -->
       <div
         v-for="(invoice, index) in invoices"
         :key="index"
-        class="grid grid-cols-6 gap-10 text-sm text-black-2 items-center py-3 border-b border-black-2 pb-4"
+        class="grid grid-cols-6 gap-2 text-xs sm:text-sm text-black-2 items-center py-3 border-b border-black-2"
       >
-        <div class="col-span-1 font-medium">{{ invoice.product }}</div>
-        <div class="col-span-1 truncate">{{ invoice.transactionId }}</div>
-        <div class="col-span-1 ml-2">{{ invoice.billingTime }}</div>
-        <div class="col-span-1 text-center ">{{ invoice.STATUS }}</div>
-        <div class="col-span-1 text-center font-medium ml-2">{{ invoice.AMOUNT }} USD</div>
-        <div class="col-span-1 flex justify-center">
-          <a
-            :href="invoice.receiptUrl"
-            download
+        <div class="col-span-2 sm:col-span-1">{{ invoice.product }}</div>
+        <div class="col-span-2 sm:col-span-1 truncate">{{ invoice.transactionId }}</div>
+        <div class="col-span-2 sm:col-span-1 ml-4">{{ formatDate(invoice.billingTime) }}</div>
+        <div class="hidden sm:block text-center">{{ invoice.STATUS }}</div>
+        <div class="hidden sm:block text-center ml-4">{{ invoice.AMOUNT }} USD</div>
+        <div class="hidden sm:flex justify-center">
+          <button
+            @click="downloadInvoice(invoice.receiptUrl)"
             class="text-blue-600 hover:text-blue-800 transition"
           >
             <svg
@@ -47,33 +46,64 @@
                 d="M3 16a2 2 0 002 2h10a2 2 0 002-2v-1a1 1 0 112 0v1a4 4 0 01-4 4H5a4 4 0 01-4-4v-1a1 1 0 112 0v1z"
               />
             </svg>
-          </a>
+          </button>
         </div>
       </div>
-
-      <!-- Add spacing below the card -->
-      <div class="mt-8"></div>
     </div>
   </div>
 </template>
 
+
 <script setup>
-import { ref, onMounted } from 'vue'
-import genAiService from '@/services/gen-ai'
+import { ref, onMounted } from 'vue';
+import genAiService from '@/services/gen-ai';
+
 // State to hold the invoice data
-const invoices = ref([])
+const invoices = ref([]);
 
 // Fetch invoices data from API
 const fetchInvoices = async () => {
   try {
-    const response = await genAiService.fetchPaymentInfo() // Replace with your API endpoint
-    invoices.value = response.data
-    console.log('Invoices fetched successfully:', invoices.value)
+    const response = await genAiService.fetchPaymentInfo(); // Replace with your API endpoint
+    invoices.value = response.data;
+    console.log('Invoices fetched successfully:', invoices.value);
   } catch (error) {
-    console.error('Error fetching invoices:', error)
+    console.error('Error fetching invoices:', error);
   }
-}
+};
+
+// Function to format the date
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  try {
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return 'Invalid Date';
+  }
+};
+
+const downloadInvoice = async (url) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch invoice: ${response.statusText}`);
+    }
+    const blob = await response.blob();
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', 'invoice.pdf');
+    document.body.appendChild(link);
+    link.click();
+    URL.revokeObjectURL(link.href);
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error('Error downloading invoice:', error);
+  }
+};
+
 
 // Fetch data when the component is mounted
-onMounted(fetchInvoices)
+onMounted(fetchInvoices);
 </script>
+
