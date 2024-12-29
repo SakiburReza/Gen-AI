@@ -91,6 +91,7 @@ watch(activeMode, async (newValue) => {
     activeFunctionality.value = 'Text to Video'
     await fetchMedia('text-to-video')
   } else if (newValue === 'image') {
+    activeFunctionality.value = 'Text to Image'
     await fetchMedia('text-to-image')
   }
 })
