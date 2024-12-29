@@ -27,8 +27,9 @@
         <div class="hidden sm:block text-center">{{ invoice.STATUS }}</div>
         <div class="hidden sm:block text-center ml-4">{{ invoice.AMOUNT }} USD</div>
         <div class="hidden sm:flex justify-center">
-          <button
-            @click="downloadInvoice(invoice.receiptUrl)"
+          <a
+            :href="invoice.receiptUrl"
+            download
             class="text-blue-600 hover:text-blue-800 transition"
           >
             <svg
@@ -46,7 +47,7 @@
                 d="M3 16a2 2 0 002 2h10a2 2 0 002-2v-1a1 1 0 112 0v1a4 4 0 01-4 4H5a4 4 0 01-4-4v-1a1 1 0 112 0v1z"
               />
             </svg>
-          </button>
+          </a>
         </div>
       </div>
     </div>
@@ -83,19 +84,19 @@ const formatDate = (dateString) => {
   }
 };
 
-const downloadInvoice = async (url) => {
+const downloadInvoice = async (url, filename) => {
   try {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch invoice: ${response.statusText}`);
     }
+
     const blob = await response.blob();
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.setAttribute('download', 'invoice.pdf');
+    link.download = `${filename}.pdf`; // Add .pdf or desired file extension
     document.body.appendChild(link);
     link.click();
-    URL.revokeObjectURL(link.href);
     document.body.removeChild(link);
   } catch (error) {
     console.error('Error downloading invoice:', error);
