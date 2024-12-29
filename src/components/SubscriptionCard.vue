@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-
-// Assuming the `subscribePackages` method is imported from an API service.
 import genAiService from '@/services/gen-ai'
+
+// Define the emits to handle custom events
+const emit = defineEmits<{
+  (event: 'button-clicked'): void; // Define the event name and type
+}>();
 
 const props = defineProps({
   data: {
@@ -20,20 +23,24 @@ const props = defineProps({
       price: "$12.99"
     }),
   },
-
-
-
-  
   isStyle: {
     type: Boolean,
     default: true,
   },
-
+  isButtonDisabled: {
+    type: Boolean,
+    default: false, // Default to false, button is enabled initially
+  }
 });
 
 const subscriptionLink = ref(''); // Store the subscription link
 
 const ZeuxItNow = async () => {
+  if (props.isButtonDisabled) return; // Prevent the button from being clicked if it's disabled
+
+  // Emit an event to disable all buttons when one is clicked
+  emit('button-clicked');
+
   // Prepare the reqData based on the selected plan
   const reqData = {
     subscribePackage: props.data.title, // Plan title
@@ -54,6 +61,7 @@ const ZeuxItNow = async () => {
     console.error('Error subscribing:', error);
   }
 }
+
 // Dynamic dashed line
 const dashLength = ref(28); // Adjust this number for dash length
 const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
@@ -67,15 +75,13 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
       'border-blue-600': isStyle,
       'bg-blue-600': !isStyle
     }">
-      <h2 class="text-2xl font-bold mb-4" :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">{{
-        data.title }}</h2>
+      <h2 class="text-2xl font-bold mb-4" :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">{{ data.title }}</h2>
 
       <!-- Feature List with Radio Button -->
       <div class="space-y-1 mb-6">
         <label v-for="(feature, index) in data.featureList" :key="index" class="flex items-center space-x-2">
           <img v-if="feature.isActive && !isStyle" class="h-4 w-4" src="/images/icon/radio_button_checked.svg" alt="">
-          <img v-else-if="feature.isActive && isStyle" class="h-4 w-4" src="/images/icon/radio_button_checked_blue.svg"
-            alt="">
+          <img v-else-if="feature.isActive && isStyle" class="h-4 w-4" src="/images/icon/radio_button_checked_blue.svg" alt="">
           <img v-else class="h-4 w-4" src="/images/icon/radio_button_checked_red.svg" alt="">
           <span :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">{{ feature.name }}</span>
         </label>
@@ -89,8 +95,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
           {{ data.comments }}
         </span>
 
-        <span class="text-3xl font-bold" :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">{{
-          data.price }}</span>
+        <span class="text-3xl font-bold" :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">{{ data.price }}</span>
       </div>
 
       <div class="border-solid lg:border-dashed">
@@ -98,14 +103,14 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
       </div>
 
       <!-- CTA Button -->
-      <button @click="ZeuxItNow" class="w-full bg-black text-white text-sm py-3 rounded-lg hover:bg-gray-800">
+      <button @click="ZeuxItNow" :disabled="isButtonDisabled" 
+        :class="{
+          'w-full text-sm py-3 rounded-lg': true,
+          'bg-black text-white hover:bg-gray-800': !isButtonDisabled,
+          'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled
+        }">
         Zeux It Now
       </button>
     </div>
   </div>
-
 </template>
-
-<style scoped>
-/* Optional Custom Styles */
-</style>
