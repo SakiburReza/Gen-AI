@@ -56,7 +56,7 @@ const fetchprops = async () => {
         return null;
       }
     }).filter((plan) => plan !== null); // Filter out null plans
-    console.log("sss",plans.value)
+    console.log("sss", plans.value)
   } catch (error) {
     console.error('Error fetching plans:', error);
   }
@@ -87,44 +87,57 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="props.isOpen" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" @click="handleOutsideClick">
+  <div v-if="props.isOpen" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+    @click="handleOutsideClick">
 
-    <div class="bg-white rounded-lg shadow-md w-1/3">
-      <div class="bg-tertiary p-6">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-4">
-            <h2 class="text-2xl text-black font-bold">My Credits:</h2>
-            <h2 class="text-2xl text-black font-bold">{{ props.cardTwo.credit }}</h2>
-            <img src="/public/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5 ml-1">
+    <div class="bg-white rounded-lg shadow-md w-full max-w-lg mx-4 md:w-1/1">
+      <div class="bg-tertiary p-6 ">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0">
+          <div class="flex items-center justify-between space-x-4">
+            <div class="flex items-center space-x-4">
+              <h2 class="text-xl md:text-2xl text-black font-bold">My Credits:</h2>
+              <h2 class="text-xl md:text-2xl text-black font-bold">{{ props.cardTwo.credit }}</h2>
+              <img src="/public/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5 ml-1">
+              <img src="/images/zeuxis.png" alt="Logo" class="h-8 md:h-11 w-auto pl-36">
+            </div>
           </div>
-          <div class="flex items-center ml-auto pr-5">
-            <img src="/images/zeuxis.png" alt="Logo" class="h-10 w-40 bg-silverChalice">
-          </div>
+
         </div>
 
-        <div class="flex flex-col space-y-1">
+        <div class="flex flex-col space-y-2 mt-4">
           <p class="text-ravenBlack text-md font-bold">Credits Purchase</p>
           <p class="text-silverChalice text-xs break-words">
-            Note: To enjoy subscriber benefits such as fast track, you must have an active subscription plan; buying extra credits alone will not suffice. Credits expire in 2 years and are non-transferable and non-refundable.
+            Note: To enjoy subscriber benefits such as fast track, you must have an active subscription plan; buying
+            extra credits alone will not suffice. Credits expire in 2 years and are non-transferable and non-refundable.
           </p>
         </div>
       </div>
 
       <!-- Cards Container -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 p-6 h- w-full">
-        <div v-for="(feature, index) in plans" :key="index" class="bg-tertiary p-4 rounded-lg flex flex-col justify-between shadow-sm h-355 items-center">
-          <div class="flex items-center justify-start w-full">
-            <img src="/public/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5 ml-2 mb-10 mr-2">
-            <button @click="extraCreditBuy(feature)" class="flex flex-col items-center">
-                <p class="text-xl font-bold">{{ feature.credits }}</p>
-                <p class="text-xl font-bold mt-2">${{ feature.price }}</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-6">
+        <div v-for="(feature, index) in plans" :key="index"
+          class="bg-tertiary p-4 rounded-lg flex flex-col justify-between shadow-sm h-355 items-end group hover:bg-blue-600 transition-all duration-300">
+          <div class="flex items-center justify-center w-full">
+            <img src="/public/images/icon/StartIcon.svg" alt="Start Icon"
+              class="w-4 h-5 ml-2 mb-14 mr-0.5 group-hover:filter group-hover:brightness-0 group-hover:invert">
+            <button @click="extraCreditBuy(feature)"
+              class="flex flex-col items-center p-4 rounded-lg transition-all duration-300">
+              <!-- Hover effect on the <p> tags based on the parent .group hover state -->
+              <p class="text-3xl md:text-xl font-bold text-gray-800 mt-2 group-hover:text-white">{{ feature.credits
+                }}</p>
+              <br>
+              <p class="text-lg md:text-md font-semibold text-ravenBlack mt-2 group-hover:text-white">${{ feature.price }}
+              </p>
             </button>
-
           </div>
         </div>
+
       </div>
+
+
     </div>
   </div>
+
 </template>
 
 <style scoped>
