@@ -89,27 +89,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useRouter } from 'vue-router'
 
-export default {
-  setup() {
-    const router = useRouter()
+const router = useRouter()
 
-    const navigateTo = (url) => {
-      console.log(`Navigating to: ${url}`)
-      router.push(url)
-    }
+const navigateTo = (url) => {
+  console.log(`Navigating to: ${url}`)
+  router.push(url)
+}
 
-    const logout = () => {
-      // Clear user-related data (e.g., authentication token)
-      localStorage.removeItem('authToken') // Adjust the key as per your app
-      sessionStorage.clear() // Optional: Clear session data
-      // Redirect to login page
-      router.push('/')
-    }
-
-    return { navigateTo,logout }
-  },
+const logout = () => {
+  // Clear user-related data (e.g., authentication token)
+  localStorage.removeItem('authToken') // Adjust the key as per your app
+  sessionStorage.clear() // Optional: Clear session data
+  // Redirect to login page
+  router.push('/')
 }
 </script>
+
