@@ -45,7 +45,8 @@ onUnmounted(() => {
     <!-- Logo -->
     <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-20" />
     <!-- Text -->
-    <fwb-badge class="bg-white text-black" size="xl" @click="toggleAccountCard" :class="{'text-': isClicked}">
+    <fwb-badge
+      :class="{'bg-blue-600 text-white': isClicked, 'bg-white text-black-2': !isClicked}" size="xl" @click="toggleAccountCard">
       <p class="mr-2">Account</p>
       <svg
         width="20"

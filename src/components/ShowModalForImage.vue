@@ -52,12 +52,20 @@ const turnIntoVideoAction = async () => {
   isLoading.value = true; // Show loading state
   try {
     const formData = new FormData();
-    formData.append('image', props.image.url); // Correctly use `image.url`
+
+    const imgResponse = await fetch(props.image.url);
+    const blob = await imgResponse.blob();
+
+    // Convert the Blob to a File with a filename
+    const file = new File([blob], getFilename(props.image.url), { type: blob.type });
+
+
+    formData.append('image', file); // Correctly use image.url
     formData.append('prompt', prompt.value);
 
     console.log("Sending formData:", { image: props.image.url, prompt: prompt.value });
 
-    // Assuming `genAiService.imageToVideo` is an API client that handles requests
+    // Assuming genAiService.imageToVideo is an API client that handles requests
     const response = await genAiService.imageToVideo(formData);
 
     console.log("API Response:", response);
@@ -89,6 +97,20 @@ const handleOutsideClick = (event) => {
   }
 }
 
+
+const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: string): Promise<File> => {
+  try {
+    // Fetch the Blob data from the Blob URL
+    const response = await fetch(blobUrl);
+    const blob = await response.blob();
+
+    // Create a File object from the Blob
+    return new File([blob], fileName, { type: mimeType });
+  } catch (error) {
+    console.error('Error converting blob URL to File:', error);
+    throw error; // Rethrow the error for higher-level handling
+  }
+};
 
 
 </script>
