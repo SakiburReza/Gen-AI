@@ -24,11 +24,12 @@
         <div class="col-span-1 font-medium">{{ invoice.product }}</div>
         <div class="col-span-1 truncate">{{ invoice.transactionId }}</div>
         <div class="col-span-1 ml-2">{{ invoice.billingTime }}</div>
-        <div class="col-span-1 text-center ">{{ invoice.STATUS }}</div>
+        <div class="col-span-1 text-center">{{ invoice.STATUS }}</div>
         <div class="col-span-1 text-center font-medium ml-2">{{ invoice.AMOUNT }} USD</div>
         <div class="col-span-1 flex justify-center">
           <a
-            :href="invoice.receiptUrl"
+            href="javascript:void(0);"
+            @click="handleDownload(invoice.receiptUrl)"
             download
             class="text-blue-600 hover:text-blue-800 transition"
           >
@@ -73,7 +74,21 @@ const fetchInvoices = async () => {
     console.error('Error fetching invoices:', error)
   }
 }
-
+const handleDownload = (url) => {
+  const newTab = window.open(url, '_blank', 'noopener,noreferrer')
+  if (newTab) {
+    newTab.onload = () => {
+      const link = document.createElement('a')
+      link.href = url
+      link.download = '' // Add a filename if necessary
+      link.click()
+      newTab.close() // Close the tab after download
+    }
+  } else {
+    console.error('Failed to open the link in a new tab.')
+  }
+  // Ensure the URL is downloadable
+}
 // Fetch data when the component is mounted
 onMounted(fetchInvoices)
 </script>
