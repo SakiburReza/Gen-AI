@@ -45,7 +45,7 @@ onUnmounted(() => {
     <!-- Logo -->
     <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-20" />
     <!-- Text -->
-    <fwb-badge :class="`flex items-center justify-between border rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-400 border-gray-400'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition-all duration-200`"
+    <fwb-badge :class="`flex items-center justify-between border rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-500 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition-all duration-200`"
       size="xl"
       @click="toggleAccountCard"
     >

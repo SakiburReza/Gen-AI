@@ -6,7 +6,7 @@
         <li>
           <a
             @click="navigateTo('/profile')"
-            class="flex items-center px-4 py-3 text-black-2 hover:bg-blue-600 cursor-pointer rounded-lg transition-all space-x-2"
+            class="flex items-center px-4 py-3 text-black-2 hover:bg-blue-600 hover:text-white cursor-pointer rounded-lg transition-all space-x-2"
           >
             <svg
               width="16"
@@ -43,7 +43,7 @@
         <li>
           <a
             @click="navigateTo('/subscription')"
-            class="flex items-center px-4 py-3 text-black-2 hover:bg-blue-600 cursor-pointer rounded-lg transition-all space-x-2"
+            class="flex items-center px-4 py-3 text-black-2 hover:bg-blue-600 hover:text-white cursor-pointer rounded-lg transition-all space-x-2"
           >
             <svg
               width="20"
@@ -79,7 +79,7 @@
         </li>
         <li>
           <a @click="logout"
-            class="flex items-center px-4 py-3 text-black-2 hover:bg-blue-600 cursor-pointer rounded-lg transition-all space-x-2"
+             class="flex items-center px-4 py-3 text-black-2 hover:bg-blue-600 hover:text-white cursor-pointer rounded-lg transition-all space-x-2"
           >
             <svg
               width="23"
