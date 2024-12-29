@@ -45,8 +45,10 @@ onUnmounted(() => {
     <!-- Logo -->
     <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-20" />
     <!-- Text -->
-    <fwb-badge
-      :class="{'bg-blue-600 text-white': isClicked, 'bg-white text-black-2': !isClicked}" size="xl" @click="toggleAccountCard">
+    <fwb-badge :class="`flex items-center justify-between border rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-400 border-gray-400'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition-all duration-200`"
+      size="xl"
+      @click="toggleAccountCard"
+    >
       <p class="mr-2">Account</p>
       <svg
         width="20"
@@ -89,7 +91,7 @@ onUnmounted(() => {
 
       <!-- Account Card with responsive positioning -->
       <AccountCard
-        class="fixed top-12 right-80 z-10 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+        class="fixed top-6 right-75 z-10 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
         v-if="showAccountCard"
         @close="toggleAccountCard"
       />
