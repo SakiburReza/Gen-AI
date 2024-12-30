@@ -39,16 +39,19 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <!-- Logo -->
-  <div class="relative flex flex-col items-center justify-center">
-    <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-25" />
-  </div>
-  <div class="relative">
+
+  <div class="relative w-full h-screen overflow-hidden">
 
     <!-- Background Image -->
     <div class="absolute inset-0 z-0">
       <img src="/images/BG.jpg" alt="Background Image" class="w-full h-full object-cover" />
     </div>
+
+    <!-- Logo -->
+    <div class="relative flex flex-col items-center justify-center  top-1">
+      <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-23" />
+    </div>
+
 
     <div class="flex justify-center items-center min-h-screen relative z-10 ">
       <!-- Left Side - Image and Text -->
@@ -111,7 +114,6 @@ const submitForm = async () => {
       </div>
     </div>
   </div>
-
 </template>
 
 <style>
