@@ -164,13 +164,11 @@ const uploadLogo = (event) => {
 
   // Validate file existence
   if (!file) {
-    alert("No file selected!");
     return;
   }
 
   // Validate file type
   if (!file.type.match("image/png") && !file.type.match("image/jpeg")) {
-    alert("Please upload a PNG or JPG image.");
     return;
   }
 
@@ -183,11 +181,11 @@ const uploadLogo = (event) => {
       profile.value.logoPreview = img.src;
       console.log("Logo uploaded:", file.name);
     } else {
-      alert("Image must be at least 200x200 pixels.");
+      toastStore.error(img?.data.message)
     }
   };
   img.onerror = () => {
-    alert("Invalid image file. Please try again.");
+    toastStore.error(img?.data.message)
   };
 };
 
