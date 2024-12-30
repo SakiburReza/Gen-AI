@@ -168,7 +168,7 @@ const uploadLogo = (event) => {
   }
 
   // Validate file type
-  if (!file.type.match("image/png") && !file.type.match("image/jpeg")) {
+  if (!file.type.match("image/png") && !file.type.match("image/jpeg") && !file.type.match("image/jpg")) {
     return;
   }
 
