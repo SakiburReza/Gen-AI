@@ -233,8 +233,7 @@ onMounted(async () => {
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Image Grid -->
-      <!-- Left Section: Image Grid -->
-      <div class="flex-1 bg-white overflow-hidden p-6 ml-15 mt-15 mr-10">
+      <div class="flex-1 bg-white overflow-hidden p-6 ml-15 mr-10">
         <div
           class="grid grid-cols-2 md:grid-cols-4 gap-4 h-full"
           style="grid-template-rows: repeat(3, 1fr); max-height: calc(100vh - 80px)"

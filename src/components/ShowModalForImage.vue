@@ -2,6 +2,9 @@
 import { onBeforeUnmount, onUnmounted, ref } from 'vue';
 import genAiService from '@/services/gen-ai';
 import { useToastStore } from '@/stores/toast'
+import { useCredits } from '@/utils/utils'
+
+const { fetchCredits } = useCredits()
 
 const toastStore = useToastStore()
 
@@ -61,9 +64,10 @@ const turnIntoVideoAction = async () => {
     // Convert the Blob to a File with a filename
     const file = new File([blob], getFilename(props.image.url), { type: blob.type });
 
-
+    let type = "face-swap"
     formData.append('image', file); // Correctly use image.url
     formData.append('prompt', prompt.value);
+    formData.append('type',type)
 
     console.log("Sending formData:", { image: props.image.url, prompt: prompt.value });
 
@@ -74,7 +78,8 @@ const turnIntoVideoAction = async () => {
 
     if (response?.success) {
       toastStore.success(response.data.message || 'Video generated successfully!');
-      // Handle the response, e.g., display the video or download it
+      // Update credits after successful content generation
+       await fetchCredits()
     } else {
       console.error("Error in API response:", response);
       toastStore.error(response.data.message || 'Failed to generate video. Please try again.');
@@ -147,7 +152,7 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
           <div class="mb-7">
             <p class="text-gray-600 font-bold text-xs ">Prompt :</p>
             <input v-model="prompt" type="text"
-              class="w-full p-2 border border-silverChalice rounded-lg text-sm text-silverChalice "
+              class="w-full p-2 border border-silverChalice rounded-lg text-sm text-gray-900 "
               placeholder="Enter your prompt here" />
           </div>
           <!-- Action Buttons -->
