@@ -65,7 +65,8 @@ axios.interceptors.response.use(
     if (config.data.status === false) {
       toast.error(config.data.message, {
         autoClose: 2500,
-        theme: 'dark'
+        theme: 'dark',
+        closeOnClick:true
       })
     }
     // else {
@@ -104,15 +105,15 @@ axios.interceptors.response.use(
         theme: 'dark'
       })
     }
-    if (error.response.status == 401) {
-      const errMsg = error.response.data.message
-      toast.error(errMsg, {
-        theme: 'dark',
-        onClose: () => {
-          //authService.logout()
-        },
-      })
-    }
+    // if (error.response.status == 401) {
+    //   const errMsg = error.response.data.message
+    //   toast.error(errMsg, {
+    //     theme: 'dark',
+    //     onClose: () => {
+    //       //authService.logout()
+    //     },
+    //   })
+    // }
     return Promise.reject(error)
   }
 )
