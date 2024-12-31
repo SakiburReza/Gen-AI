@@ -2,7 +2,7 @@
 import CustomizationCard from '@/components/CustomizationCard.vue'
 import DescriptionCard from '@/components/DescriptionCard.vue'
 import ImageInputCard from '@/components/ImageInputCard.vue'
-import Navbar from '@/components/Navbar.vue'
+import Navbar from '@/components/NavBar.vue'
 import ShowModalForImage from '@/components/ShowModalForImage.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
@@ -144,8 +144,10 @@ const generateAiContent = async () => {
       response = await genAiService.textToVideo({ text: description.value })
     } else if (activeFunctionality.value === 'Image to Video') {
       const formData = new FormData()
+      let type = "face-swap"
       formData.append('image', referenceImage.value!)
       formData.append('prompt', description.value)
+      formData.append('type',type)
       response = await genAiService.imageToVideo(formData)
     } else if (activeFunctionality.value === 'Image to Image') {
       const formData = new FormData()
@@ -232,13 +234,13 @@ onMounted(async () => {
     <Navbar />
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
-      <!-- Left Section: Image Grid -->
+      <!-- Left Section: Content Grid -->
       <div class="flex-1 bg-white overflow-hidden p-6 ml-15 mr-10">
         <div
           class="grid grid-cols-2 md:grid-cols-4 gap-4 h-full"
           style="grid-template-rows: repeat(3, 1fr); max-height: calc(100vh - 80px)"
         >
-          <!-- Display spinner while loading images -->
+          <!-- Display spinner while loading contents -->
           <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
             <fwb-spinner size="12" />
           </div>
