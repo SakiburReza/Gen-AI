@@ -36,6 +36,13 @@ const submitForm = async () => {
     toastStore.error('An error occurred during sign-in.')
   }
 }
+
+const props = defineProps({
+  isButtonDisabled: {
+    type: Boolean,
+    default: false, // Default to false, button is enabled initially
+  },
+});
 </script>
 
 <template>
@@ -98,7 +105,11 @@ const submitForm = async () => {
             <!-- Submit Button -->
             <div class="flex justify-center">
               <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition"
-                aria-label="Sign In">
+                aria-label="Sign In" :class="{
+                  'w-full text-sm py-3 rounded-lg': true,
+                  'bg-black text-white hover:bg-gray-800': !isButtonDisabled,
+                  'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled
+                }">
                 Sign In
               </button>
             </div>
