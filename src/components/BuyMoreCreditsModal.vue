@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import genAiService from '@/services/gen-ai'
+import { useCredits } from '@/utils/utils';
+
+const { credits, fetchCredits } = useCredits();
 
 // Define Props
 const props = defineProps({
@@ -83,6 +86,7 @@ const extraCreditBuy = async (plan: Plan) => {
 // Call fetchprops when component is mounted
 onMounted(() => {
   fetchprops(); // Call the function to fetch plans
+
 });
 </script>
 
@@ -96,7 +100,7 @@ onMounted(() => {
           <div class="flex items-center justify-between space-x-4">
             <div class="flex items-center space-x-4">
               <h2 class="text-xl md:text-2xl text-black font-bold">My Credits:</h2>
-              <h2 class="text-xl md:text-2xl text-black font-bold">{{ props.cardTwo.credit }}</h2>
+              <h2 class="text-xl md:text-2xl text-black font-bold">{{ credits }}</h2>
               <img src="/public/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5 ml-1">
               <img src="/images/zeuxis.png" alt="Logo" class="h-8 md:h-11 w-auto pl-36">
             </div>
