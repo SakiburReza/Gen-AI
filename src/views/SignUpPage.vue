@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 
@@ -10,39 +10,48 @@ const formData = ref({
   name: '',
   email: '',
   password: '',
+  confirmPassword: '',
 })
+
+// Reactive password mismatch flag
+const passwordMismatch = ref(false)
+
+// Watcher to update `passwordMismatch`
+watch(
+  () => [formData.value.password, formData.value.confirmPassword],
+  ([password, confirmPassword]) => {
+    passwordMismatch.value = password && confirmPassword && password !== confirmPassword
+  }
+)
 
 // Modal visibility
 const showTermsModal = ref(false)
 
 const submitForm = async () => {
-  // Create a new object excluding termsAccepted from the payload
-  const { termsAccepted, ...formPayload } = formData.value;
+  if (passwordMismatch.value) {
+    toastStore.error('Passwords do not match. Please correct them.')
+    return
+  }
 
-  console.log('Submitting form data:', formPayload); // Debug: Check form data
+  toastStore.success('Passwords match! Proceeding with form submission.')
+
+  // Create a new object excluding termsAccepted from the payload
+  const { termsAccepted, ...formPayload } = formData.value
 
   try {
-    // Send form data to the API
-    const response = await genAiService.register(formPayload);
-    console.log('Response:', response.data);
-
-    // Check for success based on the response structure
+    const response = await genAiService.register(formPayload)
     if (response.data?.status && response.data?.code === 200) {
-      // Show success toast message if the response indicates success
-      toastStore.success(response.data.message || 'Registration successful!');
+      toastStore.success(response.data.message || 'Registration successful!')
     } else {
-      // Show error toast message for unexpected scenarios
-      toastStore.error(response.data?.message || 'Failed to register.');
+      toastStore.error(response.data?.message || 'Failed to register.')
     }
   } catch (error) {
-    // Log the error and provide feedback to the user
-    console.error('Error submitting form:', error);
-    toastStore.error('An unexpected error occurred. Please try again later.');
+    toastStore.error('An unexpected error occurred. Please try again later.')
   }
-};
-
-
+}
 </script>
+
+
 
 <template>
 
@@ -108,6 +117,19 @@ const submitForm = async () => {
               aria-label="Password" required />
           </div>
 
+          <!-- Confirm Password -->
+          <div class="mt-4">
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <input id="confirmPassword" v-model="formData.confirmPassword" type="password"
+              placeholder="Confirm your password"
+              class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
+              aria-label="Confirm Password" required />
+            <!-- Error message -->
+            <p v-if="passwordMismatch" class="text-red-500 text-sm mt-2">
+              Passwords do not match.
+            </p>
+          </div>
+
           <!-- Checkbox -->
           <div class="flex items-center">
             <input type="checkbox" id="agree" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
@@ -122,7 +144,11 @@ const submitForm = async () => {
           <!-- Submit Button -->
           <div class="flex justify-end">
             <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition"
-              aria-label="Sign Up">
+              aria-label="Sign Up" :class="{
+                'w-full text-sm py-3 rounded-lg': true,
+                'bg-black text-white hover:bg-gray-800': !isButtonDisabled,
+                'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled
+              }">
               Sign Up
             </button>
           </div>
