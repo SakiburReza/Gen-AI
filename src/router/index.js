@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import OperativePage from '@/views/OperativePage.vue'
-import SignInComponent from '@/components/SignInComponent.vue'
-import SignUpComponent from '@/components/SignUpComponent.vue'
 import SubscriptionPage from '@/views/SubscriptionPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AccountCard from '@/components/AccountCard.vue'
@@ -10,6 +8,8 @@ import VideoCarousel from '@/components/VideoCarousel.vue'
 import BuyMoreCreditsModal from '@/components/BuyMoreCreditsModal.vue'
 import {jwtDecode } from 'jwt-decode'
 import VerificationPage from '@/views/VerificationPage.vue'
+import SignInPage from '@/views/SignInPage.vue'
+import SignUpPage from '@/views/SignUpPage.vue'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -43,13 +43,13 @@ const router = createRouter({
     {
       path: '/',
       name: 'signin',
-      component: SignInComponent,
+      component: SignInPage,
       meta: { requiresAuth: false },
     },
     {
       path: '/sign-up',
       name: 'signup',
-      component: SignUpComponent,
+      component: SignUpPage,
       meta: { requiresAuth: false },
     },
     {
@@ -98,8 +98,7 @@ const router = createRouter({
     {
       path: '/verification',
       name: 'verification',
-      component: VerificationPage,
-       meta: { requiresAuth: true },
+      component: VerificationPage
     }
 
   ],
