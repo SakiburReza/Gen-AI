@@ -1,8 +1,7 @@
 <template>
-  <Navbar />
   <div class="bg-white min-h-screen p-4 sm:p-6 lg:p-8 "
        style="background-image: url('/images/BG.jpg'); background-size: cover; background-position: left;">
-
+    <Navbar/>
     <!-- Back Button -->
     <div class="absolute top-10 left-4 md:left-10 lg:left-40">
       <button
@@ -15,7 +14,8 @@
 
     <!-- Profile Form -->
 
-    <div class="max-w-2xl mx-auto p-4 sm:p-6 bg-white shadow-md rounded-md mt-1">
+    <div class="flex items-center justify-center min-h-screen px-4 z-10">
+      <div class="relative w-full max-w-lg bg-white mx-auto px-6 py-8 space-y-5 rounded-lg shadow-md border border-gray-400">
       <h2 class="text-2xl font-bold mb-8 text-black-2">Manage Profile</h2>
 
       <form @submit.prevent="saveProfile" class="mt-6">
@@ -218,6 +218,7 @@
           </button>
         </div>
       </form>
+      </div>
     </div>
   </div>
 
@@ -226,10 +227,11 @@
 
 <script setup>
 import { ref,  onMounted } from "vue";
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/NavBar.vue";
 import genAiService from "@/services/gen-ai";
 import router from '@/router/index.js'
 import { useToastStore } from '@/stores/toast'
+import { createRouter as $router } from 'vue-router'
 
 const toastStore = useToastStore()
 
@@ -294,7 +296,7 @@ const uploadLogo = (event) => {
   };
 };
 
-
+// Update profile
 const saveProfile = async () => {
   try {
     console.log(profile.value.name)

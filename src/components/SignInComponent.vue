@@ -116,6 +116,3 @@ const submitForm = async () => {
   </div>
 </template>
 
-<style>
-/* Optional custom styles */
-</style>
