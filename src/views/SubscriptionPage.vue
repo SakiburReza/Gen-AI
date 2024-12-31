@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import SubscriptionCard from '@/components/SubscriptionCard.vue';
-import Navbar from '@/components/Navbar.vue';
+import Navbar from '@/components/NavBar.vue';
 import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue';
 import genAiService from '@/services/gen-ai'
 
@@ -53,7 +53,7 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col h-screen">
-    <Navbar :title="activeFunctionality" />
+    <Navbar />
 
     <div class="pt-6 sm:pt-10 lg:pt-15 flex justify-center mb-5">
       <SubscriptionBillingCard />

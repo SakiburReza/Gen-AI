@@ -46,13 +46,13 @@ onUnmounted(() => {
     <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-20" />
     <!-- Text -->
     <fwb-badge
-      :class="`flex items-center justify-between border rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition-all duration-200`"
+      :class="`flex items-center justify-between border mt-3 rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition-all duration-200`"
       size="xl"
       @click="toggleAccountCard"
     >
       <p class="mr-2">Account</p>
       <svg
-        width="19"
+        width="30"
         height="21"
         viewBox="0 0 19 21"
         xmlns="http://www.w3.org/2000/svg"
