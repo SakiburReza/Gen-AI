@@ -9,6 +9,7 @@ import InvoiceCard from '@/components/InvoiceCard.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
 import BuyMoreCreditsModal from '@/components/BuyMoreCreditsModal.vue'
 import {jwtDecode } from 'jwt-decode'
+import VerificationPage from '@/views/VerificationPage.vue'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -92,6 +93,12 @@ const router = createRouter({
       path: '/template',
       name: 'template',
       component: VideoCarousel,
+       meta: { requiresAuth: true },
+    },
+    {
+      path: '/verification',
+      name: 'verification',
+      component: VerificationPage,
        meta: { requiresAuth: true },
     }
 
