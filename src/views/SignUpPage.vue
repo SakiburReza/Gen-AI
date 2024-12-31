@@ -2,6 +2,9 @@
 import { ref, watch } from 'vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const toastStore = useToastStore()
 
@@ -33,7 +36,8 @@ const submitForm = async () => {
     return
   }
 
-  toastStore.success('Passwords match! Proceeding with form submission.')
+  //toastStore.success('Passwords match! Proceeding with form submission.')
+  
 
   // Create a new object excluding termsAccepted from the payload
   const { termsAccepted, ...formPayload } = formData.value
@@ -48,6 +52,7 @@ const submitForm = async () => {
   } catch (error) {
     toastStore.error('An unexpected error occurred. Please try again later.')
   }
+  router.push("/verification")
 }
 </script>
 
@@ -125,7 +130,7 @@ const submitForm = async () => {
               class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
               aria-label="Confirm Password" required />
             <!-- Error message -->
-            <p v-if="passwordMismatch" class="text-red-500 text-sm mt-2">
+            <p v-if="passwordMismatch" class="text-red text-sm mt-2">
               Passwords do not match.
             </p>
           </div>
