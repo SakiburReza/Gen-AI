@@ -1,34 +1,42 @@
 <script setup>
 import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router'
-import genAiService from '@/services/gen-ai'
-import { useToastStore } from '@/stores/toast'
+import { useRoute, useRouter } from 'vue-router';
+import genAiService from '@/services/gen-ai';
+import { useToastStore } from '@/stores/toast';
+import { FwbSpinner } from 'flowbite-vue'
 
-const toastStore = useToastStore()
-
-const router = useRouter()
-
-const route = useRoute()
-const email = route.query.email
+const toastStore = useToastStore();
+const router = useRouter();
+const route = useRoute();
+const email = route.query.email;
 
 // Ref to hold the OTP value
 const otpCode = ref('');
+const loading = ref(false); // Loading state
 
 // Function to handle submit
 const handleSubmit = async () => {
   if (!otpCode.value) {
-    toastStore.error("Enter your OTP")
+    toastStore.error("Enter your OTP");
     return;
   }
 
-  const response = await genAiService.checkOTP(email,otpCode.value)
+  loading.value = true; // Start loading spinner
 
-  if(response.status.success){
-    router.push("/signin")
-  }
+  try {
+    const response = await genAiService.checkOTP(email, otpCode.value);
 
-  if(response.data.status){
-    console.log(response.data.message)
+    if (response.status) {
+      router.push("/");
+    }
+
+    if (response.data.status) {
+      console.log(response.data.message);
+    }
+  } catch (error) {
+    toastStore.error("An error occurred. Please try again.");
+  } finally {
+    loading.value = false; // Stop loading spinner
   }
 };
 </script>
@@ -62,12 +70,12 @@ const handleSubmit = async () => {
         <button
           @click="handleSubmit"
           type="submit"
-          class="w-22 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
-          Submit
+          class="w-22 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+          <!-- Spinner inside the button -->
+          <fwb-spinner v-if="loading" size="12" class="mr-2 bg-black" />
+          <span v-if="!loading">Submit</span>
         </button>
       </div>
     </div>
   </div>
 </template>
-
-
