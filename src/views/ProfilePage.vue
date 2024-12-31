@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white min-h-screen p-4 sm:p-6 lg:p-8 "
        style="background-image: url('/images/BG.jpg'); background-size: cover; background-position: left;">
-
+       <Navbar/>
     <!-- Back Button -->
     <div class="absolute top-10 left-4 md:left-10 lg:left-40">
       <button
@@ -11,7 +11,7 @@
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
-    <Navbar/>
+    
     <!-- Profile Form -->
 
     <div class="max-w-2xl mx-auto p-4 sm:p-6 bg-white border border-b-gray-400 shadow-md rounded-md mt-1">
@@ -228,8 +228,10 @@
 import { ref, onMounted } from "vue";
 import Navbar from "@/components/NavBar.vue";
 import genAiService from "@/services/gen-ai";
-import router from '@/router/index.js'
 import { useToastStore } from '@/stores/toast'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const toastStore = useToastStore()
 
