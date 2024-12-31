@@ -1,6 +1,8 @@
 <template>
   <Navbar />
-  <div class="bg-gray-50 min-h-screen p-4 sm:p-6 lg:p-8">
+  <div class="bg-white min-h-screen p-4 sm:p-6 lg:p-8 "
+  style="background-image: url('/images/BG.jpg'); background-size: cover; background-position: left;">
+    
     <!-- Back Button -->
     <div class="absolute top-10 left-4 md:left-10 lg:left-40">
       <button
@@ -10,7 +12,7 @@
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
-
+<br>
     <!-- Profile Form -->
 
     <div class="max-w-2xl mx-auto p-4 sm:p-6 bg-white shadow-md rounded-md mt-1">
