@@ -34,7 +34,7 @@ const handleSubmit = async () => {
       console.log(response.data.message);
     }
   } catch (error) {
-    toastStore.error("An error occurred. Please try again.");
+    //toastStore.error("An error occurred. Please try again.");
   } finally {
     loading.value = false; // Stop loading spinner
   }
