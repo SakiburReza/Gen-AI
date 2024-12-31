@@ -35,9 +35,15 @@ const handleSubmit = async () => {
 
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+
+
     <!-- Background Image -->
     <div class="absolute inset-0 z-0">
       <img src="/images/BG.jpg" alt="Background Image" class="w-full h-full object-cover" />
+    </div>
+
+    <div class="absolute top-4 inset-x-0 flex justify-center z-10">
+      <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-23" />
     </div>
 
     <!-- Card Container -->

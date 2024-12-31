@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white min-h-screen p-4 sm:p-6 lg:p-8 "
        style="background-image: url('/images/BG.jpg'); background-size: cover; background-position: left;">
-    <Navbar/>
+
     <!-- Back Button -->
     <div class="absolute top-10 left-4 md:left-10 lg:left-40">
       <button
@@ -11,48 +11,48 @@
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
-<br>
+    <Navbar/>
     <!-- Profile Form -->
 
-    <div class="flex items-center justify-center min-h-screen px-4 z-10">
-      <div class="relative w-full max-w-lg bg-white mx-auto px-6 py-8 space-y-5 rounded-lg shadow-md border border-gray-400">
+    <div class="max-w-2xl mx-auto p-4 sm:p-6 bg-white border border-b-gray-400 shadow-md rounded-md mt-1">
+
       <h2 class="text-2xl font-bold mb-8 text-black-2">Manage Profile</h2>
 
       <form @submit.prevent="saveProfile" class="mt-6">
-      <!-- Profile Picture Section -->
-      <h5 class="text-xl mb-6 text-black-2">Profile Picture</h5>
-      <div class="flex items-center flex-wrap sm:flex-nowrap">
-        <div class="relative">
-          <img
-            v-if="profile.logoPreview"
-            :src="profile.logoPreview"
-            alt="Profile Picture"
-            class="h-30 w-30 rounded-full object-cover"
-          />
-          <div
-            v-else
-            class="bg-gray-300 h-30 w-30 rounded-full flex items-center justify-center text-6xl font-bold text-black-2"
-          >
-            H
+        <!-- Profile Picture Section -->
+        <h5 class="text-xl mb-6 text-black-2">Profile Picture</h5>
+        <div class="flex items-center flex-wrap sm:flex-nowrap">
+          <div class="relative">
+            <img
+              v-if="profile.logoPreview"
+              :src="profile.logoPreview"
+              alt="Profile Picture"
+              class="h-30 w-30 rounded-full object-cover"
+            />
+            <div
+              v-else
+              class="bg-gray-300 h-30 w-30 rounded-full flex items-center justify-center text-6xl font-bold text-black-2"
+            >
+              H
+            </div>
+          </div>
+          <div class="ml-4 flex flex-col mt-4 sm:mt-0">
+            <label
+              for="upload-photo"
+              class="mt-2 px-7 py-1.5 bg-gray-300 text-black-2 rounded-md hover:bg-gray-400 cursor-pointer"
+            >
+              Upload Photo
+            </label>
+            <p class="text-xs text-black-2 mt-1">Min. 200x200px, PNG or JPG</p>
+            <input
+              id="upload-photo"
+              type="file"
+              accept="image/png, image/jpeg"
+              class="hidden"
+              @change="uploadLogo"
+            />
           </div>
         </div>
-        <div class="ml-4 flex flex-col mt-4 sm:mt-0">
-          <label
-            for="upload-photo"
-            class="mt-2 px-7 py-1.5 bg-gray-300 text-black-2 rounded-md hover:bg-gray-400 cursor-pointer"
-          >
-            Upload Photo
-          </label>
-          <p class="text-xs text-black-2 mt-1">Min. 200x200px, PNG or JPG</p>
-          <input
-            id="upload-photo"
-            type="file"
-            accept="image/png, image/jpeg"
-            class="hidden"
-            @change="uploadLogo"
-          />
-        </div>
-      </div>
 
 
         <!-- Account Name -->
@@ -218,7 +218,6 @@
           </button>
         </div>
       </form>
-      </div>
     </div>
   </div>
 
@@ -226,7 +225,7 @@
 
 
 <script setup>
-import { ref,  onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import Navbar from "@/components/NavBar.vue";
 import genAiService from "@/services/gen-ai";
 import router from '@/router/index.js'
@@ -295,7 +294,7 @@ const uploadLogo = (event) => {
   };
 };
 
-// Update profile
+
 const saveProfile = async () => {
   try {
     console.log(profile.value.name)
@@ -316,11 +315,11 @@ const saveProfile = async () => {
     for (let [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
-     const response = await genAiService.saveProfile(formData);
-     console.log(response);
-     if (response?.data.status) {
-     toastStore.success(response?.data.message)
-    //
+    const response = await genAiService.saveProfile(formData);
+    console.log(response);
+    if (response?.data.status) {
+      toastStore.success(response?.data.message)
+      //
     } else {
       console.error("Invalid response structure:", response);
     }
