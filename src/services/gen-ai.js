@@ -98,23 +98,23 @@ class GenAIService {
   }
 
   fetchUserProfile() {
-    return axios.get(this.url +'/user/user-profile', {
+    return axios.get(this.url + '/user/user-profile', {
       headers: this.getAuthHeaders(),
-    });
-
+    })
   }
 
   saveProfile(data) {
-    return axios.post(this.url +'/user/user-profile-update', data,{
+    return axios.post(this.url + '/user/user-profile-update', data, {
       headers: this.getAuthHeaders(),
-    });
-
+    })
   }
   fetchPaymentInfo() {
-    return axios.get(this.url +'/paymentInfo', {
+    return axios.get(this.url + '/paymentInfo', {
       headers: this.getAuthHeaders(),
-    });
-
+    })
+  }
+  checkOTP(email, otp) {
+    return axios.get(this.url + `/user/check-otp?email=${email}&otp=${otp}`)
   }
 }
 

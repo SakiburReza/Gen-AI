@@ -45,14 +45,14 @@ const submitForm = async () => {
   try {
     const response = await genAiService.register(formPayload)
     if (response.data?.status && response.data?.code === 200) {
-      toastStore.success(response.data.message || 'Registration successful!')
+      //toastStore.success(response.data.message || 'Registration successful!')
     } else {
       toastStore.error(response.data?.message || 'Failed to register.')
     }
   } catch (error) {
     toastStore.error('An unexpected error occurred. Please try again later.')
   }
-  router.push("/verification")
+  router.push({ path: '/verification', query: { email: formData.value.email } })
 }
 </script>
 

@@ -1,18 +1,35 @@
 <script setup>
 import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router'
+import genAiService from '@/services/gen-ai'
+import { useToastStore } from '@/stores/toast'
+
+const toastStore = useToastStore()
+
+const router = useRouter()
+
+const route = useRoute()
+const email = route.query.email
 
 // Ref to hold the OTP value
 const otpCode = ref('');
 
 // Function to handle submit
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (!otpCode.value) {
-    alert('Please enter the OTP');
+    toastStore.error("Enter your OTP")
     return;
   }
-  // Simulating an API call
-  console.log('Submitted OTP:', otpCode.value);
-  alert('OTP Submitted!');
+
+  const response = await genAiService.checkOTP(email,otpCode.value)
+
+  if(response.status.success){
+    router.push("/signin")
+  }
+
+  if(response.data.status){
+    console.log(response.data.message)
+  }
 };
 </script>
 
