@@ -231,7 +231,6 @@ import Navbar from "@/components/NavBar.vue";
 import genAiService from "@/services/gen-ai";
 import router from '@/router/index.js'
 import { useToastStore } from '@/stores/toast'
-import { createRouter as $router } from 'vue-router'
 
 const toastStore = useToastStore()
 
