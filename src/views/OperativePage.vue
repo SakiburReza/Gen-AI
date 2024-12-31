@@ -220,7 +220,7 @@ onMounted(async () => {
       }
 
       //window.location.reload();
-    } catch (error) {}
+    } catch (error) { }
   }
 
   fetchMedia('text-to-image') // Initial load
@@ -234,45 +234,29 @@ onMounted(async () => {
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Content Grid -->
       <div class="flex-1 bg-white overflow-auto p-6 ml-15 mr-10">
-        <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-4 h-full"
-          style="grid-template-rows: repeat(3, 1fr); max-height: calc(100vh - 80px)"
-        >
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-full"
+          style="grid-template-rows: repeat(3, 1fr); max-height: calc(100vh - 80px)">
           <!-- Display spinner while loading contents -->
           <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
             <fwb-spinner size="12" />
           </div>
 
           <!-- Render media or placeholders to ensure 12 grids -->
-          <div
-            v-for="index in 12"
-            :key="index"
+          <div v-for="index in 12" :key="index"
             class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white flex items-center justify-center"
             @click="
               activeFunctionality === 'Face Swap' &&
               media[index - 1] &&
               openImageModal(media[index - 1])
-            "
-          >
+              ">
             <!-- Render Image -->
-            <img
-              v-if="media[index - 1] && media[index - 1].type === 'image'"
-              :src="media[index - 1].url"
-              :alt="'Media ' + (index - 1)"
-              class="w-full h-full object-contain max-w-full"
-            />
+            <img v-if="media[index - 1] && media[index - 1].type === 'image'" :src="media[index - 1].url"
+              :alt="'Media ' + (index - 1)" class="w-full h-full object-contain max-w-full" />
             <!-- Render Video -->
-            <video
-              v-else-if="media[index - 1] && media[index - 1].type === 'video'"
-              :src="media[index - 1].url"
-              controls
-              class="w-full h-full object-contain max-w-full"
-            ></video>
+            <video v-else-if="media[index - 1] && media[index - 1].type === 'video'" :src="media[index - 1].url"
+              controls class="w-full h-full object-contain max-w-full"></video>
             <!-- Render Placeholder -->
-            <div
-              v-else
-              class="w-full h-full flex justify-center items-center bg-gray-100 text-gray-400"
-            ></div>
+            <div v-else class="w-full h-full flex justify-center items-center bg-gray-100 text-gray-400"></div>
           </div>
         </div>
       </div>
@@ -280,23 +264,17 @@ onMounted(async () => {
       <!-- Floating Buttons Section -->
       <div class="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex z-50">
         <!-- Image Button -->
-        <button
-          @click="setActive('image')"
-          :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
-            activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-          ]"
-        >
+        <button @click="setActive('image')" :class="[
+          'flex items-center px-4 py-2 rounded-lg font-medium transition',
+          activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+        ]">
           <span class="material-icons">image</span>
         </button>
         <!-- Video Button -->
-        <button
-          @click="setActive('video')"
-          :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
-            activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-          ]"
-        >
+        <button @click="setActive('video')" :class="[
+          'flex items-center px-4 py-2 rounded-lg font-medium transition',
+          activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+        ]">
           <span class="material-icons">videocam</span>
         </button>
       </div>
@@ -306,98 +284,39 @@ onMounted(async () => {
         <!-- Facility Card -->
         <div class="px-6 mx-auto w-full flex justify-center">
           <div class="grid grid-cols-1 gap-2 w-full sm:w-64 md:w-80 lg:w-full">
-            <!-- Text to Image-->
-            <div
-              v-if="activeMode === 'image'"
-              :class="[
-                'flex items-center cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-                activeFunctionality === 'Text to Image' ? 'border border-blue-600' : '',
-              ]"
-              @click="changeFunctionality('Text to Image')"
-            >
-              <span class="text-gray-900 text-md mx-auto">Text to Image</span>
+            <!-- Dropdown for Text to Image -->
+            <div v-if="activeMode === 'image'">
+              <select v-model="activeFunctionality"
+                class="w-full py-2 px-3 rounded-lg bg-tertiary text-sm  p-2 text-dimGray font-bold">
+                <option value="Text to Image" :selected="activeFunctionality === 'Text to Image'" >Text to Image</option>
+                <option value="Image to Image" class="text-sm" :selected="activeFunctionality === 'Image to Image'">Image to Image
+                </option>
+              </select>
             </div>
 
-            <!-- Text to Video -->
-            <div
-              v-if="activeMode === 'video'"
-              :class="[
-                'flex items-center justify-center space-x-2 cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-                activeFunctionality === 'Text to Video' ? 'border border-blue-600' : '',
-              ]"
-              @click="changeFunctionality('Text to Video')"
-            >
-              <span class="text-gray-800 font-medium">Text to Video</span>
-              <img src="/public/images/textToVideo.png" alt="Text to Video" class="h-6 w-6" />
-            </div>
-
-            <!-- Image to Video -->
-            <div
-              v-if="activeMode === 'video'"
-              :class="[
-                'flex items-center justify-center space-x-2 cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-                activeFunctionality === 'Image to Video' ? 'border border-blue-600' : '',
-              ]"
-              @click="changeFunctionality('Image to Video')"
-            >
-              <span class="text-gray-800 font-medium">Image to Video</span>
-              <img src="/public/images/imageToVideo.png" alt="Image to Video" class="h-6 w-6" />
-            </div>
-
-            <!-- Face Swap -->
-            <div
-              v-if="activeMode === 'video'"
-              @click="changeFunctionality('Face Swap')"
-              :class="[
-                'flex items-center justify-center space-x-2 cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-                activeFunctionality === 'Face Swap' ? 'border border-blue-600' : '',
-              ]"
-            >
-              <span class="text-gray-900 font-medium">Face Swap</span>
-              <img src="/public/images/icon/face-swap.svg" alt="Face Swap" class="h-6 w-6" />
-            </div>
-
-            <!-- Templates -->
-            <div
-              v-if="activeMode === 'video'"
-              :class="[
-                'flex items-center justify-center space-x-2 cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-                activeFunctionality === 'Templates' ? 'border border-blue-600' : '',
-              ]"
-              @click="changeFunctionality('Templates')"
-            >
-              <span class="text-gray-800 font-medium">Templates</span>
-              <img src="/public/images/templates.png" alt="Image to Video" class="h-6 w-6" />
-            </div>
-
-            <!-- Image to Image -->
-            <div
-              v-if="activeMode === 'image'"
-              :class="[
-                'flex items-center cursor-pointer hover:bg-tertiary rounded-lg py-1.5 bg-tertiary',
-                activeFunctionality === 'Image to Image' ? 'border border-blue-600' : '',
-              ]"
-              @click="changeFunctionality('Image to Image')"
-            >
-              <span class="text-gray-800 text-md mx-auto">Image to Image</span>
+            <!-- Dropdown for Text to Video and Image to Video -->
+            <div v-if="activeMode === 'video'">
+              <select v-model="activeFunctionality"
+                class="w-full py-2 px-3 rounded-lg bg-tertiary text-sm  p-2 text-dimGray font-bold">
+                <option value="Text to Video" :selected="activeFunctionality === 'Text to Video'">
+                  Text to Video
+                </option>
+                <option value="Image to Video" :selected="activeFunctionality === 'Image to Video'">
+                  Image to Video
+                </option>
+                <option value="Face Swap" :selected="activeFunctionality === 'Face Swap'">Face Swap</option>
+                <option value="Templates" :selected="activeFunctionality === 'Templates'">Templates</option>
+              </select>
             </div>
           </div>
         </div>
+
         <!-- Dynamic Content Based on Selected Functionality -->
-        <div
-          v-if="activeFunctionality === 'Text to Image'"
-          class="bg-white p-6 space-y-6 flex-shrink-0"
-        >
-          <CustomizationCard
-            @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)"
-          />
+        <div v-if="activeFunctionality === 'Text to Image'" class="bg-white p-6 space-y-6 flex-shrink-0">
+          <CustomizationCard @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)" />
           <DescriptionCard @input="(value) => (description = value)" />
-          <fwb-button
-            @click="generateAiContent"
-            class="w-full sm:w-64 md:w-80 lg:w-full"
-            color="default"
-          >
+          <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
             Zeuxis
           </fwb-button>
         </div>
