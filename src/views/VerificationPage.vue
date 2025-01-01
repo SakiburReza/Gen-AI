@@ -13,7 +13,7 @@ const email = route.query.email;
 // Refs
 const otpCode = ref('');
 const loading = ref(false);
-const timer = ref(300); // Timer in seconds (5 minutes)
+const timer = ref(120); // Timer in seconds (5 minutes)
 const resendVisible = ref(false);
 
 // Function to format time as mm:ss
@@ -28,7 +28,7 @@ const formattedTime = computed(() => {
 // Start the timer
 const startTimer = () => {
   resendVisible.value = false;
-  timer.value = 300; // Reset to 5 minutes
+  timer.value = 120; // Reset to 5 minutes
   const interval = setInterval(() => {
     if (timer.value > 0) {
       timer.value -= 1;
