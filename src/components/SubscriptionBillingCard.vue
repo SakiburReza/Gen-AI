@@ -26,6 +26,7 @@ const props = defineProps({
       billingDate: "Jan. 11, 2025"
     })
   }
+
 });
 const showBuyMoreCreditsModal = ref(false) // Modal visibility
 const BuyMoreCredits = async () => {
@@ -74,6 +75,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
   <div class="p-8 max-w-6xl mx-auto">
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-bold mb-4">Billing</h1>
+      <!-- <h1 class="text-3xl font-bold mb-4">Subscription</h1> -->
       <!-- Button Hidden on Mobile and Shown on Medium Screens and Above -->
       <button @click="() => $router.push('/operativepage')"
         class="hidden md:inline-block mb-5 bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
