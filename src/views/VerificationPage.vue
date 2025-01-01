@@ -1,48 +1,86 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import genAiService from '@/services/gen-ai';
 import { useToastStore } from '@/stores/toast';
-import { FwbSpinner } from 'flowbite-vue'
+import { FwbSpinner } from 'flowbite-vue';
 
 const toastStore = useToastStore();
 const router = useRouter();
 const route = useRoute();
 const email = route.query.email;
 
-// Ref to hold the OTP value
+// Refs
 const otpCode = ref('');
-const loading = ref(false); // Loading state
+const loading = ref(false);
+const timer = ref(300); // Timer in seconds (5 minutes)
+const resendVisible = ref(false);
 
-// Function to handle submit
+// Function to format time as mm:ss
+const formattedTime = computed(() => {
+  const minutes = Math.floor(timer.value / 60)
+    .toString()
+    .padStart(2, '0');
+  const seconds = (timer.value % 60).toString().padStart(2, '0');
+  return `${minutes}:${seconds}`;
+});
+
+// Start the timer
+const startTimer = () => {
+  resendVisible.value = false;
+  timer.value = 300; // Reset to 5 minutes
+  const interval = setInterval(() => {
+    if (timer.value > 0) {
+      timer.value -= 1;
+    } else {
+      clearInterval(interval);
+      resendVisible.value = true; // Show Resend Code
+    }
+  }, 1000);
+};
+
+// Resend Code handler
+const handleResendCode = async () => {
+  try {
+    // Simulate API call for resending the OTP
+    await genAiService.resendOTP(email);
+    toastStore.success("OTP has been resent.");
+    startTimer(); // Restart the timer
+  } catch (error) {
+    toastStore.error("Failed to resend OTP. Please try again.");
+  }
+};
+
+// Handle OTP submission
 const handleSubmit = async () => {
   if (!otpCode.value) {
     toastStore.error("Enter your OTP");
     return;
   }
 
-  loading.value = true; // Start loading spinner
-
+  loading.value = true;
   try {
     const response = await genAiService.checkOTP(email, otpCode.value);
-
     if (response.status) {
       router.push("/");
-    }
-
-    if (response.data.status) {
-      console.log(response.data.message);
+    } else {
+      toastStore.error(response.data.message || "Invalid OTP");
     }
   } catch (error) {
-    //toastStore.error("An error occurred. Please try again.");
+    toastStore.error("An error occurred. Please try again.");
   } finally {
-    loading.value = false; // Stop loading spinner
+    loading.value = false;
   }
 };
+
+onMounted(() => {
+  startTimer(); // Start the timer when the component mounts
+});
 </script>
 
+
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+  <div class="flex items-center justify-center min-h-screen bg-gray-300 px-4">
 
 
     <!-- Background Image -->
@@ -67,10 +105,34 @@ const handleSubmit = async () => {
           class="input-icon w-full border border-gray-300 rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Enter your code"
         />
+
+        <div class="flex items-center justify-between">
+
+          <!-- Timer -->
+
+          <span class="w-22 py-2.5  rounded-lg font-bold transition duration-300 flex items-center justify-center text-black-2">{{ formattedTime }}</span>
+
+
+          <!-- Resend Code -->
+
+          <button
+
+            v-if="resendVisible"
+
+            @click="handleResendCode"
+
+            class="text-sm text-blue-600 hover:underline">
+
+            Resend Code
+
+          </button>
+
+        </div>
+
         <button
           @click="handleSubmit"
           type="submit"
-          class="w-22 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+          class="w-full py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
           <!-- Spinner inside the button -->
           <fwb-spinner v-if="loading" size="12" class="mr-2 bg-black" />
           <span v-if="!loading">Submit</span>
