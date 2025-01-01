@@ -16,12 +16,9 @@
         <span>EXPLORE</span>
 
       <template #suffix>
-        <a
-          @click="navigateTo('/explore')"
-          class="flex items-center px-4 py-3 text-black-2 hover:bg-blue-600 hover:text-white cursor-pointer rounded-lg transition-all space-x-2 group"
-        >
+
         <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
-        </a>
+
       </template>
 
     </fwb-sidebar-item>
