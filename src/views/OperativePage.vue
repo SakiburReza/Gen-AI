@@ -333,7 +333,7 @@ const imageModeOptions = [
         </div>
 
         <!-- Floating Buttons Section -->
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex">
+        <div class="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex z-50">
           <!-- Image Button -->
           <button @click="setActive('image')" :class="[
             'flex items-center px-4 py-2 rounded-lg font-medium transition',
