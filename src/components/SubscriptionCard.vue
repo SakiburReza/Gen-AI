@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import genAiService from '@/services/gen-ai'
 
+
 // Define the emits to handle custom events
 const emit = defineEmits<{
   (event: 'button-clicked'): void; // Define the event name and type
@@ -76,14 +77,14 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
       'bg-blue-600': !isStyle
     }">
       <!-- Title -->
-      <h2 class="text-2xl font-bold mb-4 text-center md:text-left"
+      <h2 class="text-3xl font-bold mb-4 text-center md:text-left"
         :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">
         {{ data.title }}
       </h2>
 
       <!-- Feature List with Radio Button -->
       <div class="space-y-2 mb-6">
-        <label v-for="(feature, index) in data.featureList" :key="index" class="flex items-center space-x-3">
+        <label v-for="(feature, index) in data.featureList" :key="index" class="flex items-center space-x-3 text-sm sm:text-sm md:text-md lg:text-2xl">
           <img v-if="feature.isActive && !isStyle" class="h-5 w-5" src="/images/icon/radio_button_checked.svg" alt="">
           <img v-else-if="feature.isActive && isStyle" class="h-5 w-5" src="/images/icon/radio_button_checked_blue.svg"
             alt="">
