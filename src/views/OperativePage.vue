@@ -21,6 +21,7 @@ const route = useRoute()
 // const creditsFromQuery = router.currentRoute.value.query.credits || 10;
 
 // console.log("lll",creditsFromQuery)
+ 
 
 const toastStore = useToastStore()
 
@@ -375,7 +376,7 @@ onMounted(async () => {
             <!-- First Image Card -->
             <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-gray-200 rounded-lg shadow-lg">
               <ImageInputCard
-                title="Insert Reference Image"
+                title="Insert Reference Face Image"
                 @input="(file) => (referenceImage = file)"
               />
             </div>

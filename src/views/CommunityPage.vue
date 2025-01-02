@@ -213,7 +213,7 @@ onMounted(async () => {
   <div class="flex flex-col h-screen">
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[60%] mt-30">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[200vh] mt-30 overflow-y-auto pr-2">
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />
@@ -245,5 +245,38 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.grid {
+
+scrollbar-width: thin; /* Firefox */
+
+scrollbar-color: #ccc #f0f0f0; /* Firefox */
+
+}
+
+
+
+.grid::-webkit-scrollbar {
+
+width: 8px; /* Width for vertical scrollbar */
+
+}
+
+
+
+.grid::-webkit-scrollbar-thumb {
+
+background-color: #ccc; /* Scrollbar color */
+
+border-radius: 4px; /* Rounded scrollbar */
+
+}
+
+
+
+.grid::-webkit-scrollbar-track {
+
+background: #f0f0f0; /* Scrollbar track */
+
+}
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 </style>
