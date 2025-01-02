@@ -1,32 +1,94 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import ShowModalForImage from './ShowModalForImage.vue';
+import InvoiceCard from '@/components/InvoiceCard.vue';
+import genAiService from "@/services/gen-ai";
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue';
-import InvoiceCard from '@/components/InvoiceCard.vue'
 
-const props = defineProps({
-  cardOne: {
-    type: Object,
-    default: () => ({
-      title: "Next Up Creator",
-      credit: "2000",
-      date: "Jan.11, 2025",
-    }),
-  },
-  cardTwo: {
-    type: Object,
-    default: () => ({
-      credit: "20"
-    })
-  },
-  cardThree: {
-    type: Object,
-    default: () => ({
-      price: "$20.00/month",
-      billingDate: "Jan. 11, 2025"
-    })
-  }
+// const props = defineProps({
+//   cardOne: {
+//     type: Object,
+//     default: () => ({
+//       title: "Next Up Creator",
+//       credit: "2000",
+//       date: "Jan.11, 2025",
+//     }),
+//   },
+//   cardTwo: {
+//     type: Object,
+//     default: () => ({
+//       credit: "20"
+//     })
+//   },
+//   cardThree: {
+//     type: Object,
+//     default: () => ({
+//       price: "$20.00/month",
+//       billingDate: "Jan. 11, 2025"
+//     })
+//   }
+
+// });
+const billinInformation = ref({
+  plan_name: "",
+  credit: "",
+  last_billing_time: "",
+  last_billing_amount: "",
+  last_purchased_credit: "",
 });
+
+const billingInfo = async () => {
+  try {
+    const response = await genAiService.billingInformation();
+    console.log(response.data);
+    if (response.data.status) {
+      if (response.data.data.subscription) {
+        billinInformation.value.plan_name = (response.data.data.subscription.plan_name === null ||
+          response.data.data.subscription.plan_name === "null" ||
+          response.data.data.subscription.plan_name === undefined)
+          ? "No plan yet"
+          : response.data.data.subscription.plan_name;
+
+        billinInformation.value.credit = (response.data.data.subscription.credit === null ||
+          response.data.data.subscription.credit === "null" ||
+          response.data.data.subscription.credit === undefined)
+          ? "0.00"
+          : response.data.data.subscription.credit;
+
+          billinInformation.value.last_purchased_credit = (response.data.data.subscription.last_purchased_credit === null ||
+          response.data.data.subscription.last_purchased_credit === "null" ||
+          response.data.data.subscription.last_purchased_credit === undefined)
+          ? "0.00"
+          : response.data.data.subscription.last_purchased_credit;
+
+
+          billinInformation.value.last_billing_time = (response.data.data.subscription.last_billing_time === null ||
+          response.data.data.subscription.last_billing_time === "null" ||
+          response.data.data.subscription.last_billing_time === undefined)
+          ? "No date available"
+          : response.data.data.subscription.last_billing_time;
+
+          billinInformation.value.last_billing_amount = (response.data.data.subscription.last_billing_amount === null ||
+          response.data.data.subscription.last_billing_amount === "null" ||
+          response.data.data.subscription.last_billing_amount === undefined)
+          ? "0.00"
+          : response.data.data.subscription.last_billing_amount;
+
+      }
+      if (response.data.data.last_purchase) {
+
+
+        billinInformation.value.last_billing_time = response.data.data.last_purchase.last_billing_time;
+        billinInformation.value.last_billing_amount = response.data.data.last_purchase.last_billing_amount;
+        billinInformation.value.last_purchased_credit = response.data.data.last_purchased_credit;
+      }
+    } else {
+      console.error("Invalid response structure:", response);
+    }
+  } catch (error) {
+    console.error("Error fetching billing information:", error);
+  }
+};
+
 const showBuyMoreCreditsModal = ref(false) // Modal visibility
 const BuyMoreCredits = async () => {
   console.log("Executing More Credits");
@@ -58,6 +120,7 @@ function handleClickOutside(event) {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+  billingInfo(); // Fetch billing data on mount
 });
 
 onUnmounted(() => {
@@ -74,6 +137,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
   <div class="p-8 max-w-6xl mx-auto">
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-bold mb-4">Billing</h1>
+      <!-- <h1 class="text-3xl font-bold mb-4">Subscription</h1> -->
       <!-- Button Hidden on Mobile and Shown on Medium Screens and Above -->
       <button @click="() => $router.push('/operativepage')"
         class="hidden md:inline-block mb-5 bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
@@ -89,12 +153,12 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
         <!-- Next Up Creator Card -->
         <div class="bg-tertiary p-6 rounded-lg flex flex-col justify-between shadow-sm">
           <div>
-            <h3 class="text-xl font-semibold mb-1">{{ cardOne.title }}</h3>
+            <h3 class="text-xl font-semibold mb-1">{{ billinInformation.plan_name }}</h3>
             <div class="flex items-center justify-between">
-              <p class="text-silverChalice mb-4 text-sm">Monthly</p>
+              <p class="text-silverChalice mb-4 text-sm"></p>
               <p class="text-md flex items-center text-silverChalice">
                 <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
-                {{ cardOne.credit }}
+                ${{ billinInformation.last_purchased_credit }}
               </p>
             </div>
             <br>
@@ -103,7 +167,9 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
             </div>
             <br>
             <div class="flex items-center justify-between">
-              <p class="text-xs text-silverChalice mt-2">Plan renews on {{ cardOne.date }}</p>
+              <p class="text-xs text-silverChalice mt-2">
+                <!-- {{ cardOne.date }} -->
+              </p>
               <button
                 class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
                 Change Plan
@@ -120,7 +186,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
               <p class="text-silverChalice mb-4 text-sm">Credits</p>
               <p class="text-md flex items-center text-silverChalice">
                 <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
-                {{ cardTwo.credit }}
+                ${{ billinInformation.credit }}
               </p>
             </div>
             <br>
@@ -128,7 +194,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
               <p class="text-center text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
             </div>
             <div class="flex items-center justify-between">
-              <p class="text-xs text-silverChalice mt-1">Expires 2 years from date purchased</p>
+              <p class="text-xs text-silverChalice mt-1"></p>
               <button @click="BuyMoreCredits"
                 class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
                 Buy More
@@ -147,16 +213,16 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
               </button>
             </div>
             <br><br>
-            <div class="border-solid lg:border-dashed">
+            <div class="border-dashed border-da lg:border-dashed">
               <p class="text-center text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
             </div>
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-2 text-sm">Price</p>
-              <p class="font-bold text-lg">{{ cardThree.price }}</p>
+              <p class="font-bold text-lg"> ${{ billinInformation.last_billing_amount }}</p>
             </div>
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-2 text-sm">Billing date</p>
-              <p class="font-bold text-md">{{ cardThree.billingDate }}</p>
+              <p class="font-bold text-md">{{ billinInformation.last_billing_time }}</p>
             </div>
           </div>
         </div>

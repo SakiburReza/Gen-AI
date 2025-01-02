@@ -46,7 +46,7 @@ const faceImage = ref<File | null>(null)
 
 // States
 const description = ref('')
-const media = ref<{ url: string; type: 'image' | 'video' }[]>([]) // Array to store media
+const media = ref<{ url: string; type: 'image' | 'video'; orientation: 'L' | 'P' }[]>([]) // Array to store media
 const loading = ref(false) // Track loading state
 
 const activeMode = ref('image')
@@ -111,6 +111,7 @@ const fetchMedia = async (label: string) => {
         .map((item) => ({
           url: base64ToBlobUrl(item.content),
           type: item.type || (item.content.includes('video') ? 'video' : 'image'),
+          orientation: item.orientation,
         }))
         .slice(0, 12) // Ensure maximum of 12 items
     } else {
@@ -195,6 +196,8 @@ const generateAiContent = async () => {
         }
         media.value = [newMedia, ...media.value].slice(0, 12)
       }
+       // Update credits after successful content generation
+       await fetchCredits()
     } else {
       console.error('Failed to generate media:', response)
     }
@@ -220,7 +223,7 @@ onMounted(async () => {
       }
 
       //window.location.reload();
-    } catch (error) { }
+    } catch (error) {}
   }
 
   fetchMedia('text-to-image') // Initial load
@@ -232,31 +235,43 @@ onMounted(async () => {
     <Navbar />
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
-      <!-- Left Section: Content Grid -->
-      <div class="flex-1 bg-white overflow-auto p-6 ml-15 mr-10">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-full"
-          style="grid-template-rows: repeat(3, 1fr); max-height: calc(100vh - 80px)">
-          <!-- Display spinner while loading contents -->
-          <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
+      <!-- Left Section: Enhanced Image Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[60%] mt-6">
+         <!-- Display spinner while loading images -->
+         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
             <fwb-spinner size="12" />
           </div>
-
-          <!-- Render media or placeholders to ensure 12 grids -->
-          <div v-for="index in 12" :key="index"
-            class="rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white flex items-center justify-center"
-            @click="
-              activeFunctionality === 'Face Swap' &&
-              media[index - 1] &&
-              openImageModal(media[index - 1])
-              ">
-            <!-- Render Image -->
-            <img v-if="media[index - 1] && media[index - 1].type === 'image'" :src="media[index - 1].url"
-              :alt="'Media ' + (index - 1)" class="w-full h-full object-contain max-w-full" />
-            <!-- Render Video -->
-            <video v-else-if="media[index - 1] && media[index - 1].type === 'video'" :src="media[index - 1].url"
-              controls class="w-full h-full object-contain max-w-full"></video>
-            <!-- Render Placeholder -->
-            <div v-else class="w-full h-full flex justify-center items-center bg-gray-100 text-gray-400"></div>
+        <div
+          v-for="(item, index) in media"
+          :key="index"
+          class="relative overflow-hidden rounded-lg"
+          :class="[
+            item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
+            'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
+          ]"
+        >
+          <!-- Render Image -->
+          <img
+            v-if="item.type === 'image'"
+            :src="item.url"
+            :alt="'Media ' + index"
+            class="h-full max-w-full rounded-lg w-full"
+            :class="[
+            item.orientation === 'P' ? 'object-full' : 'object-cover'
+          ]"
+          />
+          <!-- Render Video -->
+          <video
+            v-else-if="item.type === 'video'"
+            :src="item.url"
+            controls
+            class="h-full max-w-full rounded-lg object-cover w-full"
+          ></video>
+          <!-- Placeholder -->
+          <div
+            v-else
+            class="w-full h-full flex justify-center items-center bg-gray-200 text-gray-500 font-medium rounded-lg"
+          >
           </div>
         </div>
       </div>
@@ -264,17 +279,23 @@ onMounted(async () => {
       <!-- Floating Buttons Section -->
       <div class="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex z-50">
         <!-- Image Button -->
-        <button @click="setActive('image')" :class="[
-          'flex items-center px-4 py-2 rounded-lg font-medium transition',
-          activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-        ]">
+        <button
+          @click="setActive('image')"
+          :class="[
+            'flex items-center px-4 py-2 rounded-lg font-medium transition',
+            activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+          ]"
+        >
           <span class="material-icons">image</span>
         </button>
         <!-- Video Button -->
-        <button @click="setActive('video')" :class="[
-          'flex items-center px-4 py-2 rounded-lg font-medium transition',
-          activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-        ]">
+        <button
+          @click="setActive('video')"
+          :class="[
+            'flex items-center px-4 py-2 rounded-lg font-medium transition',
+            activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+          ]"
+        >
           <span class="material-icons">videocam</span>
         </button>
       </div>
@@ -286,44 +307,164 @@ onMounted(async () => {
           <div class="grid grid-cols-1 gap-2 w-full sm:w-64 md:w-80 lg:w-full">
             <!-- Dropdown for Text to Image -->
             <div v-if="activeMode === 'image'">
-              <select v-model="activeFunctionality"
-                class="w-full py-2 px-3 rounded-lg bg-tertiary text-sm  p-2 text-dimGray font-bold">
-                <option value="Text to Image" :selected="activeFunctionality === 'Text to Image'" >Text to Image</option>
-                <option value="Image to Image" class="text-sm" :selected="activeFunctionality === 'Image to Image'">Image to Image
+              <select
+                v-model="activeFunctionality"
+                class="w-full py-2 px-3 rounded-lg bg-tertiary text-sm p-2 text-dimGray font-bold"
+              >
+                <option value="Text to Image" :selected="activeFunctionality === 'Text to Image'">
+                  Text to Image
+                </option>
+                <option
+                  value="Image to Image"
+                  class="text-sm"
+                  :selected="activeFunctionality === 'Image to Image'"
+                >
+                  Image to Image
                 </option>
               </select>
             </div>
 
             <!-- Dropdown for Text to Video and Image to Video -->
             <div v-if="activeMode === 'video'">
-              <select v-model="activeFunctionality"
-                class="w-full py-2 px-3 rounded-lg bg-tertiary text-sm  p-2 text-dimGray font-bold">
+              <select
+                v-model="activeFunctionality"
+                class="w-full py-2 px-3 rounded-lg bg-tertiary text-sm p-2 text-dimGray font-bold"
+              >
                 <option value="Text to Video" :selected="activeFunctionality === 'Text to Video'">
                   Text to Video
                 </option>
                 <option value="Image to Video" :selected="activeFunctionality === 'Image to Video'">
                   Image to Video
                 </option>
-                <option value="Face Swap" :selected="activeFunctionality === 'Face Swap'">Face Swap</option>
-                <option value="Templates" :selected="activeFunctionality === 'Templates'">Templates</option>
+                <option value="Face Swap" :selected="activeFunctionality === 'Face Swap'">
+                  Face Swap
+                </option>
+                <option value="Templates" :selected="activeFunctionality === 'Templates'">
+                  Templates
+                </option>
               </select>
             </div>
           </div>
         </div>
 
         <!-- Dynamic Content Based on Selected Functionality -->
-        <div v-if="activeFunctionality === 'Text to Image'" class="bg-white p-6 space-y-6 flex-shrink-0">
-          <CustomizationCard @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)" />
+        <div
+          v-if="activeFunctionality === 'Text to Image'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
+          <CustomizationCard
+            @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)"
+          />
           <DescriptionCard @input="(value) => (description = value)" />
-          <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
+            Zeux IT
+          </fwb-button>
+        </div>
+
+        <div
+          v-if="activeFunctionality === 'Face Swap'"
+          class="bg-white p-6 space-y-6 flex-shrink-0 relative"
+        >
+          <!-- Image Cards with Sequencial Positioning -->
+          <div class="w-full space-y-6">
+            <!-- First Image Card -->
+            <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-gray-200 rounded-lg shadow-lg">
+              <ImageInputCard
+                title="Insert Reference Image"
+                @input="(file) => (referenceImage = file)"
+              />
+            </div>
+            <!-- Second Image Card -->
+            <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white rounded-lg shadow-2xl">
+              <ImageInputCard title="Insert Face Image" @input="(file) => (faceImage = file)" />
+            </div>
+          </div>
+
+          <CustomizationCard
+            @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)"
+          />
+          <!-- Generate Button -->
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full mt-8"
+            color="default"
+          >
             Zeuxis
           </fwb-button>
         </div>
-        <!-- Other functionalities are omitted for brevity -->
+        <div
+          v-if="activeFunctionality === 'Text to Video'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
+          <DescriptionCard @input="(value) => (description = value)" />
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
+            Zeuxis
+          </fwb-button>
+        </div>
+        <div
+          v-if="activeFunctionality === 'Image to Video'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
+          <!-- Modify ImageInputCard to bind the selected images -->
+          <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" />
+          <DescriptionCard @input="(value) => (description = value)" />
+
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
+            Zeuxis
+          </fwb-button>
+        </div>
+        <div
+          v-if="activeFunctionality === 'Image to Image'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
+          <CustomizationCard
+            @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)"
+          />
+          <!-- Modify ImageInputCard to bind the selected images -->
+          <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" />
+          <DescriptionCard @input="(value) => (description = value)" />
+
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
+            Zeuxis
+          </fwb-button>
+        </div>
+        <div
+          v-if="activeFunctionality === 'Templates'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
+          <!-- Video Carousel -->
+          <VideoCarousel @video-selected="(object) => (selectedVideo = object)" />
+
+          <ImageInputCard title="Face Image" @input="(file) => (referenceImage = file)" />
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
+            Zeuxis
+          </fwb-button>
+        </div>
       </div>
     </div>
-
     <!-- Modal Component -->
     <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="selectedImage" />
   </div>
@@ -331,4 +472,8 @@ onMounted(async () => {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+/* Custom fractional row span */
+.row-span-1-5 {
+  grid-row: span 2 / span 1; /* Span 1.5 rows */
+}
 </style>
