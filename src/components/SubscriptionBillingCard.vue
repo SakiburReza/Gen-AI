@@ -53,8 +53,30 @@ const billingInfo = async () => {
           response.data.data.subscription.credit === undefined)
           ? "0.00"
           : response.data.data.subscription.credit;
+
+          billinInformation.value.last_purchased_credit = (response.data.data.subscription.last_purchased_credit === null ||
+          response.data.data.subscription.last_purchased_credit === "null" ||
+          response.data.data.subscription.last_purchased_credit === undefined)
+          ? "0.00"
+          : response.data.data.subscription.last_purchased_credit;
+
+
+          billinInformation.value.last_billing_time = (response.data.data.subscription.last_billing_time === null ||
+          response.data.data.subscription.last_billing_time === "null" ||
+          response.data.data.subscription.last_billing_time === undefined)
+          ? "No date available"
+          : response.data.data.subscription.last_billing_time;
+
+          billinInformation.value.last_billing_amount = (response.data.data.subscription.last_billing_amount === null ||
+          response.data.data.subscription.last_billing_amount === "null" ||
+          response.data.data.subscription.last_billing_amount === undefined)
+          ? "0.00"
+          : response.data.data.subscription.last_billing_amount;
+
       }
       if (response.data.data.last_purchase) {
+
+
         billinInformation.value.last_billing_time = response.data.data.last_purchase.last_billing_time;
         billinInformation.value.last_billing_amount = response.data.data.last_purchase.last_billing_amount;
         billinInformation.value.last_purchased_credit = response.data.data.last_purchased_credit;
@@ -136,7 +158,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
               <p class="text-silverChalice mb-4 text-sm"></p>
               <p class="text-md flex items-center text-silverChalice">
                 <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
-                {{ billinInformation.last_purchased_credit }}
+                ${{ billinInformation.last_purchased_credit }}
               </p>
             </div>
             <br>
@@ -164,7 +186,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
               <p class="text-silverChalice mb-4 text-sm">Credits</p>
               <p class="text-md flex items-center text-silverChalice">
                 <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
-                {{ billinInformation.credit }}
+                ${{ billinInformation.credit }}
               </p>
             </div>
             <br>
@@ -196,7 +218,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
             </div>
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-2 text-sm">Price</p>
-              <p class="font-bold text-lg">{{ billinInformation.last_billing_amount }}</p>
+              <p class="font-bold text-lg"> ${{ billinInformation.last_billing_amount }}</p>
             </div>
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-2 text-sm">Billing date</p>
