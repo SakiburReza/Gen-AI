@@ -235,10 +235,14 @@ onMounted(async () => {
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[60%] mt-6">
+         <!-- Display spinner while loading images -->
+         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
+            <fwb-spinner size="12" />
+          </div>
         <div
           v-for="(item, index) in media"
           :key="index"
-          class="relative overflow-hidden rounded-lg "
+          class="relative overflow-hidden rounded-lg"
           :class="[
             item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
             'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
@@ -249,21 +253,23 @@ onMounted(async () => {
             v-if="item.type === 'image'"
             :src="item.url"
             :alt="'Media ' + index"
-            class="h-full max-w-full rounded-lg object-cover w-full"
+            class="h-full max-w-full rounded-lg w-full"
+            :class="[
+            item.orientation === 'P' ? 'object-full' : 'object-cover'
+          ]"
           />
           <!-- Render Video -->
           <video
             v-else-if="item.type === 'video'"
             :src="item.url"
             controls
-            class="h-auto max-w-full rounded-lg object-cover w-full"
+            class="h-full max-w-full rounded-lg object-cover w-full"
           ></video>
           <!-- Placeholder -->
           <div
             v-else
             class="w-full h-full flex justify-center items-center bg-gray-200 text-gray-500 font-medium rounded-lg"
           >
-            No Media Available
           </div>
         </div>
       </div>
@@ -339,22 +345,37 @@ onMounted(async () => {
           </div>
         </div>
 
-       <!-- Dynamic Content Based on Selected Functionality -->
-       <div v-if="activeFunctionality === 'Text to Image'" class="bg-white p-6 space-y-6 flex-shrink-0">
-          <CustomizationCard @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)" />
+        <!-- Dynamic Content Based on Selected Functionality -->
+        <div
+          v-if="activeFunctionality === 'Text to Image'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
+          <CustomizationCard
+            @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)"
+          />
           <DescriptionCard @input="(value) => (description = value)" />
-          <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
             Zeux IT
           </fwb-button>
         </div>
 
-        <div v-if="activeFunctionality === 'Face Swap'" class="bg-white p-6 space-y-6 flex-shrink-0 relative">
+        <div
+          v-if="activeFunctionality === 'Face Swap'"
+          class="bg-white p-6 space-y-6 flex-shrink-0 relative"
+        >
           <!-- Image Cards with Sequencial Positioning -->
           <div class="w-full space-y-6">
             <!-- First Image Card -->
             <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-gray-200 rounded-lg shadow-lg">
-              <ImageInputCard title="Insert Reference Image" @input="(file) => (referenceImage = file)" />
+              <ImageInputCard
+                title="Insert Reference Image"
+                @input="(file) => (referenceImage = file)"
+              />
             </div>
             <!-- Second Image Card -->
             <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white rounded-lg shadow-2xl">
@@ -362,45 +383,81 @@ onMounted(async () => {
             </div>
           </div>
 
-          <CustomizationCard @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)" />
+          <CustomizationCard
+            @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)"
+          />
           <!-- Generate Button -->
-          <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full mt-8" color="default">
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full mt-8"
+            color="default"
+          >
             Zeuxis
           </fwb-button>
         </div>
-        <div v-if="activeFunctionality === 'Text to Video'" class="bg-white p-6 space-y-6 flex-shrink-0">
+        <div
+          v-if="activeFunctionality === 'Text to Video'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
           <DescriptionCard @input="(value) => (description = value)" />
-          <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
             Zeuxis
           </fwb-button>
         </div>
-        <div v-if="activeFunctionality === 'Image to Video'" class="bg-white p-6 space-y-6 flex-shrink-0">
+        <div
+          v-if="activeFunctionality === 'Image to Video'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" />
           <DescriptionCard @input="(value) => (description = value)" />
 
-          <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
             Zeuxis
           </fwb-button>
         </div>
-        <div v-if="activeFunctionality === 'Image to Image'" class="bg-white p-6 space-y-6 flex-shrink-0">
-          <CustomizationCard @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)" />
+        <div
+          v-if="activeFunctionality === 'Image to Image'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
+          <CustomizationCard
+            @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)"
+          />
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" />
           <DescriptionCard @input="(value) => (description = value)" />
 
-          <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
             Zeuxis
           </fwb-button>
         </div>
-        <div v-if="activeFunctionality === 'Templates'" class="bg-white p-6 space-y-6 flex-shrink-0">
+        <div
+          v-if="activeFunctionality === 'Templates'"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
+        >
           <!-- Video Carousel -->
           <VideoCarousel @video-selected="(object) => (selectedVideo = object)" />
 
           <ImageInputCard title="Face Image" @input="(file) => (referenceImage = file)" />
-          <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
+          <fwb-button
+            @click="generateAiContent"
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
+          >
             Zeuxis
           </fwb-button>
         </div>
@@ -417,5 +474,4 @@ onMounted(async () => {
 .row-span-1-5 {
   grid-row: span 2 / span 1; /* Span 1.5 rows */
 }
-
 </style>
