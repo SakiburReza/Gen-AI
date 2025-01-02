@@ -96,20 +96,19 @@ const selectedRatio = ref('Landscape')
 const selectedOutput = ref(1)
 
 // Fetch Images / Videos from API
-const fetchMedia = async (label: string) => {
+const fetchMedia = async () => {
   loading.value = true
   try {
-    const { data: response } = await genAiService.getMedia(label)
+    const { data: response } = await genAiService.getCommunityMedia()
 
     if (response.status && Array.isArray(response.data)) {
       // Map data with type detection (image/video) for initial load
       media.value = response.data
         .map((item) => ({
-          url: base64ToBlobUrl(item.content),
-          type: item.type || (item.content.includes('video') ? 'video' : 'image'),
+          url: item.url,
           orientation: item.orientation,
         }))
-        .slice(0, 12) // Ensure maximum of 12 items
+       // .slice(0, 12) // Ensure maximum of 12 items
     } else {
       console.error('Failed to fetch images: Invalid response format')
     }
@@ -206,23 +205,7 @@ const generateAiContent = async () => {
 
 // Fetch images when the component is mounted
 onMounted(async () => {
-  console.log(route.query.checkoutId)
-  if (route.query) {
-    try {
-      const checkoutId = route.query.checkoutId
-      const transactionId = route.query.transactionId
-      console.log('checkoutId :', checkoutId, 'transactionId:', transactionId)
-
-      if (checkoutId && transactionId) {
-        const response = await genAiService.getPaymentSync(checkoutId, transactionId)
-        toastStore.success(response.data)
-      }
-
-      //window.location.reload();
-    } catch (error) {}
-  }
-
-  fetchMedia('text-to-image') // Initial load
+  fetchMedia()
 })
 </script>
 
@@ -230,7 +213,7 @@ onMounted(async () => {
   <div class="flex flex-col h-screen">
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[60%] mt-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[60%] mt-30">
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />
@@ -246,24 +229,11 @@ onMounted(async () => {
         >
           <!-- Render Image -->
           <img
-            v-if="item.type === 'image'"
             :src="item.url"
             :alt="'Media ' + index"
             class="h-full max-w-full rounded-lg w-full"
             :class="[item.orientation === 'P' ? 'object-full' : 'object-cover']"
           />
-          <!-- Render Video -->
-          <video
-            v-else-if="item.type === 'video'"
-            :src="item.url"
-            controls
-            class="h-full max-w-full rounded-lg object-cover w-full"
-          ></video>
-          <!-- Placeholder -->
-          <div
-            v-else
-            class="w-full h-full flex justify-center items-center bg-gray-200 text-gray-500 font-medium rounded-lg"
-          ></div>
         </div>
       </div>
     </div>

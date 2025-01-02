@@ -121,6 +121,9 @@ class GenAIService {
       headers: this.getAuthHeaders(),
     });
   }
+  getCommunityMedia() {
+    return axios.get(this.url + '/share/communityImage')
+  }
 }
 
 export default new GenAIService()
