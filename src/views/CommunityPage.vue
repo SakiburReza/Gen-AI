@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import CustomizationCard from '@/components/CustomizationCard.vue'
-import DescriptionCard from '@/components/DescriptionCard.vue'
-import ImageInputCard from '@/components/ImageInputCard.vue'
-import Navbar from '@/components/NavBar.vue'
 import ShowModalForImage from '@/components/ShowModalForImage.vue'
-import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted } from 'vue'
@@ -47,7 +42,7 @@ const faceImage = ref<File | null>(null)
 
 // States
 const description = ref('')
-const media = ref<{ url: string; type: 'image' | 'video' }[]>([]) // Array to store media
+const media = ref<{ url: string; type: 'image' | 'video'; orientation: 'L' | 'P' }[]>([]) // Array to store media
 const loading = ref(false) // Track loading state
 
 const activeMode = ref('image')
@@ -112,6 +107,7 @@ const fetchMedia = async (label: string) => {
         .map((item) => ({
           url: base64ToBlobUrl(item.content),
           type: item.type || (item.content.includes('video') ? 'video' : 'image'),
+          orientation: item.orientation,
         }))
         .slice(0, 12) // Ensure maximum of 12 items
     } else {
@@ -196,6 +192,8 @@ const generateAiContent = async () => {
         }
         media.value = [newMedia, ...media.value].slice(0, 12)
       }
+      // Update credits after successful content generation
+      await fetchCredits()
     } else {
       console.error('Failed to generate media:', response)
     }
@@ -221,7 +219,7 @@ onMounted(async () => {
       }
 
       //window.location.reload();
-    } catch (error) { }
+    } catch (error) {}
   }
 
   fetchMedia('text-to-image') // Initial load
@@ -230,57 +228,52 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col h-screen">
-    <!-- Grid for media items -->
-    <div
-      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4 overflow-auto"
-      style="grid-auto-rows: minmax(150px, 1fr);"
-    >
-      <!-- Spinner while loading -->
-      <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
-        <fwb-spinner size="12" />
-      </div>
-
-      <!-- Render media or placeholders -->
-      <div
-        v-for="(item, index) in media"
-        :key="index"
-        class="relative group rounded-lg overflow-hidden shadow-md hover:shadow-lg bg-white"
-        @click="
-          activeFunctionality === 'Face Swap' &&
-          item &&
-          openImageModal(item)
-        "
-      >
-        <!-- Render Image -->
-        <img
-          v-if="item.type === 'image'"
-          :src="item.url"
-          :alt="'Media ' + index"
-          class="w-full h-full object-cover"
-        />
-        <!-- Render Video -->
-        <video
-          v-else-if="item.type === 'video'"
-          :src="item.url"
-          controls
-          class="w-full h-full object-cover"
-        ></video>
-        <!-- Placeholder for empty slots -->
-        <div v-else class="w-full h-full flex justify-center items-center bg-gray-100 text-gray-400">
-          No Media
+    <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
+      <!-- Left Section: Enhanced Image Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[60%] mt-6">
+        <!-- Display spinner while loading images -->
+        <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
+          <fwb-spinner size="12" />
         </div>
-
-        <!-- Overlay effect -->
         <div
-          class="absolute inset-0 bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity"
-        ></div>
+          v-for="(item, index) in media"
+          :key="index"
+          class="relative overflow-hidden rounded-lg"
+          :class="[
+            item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
+            'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
+          ]"
+        >
+          <!-- Render Image -->
+          <img
+            v-if="item.type === 'image'"
+            :src="item.url"
+            :alt="'Media ' + index"
+            class="h-full max-w-full rounded-lg w-full"
+            :class="[item.orientation === 'P' ? 'object-full' : 'object-cover']"
+          />
+          <!-- Render Video -->
+          <video
+            v-else-if="item.type === 'video'"
+            :src="item.url"
+            controls
+            class="h-full max-w-full rounded-lg object-cover w-full"
+          ></video>
+          <!-- Placeholder -->
+          <div
+            v-else
+            class="w-full h-full flex justify-center items-center bg-gray-200 text-gray-500 font-medium rounded-lg"
+          ></div>
+        </div>
       </div>
     </div>
-
     <!-- Sidebar Component -->
     <CommunitySidebar class="w-30 md:w-30" />
-
     <!-- Modal Component -->
     <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="selectedImage" />
   </div>
 </template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+</style>
