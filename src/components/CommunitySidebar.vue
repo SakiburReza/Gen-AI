@@ -1,145 +1,171 @@
 <template>
-  <div class="absolute flex left-230 rounded-lg bg-white p-4 shadow-md">
+  <div
+    class="fixed top-0 right-0 h-screen bg-gray-50 shadow-lg rounded-l-3xl flex flex-col w-64 md:w-72 lg:w-80 xl:w-96 transition-transform transform translate-x-full lg:translate-x-0"
+    :class="{ 'translate-x-0': isOpen }"
+  >
+    <!-- Logo -->
+    <div class="px-6 py-4 flex justify-center">
+      <img src="/images/zeuxis.png" alt="Zeuxis Logo" class="w-30 h-20" />
+    </div>
 
-  <fwb-sidebar>
+    <!-- Menu Items -->
+    <nav class="flex-1 overflow-y-auto">
+      <ul class="space-y-2 px-4">
+        <li>
+          <a
+            href="#"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all">
+              <path d="M12 0C9.62663 0 7.30655 0.703788 5.33316 2.02236C3.35977 3.34094 1.8217 5.21508 0.913451 7.4078C0.0051994 9.60051 -0.232441 12.0133 0.230582 14.3411C0.693605 16.6689 1.83649 18.807 3.51472 20.4853C5.19295 22.1635 7.33115 23.3064 9.65892 23.7694C11.9867 24.2324 14.3995 23.9948 16.5922 23.0865C18.7849 22.1783 20.6591 20.6402 21.9776 18.6668C23.2962 16.6934 24 14.3734 24 12C24 8.8174 22.7357 5.76515 20.4853 3.51472C18.2348 1.26428 15.1826 0 12 0ZM12 22.2857C9.96568 22.2857 7.97704 21.6825 6.28557 20.5523C4.59409 19.422 3.27575 17.8156 2.49724 15.9362C1.71874 14.0567 1.51505 11.9886 1.91193 9.99335C2.3088 7.99812 3.28842 6.16538 4.72691 4.7269C6.16539 3.28842 7.99813 2.3088 9.99336 1.91192C11.9886 1.51505 14.0567 1.71874 15.9362 2.49724C17.8156 3.27574 19.4221 4.59409 20.5523 6.28556C21.6825 7.97704 22.2857 9.96568 22.2857 12C22.2857 14.7279 21.202 17.3441 19.2731 19.2731C17.3442 21.202 14.7279 22.2857 12 22.2857ZM17.0743 5.77714L9.79715 9.42857C9.63275 9.51548 9.49834 9.64989 9.41143 9.81428L5.77715 17.0743C5.71305 17.2051 5.68335 17.3501 5.69085 17.4955C5.69835 17.641 5.7428 17.7822 5.82 17.9057C5.89721 18.0292 6.00462 18.1311 6.13209 18.2015C6.25957 18.272 6.40291 18.3089 6.54858 18.3086C6.67918 18.3091 6.80818 18.2798 6.92572 18.2229L14.2029 14.5714C14.3673 14.4845 14.5017 14.3501 14.5886 14.1857L18.2229 6.90857C18.3022 6.74787 18.3291 6.56634 18.2999 6.38953C18.2707 6.21272 18.1868 6.04951 18.06 5.92286C17.9314 5.79887 17.7672 5.71818 17.5905 5.69205C17.4138 5.66593 17.2333 5.69568 17.0743 5.77714ZM13.1829 13.1829L8.46 15.54L10.8171 10.8171L15.54 8.46L13.1829 13.1829Z" fill="black"/>
+            </svg>
+            Explore
+          </a>
+        </li>
 
-     <fwb-sidebar-item>
+        <li>
+          <a
+            href="#"
+            class="flex items-center px-4 py-3 text-black-2 hover:bg-blue-600 hover:text-white cursor-pointer rounded-lg transition-all space-x-2 group"
+          >
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M14.7476 17.2505C13.4253 15.9282 12.1123 16.4439 10.9766 17.8058L5.79309 24.0224C4.73148 25.2955 2.90158 25.295 1.80333 24.1967C0.70509 23.0985 0.704554 21.2686 1.97767 20.207L8.19426 15.0234C9.55616 13.8878 10.0718 12.5748 8.74952 11.2525C7.88645 10.3894 7.88645 8.97707 8.74952 8.11399L15.8635 1L25 10.1366L17.8861 17.2505C17.023 18.1136 15.6106 18.1136 14.7476 17.2505Z" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.35889 21.8662L4.13401 18.6413" stroke="black" stroke-width="0.975609" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M19.1333 15.7383L16.2499 12.8549M13.1455 9.75053L10.2619 6.86692" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M23.0005 8.4816L21.7921 9.68994" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21.1729 6.65463L18.5331 9.29443" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M19.3457 4.82721L17.5338 6.63916" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.5181 2.99972L16.3098 4.20801" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14.6978 11.3027H14.6974" stroke="black" stroke-width="0.975609" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Create
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
+          >
+            <svg width="34" height="24" viewBox="0 0 34 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current text-[#000000] group-hover:text-white transition-colors">
+              <g clip-path="url(#clip0_2398_2269)">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1.76182 0H16.6136L17.2936 0.558491C17.6645 0.875472 18.0664 1.31321 18.1745 1.53962C18.3291 1.82642 18.3909 2.56604 18.3909 5.88679H24.8509C28.4364 5.88679 31.5427 5.94717 31.8364 6.03774C32.13 6.11321 32.64 6.43019 32.9645 6.74717C33.2891 7.06415 33.6136 7.53208 33.7064 7.77358C33.7836 8.04528 33.8609 10.9887 33.8918 14.8679C33.9227 20.8755 33.8918 21.5849 33.66 22.234C33.4745 22.7019 33.15 23.1245 32.0682 24H17.3091L16.7064 23.5925C16.3664 23.3509 15.9336 22.9434 15.7327 22.6566C15.4082 22.1887 15.3773 21.9472 15.3 18.1132H2.24091L1.54545 17.766C1.15909 17.5698 0.664545 17.1472 0.0154545 16.2264L0 9.16226C0 3.63774 0.0463636 2.00755 0.200909 1.61509C0.324545 1.35849 0.710909 0.875472 1.08182 0.573585L1.76182 0ZM1.20545 1.93208L1.25182 11.3811C4.23455 8.40755 5.20818 7.54717 5.33182 7.54717C5.47091 7.53208 6.41364 8.39245 7.46455 9.43396C8.5 10.4755 9.41182 11.3208 9.47364 11.3208C9.53545 11.3208 10.2155 10.5208 10.9882 9.53962C11.7609 8.55849 12.5027 7.71321 12.6109 7.65283C12.7345 7.59245 12.9818 7.63774 13.1827 7.7434C13.3682 7.84906 14.2645 8.70943 15.1455 9.64528C16.0418 10.5811 16.8918 11.3962 17.0464 11.4717C17.2936 11.6075 17.3091 11.4264 17.3091 8.73962V5.88679C16.7682 6.15849 16.1036 6.24906 15.4545 6.24906C14.5427 6.24906 14.1255 6.17359 13.4609 5.8717C13.0127 5.67547 12.3791 5.23774 12.07 4.90566C11.7609 4.57359 11.3436 3.90943 11.1582 3.42642C10.9727 2.9434 10.8182 2.21887 10.8182 1.81132V1.0566H2.21L1.20545 1.93208ZM12.0545 1.91698C12.0545 2.52075 12.1627 2.98868 12.41 3.4566C12.6109 3.84906 13.0436 4.33208 13.43 4.58868C14.0327 5.01132 14.1873 5.04151 15.3618 5.04151C16.4436 5.04151 16.7064 4.99623 16.9845 4.73962C17.2473 4.49811 17.3091 4.2717 17.3091 3.50189C17.3091 2.98868 17.2009 2.32453 17.0618 2.02264C16.9382 1.73585 16.6291 1.40377 16.3664 1.26792C16.0418 1.11698 15.3927 1.04151 13.9709 1.04151H12.0391L12.0545 1.91698ZM18.3909 7.09434C18.3909 15.5925 18.36 15.9698 18.0818 16.5585C17.8964 16.9509 17.5255 17.3736 17.1545 17.6151L16.5209 18.0377C16.5364 21.3887 16.5827 21.7358 16.8455 22.1434C17.0155 22.4151 17.3245 22.7019 17.5409 22.7925C17.7727 22.883 20.5236 22.9434 24.65 22.9434C29.2864 22.9434 31.4809 22.8981 31.7282 22.7774C31.9136 22.6868 32.1918 22.4604 32.3309 22.2792C32.5782 21.9925 32.6091 21.3736 32.6091 14.9736V8L31.7591 7.13962C25.7782 6.98868 22.95 6.95849 21.6364 6.95849C20.3227 6.97358 19.0555 7.01887 18.8236 7.03396L18.3909 7.09434ZM1.26727 13.0566C1.08182 14.7925 1.09727 15.3811 1.22091 15.7434C1.31364 16.0604 1.57636 16.4528 1.80818 16.6189C2.17909 16.8755 2.45727 16.9208 3.70909 16.9057L5.17727 16.8906C7.68091 13.7208 8.48455 12.6642 8.57727 12.4981C8.70091 12.2566 8.48455 11.9849 7.10909 10.6415C6.21273 9.76604 5.40909 9.0566 5.33182 9.0717C5.23909 9.0717 4.29636 9.96227 3.23 11.0642L1.26727 13.0566ZM9.93727 12.7849C8.31455 14.8377 6.93909 16.6189 6.89273 16.7245C6.8 16.8604 7.77364 16.9057 11.4982 16.9057H16.2118C17.2009 16.0453 17.2164 15.9849 17.2627 14.6868L17.3091 13.3585L12.8891 9.04151L9.93727 12.7849ZM19.9518 8.75472C20.06 8.75472 22.4709 10.0679 25.3145 11.683C28.8845 13.6906 30.5073 14.6868 30.5382 14.883C30.5691 15.0491 30.4609 15.2755 30.3064 15.4264C30.1518 15.5623 28.1273 16.7396 25.7782 18.0528C23.4445 19.3509 21.2655 20.5887 20.9564 20.7698C20.6318 20.966 20.2145 21.117 19.6736 21.0566L19.6582 15.0943C19.6427 11.8189 19.6582 9.04151 19.6891 8.95094C19.72 8.84528 19.8436 8.75472 19.9518 8.75472ZM20.6936 14.9434C20.6782 17.6302 20.74 19.4566 20.8327 19.4415C20.91 19.4113 22.7182 18.4151 24.8355 17.2075C26.9682 16 28.7145 14.9887 28.7145 14.9434C28.7145 14.8981 27.2773 14.0679 25.5155 13.1019C23.7536 12.1208 21.9455 11.1094 21.4973 10.8679L20.6936 10.4151V14.9434Z" fill="black"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_2398_2269">
+                  <rect width="34" height="24" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            Image to Video
+          </a>
+        </li>
 
-      <template #icon>
+        <li>
+          <a
+            href="#"
+            class="flex items-center px-4 py-3 rounded-lg text-black hover:bg-blue-600 hover:text-white group transition-all"
+          >
+            <svg
+              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16s1.5-2 3-2 3 2 5 2 3-2 5-2 3 2 5 2" />
+            </svg>
+            Text to Video
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+          >
+            <svg
+              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+            </svg>
+            Face Swap
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+          >
+            <svg
+              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18" />
+            </svg>
+            Templates
+          </a>
+        </li>
+      </ul>
+    </nav>
 
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C9.62663 0 7.30655 0.703788 5.33316 2.02236C3.35977 3.34094 1.8217 5.21508 0.913451 7.4078C0.0051994 9.60051 -0.232441 12.0133 0.230582 14.3411C0.693605 16.6689 1.83649 18.807 3.51472 20.4853C5.19295 22.1635 7.33115 23.3064 9.65892 23.7694C11.9867 24.2324 14.3995 23.9948 16.5922 23.0865C18.7849 22.1783 20.6591 20.6402 21.9776 18.6668C23.2962 16.6934 24 14.3734 24 12C24 8.8174 22.7357 5.76515 20.4853 3.51472C18.2348 1.26428 15.1826 0 12 0ZM12 22.2857C9.96568 22.2857 7.97704 21.6825 6.28557 20.5523C4.59409 19.422 3.27575 17.8156 2.49724 15.9362C1.71874 14.0567 1.51505 11.9886 1.91193 9.99335C2.3088 7.99812 3.28842 6.16538 4.72691 4.7269C6.16539 3.28842 7.99813 2.3088 9.99336 1.91192C11.9886 1.51505 14.0567 1.71874 15.9362 2.49724C17.8156 3.27574 19.4221 4.59409 20.5523 6.28556C21.6825 7.97704 22.2857 9.96568 22.2857 12C22.2857 14.7279 21.202 17.3441 19.2731 19.2731C17.3442 21.202 14.7279 22.2857 12 22.2857ZM17.0743 5.77714L9.79715 9.42857C9.63275 9.51548 9.49834 9.64989 9.41143 9.81428L5.77715 17.0743C5.71305 17.2051 5.68335 17.3501 5.69085 17.4955C5.69835 17.641 5.7428 17.7822 5.82 17.9057C5.89721 18.0292 6.00462 18.1311 6.13209 18.2015C6.25957 18.272 6.40291 18.3089 6.54858 18.3086C6.67918 18.3091 6.80818 18.2798 6.92572 18.2229L14.2029 14.5714C14.3673 14.4845 14.5017 14.3501 14.5886 14.1857L18.2229 6.90857C18.3022 6.74787 18.3291 6.56634 18.2999 6.38953C18.2707 6.21272 18.1868 6.04951 18.06 5.92286C17.9314 5.79887 17.7672 5.71818 17.5905 5.69205C17.4138 5.66593 17.2333 5.69568 17.0743 5.77714ZM13.1829 13.1829L8.46 15.54L10.8171 10.8171L15.54 8.46L13.1829 13.1829Z" fill="black"/>
-        </svg>
-
-      </template>
-
-        <span>EXPLORE</span>
-
-      <template #suffix>
-
-        <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
-
-      </template>
-
-    </fwb-sidebar-item>
-    <fwb-sidebar-item>
-      <template #icon>
-        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M14.7476 17.2505C13.4253 15.9282 12.1123 16.4439 10.9766 17.8058L5.79309 24.0224C4.73148 25.2955 2.90158 25.295 1.80333 24.1967C0.70509 23.0985 0.704554 21.2686 1.97767 20.207L8.19426 15.0234C9.55616 13.8878 10.0718 12.5748 8.74952 11.2525C7.88645 10.3894 7.88645 8.97707 8.74952 8.11399L15.8635 1L25 10.1366L17.8861 17.2505C17.023 18.1136 15.6106 18.1136 14.7476 17.2505Z" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M7.35889 21.8662L4.13401 18.6413" stroke="black" stroke-width="0.975609" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M19.1333 15.7383L16.2499 12.8549M13.1455 9.75053L10.2619 6.86692" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M23.0005 8.4816L21.7921 9.68994" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M21.1729 6.65463L18.5331 9.29443" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M19.3457 4.82721L17.5338 6.63916" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M17.5181 2.99972L16.3098 4.20801" stroke="black" stroke-width="1.5" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M14.6978 11.3027H14.6974" stroke="black" stroke-width="0.975609" stroke-miterlimit="2.6131" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </template>
-      <template #default>CREATE</template>
-      <template #suffix>
-        <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
-      </template>
-    </fwb-sidebar-item>
-    <fwb-sidebar-item>
-      <template #icon>
-        <svg width="34" height="24" viewBox="0 0 34 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g clip-path="url(#clip0_2398_2269)">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M1.76182 0H16.6136L17.2936 0.558491C17.6645 0.875472 18.0664 1.31321 18.1745 1.53962C18.3291 1.82642 18.3909 2.56604 18.3909 5.88679H24.8509C28.4364 5.88679 31.5427 5.94717 31.8364 6.03774C32.13 6.11321 32.64 6.43019 32.9645 6.74717C33.2891 7.06415 33.6136 7.53208 33.7064 7.77358C33.7836 8.04528 33.8609 10.9887 33.8918 14.8679C33.9227 20.8755 33.8918 21.5849 33.66 22.234C33.4745 22.7019 33.15 23.1245 32.0682 24H17.3091L16.7064 23.5925C16.3664 23.3509 15.9336 22.9434 15.7327 22.6566C15.4082 22.1887 15.3773 21.9472 15.3 18.1132H2.24091L1.54545 17.766C1.15909 17.5698 0.664545 17.1472 0.0154545 16.2264L0 9.16226C0 3.63774 0.0463636 2.00755 0.200909 1.61509C0.324545 1.35849 0.710909 0.875472 1.08182 0.573585L1.76182 0ZM1.20545 1.93208L1.25182 11.3811C4.23455 8.40755 5.20818 7.54717 5.33182 7.54717C5.47091 7.53208 6.41364 8.39245 7.46455 9.43396C8.5 10.4755 9.41182 11.3208 9.47364 11.3208C9.53545 11.3208 10.2155 10.5208 10.9882 9.53962C11.7609 8.55849 12.5027 7.71321 12.6109 7.65283C12.7345 7.59245 12.9818 7.63774 13.1827 7.7434C13.3682 7.84906 14.2645 8.70943 15.1455 9.64528C16.0418 10.5811 16.8918 11.3962 17.0464 11.4717C17.2936 11.6075 17.3091 11.4264 17.3091 8.73962V5.88679C16.7682 6.15849 16.1036 6.24906 15.4545 6.24906C14.5427 6.24906 14.1255 6.17359 13.4609 5.8717C13.0127 5.67547 12.3791 5.23774 12.07 4.90566C11.7609 4.57359 11.3436 3.90943 11.1582 3.42642C10.9727 2.9434 10.8182 2.21887 10.8182 1.81132V1.0566H2.21L1.20545 1.93208ZM12.0545 1.91698C12.0545 2.52075 12.1627 2.98868 12.41 3.4566C12.6109 3.84906 13.0436 4.33208 13.43 4.58868C14.0327 5.01132 14.1873 5.04151 15.3618 5.04151C16.4436 5.04151 16.7064 4.99623 16.9845 4.73962C17.2473 4.49811 17.3091 4.2717 17.3091 3.50189C17.3091 2.98868 17.2009 2.32453 17.0618 2.02264C16.9382 1.73585 16.6291 1.40377 16.3664 1.26792C16.0418 1.11698 15.3927 1.04151 13.9709 1.04151H12.0391L12.0545 1.91698ZM18.3909 7.09434C18.3909 15.5925 18.36 15.9698 18.0818 16.5585C17.8964 16.9509 17.5255 17.3736 17.1545 17.6151L16.5209 18.0377C16.5364 21.3887 16.5827 21.7358 16.8455 22.1434C17.0155 22.4151 17.3245 22.7019 17.5409 22.7925C17.7727 22.883 20.5236 22.9434 24.65 22.9434C29.2864 22.9434 31.4809 22.8981 31.7282 22.7774C31.9136 22.6868 32.1918 22.4604 32.3309 22.2792C32.5782 21.9925 32.6091 21.3736 32.6091 14.9736V8L31.7591 7.13962C25.7782 6.98868 22.95 6.95849 21.6364 6.95849C20.3227 6.97358 19.0555 7.01887 18.8236 7.03396L18.3909 7.09434ZM1.26727 13.0566C1.08182 14.7925 1.09727 15.3811 1.22091 15.7434C1.31364 16.0604 1.57636 16.4528 1.80818 16.6189C2.17909 16.8755 2.45727 16.9208 3.70909 16.9057L5.17727 16.8906C7.68091 13.7208 8.48455 12.6642 8.57727 12.4981C8.70091 12.2566 8.48455 11.9849 7.10909 10.6415C6.21273 9.76604 5.40909 9.0566 5.33182 9.0717C5.23909 9.0717 4.29636 9.96227 3.23 11.0642L1.26727 13.0566ZM9.93727 12.7849C8.31455 14.8377 6.93909 16.6189 6.89273 16.7245C6.8 16.8604 7.77364 16.9057 11.4982 16.9057H16.2118C17.2009 16.0453 17.2164 15.9849 17.2627 14.6868L17.3091 13.3585L12.8891 9.04151L9.93727 12.7849ZM19.9518 8.75472C20.06 8.75472 22.4709 10.0679 25.3145 11.683C28.8845 13.6906 30.5073 14.6868 30.5382 14.883C30.5691 15.0491 30.4609 15.2755 30.3064 15.4264C30.1518 15.5623 28.1273 16.7396 25.7782 18.0528C23.4445 19.3509 21.2655 20.5887 20.9564 20.7698C20.6318 20.966 20.2145 21.117 19.6736 21.0566L19.6582 15.0943C19.6427 11.8189 19.6582 9.04151 19.6891 8.95094C19.72 8.84528 19.8436 8.75472 19.9518 8.75472ZM20.6936 14.9434C20.6782 17.6302 20.74 19.4566 20.8327 19.4415C20.91 19.4113 22.7182 18.4151 24.8355 17.2075C26.9682 16 28.7145 14.9887 28.7145 14.9434C28.7145 14.8981 27.2773 14.0679 25.5155 13.1019C23.7536 12.1208 21.9455 11.1094 21.4973 10.8679L20.6936 10.4151V14.9434Z" fill="black"/>
-          </g>
-          <defs>
-            <clipPath id="clip0_2398_2269">
-              <rect width="34" height="24" fill="white"/>
-            </clipPath>
-          </defs>
-        </svg>
-      </template>
-      <template #default>IMAGE TO VIDEO</template>
-      <template #suffix>
-        <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
-      </template>
-    </fwb-sidebar-item>
-    <fwb-sidebar-item>
-      <template #icon>
-        <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <rect width="28" height="26" fill="url(#pattern0_107_1449)"/>
-          <defs>
-            <pattern id="pattern0_107_1449" patternContentUnits="objectBoundingBox" width="1" height="1">
-              <use xlink:href="#image0_107_1449" transform="matrix(0.00526316 0 0 0.00566802 0 -0.00161943)"/>
-            </pattern>
-            <image id="image0_107_1449" width="190" height="177" xlink:href="data:image/png;base64,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"/>
-          </defs>
-        </svg>
-      </template>
-      <template #default>TEXT TO VIDEO</template>
-      <template #suffix>
-        <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
-      </template>
-    </fwb-sidebar-item>
-    <fwb-sidebar-item>
-      <template #icon>
-        <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <rect width="23" height="23" transform="matrix(-1 0 0 1 23 0)" fill="url(#pattern0_107_1448)"/>
-          <defs>
-            <pattern id="pattern0_107_1448" patternContentUnits="objectBoundingBox" width="1" height="1">
-              <use xlink:href="#image0_107_1448" transform="scale(0.00571429)"/>
-            </pattern>
-            <image id="image0_107_1448" width="175" height="175" xlink:href="data:image/png;base64,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"/>
-          </defs>
-        </svg>
-      </template>
-      <template #default>FACE SWAP</template>
-      <template #suffix>
-        <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
-      </template>
-    </fwb-sidebar-item>
-
-    <fwb-sidebar-item>
-      <template #icon>
-        <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <rect width="27" height="26" fill="url(#pattern0_107_1451)"/>
-          <defs>
-            <pattern id="pattern0_107_1451" patternContentUnits="objectBoundingBox" width="1" height="1">
-              <use xlink:href="#image0_107_1451" transform="matrix(0.00591716 0 0 0.00614474 0 -0.000796541)"/>
-            </pattern>
-            <image id="image0_107_1451" width="169" height="163" xlink:href="data:image/png;base64,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"/>
-          </defs>
-        </svg>
-      </template>
-      <template #default>TEMPLATES</template>
-      <template #suffix>
-        <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
-      </template>
-    </fwb-sidebar-item>
-
-
-      <fwb-sidebar-item>
-        <template #icon>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.4853 3.51471C18.2188 1.24823 15.2053 0 12 0C8.79474 0 5.78119 1.24823 3.51471 3.51471C1.24823 5.78119 0 8.79474 0 12C0 15.2053 1.24823 18.2188 3.51471 20.4853C5.78119 22.7518 8.79474 24 12 24C15.2053 24 18.2188 22.7518 20.4853 20.4853C22.7518 18.2188 24 15.2053 24 12C24 8.79474 22.7518 5.78119 20.4853 3.51471ZM5.20807 20.1233C5.60431 16.7139 8.53564 14.0815 12 14.0815C13.8263 14.0815 15.5436 14.7931 16.8354 16.0847C17.9268 17.1762 18.6151 18.6013 18.7921 20.1231C16.9519 21.6643 14.5825 22.5938 12 22.5938C9.41748 22.5938 7.04828 21.6645 5.20807 20.1233ZM12 12.6332C9.99042 12.6332 8.35529 10.998 8.35529 8.98846C8.35529 6.9787 9.99042 5.34375 12 5.34375C14.0096 5.34375 15.6447 6.9787 15.6447 8.98846C15.6447 10.998 14.0096 12.6332 12 12.6332ZM20.0024 18.9344C19.6441 17.4897 18.8969 16.1576 17.8297 15.0905C16.9655 14.2262 15.943 13.5778 14.8279 13.1715C16.1684 12.2624 17.051 10.7265 17.051 8.98846C17.051 6.20343 14.785 3.9375 12 3.9375C9.21497 3.9375 6.94904 6.20343 6.94904 8.98846C6.94904 10.7274 7.83234 12.2639 9.17395 13.1728C8.14801 13.5467 7.19861 14.1248 6.38177 14.8857C5.19891 15.9873 4.3775 17.3919 3.99664 18.9333C2.38367 17.0739 1.40625 14.649 1.40625 12C1.40625 6.15857 6.15857 1.40625 12 1.40625C17.8414 1.40625 22.5938 6.15857 22.5938 12C22.5938 14.6495 21.616 17.075 20.0024 18.9344Z" fill="black"/>
-          </svg>
-        </template>
-        <template #default>SUBSCRIBE</template>
-        <template #suffix>
-          <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
-        </template>
-      </fwb-sidebar-item>
-
-      <fwb-sidebar-item>
-        <template #icon>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 0C5.36761 0 0 5.367 0 12C0 18.6323 5.367 24 12 24C18.6324 24 24 18.633 24 12C24 5.36761 18.633 0 12 0ZM12 22.3256C6.30647 22.3256 1.67442 17.6936 1.67442 12C1.67442 6.30642 6.30647 1.67442 12 1.67442C17.6936 1.67442 22.3256 6.30642 22.3256 12C22.3256 17.6936 17.6936 22.3256 12 22.3256Z" fill="black"/>
-            <path d="M11.6433 15.1846C10.9799 15.1846 10.4429 15.7374 10.4429 16.4008C10.4429 17.0485 10.9641 17.6171 11.6433 17.6171C12.3226 17.6171 12.8596 17.0485 12.8596 16.4008C12.8596 15.7374 12.3067 15.1846 11.6433 15.1846Z" fill="black"/>
-            <path d="M11.851 5.97607C9.71857 5.97607 8.73926 7.23978 8.73926 8.09271C8.73926 8.70875 9.26051 8.99309 9.68698 8.99309C10.54 8.99309 10.1925 7.77678 11.8036 7.77678C12.5934 7.77678 13.2252 8.12431 13.2252 8.85092C13.2252 9.70386 12.3407 10.1935 11.8194 10.6358C11.3613 11.0306 10.7611 11.6783 10.7611 13.0367C10.7611 13.8581 10.9823 14.095 11.6299 14.095C12.4038 14.095 12.5618 13.7475 12.5618 13.4473C12.5618 12.626 12.5776 12.1521 13.4464 11.4729C13.8728 11.1412 15.2154 10.0671 15.2154 8.58232C15.2154 7.09756 13.8728 5.97607 11.851 5.97607Z" fill="black"/>
-          </svg>
-        </template>
-        <template #default>HELP</template>
-        <template #suffix>
-          <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"></span>
-        </template>
-      </fwb-sidebar-item>
-  </fwb-sidebar>
+    <!-- Footer -->
+    <div class="px-4 py-4">
+      <ul class="space-y-2">
+        <li>
+          <a
+            href="#"
+            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+          >
+            <svg
+              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h2m-2 4h2m0 4h14m2-8h2m-2-4h2M6 8h6m-6 8h6" />
+            </svg>
+            Subscribe
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+          >
+            <svg
+              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M12 0C5.36761 0 0 5.367 0 12C0 18.6323 5.367 24 12 24C18.6324 24 24 18.633 24 12C24 5.36761 18.633 0 12 0ZM12 22.3256C6.30647 22.3256 1.67442 17.6936 1.67442 12C1.67442 6.30642 6.30647 1.67442 12 1.67442C17.6936 1.67442 22.3256 6.30642 22.3256 12C22.3256 17.6936 17.6936 22.3256 12 22.3256Z" fill="black"/>
+              <path d="M11.6433 15.1846C10.9799 15.1846 10.4429 15.7374 10.4429 16.4008C10.4429 17.0485 10.9641 17.6171 11.6433 17.6171C12.3226 17.6171 12.8596 17.0485 12.8596 16.4008C12.8596 15.7374 12.3067 15.1846 11.6433 15.1846Z" fill="black"/>
+              <path d="M11.851 5.97607C9.71857 5.97607 8.73926 7.23978 8.73926 8.09271C8.73926 8.70875 9.26051 8.99309 9.68698 8.99309C10.54 8.99309 10.1925 7.77678 11.8036 7.77678C12.5934 7.77678 13.2252 8.12431 13.2252 8.85092C13.2252 9.70386 12.3407 10.1935 11.8194 10.6358C11.3613 11.0306 10.7611 11.6783 10.7611 13.0367C10.7611 13.8581 10.9823 14.095 11.6299 14.095C12.4038 14.095 12.5618 13.7475 12.5618 13.4473C12.5618 12.626 12.5776 12.1521 13.4464 11.4729C13.8728 11.1412 15.2154 10.0671 15.2154 8.58232C15.2154 7.09756 13.8728 5.97607 11.851 5.97607Z" fill="black"/>
+            </svg>
+            Help
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
+
 <script setup>
-import { FwbSidebar, FwbSidebarItem } from 'flowbite-vue'
+import { ref } from 'vue';
+
+const isOpen = ref(false); // State for mobile toggle
+
+const toggleSidebar = () => {
+  isOpen.value = !isOpen.value;
+};
 </script>
+
+
