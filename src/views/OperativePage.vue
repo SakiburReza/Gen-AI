@@ -196,6 +196,8 @@ const generateAiContent = async () => {
         }
         media.value = [newMedia, ...media.value].slice(0, 12)
       }
+       // Update credits after successful content generation
+       await fetchCredits()
     } else {
       console.error('Failed to generate media:', response)
     }
