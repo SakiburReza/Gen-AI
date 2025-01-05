@@ -37,7 +37,7 @@ export default {
         blue:{
           600:'#3526E1',
         },
-        
+
         // Color Code added by Abeer 22/12/2024
         lightGray: '#EAEAEA',
         silverChalice: '#A2A2A2',
@@ -70,6 +70,7 @@ export default {
         bodydark: '#AEB7C0',
         bodydark1: '#DEE4EE',
         bodydark2: '#8A99AF',
+        icon: '#ffff26',
 
         stroke: '#E2E8F0',
 
