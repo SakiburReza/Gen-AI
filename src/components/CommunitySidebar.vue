@@ -14,7 +14,7 @@
         <li>
           <div
             @click="hardRefresh"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
               width="24"
@@ -39,7 +39,7 @@
               path: '/operativepage',
               //query: { mode: 'video', activeFunctionality: 'Templates' },
             }"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
               width="26"
@@ -125,7 +125,7 @@
               path: '/operativepage',
               //query: { mode: 'video', activeFunctionality: 'Templates' },
             }"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
               width="34"
@@ -133,7 +133,7 @@
               viewBox="0 0 34 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
             >
               <g clip-path="url(#clip0_2398_2269)">
                 <path
@@ -159,7 +159,7 @@
               path: '/operativepage',
               //query: { mode: 'video', activeFunctionality: 'Templates' },
             }"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
               width="34"
@@ -167,7 +167,7 @@
               viewBox="0 0 34 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
             >
               <g clip-path="url(#clip0_2398_2269)">
                 <path
@@ -193,7 +193,7 @@
               path: '/operativepage',
               //query: { mode: 'video', activeFunctionality: 'Templates' },
             }"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
               width="34"
@@ -201,7 +201,7 @@
               viewBox="0 0 34 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
             >
               <g clip-path="url(#clip0_2398_2269)">
                 <path
@@ -227,7 +227,7 @@
               path: '/operativepage',
               //query: { mode: 'video', activeFunctionality: 'Templates' },
             }"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
               width="28"
@@ -236,7 +236,7 @@
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
-              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
             >
               <rect width="28" height="26" fill="url(#pattern0_107_1449)" />
               <defs>
@@ -268,7 +268,7 @@
               path: '/operativepage',
               //query: { mode: 'video', activeFunctionality: 'Templates' },
             }"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
               width="23"
@@ -277,7 +277,7 @@
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
-              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
             >
               <rect
                 width="23"
@@ -311,7 +311,7 @@
               path: '/operativepage',
               //query: { mode: 'video', activeFunctionality: 'Templates' },
             }"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
               width="27"
@@ -320,7 +320,7 @@
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
-              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
             >
               <rect width="27" height="26" fill="url(#pattern0_107_1451)" />
               <defs>
@@ -358,7 +358,7 @@
               path: '/subscription',
               //query: { mode: 'video', activeFunctionality: 'Templates' },
             }"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
               width="19"
@@ -366,7 +366,7 @@
               viewBox="0 0 19 21"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
             >
               <g clip-path="url(#clip0_2242_871)">
                 <path
@@ -386,10 +386,10 @@
         <li>
           <a
             href="#"
-            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-600 hover:text-white group transition-all"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg
-              class="w-6 h-6 mr-3 text-gray-700 group-hover:text-white transition-all"
+              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
