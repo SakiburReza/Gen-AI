@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CommunitySidebar from '@/components/CommunitySidebar.vue'
 import ShowModalForImage from '@/components/ShowModalForImage.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
@@ -7,7 +8,6 @@ import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { base64ToBlobUrl } from '@/utils/utils'
 import { useRoute } from 'vue-router'
 import { useCredits } from '@/utils/utils'
-import CommunitySidebar from '@/components/CommunitySidebar.vue'
 
 const { fetchCredits } = useCredits()
 
@@ -17,6 +17,7 @@ const route = useRoute()
 // const creditsFromQuery = router.currentRoute.value.query.credits || 10;
 
 // console.log("lll",creditsFromQuery)
+
 
 const toastStore = useToastStore()
 
@@ -96,19 +97,20 @@ const selectedRatio = ref('Landscape')
 const selectedOutput = ref(1)
 
 // Fetch Images / Videos from API
-const fetchMedia = async () => {
+const fetchMedia = async (label: string) => {
   loading.value = true
   try {
-    const { data: response } = await genAiService.getCommunityMedia()
+    const { data: response } = await genAiService.getMedia(label)
 
     if (response.status && Array.isArray(response.data)) {
       // Map data with type detection (image/video) for initial load
       media.value = response.data
         .map((item) => ({
-          url: item.url,
+          url: base64ToBlobUrl(item.content),
+          type: item.type || (item.content.includes('video') ? 'video' : 'image'),
           orientation: item.orientation,
         }))
-       // .slice(0, 12) // Ensure maximum of 12 items
+        .slice(0, 12) // Ensure maximum of 12 items
     } else {
       console.error('Failed to fetch images: Invalid response format')
     }
@@ -205,7 +207,23 @@ const generateAiContent = async () => {
 
 // Fetch images when the component is mounted
 onMounted(async () => {
-  fetchMedia()
+  console.log(route.query.checkoutId)
+  if (route.query) {
+    try {
+      const checkoutId = route.query.checkoutId
+      const transactionId = route.query.transactionId
+      console.log('checkoutId :', checkoutId, 'transactionId:', transactionId)
+
+      if (checkoutId && transactionId) {
+        const response = await genAiService.getPaymentSync(checkoutId, transactionId)
+        toastStore.success(response.data)
+      }
+
+      //window.location.reload();
+    } catch (error) {}
+  }
+
+  fetchMedia('text-to-image') // Initial load
 })
 </script>
 
@@ -213,7 +231,7 @@ onMounted(async () => {
   <div class="flex flex-col h-screen">
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[200vh] mt-30 overflow-y-auto pr-2">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[60%] mt-6">
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />
@@ -222,10 +240,7 @@ onMounted(async () => {
           v-for="(item, index) in media"
           :key="index"
           class="relative overflow-hidden rounded-lg"
-          :class="[
-            item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
-            'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
-          ]"
+          :class="[item.orientation === 'P' ? 'row-span-2' : 'row-span-1', 'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300']"
         >
           <!-- Render Image -->
           <img
@@ -234,6 +249,44 @@ onMounted(async () => {
             class="h-full max-w-full rounded-lg w-full"
             :class="[item.orientation === 'P' ? 'object-full' : 'object-cover']"
           />
+
+          <!-- Floating Buttons -->
+          <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
+            <!-- Share Button -->
+            <button
+              @click="onShare(index)"
+              class="flex justify-center items-center w-10 h-10 bg-black text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="20" height="20" rx="4" fill="white"/>
+                <path d="M13.3438 11.7812C12.6336 11.7812 12.0078 12.123 11.6147 12.6427L8.21643 10.9404C8.27285 10.7523 8.3125 10.5573 8.3125 10.3516C8.3125 10.0725 8.25402 9.80723 8.15299 9.56322L11.7095 7.46959C12.1053 7.924 12.687 8.21875 13.3438 8.21875C14.5328 8.21875 15.5 7.27255 15.5 6.10938C15.5 4.9462 14.5328 4 13.3438 4C12.1547 4 11.1875 4.9462 11.1875 6.10938C11.1875 6.37743 11.2439 6.6317 11.3375 6.86777L7.77044 8.96753C7.37499 8.52663 6.80162 8.24219 6.15625 8.24219C4.96722 8.24219 4 9.18838 4 10.3516C4 11.5147 4.96722 12.4609 6.15625 12.4609C6.87811 12.4609 7.51447 12.1092 7.90605 11.5749L11.2932 13.2716C11.2308 13.4686 11.1875 13.6738 11.1875 13.8906C11.1875 15.0538 12.1547 16 13.3438 16C14.5328 16 15.5 15.0538 15.5 13.8906C15.5 12.7274 14.5328 11.7812 13.3438 11.7812Z" fill="#474747"/>
+              </svg>
+            </button>
+            <!-- Text Button -->
+            <button
+              @click="onText(index)"
+              class="flex justify-center items-center w-10 h-10 bg-black text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="20" height="20" rx="4" fill="white"/>
+                <path d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z" fill="#474747"/>
+              </svg>
+            </button>
+            <!-- Like Button -->
+            <button
+              @click="onLike(index)"
+              class="flex justify-center items-center w-10 h-10 bg-blue-600 text-white border border-blue-600 rounded-full shadow-md hover:shadow-lg hover:bg-blue-500 transition duration-300"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
