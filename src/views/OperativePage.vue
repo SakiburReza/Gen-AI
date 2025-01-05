@@ -25,6 +25,8 @@ import { base64ToBlobUrl } from '@/utils/utils'
 import { useRoute } from 'vue-router'
 
 import { useCredits } from '@/utils/utils'
+import PreviewImageModal from '@/components/PreviewImageModal.vue'
+
 
 
 
@@ -57,8 +59,11 @@ const selectedVideo = ref(null)
 
 
 const selectedImage = ref(null) // Selected image or video
+const showImageModal = ref(false)
 
 const showModal = ref(false) // Modal visibility
+const showPreviewModal = ref(false)// Controls PreviewImageModal
+
 
 
 
@@ -69,19 +74,22 @@ const openImageModal = (mediaItem) => {
   selectedImage.value = mediaItem
 
   showModal.value = true
+  showImageModal.value = true;
 
 }
+const openPreviewModal = (mediaItem) => {
+  selectedImage.value = mediaItem;
+  showPreviewModal.value = true;
+}
 
-
-
-const closeModal = () => {
-
-  showModal.value = false
-
+const closeImageModal = () => {
+  showImageModal.value = false;
   selectedImage.value = null
-
 }
-
+const closePreviewModal = () => {
+  showPreviewModal.value = false;
+  selectedImage.value = null
+}
 
 
 // States to store images from the ImageInputCard components
@@ -432,11 +440,7 @@ const generateAiContent = async () => {
 
 //Dropdown property 
 
-
-
-
-
-const activeModeDropDown = ref('image')
+// const activeModeDropDown = ref('image')
 
 const isImageDropdownOpen = ref(false)
 
@@ -600,7 +604,6 @@ const imageModeOptions = [
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
 
-      <!-- Left Section: Image Grid -->
 
       <!-- Left Section: Image Grid -->
 
@@ -630,18 +633,23 @@ const imageModeOptions = [
               media[index - 1] &&
 
               openImageModal(media[index - 1])
-
               ">
 
             <!-- Render Image -->
 
             <img v-if="media[index - 1] && media[index - 1].type === 'image'" :src="media[index - 1].url"
-              :alt="'Media ' + (index - 1)" class="w-full h-full object-contain max-w-full" />
+              :alt="'Media ' + (index - 1)" class="w-full h-full object-contain max-w-full" @click="
+                (activeFunctionality === 'Image to Image' || activeFunctionality === 'Text to Image') && media[index - 1] && openPreviewModal(media[index - 1])
+                " />
 
             <!-- Render Video -->
 
             <video v-else-if="media[index - 1] && media[index - 1].type === 'video'" :src="media[index - 1].url"
-              controls class="w-full h-full object-contain max-w-full"></video>
+              controls class="w-full h-full object-contain max-w-full"
+              @click="
+               (activeFunctionality === 'Text to Video' || activeFunctionality === 'Image to Video' || activeFunctionality === 'Templates') && media[index - 1] && openPreviewModal(media[index - 1])
+              "
+              ></video>
 
             <!-- Render Placeholder -->
 
@@ -845,7 +853,11 @@ const imageModeOptions = [
       </div>
     </div>
     <!-- Modal Component -->
-    <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="selectedImage" />
+    <ShowModalForImage :isOpen="showImageModal" @close="closeImageModal" :image="selectedImage" />
+    <PreviewImageModal :isOpen="showPreviewModal" @close="closePreviewModal" :image="selectedImage" />
+
+    <!-- 
+    <ShowModalWithDownloadButton :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->
   </div>
 </template>
 
