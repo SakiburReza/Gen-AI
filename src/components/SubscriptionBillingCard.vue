@@ -4,30 +4,6 @@ import genAiService from "@/services/gen-ai";
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue';
 
-// const props = defineProps({
-//   cardOne: {
-//     type: Object,
-//     default: () => ({
-//       title: "Next Up Creator",
-//       credit: "2000",
-//       date: "Jan.11, 2025",
-//     }),
-//   },
-//   cardTwo: {
-//     type: Object,
-//     default: () => ({
-//       credit: "20"
-//     })
-//   },
-//   cardThree: {
-//     type: Object,
-//     default: () => ({
-//       price: "$20.00/month",
-//       billingDate: "Jan. 11, 2025"
-//     })
-//   }
-
-// });
 const billinInformation = ref({
   plan_name: "",
   credit: "",

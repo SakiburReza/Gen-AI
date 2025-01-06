@@ -12,6 +12,7 @@ import SignInPage from '@/views/SignInPage.vue'
 import SignUpPage from '@/views/SignUpPage.vue'
 import CommunitySidebar from '@/components/CommunitySidebar.vue'
 import CommunityPage from '@/views/CommunityPage.vue'
+import PreviewImageModal from '@/components/PreviewImageModal.vue'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -114,7 +115,7 @@ const router = createRouter({
       component: CommunityPage,
       meta: { requiresAuth: true },
     },
-
+   
   ],
 });
 router.beforeEach((to, from, next) => {
