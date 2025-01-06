@@ -7,6 +7,7 @@ import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { base64ToBlobUrl } from '@/utils/utils'
 import { useRoute } from 'vue-router'
 import { useCredits } from '@/utils/utils'
+import { imageUrl } from '@/utils/utils'
 import CommunitySidebar from '@/components/CommunitySidebar.vue'
 
 const { fetchCredits } = useCredits()
@@ -213,7 +214,7 @@ onMounted(async () => {
   <div class="flex flex-col h-screen">
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[200vh] mt-30 overflow-y-auto pr-2">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[250vh] mt-30 overflow-y-auto pr-2">
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />
@@ -229,7 +230,7 @@ onMounted(async () => {
         >
           <!-- Render Image -->
           <img
-            :src="item.url"
+          :src="imageUrl() + item.url"
             :alt="'Media ' + index"
             class="h-full max-w-full rounded-lg w-full"
             :class="[item.orientation === 'P' ? 'object-full' : 'object-cover']"

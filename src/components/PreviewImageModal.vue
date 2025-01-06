@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { imageUrl } from '@/utils/utils';
 
 const props = defineProps({
   isOpen: {
@@ -44,20 +45,12 @@ const handleOutsideClick = (event) => {
 </script>
 
 <template>
-  <div
-    class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
-    @click="handleOutsideClick"
-    v-if="isOpen"
-  >
-    <div
-      class="bg-tertiary rounded-lg shadow-lg w-120 max-w-5xl p-6 relative flex flex-col items-center"
-      @click.stop
-    >
+  <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" @click="handleOutsideClick"
+    v-if="isOpen">
+    <div class="bg-tertiary rounded-lg shadow-lg w-120 max-w-5xl p-6 relative flex flex-col items-center" @click.stop>
       <!-- Close Button -->
-      <button
-        @click="close"
-        class="absolute top-2 right-2 bg-gray-200 hover:bg-gray-300 text-gray-500 hover:text-gray-800 rounded-full p-1 shadow-md"
-      >
+      <button @click="close"
+        class="absolute top-2 right-2 bg-gray-200 hover:bg-gray-300 text-gray-500 hover:text-gray-800 rounded-full p-1 shadow-md">
         ✕
       </button>
 
@@ -67,34 +60,20 @@ const handleOutsideClick = (event) => {
         <div class="w-full flex flex-col items-center">
           <!-- Image Display -->
           <div v-if="image?.type === 'image'" class="w-full">
-            <img
-              :src="image.url"
-              alt="Generated Image"
-              class="rounded-lg w-full max-h-[calc(100vh-12rem)] object-contain"
-            />
+            <img :src="imageUrl() + image.url" alt="Generated Image"
+              class="rounded-lg w-full max-h-[calc(100vh-12rem)] object-contain" />
           </div>
 
           <!-- Video Display -->
           <div v-else-if="image?.type === 'video'" class="w-full">
-            <video
-              :src="image.url"
-              controls
-              class="rounded-lg w-full max-h-[calc(100vh-12rem)] object-contain"
-            ></video>
+            <video :src="imageUrl() + image.url" controls
+              class="rounded-lg w-full max-h-[calc(100vh-12rem)] object-contain"></video>
           </div>
 
           <!-- Download Button -->
-          <a
-            v-if="image?.url"
-            :href="image.url"
-            :download="getFilename(image.url)"
-            class="flex items-center justify-center text-blue-600 text-sm font-semibold py-2 px-4 rounded hover:bg-blue-600 hover:text-white mt-4"
-          >
-            <img
-              src="/public/images/icon/downloadButton.svg"
-              alt="Download Icon"
-              class="w-4 h-4 mr-2"
-            />
+          <a v-if="image?.url" :href="image.url" :download="getFilename(image.url)"
+            class="flex items-center justify-center text-blue-600 text-sm font-semibold py-2 px-4 rounded hover:bg-blue-600 hover:text-white mt-4">
+            <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-4 h-4 mr-2" />
             DOWNLOAD
           </a>
         </div>

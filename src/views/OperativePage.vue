@@ -25,6 +25,7 @@ import { base64ToBlobUrl } from '@/utils/utils'
 import { useRoute } from 'vue-router'
 
 import { useCredits } from '@/utils/utils'
+import { imageUrl } from '@/utils/utils'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
 
 
@@ -242,9 +243,10 @@ const fetchMedia = async (label: string) => {
 
         .map((item) => ({
 
-          url: base64ToBlobUrl(item.content),
+          url: item.content,
 
-          type: item.type || (item.content.includes('video') ? 'video' : 'image'),
+          type: item.type || (label === 'text-to-video' || label === 'image-to-video' || label === 'template-video' || label === 'face-swap' && item.orientation == null ? 'video' : 'image'),
+          orientation: item.orientation
 
         }))
 
@@ -637,19 +639,18 @@ const imageModeOptions = [
 
             <!-- Render Image -->
 
-            <img v-if="media[index - 1] && media[index - 1].type === 'image'" :src="media[index - 1].url"
+            <img v-if="media[index - 1] && media[index - 1].type === 'image'" :src="imageUrl() + media[index - 1].url"
+
               :alt="'Media ' + (index - 1)" class="w-full h-full object-contain max-w-full" @click="
                 (activeFunctionality === 'Image to Image' || activeFunctionality === 'Text to Image') && media[index - 1] && openPreviewModal(media[index - 1])
                 " />
 
             <!-- Render Video -->
 
-            <video v-else-if="media[index - 1] && media[index - 1].type === 'video'" :src="media[index - 1].url"
-              controls class="w-full h-full object-contain max-w-full"
-              @click="
-               (activeFunctionality === 'Text to Video' || activeFunctionality === 'Image to Video' || activeFunctionality === 'Templates') && media[index - 1] && openPreviewModal(media[index - 1])
-              "
-              ></video>
+            <video v-else-if="media[index - 1] && media[index - 1].type === 'video'" :src="imageUrl() + media[index - 1].url"
+              controls class="w-full h-full object-contain max-w-full" @click="
+                (activeFunctionality === 'Text to Video' || activeFunctionality === 'Image to Video' || activeFunctionality === 'Templates') && media[index - 1] && openPreviewModal(media[index - 1])
+                "></video>
 
             <!-- Render Placeholder -->
 
