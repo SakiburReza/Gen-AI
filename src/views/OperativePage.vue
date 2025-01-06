@@ -172,8 +172,6 @@ const fetchMedia = async (label: string) => {
               : 'image'),
           orientation: item.orientation,
         }))
-
-        .slice(0, 12) // Ensure maximum of 12 items
     } else {
       console.error('Failed to fetch images: Invalid response format')
     }
@@ -273,7 +271,7 @@ const generateAiContent = async () => {
 
           // Prepend the new media and maintain the list size at 12
 
-          media.value = [newMedia, ...media.value].slice(0, 12)
+          media.value = [newMedia, ...media.value]
         })
       } else {
         // Handle the case where the content is a single item (fallback for non-array responses)
@@ -419,7 +417,7 @@ const imageModeOptions = [
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
       <div
-        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[100vh] mt-30 overflow-y-auto pr-2"
+        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-30 overflow-y-auto pr-2"
       >
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
@@ -435,14 +433,14 @@ const imageModeOptions = [
           ]"
           @click="
             activeFunctionality === 'Face Swap' &&
-            media[index - 1] &&
-            openImageModal(media[index - 1])
+            media[index] &&
+            openImageModal(media[index])
           "
         >
           <!-- Render Image -->
 
           <img
-            v-if="media[index - 1] && media[index - 1].type === 'image'"
+            v-if="media[index] && media[index].type === 'image'"
             :src="imageUrl() + item.url"
             :alt="'Media ' + index"
             class="h-full max-w-full rounded-lg w-full"
@@ -450,24 +448,24 @@ const imageModeOptions = [
             @click="
               (activeFunctionality === 'Image to Image' ||
                 activeFunctionality === 'Text to Image') &&
-              media[index - 1] &&
-              openPreviewModal(media[index - 1])
+              media[index] &&
+              openPreviewModal(media[index])
             "
           />
 
           <!-- Render Video -->
 
           <video
-            v-else-if="media[index - 1] && media[index - 1].type === 'video'"
-            :src="imageUrl() + media[index - 1].url"
+            v-else-if="media[index] && media[index].type === 'video'"
+            :src="imageUrl() + media[index].url"
             controls
             class="w-full h-full object-contain max-w-full"
             @click="
               (activeFunctionality === 'Text to Video' ||
                 activeFunctionality === 'Image to Video' ||
                 activeFunctionality === 'Templates') &&
-              media[index - 1] &&
-              openPreviewModal(media[index - 1])
+              media[index] &&
+              openPreviewModal(media[index])
             "
           ></video>
         </div>
