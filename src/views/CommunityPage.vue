@@ -106,7 +106,7 @@ const fetchMedia = async () => {
       // Map data with type detection (image/video) for initial load
       media.value = response.data
         .map((item) => ({
-          url: item.url,
+          url: item.content,
           orientation: item.orientation,
         }))
        // .slice(0, 12) // Ensure maximum of 12 items
@@ -214,7 +214,7 @@ onMounted(async () => {
   <div class="flex flex-col h-screen">
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[250vh] mt-30 overflow-y-auto pr-2">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-30 overflow-y-auto pr-2">
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />

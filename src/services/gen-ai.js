@@ -25,7 +25,7 @@ class GenAIService {
   }
 
   getMedia(params) {
-    return axios.get(this.url + '/get-images?type=' + params, {
+    return axios.get(this.url + '/get-media?type=' + params, {
       headers: this.getAuthHeaders(),
     })
   }
