@@ -3,6 +3,7 @@ import { onBeforeUnmount, onUnmounted, ref } from 'vue';
 import genAiService from '@/services/gen-ai';
 import { useToastStore } from '@/stores/toast'
 import { useCredits } from '@/utils/utils'
+import { imageUrl } from '@/utils/utils'
 
 const { fetchCredits } = useCredits()
 
@@ -67,7 +68,7 @@ const turnIntoVideoAction = async () => {
     let type = "face-swap"
     formData.append('image', file); // Correctly use image.url
     formData.append('prompt', prompt.value);
-    formData.append('type',type)
+    formData.append('type', type)
 
     console.log("Sending formData:", { image: props.image.url, prompt: prompt.value });
 
@@ -79,7 +80,7 @@ const turnIntoVideoAction = async () => {
     if (response?.success) {
       toastStore.success(response.data.message || 'Video generated successfully!');
       // Update credits after successful content generation
-       await fetchCredits()
+      await fetchCredits()
     } else {
       console.error("Error in API response:", response);
       toastStore.error(response.data.message || 'Failed to generate video. Please try again.');
@@ -137,10 +138,10 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
         <!-- Image Section -->
         <div class="h-full md:h-auto md:col-span-1 w-full">
           <div v-if="image?.type === 'image'" class="w-full h-full">
-            <img :src="image.url" alt="Generated Image" class="rounded-lg w-full h-full object-contain" />
+            <img :src="imageUrl() + image.url" alt="Generated Image" class="rounded-lg w-full h-full object-contain" />
           </div>
           <div v-else-if="image?.type === 'video'" class="w-full h-full">
-            <video :src="image.url" controls class="w-full h-full object-contain"></video>
+            <video :src="imageUrl() + image.url" controls class="w-full h-full object-contain"></video>
           </div>
         </div>
         <!-- Details Section -->

@@ -71,12 +71,12 @@ const toggleBillingSection = () => {
     </transition>
 
     <!-- Header and Button Section -->
-    <div v-if="!showBillingSection" class="flex justify-between items-center w-full px-20">
-      <h1 v-show="!showBillingSection" class="text-3xl font-bold transition-opacity duration-500 ease-in-out opacity-0"
+    <div v-if="!showBillingSection" class="flex justify-between items-center mb-2 w-full">
+      <h1 v-show="!showBillingSection" class="text-xl sm:text-2xl lg:text-3xl font-bold text-center ml-6 lg:ml-50 transition-opacity duration-500 ease-in-out opacity-0"
         :class="{ 'opacity-100': !showBillingSection }">
         Subscription
       </h1>
-      <div class="flex justify-center sm:justify-end">
+      <div class="flex justify-center sm:justify-center mr-5 lg:mr-50">
         <button @click="toggleBillingSection"
           class="w-auto bg-blue-600 text-white text-sm sm:text-md py-2 px-3 sm:py-2 sm:px-5 rounded-md hover:bg-gray-800 transition-all duration-300">
           BILLING
@@ -87,7 +87,7 @@ const toggleBillingSection = () => {
 
     <!-- Subscription Plans Section -->
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-3 lg:gap-2 p-4 transition-all duration-500 ease-in-out"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-3 lg:gap-2 lg:p-30 transition-all duration-500 ease-in-out"
       id="targetSection">
       <SubscriptionCard v-for="(feature, index) in plans" :key="index" :data="feature" :isStyle="index % 2 == 0"
         :isButtonDisabled="isButtonDisabled" @button-clicked="isButtonDisabled = true" />

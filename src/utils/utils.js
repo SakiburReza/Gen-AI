@@ -37,7 +37,9 @@ export function useCredits() {
   return { credits, fetchCredits };
 }
 
-
+export function imageUrl() {
+  return import.meta.env.VITE_API_URL + '/raw/';
+}
 
 
   

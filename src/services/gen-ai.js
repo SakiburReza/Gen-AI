@@ -25,7 +25,7 @@ class GenAIService {
   }
 
   getMedia(params) {
-    return axios.get(this.url + '/get-images?type=' + params, {
+    return axios.get(this.url + '/get-media?type=' + params, {
       headers: this.getAuthHeaders(),
     })
   }
@@ -81,7 +81,7 @@ class GenAIService {
   subscribePackages(subscribePackage, recurringConfirmation, recurringCadence) {
     return axios.post(
       this.url +
-        `/checkoutSubscribe?subscribePackage=${subscribePackage}&recurringConfirmation=${recurringConfirmation}&recurringCadence=${recurringCadence}`,
+      `/checkoutSubscribe?subscribePackage=${subscribePackage}&recurringConfirmation=${recurringConfirmation}&recurringCadence=${recurringCadence}`,
       {},
       {
         headers: this.getAuthHeaders(),
@@ -115,6 +115,14 @@ class GenAIService {
   }
   checkOTP(email, otp) {
     return axios.get(this.url + `/user/check-otp?email=${email}&otp=${otp}`)
+  }
+  billingInformation() {
+    return axios.get(this.url + '/billingInfo', {
+      headers: this.getAuthHeaders(),
+    });
+  }
+  getCommunityMedia() {
+    return axios.get(this.url + '/share/communityImage')
   }
 }
 
