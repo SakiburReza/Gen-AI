@@ -138,7 +138,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
               </p>
             </div>
             <br>
-            <div class="border-solid lg:border-dashed">
+            <div class="border-solid lg:border-dashed mt-4">
               <p class="text-center text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
             </div>
             <br>
@@ -169,7 +169,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
             <div class="border-solid lg:border-dashed">
               <p class="text-center text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
             </div>
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between mt-7">
               <p class="text-xs text-silverChalice mt-1"></p>
               <button @click="BuyMoreCredits"
                 class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
