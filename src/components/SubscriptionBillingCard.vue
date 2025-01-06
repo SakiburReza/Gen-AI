@@ -116,7 +116,8 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
       <!-- <h1 class="text-3xl font-bold mb-4">Subscription</h1> -->
       <!-- Button Hidden on Mobile and Shown on Medium Screens and Above -->
       <button @click="() => $router.push('/operativepage')"
-        class="hidden md:inline-block mb-5 bg-blue-600 text-white px-6 py-4 rounded-lg text-sm">
+        class=" hidden md:relative md:w-auto md:inline-block bg-blue-600 text-white px-4 py-2 
+         rounded-lg text-sm sm:mb-10">
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
@@ -203,6 +204,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
           </div>
         </div>
       </div>
+
     </div>
 
 

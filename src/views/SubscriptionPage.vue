@@ -52,10 +52,10 @@ const toggleBillingSection = () => {
   showBillingSection.value = !showBillingSection.value; // Toggles the billing section visibility
 }
 
-  onMounted(() => {
-    fetchPlans(); // Call the function to fetch plans
+onMounted(() => {
+  fetchPlans(); // Call the function to fetch plans
 
-  });
+});
 </script>
 
 <template>
@@ -72,7 +72,8 @@ const toggleBillingSection = () => {
 
     <!-- Header and Button Section -->
     <div v-if="!showBillingSection" class="flex justify-between items-center mb-2 w-full">
-      <h1 v-show="!showBillingSection" class="text-xl sm:text-2xl lg:text-3xl font-bold text-center ml-6 lg:ml-50 transition-opacity duration-500 ease-in-out opacity-0"
+      <h1 v-show="!showBillingSection"
+        class="text-xl sm:text-2xl lg:text-3xl font-bold text-center ml-6 lg:ml-50 transition-opacity duration-500 ease-in-out opacity-0"
         :class="{ 'opacity-100': !showBillingSection }">
         Subscription
       </h1>
@@ -94,12 +95,23 @@ const toggleBillingSection = () => {
     </div>
 
     <!-- Button Shown Only on Mobile -->
-    <div v-if="!showBillingSection" class="md:hidden w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
+    <div v-if="!showBillingSection" class="w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
       <button @click="() => $router.push('/operativepage')"
         class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block">
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
+    <div v-else-if="!showBillingSection" class="w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-5">
+      <button @click="() => $router.push('/operativepage')"
+        class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block">
+        TAKE ME BACK I WANT TO CREATE
+      </button>
+    </div> <br>
+    <button @click="() => $router.push('/operativepage')" class="lg:hidden md:relative md:w-auto w-3/4 sm:w-1/2 sm:py-3 md:inline-block bg-blue-600 text-white 
+         px-4 py-2 rounded-lg text-sm sm:mb-10 mx-auto block">
+      TAKE ME BACK I WANT TO CREATE
+    </button>
+
   </div>
 
 
