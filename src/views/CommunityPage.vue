@@ -104,12 +104,11 @@ const fetchMedia = async () => {
 
     if (response.status && Array.isArray(response.data)) {
       // Map data with type detection (image/video) for initial load
-      media.value = response.data
-        .map((item) => ({
-          url: item.content,
-          orientation: item.orientation,
-        }))
-       // .slice(0, 12) // Ensure maximum of 12 items
+      media.value = response.data.map((item) => ({
+        url: item.content,
+        orientation: item.orientation,
+      }))
+      // .slice(0, 12) // Ensure maximum of 12 items
     } else {
       console.error('Failed to fetch images: Invalid response format')
     }
@@ -214,7 +213,9 @@ onMounted(async () => {
   <div class="flex flex-col h-screen">
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-30 overflow-y-auto pr-2">
+      <div
+        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-30 overflow-y-auto pr-2]"
+      >
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />
@@ -230,10 +231,10 @@ onMounted(async () => {
         >
           <!-- Render Image -->
           <img
-          :src="imageUrl() + item.url"
+            :src="imageUrl() + item.url"
             :alt="'Media ' + index"
             class="h-full max-w-full rounded-lg w-full"
-            :class="[item.orientation === 'P' ? 'object-full' : 'object-cover']"
+            :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
           />
         </div>
       </div>
@@ -247,37 +248,23 @@ onMounted(async () => {
 
 <style scoped>
 .grid {
+  scrollbar-width: thin; /* Firefox */
 
-scrollbar-width: thin; /* Firefox */
-
-scrollbar-color: #ccc #f0f0f0; /* Firefox */
-
+  scrollbar-color: #ccc #f0f0f0; /* Firefox */
 }
-
-
 
 .grid::-webkit-scrollbar {
-
-width: 8px; /* Width for vertical scrollbar */
-
+  width: 8px; /* Width for vertical scrollbar */
 }
-
-
 
 .grid::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* Scrollbar color */
 
-background-color: #ccc; /* Scrollbar color */
-
-border-radius: 4px; /* Rounded scrollbar */
-
+  border-radius: 4px; /* Rounded scrollbar */
 }
 
-
-
 .grid::-webkit-scrollbar-track {
-
-background: #f0f0f0; /* Scrollbar track */
-
+  background: #f0f0f0; /* Scrollbar track */
 }
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 </style>
