@@ -478,7 +478,7 @@ const imageModeOptions = [
               <!-- Share Button -->
               <button
                 @click=""
-                class="flex justify-center items-center w-8 h-8 bg-black text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
+                class="flex justify-center items-center w-8 h-8 bg-gray-600 text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
               >
                 <svg
                   width="20"
@@ -521,7 +521,7 @@ const imageModeOptions = [
               <!-- Share Button -->
               <button
                 @click=""
-                class="flex justify-center items-center w-8 h-8 bg-black text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
+                class="flex justify-center items-center w-8 h-8 bg-gray-600 text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect width="20" height="20" rx="4" fill="white"/>
@@ -544,7 +544,7 @@ const imageModeOptions = [
             <!-- Like Button -->
             <button
               @click=""
-              class="flex justify-center items-center w-8 h-8 bg-blue-600 text-white border border-blue-600 rounded-full shadow-md hover:shadow-lg hover:bg-blue-500 transition duration-300"
+              class="flex justify-center items-center w-8 h-8 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
