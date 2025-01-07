@@ -184,6 +184,7 @@ const fetchMedia = async (label: string) => {
             ? 'video'
             : 'image'),
         orientation: item.orientation,
+        prompt:item.prompt
       }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
@@ -269,6 +270,7 @@ const generateAiContent = async () => {
       aiGeneratedMedia.value = response.data.data.map((item) => ({
         url: item.content,
         orientation: item.orientation,
+        prompt:item.prompt
       }))
       media.value.unshift(...aiGeneratedMedia.value);
     } else {
