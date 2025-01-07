@@ -242,7 +242,7 @@ onMounted(async () => {
       <div class="w-4/5 overflow-y-auto h-full">
       <!-- Left Section: Enhanced Image Grid -->
       <div
-        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[85%] ml-15 mb-5 mt-10 overflow-y-auto pr-2]"
+        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-10 overflow-y-auto pr-2]"
       >
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
