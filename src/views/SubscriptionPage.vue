@@ -20,7 +20,7 @@ const fetchPlans = async () => {
           title: plan.planName || 'No Name Provided',
           featureList: [
             { name: `${plan.credits || 0} Credits`, isActive: true },
-            { name: `${plan.storageLimit || 0} GB of Storage`, isActive: plan.storageLimit != null },
+            // { name: `${plan.storageLimit || 0} GB of Storage`, isActive: plan.storageLimit != null },
             {
               name: plan.faceSwapAccess ? plan.faceSwapAccess.replace(/"/g, '') : 'No Access to Face Swap',
               isActive: (plan.faceSwapAccess && !plan.faceSwapAccess.includes('No'))
@@ -63,7 +63,6 @@ onMounted(() => {
 <template>
   <div class="flex flex-col h-screen">
     <Navbar />
-
     <!-- Billing Section with Transition -->
     <transition name="fade" enter-active-class="transition-opacity duration-1000 ease-in-out"
       leave-active-class="transition-opacity duration-1000 ease-in-out" enter-from-class="opacity-0"
@@ -74,13 +73,13 @@ onMounted(() => {
     </transition>
 
     <!-- Header and Button Section -->
-    <div v-if="!showBillingSection" class="flex justify-between items-center mb-2 w-full px-4 sm:px-8 lg:px-16">
-      <h1
-        class="text-xl sm:text-2xl lg:text-3xl font-bold text-center transition-opacity duration-500 ease-in-out opacity-0"
+    <div v-if="!showBillingSection" class="flex justify-around items-center">
+      <h1 v-show="!showBillingSection"
+        class="text-xl sm:text-2xl lg:text-3xl font-bold text-right ml-2 transition-opacity duration-500 ease-in-out opacity-0"
         :class="{ 'opacity-100': !showBillingSection }">
         Subscription
       </h1>
-      <div class="flex justify-end">
+      <div class="flex justify-start">
         <button @click="toggleBillingSection"
           class="w-auto bg-blue-600 text-white text-sm sm:text-md py-2 px-3 sm:py-2 sm:px-5 rounded-md hover:bg-gray-800 transition-all duration-300">
           BILLING
@@ -90,17 +89,27 @@ onMounted(() => {
 
     <!-- Subscription Plans Section -->
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-8 lg:px-75 py-4 sm:py-6 lg:py-4 transition-all duration-500 ease-in-out">
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-8 lg:px-16 py-4 sm:py-6 lg:py-8 lg:ml-56 transition-all duration-500 ease-in-out">
       <SubscriptionCard v-for="(feature, index) in plans" :key="index" :data="feature" :isStyle="index % 2 == 0"
         :isButtonDisabled="isButtonDisabled" @button-clicked="isButtonDisabled = true" />
     </div>
 
     <!-- Mobile-Specific Button -->
-    <div class="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+    <div v-if="!showBillingSection" class="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
       <button @click="() => $router.push('/operativepage')"
-        class="w-full sm:w-auto bg-blue-600 text-white text-sm sm:text-md py-3 sm:py-3 px-6 rounded-md hover:bg-gray-800 mx-auto block">
+        class=" w-full sm:w-auto bg-blue-600 text-white text-sm sm:text-md lg:mr-180 py-3 sm:py-3 px-6 rounded-md hover:bg-gray-800 mx-auto block">
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
+    <div v-else-if="!showBillingSection" class="lg:hidden sm:hidden w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-6">
+      <button @click="() => $router.push('/operativepage')"
+        class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block">
+        TAKE ME BACK I WANT TO CREATE
+      </button>
+    </div> <br>
+    <button @click="() => $router.push('/operativepage')" class="lg:hidden md:relative md:w-auto w-3/4 sm:w-1/2 sm:py-3 md:inline-block bg-blue-600 text-white 
+         px-4 py-2 rounded-lg text-sm sm:mb-10 mx-auto block">
+      TAKE ME BACK I WANT TO CREATE
+    </button>
   </div>
 </template>

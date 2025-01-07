@@ -16,7 +16,7 @@ const props = defineProps({
       title: "Basic Creator",
       featureList: [
         { name: "2250 Credits", isActive: true },
-        { name: "50 GB of Storage", isActive: true },
+        // { name: "50 GB of Storage", isActive: true },
         { name: "No Access to Face Swap", isActive: false },
         { name: "No Access to Templates", isActive: false },
         { name: "No Access to Creator Network", isActive: false },
@@ -62,9 +62,11 @@ const ZeuxItNow = async () => {
   try {
     // Call the API to subscribe to the package
     const response = await genAiService.subscribePackages(props.data.title, false, "Monthly");
-    if (response?.data?.status == "SUCCESS") {
+
+    if (response?.data?.redirectUrl) {
       // Use Vue Router to navigate to the desired route
-      this.$router.push(response.data.sessionUrl);
+      await router.push({ path: response.data.redirectUrl });
+      console.log('Navigation successful to:', response.data.redirectUrl);
     } else {
       console.error('Redirect URL not found in the response:', response);
     }
@@ -149,52 +151,59 @@ watch(
 
 <template>
   <div class="flex flex-col lg:flex-row gap-5">
+    <!-- First Card Component -->
     <div :class="{
-      'w-full max-w-sm md:max-w-sm border rounded-3xl p-5 relative justify-start': true,
+      // 'w-full max-w-md md:max-w-lg border rounded-3xl p-6 relative mx-auto': true,
+      'w-full max-w-sm border rounded-3xl p-5 relative justify-start': true,
       'border-blue-600': isStyle,
-      'bg-blue-600': !isStyle,
+      'bg-blue-600': !isStyle
     }">
       <!-- Title -->
-      <h2 class="text-3xl font-bold mb-4 text-center md:text-left ml-5"
+      <h2 class="text-3xl font-semibold mb-4  md:text-left"
         :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">
         {{ data.title }}
       </h2>
 
-      <!-- Feature List -->
-      <div class="space-y-2 mb-6">
+      <!-- Feature List with Radio Button -->
+      <div class="space-y-2 mb-15">
         <label v-for="(feature, index) in data.featureList" :key="index"
-          class="flex items-center space-x-3 sm:text-2xl md:text-2xl lg:text-2xl">
-          <img v-if="feature.isActive && !isStyle" class="h-5 w-5" src="/images/icon/radio_button_checked.svg" alt="" />
+          class="flex items-center space-x-3 sm:text-2xl md:text-2xl lg:text-xl">
+          <img v-if="feature.isActive && !isStyle" class="h-5 w-5" src="/images/icon/radio_button_checked.svg" alt="">
           <img v-else-if="feature.isActive && isStyle" class="h-5 w-5" src="/images/icon/radio_button_checked_blue.svg"
-            alt="" />
-          <img v-else class="h-5 w-5" src="/images/icon/radio_button_checked_red.svg" alt="" />
+            alt="">
+          <img v-else class="h-5 w-5" src="/images/icon/radio_button_checked_red.svg" alt="">
           <span :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">
             {{ feature.name }}
           </span>
         </label>
       </div>
 
-      <!-- Price Section -->
+      <!-- Price Section with Badge -->
       <div class="relative mb-5 inline-block">
         <span
           class="absolute -top-7 left-1/4 -translate-x-1/4 bg-blue-600 text-white text-sm px-5 py-1 rounded-2xl -rotate-6 text-nowrap"
           :class="data.title === 'Next Up Creator' ? 'text-black bg-parrot' : 'text-black'">
           {{ data.comments }}
         </span>
-        <span class="text-3xl font-bold" :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">
-          {{ data.price }}
-        </span>
+
+        <span class="text-3xl font-bold" :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">{{
+          data.price }}</span>
+      </div>
+
+      <!-- Separator -->
+      <div class="border-t border-solid-black border-grey  mb-6 ">
+        <!-- <p class="mt-4 text-center">{{ dashedLine }}</p> -->
       </div>
 
       <!-- CTA Button -->
       <button @click="ZeuxItNow" :disabled="isButtonDisabled" :class="{
-        'w-full text-md font-semibold py-3 rounded-lg': true,
-        'bg-black text-white hover:bg-gray-800': buttonText !== 'Current Package' && !isButtonDisabled,
-        'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled,
-        'bg-white text-black': buttonText === 'Current Package' && !isButtonDisabled
+        'w-full text-sm py-3 rounded-lg': true,
+        'bg-black text-white hover:bg-gray-800': !isButtonDisabled,
+        'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled
       }">
         {{ buttonText }}
       </button>
     </div>
   </div>
+
 </template>
