@@ -62,11 +62,9 @@ const ZeuxItNow = async () => {
   try {
     // Call the API to subscribe to the package
     const response = await genAiService.subscribePackages(props.data.title, false, "Monthly");
-
-    if (response?.data?.redirectUrl) {
+    if (response?.data?.status == "SUCCESS") {
       // Use Vue Router to navigate to the desired route
-      await router.push({ path: response.data.redirectUrl });
-      console.log('Navigation successful to:', response.data.redirectUrl);
+      this.$router.push(response.data.sessionUrl);
     } else {
       console.error('Redirect URL not found in the response:', response);
     }
