@@ -130,6 +130,11 @@ class GenAIService {
       headers: this.getAuthHeaders(),
     })
   }
+  likeImage(data) {
+    return axios.post(this.url + '/like-image', data, {
+      headers: this.getAuthHeaders(),
+    })
+  }
 }
 
 export default new GenAIService()
