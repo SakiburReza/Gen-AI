@@ -397,9 +397,7 @@ const imageModeOptions = [
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
-      <div
-        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
-      >
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2">
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />
@@ -450,13 +448,14 @@ const imageModeOptions = [
 
           <!------------------------------------------------------ Roney ----------------------------------------->
           <!-- Floating Buttons -->
-          <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
+          <div v-if="media[index] && media[index].type === 'image'" class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
+
             <!-- Share Button with Group Class -->
             <div class="relative group">
               <!-- Share Button -->
               <button
                 @click=""
-                class="flex justify-center items-center w-8 h-8 bg-gray-600 text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
+                class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
               >
                 <svg
                   width="20"
@@ -475,7 +474,8 @@ const imageModeOptions = [
 
               <!-- Tooltip -->
               <div
-                class="absolute mb-2 -top-8 -right-15 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
+                @click=""
+                class="absolute mb-2 top-0 -right-20 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
               >
                 <svg
                   width="20"
@@ -490,7 +490,7 @@ const imageModeOptions = [
                     fill="#FFFFFF"
                   />
                 </svg>
-                <span>Add to Explore</span>
+                <button>Add to Explore</button>
               </div>
             </div>
 
@@ -499,7 +499,7 @@ const imageModeOptions = [
               <!-- Share Button -->
               <button
                 @click=""
-                class="flex justify-center items-center w-8 h-8 bg-gray-600 text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
+                class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
               >
                 <svg
                   width="20"
@@ -518,7 +518,8 @@ const imageModeOptions = [
 
               <!-- Tooltip -->
               <div
-                class="absolute mb-2 -top-8 -right-15 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
+                @click=""
+                class="absolute mb-2 top-0 -right-18.5 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
               >
                 <svg
                   width="20"
@@ -533,7 +534,7 @@ const imageModeOptions = [
                     fill="#FFFFFF"
                   />
                 </svg>
-                <span>Copy prompt</span>
+                <button>Copy prompt</button>
               </div>
             </div>
 
