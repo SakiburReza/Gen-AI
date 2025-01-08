@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 right-0 h-screen bg-gray-100 shadow-lg rounded-l-3xl flex flex-col w-64 md:w-72 lg:w-80 xl:w-96 transition-transform transform translate-x-full lg:translate-x-0"
+    class="fixed top-2 -right-20 h-screen bg-gray-100 shadow-lg rounded-l-3xl flex flex-col w-64 md:w-72 lg:w-80 xl:w-96 transition-transform transform translate-x-full lg:translate-x-0"
     :class="{ 'translate-x-0': isOpen }"
   >
     <!-- Logo -->
