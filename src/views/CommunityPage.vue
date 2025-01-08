@@ -213,23 +213,18 @@ onMounted(async () => {
 <template>
   <div class="flex flex-col h-screen">
     <!-- Search Bar and Heart Button -->
-    <div class="flex items-center px-15 py-2 sticky top-0 z-10">
+    <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar -->
-      <div class="flex items-center w-full max-w-3xl border border-gray-300 rounded-md">
+      <div class="flex items-center w-full max-w-2xl border border-gray-300 rounded-md">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-2">
           <path d="M23.707 22.293L16.882 15.468C18.204 13.835 19 11.76 19 9.50002C19 4.26202 14.738 0 9.49997 0C4.26197 0 0 4.26197 0 9.49997C0 14.738 4.26202 19 9.50002 19C11.76 19 13.835 18.204 15.468 16.882L22.293 23.707C22.488 23.902 22.744 24 23 24C23.256 24 23.512 23.902 23.707 23.707C24.098 23.316 24.098 22.684 23.707 22.293ZM9.50002 17C5.364 17 2.00002 13.636 2.00002 9.49997C2.00002 5.36395 5.364 1.99997 9.50002 1.99997C13.636 1.99997 17 5.36395 17 9.49997C17 13.636 13.636 17 9.50002 17Z" fill="#6D6D6D"/>
         </svg>
         <input
           type="text"
           placeholder="Search"
-          class="w-full px-4 py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+          class="w-full px-4 py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-gray-200"
         />
         <!-- Add the SVG icon inside the search bar -->
-        <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-2 mr-2">
-          <path d="M19.2016 9.14227H4.80156C4.08156 9.14227 3.60156 8.6851 3.60156 7.99936C3.60156 7.31361 4.08156 6.85645 4.80156 6.85645H19.2016C19.9216 6.85645 20.4016 7.31361 20.4016 7.99936C20.4016 8.6851 19.9216 9.14227 19.2016 9.14227Z" fill="#474747"/>
-          <path d="M15.5992 16.0007H8.39922C7.67922 16.0007 7.19922 15.5435 7.19922 14.8578C7.19922 14.172 7.67922 13.7148 8.39922 13.7148H15.5992C16.3192 13.7148 16.7992 14.172 16.7992 14.8578C16.7992 15.5435 16.3192 16.0007 15.5992 16.0007Z" fill="#474747"/>
-          <path d="M22.8 2.28582H1.2C0.48 2.28582 0 1.82866 0 1.14291C0 0.457164 0.48 0 1.2 0H22.8C23.52 0 24 0.457164 24 1.14291C24 1.82866 23.52 2.28582 22.8 2.28582Z" fill="#474747"/>
-        </svg>
       </div>
       <!-- Heart Button -->
       <button
@@ -248,10 +243,9 @@ onMounted(async () => {
     </div>
 
     <div class="flex flex-row h-full overflow-hidden">
-      <div class="w-full overflow-y-auto h-full mt-8 mb-5">
+      <div class="w-4/5 h-full mt-8 mb-5 overflow-y-auto">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-1 md:w-[65%] ml-15 mb-5 mt-0 overflow-y-auto pr-2]">
-<!--        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 md:w-full">-->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-0 pr-2 overflow-y-scroll">
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner />

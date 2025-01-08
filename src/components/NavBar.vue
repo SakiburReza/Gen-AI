@@ -86,7 +86,7 @@ onUnmounted(() => {
 
       <!-- Account Card with responsive positioning -->
       <AccountCard
-        class="fixed top-6 right-72.5 z-10 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+        class="fixed top-6 right-75 z-10 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
         v-if="showAccountCard"
         @close="toggleAccountCard"
       />
