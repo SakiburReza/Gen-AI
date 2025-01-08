@@ -47,34 +47,24 @@ const otherPrice = ref<number | null>(null);
 
 // Methods
 const ZeuxItNow = async () => {
-  if (props.isButtonDisabled) return; // Prevent the button from being clicked if it's disabled
+  if (props.isButtonDisabled) return;
 
-  // Emit an event to disable all buttons when one is clicked
-  emit('button-clicked');
-
-  // Prepare the reqData based on the selected plan
-  const reqData = {
-    subscribePackage: props.data.title, // Plan title
-    recurringConfirmation: false,
-    recurringCadence: null
-  };
+  emit("button-clicked");
 
   try {
-    // Call the API to subscribe to the package
     const response = await genAiService.subscribePackages(props.data.title, false, "Monthly");
+    const redirectUrl = response.data;
 
-    if (response?.data?.redirectUrl) {
-      // Use Vue Router to navigate to the desired route
-      await router.push({ path: response.data.redirectUrl });
-      console.log('Navigation successful to:', response.data.redirectUrl);
+    if (redirectUrl) {
+      window.location.href = redirectUrl;
     } else {
-      console.error('Redirect URL not found in the response:', response);
+      console.error("Redirect URL not found in the response");
     }
   } catch (error) {
-    console.error('Error subscribing or navigating:', error);
+    console.error("Error subscribing:", error);
   }
-
 };
+
 
 const fetchCurrentPrice = async () => {
   try {
@@ -82,7 +72,7 @@ const fetchCurrentPrice = async () => {
 
     if (response?.data?.currentPackagePrice) {
       creditInformation.value.currentPackagePrice = parseFloat(
-        response.data.currentPackagePrice
+        response.data.currentPackagePrice.replace("$", "")
       ) || 0;
     } else {
       console.error("Current package price not found in response", response);
@@ -92,7 +82,6 @@ const fetchCurrentPrice = async () => {
     console.error("Error fetching current price:", error);
   }
 };
-
 const fetchOtherPrice = async () => {
   try {
     const response = await genAiService.fetchSubscribePlan();
@@ -198,11 +187,13 @@ watch(
       <!-- CTA Button -->
       <button @click="ZeuxItNow" :disabled="isButtonDisabled" :class="{
         'w-full text-sm py-3 rounded-lg': true,
-        'bg-black text-white hover:bg-gray-800': !isButtonDisabled,
-        'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled
+        'bg-black text-white hover:bg-gray-800': buttonText !== 'Current Package' && !isButtonDisabled,
+        'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled,
+        'bg-white text-black': buttonText === 'Current Package' && !isButtonDisabled
       }">
         {{ buttonText }}
       </button>
+
     </div>
   </div>
 

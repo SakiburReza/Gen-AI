@@ -89,27 +89,26 @@ onMounted(() => {
 
     <!-- Subscription Plans Section -->
     <div
-    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-8 lg:px-16 py-4 sm:py-6 lg:py-8 lg:ml-56 transition-all duration-500 ease-in-out">
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-4 gap-3 sm:px-8 sm:my-3 xl:mx-40 lg:px-4 py-4 sm:py-6 lg:py-8 justify-items-center transition-all duration-500 ease-in-out">
       <SubscriptionCard v-for="(feature, index) in plans" :key="index" :data="feature" :isStyle="index % 2 == 0"
         :isButtonDisabled="isButtonDisabled" @button-clicked="isButtonDisabled = true" />
     </div>
 
+
     <!-- Mobile-Specific Button -->
-    <div v-if="!showBillingSection" class="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+    <div v-if="!showBillingSection"
+      class="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex items-center justify-center">
       <button @click="() => $router.push('/operativepage')"
-        class=" w-full sm:w-auto bg-blue-600 text-white text-sm sm:text-md lg:mr-180 py-3 sm:py-3 px-6 rounded-md hover:bg-gray-800 mx-auto block">
+        class="w-full sm:w-auto bg-blue-600 text-white text-sm sm:text-md py-3 sm:py-3 px-6 rounded-md hover:bg-gray-800 mx-auto">
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
-    <div v-else-if="!showBillingSection" class="lg:hidden sm:hidden w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-6">
+
+    <div v-else class="md:hidden w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-6">
       <button @click="() => $router.push('/operativepage')"
         class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block">
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div> <br>
-    <button @click="() => $router.push('/operativepage')" class="lg:hidden md:relative md:w-auto w-3/4 sm:w-1/2 sm:py-3 md:inline-block bg-blue-600 text-white 
-         px-4 py-2 rounded-lg text-sm sm:mb-10 mx-auto block">
-      TAKE ME BACK I WANT TO CREATE
-    </button>
   </div>
 </template>
