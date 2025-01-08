@@ -43,59 +43,44 @@ const faceImage = ref<File | null>(null)
 
 // States
 const description = ref('')
-const media = ref<{ url: string; type: 'image' | 'video'; orientation: 'L' | 'P' }[]>([]) // Array to store media
+const media = ref<
+  {
+    url: string
+    type: 'image' | 'video'
+    orientation: 'P' | 'L'
+    isLiked: 'Y' | 'N'
+    isShared: 'Y' | 'N'
+    prompt: string
+  }[]
+>([])
 const loading = ref(false) // Track loading state
 
-const activeMode = ref('image')
-
-function setActive(button) {
-  activeMode.value = button
-}
-
-// Active functionality state
-const activeFunctionality = ref<
-  | 'Text to Image'
-  | 'Face Swap'
-  | 'Text to Video'
-  | 'Image to Video'
-  | 'Image to Image'
-  | 'Templates'
->('Text to Image')
-
-function changeFunctionality(mode) {
-  console.log(mode)
-  activeFunctionality.value = mode
-}
-
-// Watcher to trigger fetchImages based on activeFunctionality changes
-watch(activeFunctionality, async (newValue) => {
-  if (newValue === 'Face Swap') {
-    await fetchMedia('face-swap')
-  } else if (newValue === 'Text to Image') {
-    await fetchMedia('text-to-image')
-  } else if (newValue === 'Image to Image') {
-    await fetchMedia('image-to-image')
-  } else if (newValue === 'Image to Video') {
-    await fetchMedia('image-to-video')
-  } else if (newValue === 'Text to Video') {
-    await fetchMedia('text-to-video')
-  } else if (newValue === 'Templates') {
-    await fetchMedia('template-video')
+const copyAction = async (prompt: string) => {
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    try {
+      await navigator.clipboard.writeText(prompt);
+      console.log('Prompt copied to clipboard:', prompt);
+    } catch (error) {
+      console.error('Failed to copy prompt using Clipboard API:', error);
+    }
+  } else {
+    console.warn('Clipboard API not supported, using fallback method');
+    // Fallback method for unsupported environments
+    const textArea = document.createElement('textarea');
+    textArea.value = prompt;
+    textArea.style.position = 'fixed'; // Avoid scrolling to the bottom
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      console.log('Prompt copied to clipboard using fallback');
+    } catch (err) {
+      console.error('Fallback: Unable to copy prompt:', err);
+    }
+    document.body.removeChild(textArea);
   }
-})
-
-watch(activeMode, async (newValue) => {
-  if (newValue === 'video') {
-    activeFunctionality.value = 'Text to Video'
-    await fetchMedia('text-to-video')
-  } else if (newValue === 'image') {
-    activeFunctionality.value = 'Text to Image'
-    await fetchMedia('text-to-image')
-  }
-})
-
-const selectedRatio = ref('Landscape')
-const selectedOutput = ref(1)
+};
 
 // Fetch Images / Videos from API
 const fetchMedia = async () => {
@@ -107,98 +92,18 @@ const fetchMedia = async () => {
       // Map data with type detection (image/video) for initial load
       media.value = response.data.map((item) => ({
         url: item.content,
+
+        type:'image',
         orientation: item.orientation,
+        prompt: item.prompt,
+        isLiked: item.like,
+        isShared:item.share
       }))
-      // .slice(0, 12) // Ensure maximum of 12 items
     } else {
       console.error('Failed to fetch images: Invalid response format')
     }
   } catch (error) {
     console.error('Error fetching images:', error)
-  } finally {
-    loading.value = false
-  }
-}
-
-const generateAiContent = async () => {
-  loading.value = true
-  try {
-    let response
-
-    // Handling different types of functionalities
-    if (activeFunctionality.value === 'Face Swap') {
-      const formData = new FormData()
-      formData.append('targetImage', referenceImage.value!)
-      formData.append('swapImage', faceImage.value!)
-      response = await genAiService.faceSwap(formData)
-    } else if (activeFunctionality.value === 'Text to Image') {
-      response = await genAiService.textToImage({
-        text: description.value,
-        image_size: selectedRatio.value,
-        num_images: selectedOutput.value,
-      })
-    } else if (activeFunctionality.value === 'Text to Video') {
-      response = await genAiService.textToVideo({ text: description.value })
-    } else if (activeFunctionality.value === 'Image to Video') {
-      const formData = new FormData()
-      let type = 'face-swap'
-      formData.append('image', referenceImage.value!)
-      formData.append('prompt', description.value)
-      formData.append('type', type)
-      response = await genAiService.imageToVideo(formData)
-    } else if (activeFunctionality.value === 'Image to Image') {
-      const formData = new FormData()
-      formData.append('image', referenceImage.value!)
-      formData.append('text', description.value)
-      formData.append('image_size', selectedRatio.value)
-      formData.append('num_images', selectedOutput.value.toString())
-      response = await genAiService.imageToImage(formData)
-    } else if (activeFunctionality.value === 'Templates') {
-      // Create form data for file and video index
-      const formData = new FormData()
-      formData.append('template_id', selectedVideo.value.id) // Assuming videoIndex is expected by server
-      formData.append('image', referenceImage.value) // Assuming faceImage is expected by server
-      formData.append('prompt', selectedVideo.value.prompt)
-      // Make the API call
-      response = await genAiService.templateVideo(formData)
-
-      // Handle response
-      console.log('Server Response:', response.data)
-    }
-
-    if (response?.data?.status) {
-      toastStore.success(response?.data.message)
-      await fetchCredits()
-      const contents = response.data.data.content
-      // Check if 'contents' is an array and iterate over each content
-      if (Array.isArray(contents)) {
-        contents.forEach((base64Content) => {
-          // Determine the media type based on base64 content
-          const mediaType = base64Content.startsWith('data:video/mp4;') ? 'video' : 'image'
-          const newMedia = {
-            url: base64ToBlobUrl(base64Content, mediaType), // Convert base64 to Blob URL
-            type: mediaType,
-          }
-
-          // Prepend the new media and maintain the list size at 12
-          media.value = [newMedia, ...media.value].slice(0, 12)
-        })
-      } else {
-        // Handle the case where the content is a single item (fallback for non-array responses)
-        const mediaType = contents.startsWith('data:video/mp4;') ? 'video' : 'image'
-        const newMedia = {
-          url: base64ToBlobUrl(contents, mediaType),
-          type: mediaType,
-        }
-        media.value = [newMedia, ...media.value].slice(0, 12)
-      }
-      // Update credits after successful content generation
-      await fetchCredits()
-    } else {
-      console.error('Failed to generate media:', response)
-    }
-  } catch (error) {
-    console.error('Error generating media:', error)
   } finally {
     loading.value = false
   }
@@ -216,8 +121,18 @@ onMounted(async () => {
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar -->
       <div class="flex items-center w-full max-w-2xl border border-gray-300 rounded-md">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-2">
-          <path d="M23.707 22.293L16.882 15.468C18.204 13.835 19 11.76 19 9.50002C19 4.26202 14.738 0 9.49997 0C4.26197 0 0 4.26197 0 9.49997C0 14.738 4.26202 19 9.50002 19C11.76 19 13.835 18.204 15.468 16.882L22.293 23.707C22.488 23.902 22.744 24 23 24C23.256 24 23.512 23.902 23.707 23.707C24.098 23.316 24.098 22.684 23.707 22.293ZM9.50002 17C5.364 17 2.00002 13.636 2.00002 9.49997C2.00002 5.36395 5.364 1.99997 9.50002 1.99997C13.636 1.99997 17 5.36395 17 9.49997C17 13.636 13.636 17 9.50002 17Z" fill="#6D6D6D"/>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="ml-2"
+        >
+          <path
+            d="M23.707 22.293L16.882 15.468C18.204 13.835 19 11.76 19 9.50002C19 4.26202 14.738 0 9.49997 0C4.26197 0 0 4.26197 0 9.49997C0 14.738 4.26202 19 9.50002 19C11.76 19 13.835 18.204 15.468 16.882L22.293 23.707C22.488 23.902 22.744 24 23 24C23.256 24 23.512 23.902 23.707 23.707C24.098 23.316 24.098 22.684 23.707 22.293ZM9.50002 17C5.364 17 2.00002 13.636 2.00002 9.49997C2.00002 5.36395 5.364 1.99997 9.50002 1.99997C13.636 1.99997 17 5.36395 17 9.49997C17 13.636 13.636 17 9.50002 17Z"
+            fill="#6D6D6D"
+          />
         </svg>
         <input
           type="text"
@@ -231,7 +146,13 @@ onMounted(async () => {
         @click=""
         class="ml-4 flex justify-center items-center w-12 h-12 bg-gray-300 text-white border border-gray-300 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -244,78 +165,80 @@ onMounted(async () => {
 
     <div class="flex flex-row h-full overflow-hidden">
       <div class="w-4/5 h-full mt-8 mb-5 overflow-y-auto">
-      <!-- Left Section: Enhanced Image Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-0 pr-2 overflow-y-scroll">
-        <!-- Display spinner while loading images -->
-        <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
-          <fwb-spinner />
-        </div>
+        <!-- Left Section: Enhanced Image Grid -->
         <div
-          v-for="(item, index) in media"
-          :key="index"
-          class="relative overflow-hidden rounded-lg"
-          :class="[
-            item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
-            'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
-          ]"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-0 pr-2 overflow-y-auto"
+           style="max-height: calc(90vh - 4rem); overflow-y: auto;"
         >
-          <!-- Render Image -->
-          <img
-            :src="imageUrl() + item.url"
-            :alt="'Media ' + index"
-            class="h-full max-w-full rounded-lg w-full"
-            :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
-          />
-          <!-- Floating Buttons -->
-          <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
-            <!-- Text Button -->
-            <div class="relative group">
-              <!-- Share Button -->
-              <button
-                @click=""
-                class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+          <!-- Display spinner while loading images -->
+          <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
+            <fwb-spinner />
+          </div>
+          <div
+            v-for="(item, index) in media"
+            :key="index"
+            class="relative overflow-hidden rounded-lg"
+            :class="[
+              item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
+              'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
+            ]"
+          >
+            <!-- Render Image -->
+            <img
+              :src="imageUrl() + item.url"
+              :alt="'Media ' + index"
+              class="h-full max-w-full rounded-lg w-full"
+              :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
+            />
+            <!-- Floating Buttons -->
+            <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
+              <!-- Text Button -->
+              <div class="relative group">
+                <!-- Share Button -->
+                <button
+                  @click=""
+                  class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
                 >
-                  <rect width="20" height="20" rx="4" fill="white" />
-                  <path
-                    d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
-                    fill="#474747"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect width="20" height="20" rx="4" fill="white" />
+                    <path
+                      d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
+                      fill="#474747"
+                    />
+                  </svg>
+                </button>
 
-              <!-- Tooltip -->
-              <div
-                @click=""
-                class="absolute mb-2 top-0 -right-18.5 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-
+                <!-- Tooltip -->
+                <div
+                  @click=""
+                  class="absolute mb-2 top-0 -right-18.5 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
                 >
-                  <rect width="20" height="20" rx="4" fill="blue" />
-                  <path
-                    d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
-                    fill="#FFFFFF"
-                  />
-                </svg>
-                <button>Copy prompt</button>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect width="20" height="20" rx="4" fill="blue" />
+                    <path
+                      d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
+                      fill="#FFFFFF"
+                    />
+                  </svg>
+                  <button @click="copyAction(media[index].prompt)">Copy prompt</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
     <!-- Sidebar Component -->
     <CommunitySidebar class="w-30 md:w-30" />
