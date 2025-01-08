@@ -1,4 +1,5 @@
 <template>
+  <!-- Community Side Bar -->
   <div
     class="fixed top-2 right-5 h-screen bg-gray-100 shadow-lg rounded-l-3xl flex flex-col w-64 md:w-72 lg:w-80 xl:w-96 transition-transform transform translate-x-full lg:translate-x-0 mr-1"
     :class="{ 'translate-x-0': isOpen }"

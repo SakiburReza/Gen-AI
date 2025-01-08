@@ -88,9 +88,17 @@ class GenAIService {
       },
     )
   }
-  getPaymentSync(checkoutId, transactionId) {
+  // getPaymentSync(checkoutId, transactionId) {
+  //   return axios.get(
+  //     this.url + `/square/paymentDetails?checkoutId=${checkoutId}&transactionId=${transactionId}`,
+  //     {
+  //       headers: this.getAuthHeaders(),
+  //     },
+  //   )
+  // }
+  getPaymentSync() {
     return axios.get(
-      this.url + `/square/paymentDetails?checkoutId=${checkoutId}&transactionId=${transactionId}`,
+      this.url + `/square/paymentDetails`,
       {
         headers: this.getAuthHeaders(),
       },
