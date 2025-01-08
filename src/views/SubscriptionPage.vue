@@ -87,12 +87,12 @@ onMounted(() => {
     <div v-if="!showBillingSection" class="flex justify-between items-center mb-2 w-full">
       <h1
         v-show="!showBillingSection"
-        class="text-xl sm:text-2xl lg:text-3xl font-bold text-center ml-6 lg:ml-50 transition-opacity duration-500 ease-in-out opacity-0"
+        class="text-xl sm:text-2xl lg:text-3xl font-bold text-center ml-6 xl:ml-70 transition-opacity duration-500 ease-in-out opacity-0"
         :class="{ 'opacity-100': !showBillingSection }"
       >
         Subscription
       </h1>
-      <div class="flex justify-center sm:justify-center mr-5 lg:mr-50">
+      <div class="flex justify-center sm:justify-center mr-5 xl:mr-70">
         <button
           @click="toggleBillingSection"
           class="w-auto bg-blue-600 text-white text-sm sm:text-md py-2 px-3 sm:py-2 sm:px-5 rounded-md hover:bg-gray-800 transition-all duration-300"
