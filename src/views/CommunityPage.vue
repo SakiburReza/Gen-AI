@@ -2,7 +2,7 @@
 import ShowModalForImage from '@/components/ShowModalForImage.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { base64ToBlobUrl } from '@/utils/utils'
 import { useRoute } from 'vue-router'
@@ -14,10 +14,7 @@ const { fetchCredits } = useCredits()
 
 const route = useRoute()
 
-// const router = useRouter();
-// const creditsFromQuery = router.currentRoute.value.query.credits || 10;
-
-// console.log("lll",creditsFromQuery)
+const searchQuery = ref('')
 
 const toastStore = useToastStore()
 
@@ -25,6 +22,10 @@ const selectedVideo = ref(null)
 
 const selectedImage = ref(null) // Selected image or video
 const showModal = ref(false) // Modal visibility
+// Computed property to filter media based on the search query
+const filteredMedia = computed(() =>
+  media.value.filter((item) => item.prompt.toLowerCase().includes(searchQuery.value.toLowerCase())),
+)
 
 // Functions to open/close modal
 const openImageModal = (mediaItem) => {
@@ -58,29 +59,31 @@ const loading = ref(false) // Track loading state
 const copyAction = async (prompt: string) => {
   if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
     try {
-      await navigator.clipboard.writeText(prompt);
-      console.log('Prompt copied to clipboard:', prompt);
+      await navigator.clipboard.writeText(prompt)
+      toastStore.success('Prompt copied to clipboard')
+      console.log('Prompt copied to clipboard:', prompt)
     } catch (error) {
-      console.error('Failed to copy prompt using Clipboard API:', error);
+      console.error('Failed to copy prompt using Clipboard API:', error)
     }
   } else {
-    console.warn('Clipboard API not supported, using fallback method');
+    console.warn('Clipboard API not supported, using fallback method')
     // Fallback method for unsupported environments
-    const textArea = document.createElement('textarea');
-    textArea.value = prompt;
-    textArea.style.position = 'fixed'; // Avoid scrolling to the bottom
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
+    const textArea = document.createElement('textarea')
+    textArea.value = prompt
+    textArea.style.position = 'fixed' // Avoid scrolling to the bottom
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+    toastStore.success('Prompt copied to clipboard')
     try {
-      document.execCommand('copy');
-      console.log('Prompt copied to clipboard using fallback');
+      document.execCommand('copy')
+      console.log('Prompt copied to clipboard using fallback')
     } catch (err) {
-      console.error('Fallback: Unable to copy prompt:', err);
+      console.error('Fallback: Unable to copy prompt:', err)
     }
-    document.body.removeChild(textArea);
+    document.body.removeChild(textArea)
   }
-};
+}
 
 // Fetch Images / Videos from API
 const fetchMedia = async () => {
@@ -93,11 +96,11 @@ const fetchMedia = async () => {
       media.value = response.data.map((item) => ({
         url: item.content,
 
-        type:'image',
+        type: 'image',
         orientation: item.orientation,
         prompt: item.prompt,
         isLiked: item.like,
-        isShared:item.share
+        isShared: item.share,
       }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
@@ -135,6 +138,7 @@ onMounted(async () => {
           />
         </svg>
         <input
+          v-model="searchQuery"
           type="text"
           placeholder="Search"
           class="w-full px-4 py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-gray-200"
@@ -168,14 +172,14 @@ onMounted(async () => {
         <!-- Left Section: Enhanced Image Grid -->
         <div
           class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-0 pr-2 overflow-y-auto"
-           style="max-height: calc(90vh - 4rem); overflow-y: auto;"
+          style="max-height: calc(90vh - 4rem); overflow-y: auto"
         >
           <!-- Display spinner while loading images -->
           <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
-            <fwb-spinner />
+            <fwb-spinner size="12"/>
           </div>
           <div
-            v-for="(item, index) in media"
+            v-for="(item, index) in filteredMedia"
             :key="index"
             class="relative overflow-hidden rounded-lg"
             :class="[
