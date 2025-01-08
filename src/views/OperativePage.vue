@@ -273,7 +273,7 @@ const generateAiContent = async () => {
         url: item.content,
         type: item.type,
         orientation: item.orientation,
-        prompt: item.prompt
+        prompt: item.prompt,
       }))
       media.value.unshift(...aiGeneratedMedia.value)
     } else {
@@ -285,11 +285,10 @@ const generateAiContent = async () => {
     loading.value = false
   }
 }
-const shareAction = async (imageId: string, action: "Y"|"N") => {
+const shareAction = async (imageId: string, action: 'Y' | 'N') => {
   try {
     const response = await genAiService.shareImage({ imageId: imageId, isShare: action })
     if (response.status === 200) {
-
       const itemIndex = media.value.findIndex((item) => item.url === imageId)
       if (itemIndex !== -1) {
         media.value[itemIndex].isShared = action
@@ -303,11 +302,10 @@ const shareAction = async (imageId: string, action: "Y"|"N") => {
     console.error('Error sharing the image:', error)
   }
 }
-const likeAction = async (imageId: string, action:  "Y" | "N") => {
+const likeAction = async (imageId: string, action: 'Y' | 'N') => {
   try {
     const response = await genAiService.likeImage({ imageId: imageId, isLike: action })
     if (response.status === 200) {
-      
       const itemIndex = media.value.findIndex((item) => item.url === imageId)
       if (itemIndex !== -1) {
         media.value[itemIndex].isLiked = action
@@ -325,7 +323,7 @@ const copyAction = async (prompt: string) => {
   if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
     try {
       await navigator.clipboard.writeText(prompt)
-      toastStore.success("Prompt copied to clipboard")
+      toastStore.success('Prompt copied to clipboard')
       console.log('Prompt copied to clipboard:', prompt)
     } catch (error) {
       console.error('Failed to copy prompt using Clipboard API:', error)
@@ -339,7 +337,7 @@ const copyAction = async (prompt: string) => {
     document.body.appendChild(textArea)
     textArea.focus()
     textArea.select()
-    toastStore.success("Prompt copied to clipboard")
+    toastStore.success('Prompt copied to clipboard')
     try {
       document.execCommand('copy')
       console.log('Prompt copied to clipboard using fallback')
