@@ -23,7 +23,6 @@ const toastStore = useToastStore()
 
 const selectedVideo = ref(null)
 
-const selectedImage = ref(null) // Selected image or video
 const showModal = ref(false) // Modal visibility
 
 // Functions to open/close modal
@@ -31,11 +30,19 @@ const openImageModal = (mediaItem) => {
   selectedImage.value = mediaItem
   showModal.value = true
 }
+const showPreviewModal = ref(false) // Controls PreviewImageModal
 
-const closeModal = () => {
-  showModal.value = false
+const closePreviewModal = () => {
+  showPreviewModal.value = false
   selectedImage.value = null
 }
+const selectedImage = ref(null) // Selected image or video
+
+
+// const closeModal = () => {
+//   showModal.value = false
+//   selectedImage.value = null
+// }
 
 // States to store images from the ImageInputCard components
 const referenceImage = ref<File | null>(null)
@@ -318,7 +325,12 @@ onMounted(async () => {
     <!-- Sidebar Component -->
     <CommunitySidebar class="w-30 md:w-30" />
     <!-- Modal Component -->
-    <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="selectedImage" />
+    <!-- <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->
+    <PreviewImageModal
+      :isOpen="showPreviewModal"
+      @close="closePreviewModal"
+      :image="selectedImage"
+    />
   </div>
 </template>
 
