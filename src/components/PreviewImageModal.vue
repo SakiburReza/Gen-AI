@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { imageUrl } from '@/utils/utils';
 
 const props = defineProps({
@@ -17,31 +17,63 @@ const props = defineProps({
       title: "A bottom-up image of a girl walking confidently down the city streets",
     }),
   },
-
-})
+});
 
 // Emits
 const emit = defineEmits(['close']);
 
-
 // State
 const prompt = ref<string | null>(null);
+const loading = ref<boolean>(false);
+const error = ref<string | null>(null);
+const fileUrl = ref<string | null>(null);
 
-// Helper to extract filename from URL
-const getFilename = (url: string): string => {
-  const parts = url.split('/');
-  return parts[parts.length - 1] || 'download';
+const getFilename = (url: string): string =>
+  `${url.split('/').pop() || 'download'}${props.image?.type === 'image' ? '.png' : '.mp4'}`;
+
+
+// Fetch file when image.url is available
+const fetchFile = async () => {
+  console.log('fetchFile called');
+  if (props.image?.url) {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await fetch(imageUrl() + props.image.url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch the file');
+      }
+      const fileBlob = await response.blob();
+      fileUrl.value = URL.createObjectURL(fileBlob);
+      console.log('File URL:', fileUrl.value);
+    } catch (err) {
+      error.value = `Failed to fetch the file: ${err.message}`;
+      console.error('Error fetching file:', err);
+    } finally {
+      loading.value = false;
+    }
+  }
 };
 
+// Watch for changes in image.url and isOpen to fetch the file when image.url is set
+watch([() => props.image?.url, () => props.isOpen], ([imageUrl, isOpen]) => {
+  console.log('Watching image.url and isOpen:', imageUrl, isOpen);
+  if (isOpen && imageUrl) {
+    fetchFile();
+  }
+});
+// Close handler
 const close = () => {
   emit('close');
   prompt.value = "";
 };
+
+// Handle click outside to close
 const handleOutsideClick = (event) => {
   if (event.target === event.currentTarget) {
     close();
   }
-}
+};
 </script>
 
 <template>
@@ -60,18 +92,18 @@ const handleOutsideClick = (event) => {
         <div class="w-full flex flex-col items-center">
           <!-- Image Display -->
           <div v-if="image?.type === 'image'" class="w-full">
-            <img :src="imageUrl() + image.url" alt="Generated Image"
+            <img v-if="fileUrl" :src="fileUrl" alt="Generated Image"
               class="rounded-lg w-full max-h-[calc(100vh-12rem)] object-contain" />
           </div>
 
           <!-- Video Display -->
           <div v-else-if="image?.type === 'video'" class="w-full">
-            <video :src="imageUrl() + image.url" controls
+            <video v-if="fileUrl" :src="fileUrl" controls
               class="rounded-lg w-full max-h-[calc(100vh-12rem)] object-contain"></video>
           </div>
 
           <!-- Download Button -->
-          <a v-if="image?.url" :href="image.url" :download="getFilename(image.url)"
+          <a v-if="image?.url" :href="fileUrl" :download="getFilename(image.url)"
             class="flex items-center justify-center text-blue-600 text-sm font-semibold py-2 px-4 rounded hover:bg-blue-600 hover:text-white mt-4">
             <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-4 h-4 mr-2" />
             DOWNLOAD
@@ -81,6 +113,7 @@ const handleOutsideClick = (event) => {
     </div>
   </div>
 </template>
+
 
 
 <style scoped>
