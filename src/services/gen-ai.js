@@ -25,7 +25,7 @@ class GenAIService {
   }
 
   getMedia(params) {
-    return axios.get(this.url + '/get-images?type=' + params, {
+    return axios.get(this.url + '/get-media?type=' + params, {
       headers: this.getAuthHeaders(),
     })
   }
@@ -88,9 +88,17 @@ class GenAIService {
       },
     )
   }
-  getPaymentSync(checkoutId, transactionId) {
+  // getPaymentSync(checkoutId, transactionId) {
+  //   return axios.get(
+  //     this.url + `/square/paymentDetails?checkoutId=${checkoutId}&transactionId=${transactionId}`,
+  //     {
+  //       headers: this.getAuthHeaders(),
+  //     },
+  //   )
+  // }
+  getPaymentSync() {
     return axios.get(
-      this.url + `/square/paymentDetails?checkoutId=${checkoutId}&transactionId=${transactionId}`,
+      this.url + `/square/paymentDetails`,
       {
         headers: this.getAuthHeaders(),
       },
@@ -123,6 +131,17 @@ class GenAIService {
   }
   getCommunityMedia() {
     return axios.get(this.url + '/share/communityImage')
+  }
+
+  shareImage(data) {
+    return axios.post(this.url + '/share-image', data, {
+      headers: this.getAuthHeaders(),
+    })
+  }
+  likeImage(data) {
+    return axios.post(this.url + '/like-image', data, {
+      headers: this.getAuthHeaders(),
+    })
   }
 }
 

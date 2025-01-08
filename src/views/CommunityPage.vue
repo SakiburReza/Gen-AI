@@ -66,6 +66,7 @@ function changeFunctionality(mode) {
   console.log(mode)
   activeFunctionality.value = mode
 }
+
 // Watcher to trigger fetchImages based on activeFunctionality changes
 watch(activeFunctionality, async (newValue) => {
   if (newValue === 'Face Swap') {
@@ -104,12 +105,11 @@ const fetchMedia = async () => {
 
     if (response.status && Array.isArray(response.data)) {
       // Map data with type detection (image/video) for initial load
-      media.value = response.data
-        .map((item) => ({
-          url: item.url,
-          orientation: item.orientation,
-        }))
-       // .slice(0, 12) // Ensure maximum of 12 items
+      media.value = response.data.map((item) => ({
+        url: item.content,
+        orientation: item.orientation,
+      }))
+      // .slice(0, 12) // Ensure maximum of 12 items
     } else {
       console.error('Failed to fetch images: Invalid response format')
     }
@@ -212,12 +212,41 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col h-screen">
-    <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
+    <!-- Search Bar and Heart Button -->
+    <div class="flex items-center px-10 py-4  sticky top-0 z-10">
+      <!-- Search Bar -->
+      <div class="flex items-center w-full max-w-3xl">
+        <input
+          type="text"
+          placeholder="Search"
+          class="flex-grow px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+      <!-- Heart Button -->
+      <button
+        @click=""
+        class="ml-4 flex justify-center items-center w-8 h-8 bg-gray-400 text-white box-full shadow-md hover:bg-blue-600 transition duration-300"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex flex-row h-full overflow-hidden">
+      <div class="w-4/5 overflow-y-auto h-full">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[250vh] mt-30 overflow-y-auto pr-2">
+      <div
+        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[85%] ml-15 mb-5 mt-10 overflow-y-auto pr-2]"
+      >
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
-          <fwb-spinner size="12" />
+          <fwb-spinner />
         </div>
         <div
           v-for="(item, index) in media"
@@ -230,13 +259,61 @@ onMounted(async () => {
         >
           <!-- Render Image -->
           <img
-          :src="imageUrl() + item.url"
+            :src="imageUrl() + item.url"
             :alt="'Media ' + index"
             class="h-full max-w-full rounded-lg w-full"
-            :class="[item.orientation === 'P' ? 'object-full' : 'object-cover']"
+            :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
           />
+          <!-- Floating Buttons -->
+          <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
+            <!-- Text Button -->
+            <div class="relative group">
+              <!-- Share Button -->
+              <button
+                @click=""
+                class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="20" height="20" rx="4" fill="white" />
+                  <path
+                    d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
+                    fill="#474747"
+                  />
+                </svg>
+              </button>
+
+              <!-- Tooltip -->
+              <div
+                @click=""
+                class="absolute mb-2 top-0 -right-18.5 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+
+                >
+                  <rect width="20" height="20" rx="4" fill="blue" />
+                  <path
+                    d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
+                    fill="#FFFFFF"
+                  />
+                </svg>
+                <button>Copy prompt</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
     </div>
     <!-- Sidebar Component -->
     <CommunitySidebar class="w-30 md:w-30" />
@@ -247,37 +324,24 @@ onMounted(async () => {
 
 <style scoped>
 .grid {
+  scrollbar-width: thin; /* Firefox */
 
-scrollbar-width: thin; /* Firefox */
-
-scrollbar-color: #ccc #f0f0f0; /* Firefox */
-
+  scrollbar-color: #ccc #f0f0f0; /* Firefox */
 }
-
-
 
 .grid::-webkit-scrollbar {
-
-width: 8px; /* Width for vertical scrollbar */
-
+  width: 8px; /* Width for vertical scrollbar */
 }
-
-
 
 .grid::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* Scrollbar color */
 
-background-color: #ccc; /* Scrollbar color */
-
-border-radius: 4px; /* Rounded scrollbar */
-
+  border-radius: 4px; /* Rounded scrollbar */
 }
-
-
 
 .grid::-webkit-scrollbar-track {
-
-background: #f0f0f0; /* Scrollbar track */
-
+  background: #f0f0f0; /* Scrollbar track */
 }
+
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 </style>

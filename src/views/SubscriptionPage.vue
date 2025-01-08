@@ -4,6 +4,12 @@ import SubscriptionCard from '@/components/SubscriptionCard.vue'
 import Navbar from '@/components/NavBar.vue'
 import SubscriptionBillingCard from '@/components/SubscriptionBillingCard.vue'
 import genAiService from '@/services/gen-ai'
+import { useRoute } from 'vue-router'
+import { useToastStore } from '@/stores/toast'
+import { useCredits } from '@/utils/utils'
+const route = useRoute()
+const toastStore = useToastStore()
+const { fetchCredits } = useCredits()
 
 const plans = ref([]) // Create a ref for the plans list
 const isButtonDisabled = ref(false) // Track button state (whether it is disabled)
@@ -59,10 +65,27 @@ const fetchPlans = async () => {
 const toggleBillingSection = () => {
   showBillingSection.value = !showBillingSection.value // Toggles the billing section visibility
 }
+  onMounted(
+    async () => {
+    fetchPlans(); // Call the function to fetch plans
+    if (route.query) {
+    try {
+      const payment = route.query.payment
 
-onMounted(() => {
-  fetchPlans() // Call the function to fetch plans
-})
+      const customerId = route.query.customer
+
+      if (payment === "success" && customerId) {
+        const response = await genAiService.getPaymentSync()
+        if(response.status){
+          await fetchCredits()
+        }
+        toastStore.success(response.data)
+      }
+    } catch (error) {}
+  }
+}
+  )
+
 </script>
 
 <template>

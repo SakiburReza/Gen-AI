@@ -18,11 +18,7 @@ import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted } from 'vue'
 
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
-
-import { base64ToBlobUrl } from '@/utils/utils'
-
 import { useRoute } from 'vue-router'
-
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
@@ -79,8 +75,27 @@ const faceImage = ref<File | null>(null)
 
 const description = ref('')
 
-const media = ref<{ url: string; type: 'image' | 'video'; orientation: 'P' | 'L' }[]>([]) // Array to store media
+const media = ref<
+  {
+    url: string
+    type: 'image' | 'video'
+    orientation: 'P' | 'L'
+    isLiked: 'Y' | 'N'
+    isShared: 'Y' | 'N'
+    prompt: string
+  }[]
+>([])
 
+const aiGeneratedMedia = ref<
+  {
+    url: string
+    type: 'image' | 'video'
+    orientation: 'P' | 'L'
+    isLiked: 'Y' | 'N'
+    isShared: 'Y' | 'N'
+    prompt: string
+  }[]
+>([])
 const loading = ref(false) // Track loading state
 
 const activeMode = ref('image')
@@ -157,23 +172,22 @@ const fetchMedia = async (label: string) => {
     if (response.status && Array.isArray(response.data)) {
       // Map data with type detection (image/video) for initial load
 
-      media.value = response.data
+      media.value = response.data.map((item) => ({
+        url: item.content,
 
-        .map((item) => ({
-          url: item.content,
-
-          type:
-            item.type ||
-            (label === 'text-to-video' ||
-            label === 'image-to-video' ||
-            label === 'template-video' ||
-            (label === 'face-swap' && item.orientation == null)
-              ? 'video'
-              : 'image'),
-          orientation: item.orientation,
-        }))
-
-        .slice(0, 12) // Ensure maximum of 12 items
+        type:
+          item.type ||
+          (label === 'text-to-video' ||
+          label === 'image-to-video' ||
+          label === 'template-video' ||
+          (label === 'face-swap' && item.orientation == null)
+            ? 'video'
+            : 'image'),
+        orientation: item.orientation,
+        prompt: item.prompt,
+        isLiked: item.like,
+        isShared:item.share
+      }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
     }
@@ -255,43 +269,15 @@ const generateAiContent = async () => {
 
       await fetchCredits()
 
-      const contents = response.data.data.content
-
-      // Check if 'contents' is an array and iterate over each content
-
-      if (Array.isArray(contents)) {
-        contents.forEach((base64Content) => {
-          // Determine the media type based on base64 content
-
-          const mediaType = base64Content.startsWith('data:video/mp4;') ? 'video' : 'image'
-
-          const newMedia = {
-            url: base64ToBlobUrl(base64Content, mediaType), // Convert base64 to Blob URL
-
-            type: mediaType,
-          }
-
-          // Prepend the new media and maintain the list size at 12
-
-          media.value = [newMedia, ...media.value].slice(0, 12)
-        })
-      } else {
-        // Handle the case where the content is a single item (fallback for non-array responses)
-
-        const mediaType = contents.startsWith('data:video/mp4;') ? 'video' : 'image'
-
-        const newMedia = {
-          url: base64ToBlobUrl(contents, mediaType),
-
-          type: mediaType,
-        }
-
-        media.value = [newMedia, ...media.value].slice(0, 12)
-      }
-
-      // Update credits after successful content generation
-
-      await fetchCredits()
+      aiGeneratedMedia.value = response.data.data.map((item) => ({
+        url: item.content,
+        orientation: item.orientation,
+        prompt: item.prompt,
+        isLiked: 'N',
+        isShared: 'N'
+      }))
+      console.log("ai:", aiGeneratedMedia.value)
+      media.value.unshift(...aiGeneratedMedia.value)
     } else {
       console.error('Failed to generate media:', response)
     }
@@ -301,6 +287,53 @@ const generateAiContent = async () => {
     loading.value = false
   }
 }
+const shareAction = async (imageId:string,action:string) => {
+  try {
+    const response = await genAiService.shareImage({imageIds:imageId, isShare:action})
+    if (response.status === 200) {
+      console.log('Image shared successfully:', response.data);
+    }
+  } catch (error) {
+    console.error('Error sharing the image:', error);
+  }
+};
+const likeAction = async (imageId:string,action:string) => {
+  try {
+    const response = await genAiService.likeImage({imageIds:imageId, isLike:action})
+    if (response.status === 200) {
+      console.log('Image Liked successfully:', response.data);
+    }
+  } catch (error) {
+    console.error('Error sharing the image:', error);
+  }
+};
+
+const copyAction = async (prompt: string) => {
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    try {
+      await navigator.clipboard.writeText(prompt);
+      console.log('Prompt copied to clipboard:', prompt);
+    } catch (error) {
+      console.error('Failed to copy prompt using Clipboard API:', error);
+    }
+  } else {
+    console.warn('Clipboard API not supported, using fallback method');
+    // Fallback method for unsupported environments
+    const textArea = document.createElement('textarea');
+    textArea.value = prompt;
+    textArea.style.position = 'fixed'; // Avoid scrolling to the bottom
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      console.log('Prompt copied to clipboard using fallback');
+    } catch (err) {
+      console.error('Fallback: Unable to copy prompt:', err);
+    }
+    document.body.removeChild(textArea);
+  }
+};
 
 //Dropdown property
 
@@ -308,7 +341,7 @@ const generateAiContent = async () => {
 
 const isImageDropdownOpen = ref(false)
 
-const selectedLabel = ref(null)
+const selectedLabel = ref('Text to Image')
 
 const selectedImageDropDown = ref(null)
 
@@ -337,23 +370,21 @@ function selectVideoOption(option) {
 onMounted(async () => {
   console.log(route.query.checkoutId)
 
-  if (route.query) {
-    try {
-      const checkoutId = route.query.checkoutId
+  // if (route.query) {
+  //   try {
+  //     const checkoutId = route.query.checkoutId
 
-      const transactionId = route.query.transactionId
+  //     const transactionId = route.query.transactionId
 
-      console.log('checkoutId :', checkoutId, 'transactionId:', transactionId)
+  //     console.log('checkoutId :', checkoutId, 'transactionId:', transactionId)
 
-      if (checkoutId && transactionId) {
-        const response = await genAiService.getPaymentSync(checkoutId, transactionId)
+  //     if (checkoutId && transactionId) {
+  //       const response = await genAiService.getPaymentSync(checkoutId, transactionId)
 
-        toastStore.success(response.data)
-      }
-
-      //window.location.reload();
-    } catch (error) {}
-  }
+  //       toastStore.success(response.data)
+  //     }
+  //   } catch (error) {}
+  // }
 
   selectImageOption(imageModeOptions[0])
 
@@ -397,17 +428,16 @@ const imageModeOptions = [
   {
     id: '11',
 
-    imageSrc: '/public/images/icon/image-to-image.svg',
-
-    text: 'Image to Image',
-  },
-
-  {
-    id: '12',
-
     imageSrc: '/public/images/icon/text-to-image.svg',
 
     text: 'Text to Image',
+  },
+  {
+    id: '12',
+
+    imageSrc: '/public/images/icon/image-to-image.svg',
+
+    text: 'Image to Image',
   },
 ]
 </script>
@@ -419,7 +449,7 @@ const imageModeOptions = [
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
       <div
-        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 h-[100vh] mt-30 overflow-y-auto pr-2"
+        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
       >
         <!-- Display spinner while loading images -->
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
@@ -434,15 +464,13 @@ const imageModeOptions = [
             'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
           ]"
           @click="
-            activeFunctionality === 'Face Swap' &&
-            media[index - 1] &&
-            openImageModal(media[index - 1])
+            activeFunctionality === 'Face Swap' && media[index] && openImageModal(media[index])
           "
         >
           <!-- Render Image -->
 
           <img
-            v-if="media[index - 1] && media[index - 1].type === 'image'"
+            v-if="media[index] && media[index].type === 'image'"
             :src="imageUrl() + item.url"
             :alt="'Media ' + index"
             class="h-full max-w-full rounded-lg w-full"
@@ -450,86 +478,133 @@ const imageModeOptions = [
             @click="
               (activeFunctionality === 'Image to Image' ||
                 activeFunctionality === 'Text to Image') &&
-              media[index - 1] &&
-              openPreviewModal(media[index - 1])
+              media[index] &&
+              openPreviewModal(media[index])
             "
           />
 
           <!-- Render Video -->
 
           <video
-            v-else-if="media[index - 1] && media[index - 1].type === 'video'"
-            :src="imageUrl() + media[index - 1].url"
+            v-else-if="media[index] && media[index].type === 'video'"
+            :src="imageUrl() + media[index].url"
             controls
             class="w-full h-full object-contain max-w-full"
             @click="
               (activeFunctionality === 'Text to Video' ||
                 activeFunctionality === 'Image to Video' ||
                 activeFunctionality === 'Templates') &&
-              media[index - 1] &&
-              openPreviewModal(media[index - 1])
+              media[index] &&
+              openPreviewModal(media[index])
             "
           ></video>
 
           <!------------------------------------------------------ Roney ----------------------------------------->
-          <!-- Floating Buttons -->
-          <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
-
-            <!-- Share Button -->
-            <button
-              @click=""
-              class="flex justify-center items-center w-8 h-8 bg-black text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+          <!-- Floating Social Buttons -->
+          <div
+            v-if="media[index] && media[index].type === 'image'"
+            class="absolute bottom-2 right-2 flex flex-col gap-2 items-center"
+          >
+            <!-- Share Button with Group Class -->
+            <div class="relative group">
+              <!-- Share Button -->
+              <button
+                class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
               >
-                <rect width="20" height="20" rx="4" fill="white" />
-                <path
-                  d="M13.3438 11.7812C12.6336 11.7812 12.0078 12.123 11.6147 12.6427L8.21643 10.9404C8.27285 10.7523 8.3125 10.5573 8.3125 10.3516C8.3125 10.0725 8.25402 9.80723 8.15299 9.56322L11.7095 7.46959C12.1053 7.924 12.687 8.21875 13.3438 8.21875C14.5328 8.21875 15.5 7.27255 15.5 6.10938C15.5 4.9462 14.5328 4 13.3438 4C12.1547 4 11.1875 4.9462 11.1875 6.10938C11.1875 6.37743 11.2439 6.6317 11.3375 6.86777L7.77044 8.96753C7.37499 8.52663 6.80162 8.24219 6.15625 8.24219C4.96722 8.24219 4 9.18838 4 10.3516C4 11.5147 4.96722 12.4609 6.15625 12.4609C6.87811 12.4609 7.51447 12.1092 7.90605 11.5749L11.2932 13.2716C11.2308 13.4686 11.1875 13.6738 11.1875 13.8906C11.1875 15.0538 12.1547 16 13.3438 16C14.5328 16 15.5 15.0538 15.5 13.8906C15.5 12.7274 14.5328 11.7812 13.3438 11.7812Z"
-                  fill="#474747"
-                />
-              </svg>
-            </button>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="20" height="20" rx="4" fill="white" />
+                  <path
+                    d="M13.3438 11.7812C12.6336 11.7812 12.0078 12.123 11.6147 12.6427L8.21643 10.9404C8.27285 10.7523 8.3125 10.5573 8.3125 10.3516C8.3125 10.0725 8.25402 9.80723 8.15299 9.56322L11.7095 7.46959C12.1053 7.924 12.687 8.21875 13.3438 8.21875C14.5328 8.21875 15.5 7.27255 15.5 6.10938C15.5 4.9462 14.5328 4 13.3438 4C12.1547 4 11.1875 4.9462 11.1875 6.10938C11.1875 6.37743 11.2439 6.6317 11.3375 6.86777L7.77044 8.96753C7.37499 8.52663 6.80162 8.24219 6.15625 8.24219C4.96722 8.24219 4 9.18838 4 10.3516C4 11.5147 4.96722 12.4609 6.15625 12.4609C6.87811 12.4609 7.51447 12.1092 7.90605 11.5749L11.2932 13.2716C11.2308 13.4686 11.1875 13.6738 11.1875 13.8906C11.1875 15.0538 12.1547 16 13.3438 16C14.5328 16 15.5 15.0538 15.5 13.8906C15.5 12.7274 14.5328 11.7812 13.3438 11.7812Z"
+                    fill="#474747"
+                  />
+                </svg>
+              </button>
 
-            <!-- Tooltip -->
-            <div
-              class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-medium flex items-center gap-2 transition-all duration-300"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <!-- Tooltip -->
+              <div
+                @click=""
+                class="absolute mb-2 top-0 -right-20 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
               >
-                <path
-                  d="M18 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V4C20 2.89543 19.1046 2 18 2ZM8 10C7.44772 10 7 9.55228 7 9C7 8.44772 7.44772 8 8 8C8.55228 8 9 8.44772 9 9C9 9.55228 8.55228 10 8 10ZM16 16H8V14H16V16ZM16 12H8V10H16V12ZM16 8H8V6H16V8Z"
-                  fill="#4A90E2"
-                />
-              </svg>
-              Add to Explore
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="20" height="20" rx="4" fill="blue" />
+                  <path
+                    d="M13.3438 11.7812C12.6336 11.7812 12.0078 12.123 11.6147 12.6427L8.21643 10.9404C8.27285 10.7523 8.3125 10.5573 8.3125 10.3516C8.3125 10.0725 8.25402 9.80723 8.15299 9.56322L11.7095 7.46959C12.1053 7.924 12.687 8.21875 13.3438 8.21875C14.5328 8.21875 15.5 7.27255 15.5 6.10938C15.5 4.9462 14.5328 4 13.3438 4C12.1547 4 11.1875 4.9462 11.1875 6.10938C11.1875 6.37743 11.2439 6.6317 11.3375 6.86777L7.77044 8.96753C7.37499 8.52663 6.80162 8.24219 6.15625 8.24219C4.96722 8.24219 4 9.18838 4 10.3516C4 11.5147 4.96722 12.4609 6.15625 12.4609C6.87811 12.4609 7.51447 12.1092 7.90605 11.5749L11.2932 13.2716C11.2308 13.4686 11.1875 13.6738 11.1875 13.8906C11.1875 15.0538 12.1547 16 13.3438 16C14.5328 16 15.5 15.0538 15.5 13.8906C15.5 12.7274 14.5328 11.7812 13.3438 11.7812Z"
+                    fill="#FFFFFF"
+                  />
+                </svg>
+                <button v-if="media[index].isShared==='N'" @click="shareAction(media[index].url,'Y')">Add to Explore</button>
+                <button v-else @click="shareAction(media[index].url,'N')">Unexplore</button>
+              </div>
             </div>
 
             <!-- Text Button -->
-            <button
-              @click=""
-              class="flex justify-center items-center w-8 h-8 bg-black text-gray-700 border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
-            >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="20" height="20" rx="4" fill="white"/>
-                <path d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z" fill="#474747"/>
-              </svg>
-            </button>
+            <div class="relative group">
+              <!-- Copy -->
+              <button
+                @click=""
+                class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="20" height="20" rx="4" fill="white" />
+                  <path
+                    d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
+                    fill="#474747"
+                  />
+                </svg>
+              </button>
+
+              <!-- Tooltip -->
+              <div
+                @click=""
+                class="absolute mb-2 top-0 -right-18.5 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="20" height="20" rx="4" fill="blue" />
+                  <path
+                    d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
+                    fill="#FFFFFF"
+                  />
+                </svg>
+                <button @click="copyAction(media[index].prompt)">Copy prompt</button>
+              </div>
+            </div>
+
             <!-- Like Button -->
             <button
-              @click=""
-              class="flex justify-center items-center w-8 h-8 bg-blue-600 text-white border border-blue-600 rounded-full shadow-md hover:shadow-lg hover:bg-blue-500 transition duration-300"
+              class="flex justify-center items-center w-8 h-8 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
+               @click="likeAction(media[index].url,media[index].isLiked === 'N' ? 'Y' : 'N')"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                :fill="media[index].isLiked === 'N' ? 'none' : 'currentColor'"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"

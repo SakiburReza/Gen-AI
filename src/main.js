@@ -81,7 +81,6 @@ axios.interceptors.response.use(
   (error) => {
     console.log(error)
     if (error.code == 'ERR_NETWORK') {
-      router.push({ name: 'userLogin' })
       setTimeout(() => {
         toast.error('Connection refused. Please check your network and try again.', {
           autoClose: 2500,
