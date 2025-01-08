@@ -273,9 +273,7 @@ const generateAiContent = async () => {
         url: item.content,
         type: item.type,
         orientation: item.orientation,
-        prompt: item.prompt,
-        isLiked: 'N',
-        isShared: 'N',
+        prompt: item.prompt
       }))
       media.value.unshift(...aiGeneratedMedia.value)
     } else {
