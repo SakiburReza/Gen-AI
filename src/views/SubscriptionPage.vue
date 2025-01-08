@@ -116,8 +116,8 @@ onMounted(
     </div>
 
     <!-- Subscription Plans Section -->
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-4 gap-4 md:gap-10 sm:px-5 sm:my-3 xl:mx-40 lg:px-4 py-4 sm:py-2 lg:py-8 justify-items-center transition-all duration-500 ease-in-out">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-4 gap-4 md:gap-10 sm:px-5 sm:my-3 xl:mx-40 lg:px-4 py-4 sm:py-2 lg:py-8 justify-items-center
+       transition-all duration-500 ease-in-out">
       <SubscriptionCard v-for="(feature, index) in plans" :key="index" :data="feature" :isStyle="index % 2 == 0"
         :isButtonDisabled="isButtonDisabled" @button-clicked="isButtonDisabled = true" />
     </div>

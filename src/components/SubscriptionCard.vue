@@ -133,16 +133,24 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col lg:flex-row gap-5 space-y-4 sm:space-y-6">
+  <div class="flex flex-col flex-wrap lg:flex-row gap-5 space-y-4 sm:space-y-6">
     <!-- First Card Component -->
 
     <div :class="{
       // 'w-full max-w-md md:max-w-lg border rounded-3xl p-6 relative mx-auto': true,
-      'w-full max-w-sm border rounded-3xl p-5 relative justify-start': true,
+
+      // 'w-full max-w-sm border rounded-3xl p-5 relative justify-start': true,
+      // 'border-blue-600': isStyle,
+      // 'bg-blue-600': !isStyle, 
+      // 'scale-110': buttonText === 'Current Package', 
+      // 'bg-tertiary':data.title !=='Next Up Creator',
+
+      'w-full max-w-sm border rounded-3xl p-5 relative transition-transform duration-300': true,
       'border-blue-600': isStyle,
-      'bg-blue-600': !isStyle, 
-      'scale-110': buttonText === 'Current Package', 
-      'bg-tertiary':data.title !=='Next Up Creator',
+      'bg-blue-600': !isStyle,
+      'scale-110 -translate-y-4': buttonText === 'Current Package', // Move up
+      'translate-y-2': buttonText !== 'Current Package', // Keep in line
+      'bg-tertiary': data.title !== 'Next Up Creator',
     }"
     >
       <!-- Title -->
