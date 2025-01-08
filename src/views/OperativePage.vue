@@ -18,11 +18,7 @@ import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted } from 'vue'
 
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
-
-import { base64ToBlobUrl } from '@/utils/utils'
-
 import { useRoute } from 'vue-router'
-
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
@@ -280,6 +276,7 @@ const generateAiContent = async () => {
         isLiked: 'N',
         isShared: 'N'
       }))
+      console.log("ai:", aiGeneratedMedia.value)
       media.value.unshift(...aiGeneratedMedia.value)
     } else {
       console.error('Failed to generate media:', response)
@@ -373,21 +370,21 @@ function selectVideoOption(option) {
 onMounted(async () => {
   console.log(route.query.checkoutId)
 
-  if (route.query) {
-    try {
-      const checkoutId = route.query.checkoutId
+  // if (route.query) {
+  //   try {
+  //     const checkoutId = route.query.checkoutId
 
-      const transactionId = route.query.transactionId
+  //     const transactionId = route.query.transactionId
 
-      console.log('checkoutId :', checkoutId, 'transactionId:', transactionId)
+  //     console.log('checkoutId :', checkoutId, 'transactionId:', transactionId)
 
-      if (checkoutId && transactionId) {
-        const response = await genAiService.getPaymentSync(checkoutId, transactionId)
+  //     if (checkoutId && transactionId) {
+  //       const response = await genAiService.getPaymentSync(checkoutId, transactionId)
 
-        toastStore.success(response.data)
-      }
-    } catch (error) {}
-  }
+  //       toastStore.success(response.data)
+  //     }
+  //   } catch (error) {}
+  // }
 
   selectImageOption(imageModeOptions[0])
 
@@ -503,7 +500,7 @@ const imageModeOptions = [
           ></video>
 
           <!------------------------------------------------------ Roney ----------------------------------------->
-          <!-- Floating Buttons -->
+          <!-- Floating Social Buttons -->
           <div
             v-if="media[index] && media[index].type === 'image'"
             class="absolute bottom-2 right-2 flex flex-col gap-2 items-center"
