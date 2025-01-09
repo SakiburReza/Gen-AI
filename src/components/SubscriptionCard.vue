@@ -3,6 +3,8 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { defineProps, defineEmits } from 'vue'
 import genAiService from '@/services/gen-ai'
 import { useRouter } from 'vue-router'
+import { useToastStore } from '@/stores/toast'
+const toastStore = useToastStore()
 
 const router = useRouter() // Vue Router instance
 // Define the emits to handle custom events
@@ -52,7 +54,11 @@ const ZeuxItNow = async () => {
   emit('button-clicked')
 
   try {
-    const response = await genAiService.subscribePackages(props.data.title, false, 'Monthly')
+    const response = await genAiService.subscribePackages(props.data.title, true, 'Month')
+    if (response.status) {
+      toastStore.success(response.data.message)
+    }
+    toastStore.success(response.data.message)
     const redirectUrl = response.data
 
     if (redirectUrl) {
@@ -136,36 +142,51 @@ watch(
   <div class="flex flex-col flex-wrap lg:flex-row gap-5 space-y-4 sm:space-y-6">
     <!-- First Card Component -->
 
-    <div :class="{
-      // 'w-full max-w-md md:max-w-lg border rounded-3xl p-6 relative mx-auto': true,
+    <div
+      :class="{
+        // 'w-full max-w-md md:max-w-lg border rounded-3xl p-6 relative mx-auto': true,
 
-      // 'w-full max-w-sm border rounded-3xl p-5 relative justify-start': true,
-      // 'border-blue-600': isStyle,
-      // 'bg-blue-600': !isStyle, 
-      // 'scale-110': buttonText === 'Current Package', 
-      // 'bg-tertiary':data.title !=='Next Up Creator',
+        // 'w-full max-w-sm border rounded-3xl p-5 relative justify-start': true,
+        // 'border-blue-600': isStyle,
+        // 'bg-blue-600': !isStyle,
+        // 'scale-110': buttonText === 'Current Package',
+        // 'bg-tertiary':data.title !=='Next Up Creator',
 
-      'w-full max-w-sm border rounded-3xl p-5 relative transition-transform duration-300': true,
-      'border-blue-600': isStyle,
-      'bg-blue-600': !isStyle,
-      'scale-110 -translate-y-4': buttonText === 'Current Package', // Move up
-      'translate-y-2': buttonText !== 'Current Package', // Keep in line
-      'bg-tertiary': data.title !== 'Next Up Creator',
-    }"
+        'w-full max-w-sm border rounded-3xl p-5 relative transition-transform duration-300': true,
+        'border-blue-600': isStyle,
+        'bg-blue-600': !isStyle,
+        'scale-110 -translate-y-4': buttonText === 'Current Package', // Move up
+        'translate-y-2': buttonText !== 'Current Package', // Keep in line
+        'bg-tertiary': data.title !== 'Next Up Creator',
+      }"
     >
       <!-- Title -->
-      <h2 class="text-3xl font-semibold mb-4 md:text-left"
-        :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">
+      <h2
+        class="text-3xl font-semibold mb-4 md:text-left"
+        :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'"
+      >
         {{ data.title }}
       </h2>
 
       <!-- Feature List with Radio Button -->
       <div class="space-y-2 mb-15">
-        <label v-for="(feature, index) in data.featureList" :key="index"
-          class="flex items-center space-x-3 sm:text-2xl md:text-2xl lg:text-xl">
-          <img v-if="feature.isActive && !isStyle" class="h-5 w-5" src="/images/icon/radio_button_checked.svg" alt="" />
-          <img v-else-if="feature.isActive && isStyle" class="h-5 w-5" src="/images/icon/radio_button_checked_blue.svg"
-            alt="" />
+        <label
+          v-for="(feature, index) in data.featureList"
+          :key="index"
+          class="flex items-center space-x-3 sm:text-2xl md:text-2xl lg:text-xl"
+        >
+          <img
+            v-if="feature.isActive && !isStyle"
+            class="h-5 w-5"
+            src="/images/icon/radio_button_checked.svg"
+            alt=""
+          />
+          <img
+            v-else-if="feature.isActive && isStyle"
+            class="h-5 w-5"
+            src="/images/icon/radio_button_checked_blue.svg"
+            alt=""
+          />
           <img v-else class="h-5 w-5" src="/images/icon/radio_button_checked_red.svg" alt="" />
           <span :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">
             {{ feature.name }}
@@ -177,12 +198,18 @@ watch(
       <div class="relative mb-5 inline-block">
         <span
           class="absolute -top-7 left-1/4 -translate-x-1/4 bg-blue-600 text-white text-sm px-5 py-1 rounded-2xl -rotate-6 text-nowrap"
-          :class="data.title === 'Next Up Creator' ? 'text-black bg-parrot' : 'text-black'">
+          :class="data.title === 'Next Up Creator' ? 'text-black bg-parrot' : 'text-black'"
+        >
           {{ data.comments }}
         </span>
 
-        <span class="text-3xl font-bold" :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'">{{
-          data.price }}</span>
+        <span
+          class="text-3xl font-semibold"
+          :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'"
+        >
+          {{ data.price }}
+          <span class="text-sm font-normal">/Month</span>
+        </span>
       </div>
 
       <!-- Separator -->
@@ -191,13 +218,17 @@ watch(
       </div>
 
       <!-- CTA Button -->
-      <button @click="ZeuxItNow" :disabled="isButtonDisabled" :class="{
-        'w-full text-sm py-3 rounded-lg': true,
-        'bg-black text-white hover:bg-gray-800':
-          buttonText !== 'Current Package' && !isButtonDisabled,
-        'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled,
-        'bg-black text-white': buttonText === 'Current Package' && !isButtonDisabled,
-      }">
+      <button
+        @click="ZeuxItNow"
+        :disabled="isButtonDisabled"
+        :class="{
+          'w-full text-sm py-3 rounded-lg': true,
+          'bg-black text-white hover:bg-gray-800':
+            buttonText !== 'Current Package' && !isButtonDisabled,
+          'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled,
+          'bg-black text-white': buttonText === 'Current Package' && !isButtonDisabled,
+        }"
+      >
         {{ buttonText }}
       </button>
     </div>
