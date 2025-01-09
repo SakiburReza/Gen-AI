@@ -18,7 +18,7 @@ import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted, computed } from 'vue'
 
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
@@ -354,6 +354,12 @@ const filteredMedia = computed(() =>
   media.value.filter((item) => item.prompt.toLowerCase().includes(searchQuery.value.toLowerCase())),
 )
 
+const router = useRouter()
+
+const goToExplore = () => {
+  router.push("/communitypage");
+};
+
 //Dropdown property
 
 // const activeModeDropDown = ref('image')
@@ -464,23 +470,51 @@ const imageModeOptions = [
 <template>
   <div class="flex flex-col h-screen">
     <Navbar />
+    <div class="flex items-center w-full max-w-4xl space-x-4">
+      <!-- Explore Button -->
+      <button
+        type="button"
+        @click="goToExplore"
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 ml-15"
+      >
+        < Explore
+      </button>
 
-    <div class="flex items-center w-full max-w-sm border border-gray-300 rounded-md ml-15">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search"
-        class="w-full px-4 py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-gray-200"
-      />
+      <!-- Search Input -->
+      <div class="flex-1">
+        <div class="relative">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"
+            />
+          </svg>
+        </div>
+      </div>
+
       <!-- Heart Button -->
       <button
-        @click=""
-        class="ml-4 flex justify-center items-center w-12 h-12 bg-gray-300 text-white border border-gray-300 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
+        @click="toggleFavorite"
+        class="w-12 h-12 flex justify-center items-center bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 transition duration-300"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
+          class="h-6 w-6 text-gray-600"
+          fill="currentColor"
           viewBox="0 0 24 24"
           stroke="currentColor"
         >
@@ -579,26 +613,13 @@ const imageModeOptions = [
                 @click=""
                 class="absolute mb-2 top-0 -right-20 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect width="20" height="20" rx="4" fill="blue" />
-                  <path
-                    d="M13.3438 11.7812C12.6336 11.7812 12.0078 12.123 11.6147 12.6427L8.21643 10.9404C8.27285 10.7523 8.3125 10.5573 8.3125 10.3516C8.3125 10.0725 8.25402 9.80723 8.15299 9.56322L11.7095 7.46959C12.1053 7.924 12.687 8.21875 13.3438 8.21875C14.5328 8.21875 15.5 7.27255 15.5 6.10938C15.5 4.9462 14.5328 4 13.3438 4C12.1547 4 11.1875 4.9462 11.1875 6.10938C11.1875 6.37743 11.2439 6.6317 11.3375 6.86777L7.77044 8.96753C7.37499 8.52663 6.80162 8.24219 6.15625 8.24219C4.96722 8.24219 4 9.18838 4 10.3516C4 11.5147 4.96722 12.4609 6.15625 12.4609C6.87811 12.4609 7.51447 12.1092 7.90605 11.5749L11.2932 13.2716C11.2308 13.4686 11.1875 13.6738 11.1875 13.8906C11.1875 15.0538 12.1547 16 13.3438 16C14.5328 16 15.5 15.0538 15.5 13.8906C15.5 12.7274 14.5328 11.7812 13.3438 11.7812Z"
-                    fill="#FFFFFF"
-                  />
-                </svg>
+
                 <button
                   v-if="media[index].isShared === 'N' || media[index].isShared === null"
                   @click="shareAction(media[index].url, 'Y')"
                 >
-                  Add to Explore
                 </button>
-                <button v-else @click="shareAction(media[index].url, 'N')">Unexplore</button>
+                <button v-else @click="shareAction(media[index].url, 'N')"></button>
               </div>
             </div>
 
@@ -629,20 +650,7 @@ const imageModeOptions = [
                 @click=""
                 class="absolute mb-2 top-0 -right-18.5 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect width="20" height="20" rx="4" fill="blue" />
-                  <path
-                    d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
-                    fill="#FFFFFF"
-                  />
-                </svg>
-                <button @click="copyAction(media[index].prompt)">Copy prompt</button>
+                <button @click="copyAction(media[index].prompt)"></button>
               </div>
             </div>
 
