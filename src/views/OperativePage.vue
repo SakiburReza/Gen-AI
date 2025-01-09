@@ -25,6 +25,8 @@ import PreviewImageModal from '@/components/PreviewImageModal.vue'
 
 const { fetchCredits } = useCredits()
 
+const searchQuery = ref('')
+
 const route = useRoute()
 
 // const router = useRouter();
@@ -274,8 +276,6 @@ const generateAiContent = async () => {
         type: item.type,
         orientation: item.orientation,
         prompt: item.prompt,
-        isLiked: 'N',
-        isShared: 'N',
       }))
       media.value.unshift(...aiGeneratedMedia.value)
     } else {
@@ -287,11 +287,10 @@ const generateAiContent = async () => {
     loading.value = false
   }
 }
-const shareAction = async (imageId: string, action: "Y"|"N") => {
+const shareAction = async (imageId: string, action: 'Y' | 'N') => {
   try {
     const response = await genAiService.shareImage({ imageId: imageId, isShare: action })
     if (response.status === 200) {
-
       const itemIndex = media.value.findIndex((item) => item.url === imageId)
       if (itemIndex !== -1) {
         media.value[itemIndex].isShared = action
@@ -305,11 +304,10 @@ const shareAction = async (imageId: string, action: "Y"|"N") => {
     console.error('Error sharing the image:', error)
   }
 }
-const likeAction = async (imageId: string, action:  "Y" | "N") => {
+const likeAction = async (imageId: string, action: 'Y' | 'N') => {
   try {
     const response = await genAiService.likeImage({ imageId: imageId, isLike: action })
     if (response.status === 200) {
-      
       const itemIndex = media.value.findIndex((item) => item.url === imageId)
       if (itemIndex !== -1) {
         media.value[itemIndex].isLiked = action
@@ -327,7 +325,7 @@ const copyAction = async (prompt: string) => {
   if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
     try {
       await navigator.clipboard.writeText(prompt)
-      toastStore.success("Prompt copied to clipboard")
+      toastStore.success('Prompt copied to clipboard')
       console.log('Prompt copied to clipboard:', prompt)
     } catch (error) {
       console.error('Failed to copy prompt using Clipboard API:', error)
@@ -341,7 +339,7 @@ const copyAction = async (prompt: string) => {
     document.body.appendChild(textArea)
     textArea.focus()
     textArea.select()
-    toastStore.success("Prompt copied to clipboard")
+    toastStore.success('Prompt copied to clipboard')
     try {
       document.execCommand('copy')
       console.log('Prompt copied to clipboard using fallback')
@@ -351,6 +349,7 @@ const copyAction = async (prompt: string) => {
     document.body.removeChild(textArea)
   }
 }
+
 
 //Dropdown property
 
@@ -462,6 +461,16 @@ const imageModeOptions = [
 <template>
   <div class="flex flex-col h-screen">
     <Navbar />
+
+    <div class="flex items-center w-full max-w-sm border border-gray-300 rounded-md ml-15">
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="Search"
+        class="w-full px-4 py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+      />
+      <!-- Add the SVG icon inside the search bar -->
+    </div>
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
