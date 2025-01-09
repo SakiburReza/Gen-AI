@@ -45,6 +45,7 @@ const fetchFile = async () => {
       }
       const fileBlob = await response.blob();
       fileUrl.value = URL.createObjectURL(fileBlob);
+      loading.value = false;
       console.log('File URL:', fileUrl.value);
     } catch (err) {
       error.value = `Failed to fetch the file: ${err.message}`;
@@ -59,6 +60,7 @@ const fetchFile = async () => {
 watch([() => props.image?.url, () => props.isOpen], ([imageUrl, isOpen]) => {
   console.log('Watching image.url and isOpen:', imageUrl, isOpen);
   if (isOpen && imageUrl) {
+    loading.value = true;
     fetchFile();
   }
 });
@@ -66,6 +68,8 @@ watch([() => props.image?.url, () => props.isOpen], ([imageUrl, isOpen]) => {
 const close = () => {
   emit('close');
   prompt.value = "";
+  fileUrl.value = null;
+  loading.value = false;
 };
 
 // Handle click outside to close
@@ -77,8 +81,12 @@ const handleOutsideClick = (event) => {
 </script>
 
 <template>
+  <div class="fixed inset-0 flex justify-center items-center" v-if="loading">
+  <div class="w-8 h-8 border-4 border-blue-900 border-t-transparent rounded-full animate-spin"></div>
+</div>
+
   <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" @click="handleOutsideClick"
-    v-if="isOpen">
+    v-if="isOpen && !loading">
     <div class="bg-white rounded-lg shadow-lg w-120 max-w-5xl p-6 relative flex flex-col items-center"
       style="max-height: 90vh; overflow-y: auto;" @click.stop>
       <!-- Close Button -->
