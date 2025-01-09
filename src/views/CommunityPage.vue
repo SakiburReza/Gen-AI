@@ -4,53 +4,47 @@ import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted, computed } from 'vue'
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
-import { base64ToBlobUrl } from '@/utils/utils'
 import { useRoute } from 'vue-router'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
 import CommunitySidebar from '@/components/CommunitySidebar.vue'
+import PreviewImageModal from '@/components/PreviewImageModal.vue'
 
 const { fetchCredits } = useCredits()
 
-const route = useRoute()
+// const route = useRoute()
 
 const searchQuery = ref('')
 
 const toastStore = useToastStore()
 
-const selectedVideo = ref(null)
 
-const showModal = ref(false) // Modal visibility
 // Computed property to filter media based on the search query
 const filteredMedia = computed(() =>
   media.value.filter((item) => item.prompt.toLowerCase().includes(searchQuery.value.toLowerCase())),
 )
 
 // Functions to open/close modal
-const openImageModal = (mediaItem) => {
-  selectedImage.value = mediaItem
-  showModal.value = true
-}
-const showPreviewModal = ref(false) // Controls PreviewImageModal
-
+const showPreviewModal = ref(false) 
 const closePreviewModal = () => {
   showPreviewModal.value = false
   selectedImage.value = null
 }
+const openPreviewModal = (mediaItem) => {
+  console.log("Image clicked", media);
+  console.log("mediaItem", mediaItem);
+  
+  selectedImage.value = mediaItem
+  showPreviewModal.value = true
+}
 const selectedImage = ref(null) // Selected image or video
 
-
-// const closeModal = () => {
-//   showModal.value = false
-//   selectedImage.value = null
-// }
-
 // States to store images from the ImageInputCard components
-const referenceImage = ref<File | null>(null)
-const faceImage = ref<File | null>(null)
+// const referenceImage = ref<File | null>(null)
+// const faceImage = ref<File | null>(null)
 
 // States
-const description = ref('')
+// const description = ref('')
 const media = ref<
   {
     url: string
@@ -195,11 +189,12 @@ onMounted(async () => {
             ]"
           >
             <!-- Render Image -->
-            <img
+            <img v-if="media[index] && media[index].type === 'image'"
               :src="imageUrl() + item.url"
               :alt="'Media ' + index"
               class="h-full max-w-full rounded-lg w-full"
               :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
+              @click="openPreviewModal(item)"
             />
             <!-- Floating Buttons -->
             <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
@@ -254,7 +249,6 @@ onMounted(async () => {
     <!-- Sidebar Component -->
     <CommunitySidebar class="w-30 md:w-30" />
     <!-- Modal Component -->
-    <!-- <ShowModalForImage :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->
     <PreviewImageModal
       :isOpen="showPreviewModal"
       @close="closePreviewModal"
