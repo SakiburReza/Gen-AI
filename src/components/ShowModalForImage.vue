@@ -128,60 +128,59 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
     <div class="bg-tertiary rounded-lg shadow-lg w-full max-w-5xl p-6 relative">
       <!-- Close Button -->
       <button @click="close"
-        class=" top-2 right-1 bg-gray-200 hover:bg-gray-300 text-gray-500 hover:text-gray-800 rounded-full p-1 shadow-md float-end">
+        class="top-2 right-1 bg-gray-200 hover:bg-gray-300 text-gray-500 hover:text-gray-800 rounded-full p-1 shadow-md float-end">
         ✕
       </button>
       <br>
 
       <!-- Two Column Layout -->
-      <div class="grid md:grid-cols-3 gap-6 h-full">
+      <div class="grid md:grid-cols-3 gap-6">
         <!-- Image Section -->
-        <div class="h-full md:h-auto md:col-span-1 w-full">
-          <div v-if="image?.type === 'image'" class="w-full h-full">
-            <img :src="imageUrl() + image.url" alt="Generated Image" class="rounded-lg w-full h-full object-contain" />
+        <div class="md:col-span-1 w-full flex items-center">
+          <div v-if="image?.type === 'image'" class="w-full h-auto">
+            <img :src="imageUrl() + image.url" alt="Generated Image" class="rounded-lg w-full h-auto object-contain" />
           </div>
-          <div v-else-if="image?.type === 'video'" class="w-full h-full">
-            <video :src="imageUrl() + image.url" controls class="w-full h-full object-contain"></video>
+          <div v-else-if="image?.type === 'video'" class="w-full h-auto">
+            <video :src="imageUrl() + image.url" controls class="rounded-lg w-full h-auto object-contain"></video>
           </div>
         </div>
         <!-- Details Section -->
-        <div class="md:col-span-2 bg-white shadow-lg rounded-lg p-15">
-          <!-- Title -->
-          <h3 v-if="image?.type === 'image'" class="text-sm font-semibold text-gray-900 mb-20">Photo Details</h3>
-          <h3 v-else-if="image?.type === 'video'" class="text-sm font-semibold text-gray-900 mb-20">Video Details</h3>
-          <!-- Prompt -->
-          <div class="mb-7">
-            <p class="text-gray-600 font-bold text-xs ">Prompt :</p>
-            <input v-model="prompt" type="text"
-              class="w-full p-2 border border-silverChalice rounded-lg text-sm text-gray-900 "
-              placeholder="Enter your prompt here" />
+        <div class="md:col-span-2 bg-white shadow-lg rounded-lg p-6 flex items-center" style="height: 100%;">
+          <div class="w-full">
+            <!-- Title -->
+            <!-- <h3 v-if="image?.type === 'image'" class="text-sm font-semibold text-gray-900 mb-6">Photo Details</h3> -->
+            <!-- <h3 v-else-if="image?.type === 'video'" class="text-sm font-semibold text-gray-900 mb-6">Video Details</h3> -->
+            <!-- Prompt -->
+            <div class="mb-7">
+              <p class="text-gray-600 font-bold text-xs">Prompt :</p>
+              <input v-model="prompt" type="text"
+                class="w-full p-2 border border-silverChalice rounded-lg text-sm text-gray-900"
+                placeholder="Enter your prompt here" />
+            </div>
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-start">
+              <button @click="turnIntoVideoAction" :disabled="isLoading"
+                class="bg-blue-600 text-white text-xs px-16 py-2 rounded-lg hover:bg-blue-600 md:w-auto">
+                {{ isLoading ? 'Processing...' : 'Turn into Video' }}
+              </button>
+              <button
+                class="bg-silverChalice text-xs text-black px-16 py-2 rounded-lg hover:bg-silverChalice md:w-auto mt-4 md:mt-0">
+                Image Reference
+              </button>
+            </div>
+            <!-- Download Link -->
+            <div class="mt-5 text-center">
+              <a :href="image?.url" :download="image?.url ? getFilename(image.url) : null"
+                class="flex items-start justify-start text-black text-xs px-1 font-semibold py-3">
+                <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-5 h-5 mr-1.5">
+                DOWNLOAD
+              </a>
+            </div>
           </div>
-          <!-- Action Buttons -->
-          <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-start">
-            <button @click="turnIntoVideoAction" :disabled="isLoading"
-              class="bg-blue-600 text-white text-xs px-16 py-2 rounded-lg hover:bg-blue-600  md:w-auto">
-              {{ isLoading ? 'Processing...' : 'Turn into Video' }}
-            </button>
-            <button
-              class="bg-silverChalice text-xs text-black px-16 py-2 rounded-lg hover:bg-silverChalice  md:w-auto mt-4 md:mt-0">
-              Image Reference
-            </button>
-          </div>
-
-
-          <!-- Download Link -->
-          <div class="mt-5 text-center">
-            <a :href="image?.url" :download="image?.url ? getFilename(image.url) : null"
-              class="flex items-start justify-start text-black text-xs px-1 font-semibold py-3">
-              <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-5 h-5 mr-1.5">
-              DOWNLOAD
-            </a>
-          </div>
-
         </div>
-
       </div>
     </div>
+
   </div>
 
 </template>
