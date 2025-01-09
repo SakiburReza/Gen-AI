@@ -17,8 +17,6 @@ import { useToastStore } from '@/stores/toast'
 
 import { ref, watch, onMounted, computed } from 'vue'
 
-import { FwbButton, FwbSpinner, FwbModal } from 'flowbite-vue'
-import { useRoute } from 'vue-router'
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
@@ -639,7 +637,7 @@ const imageModeOptions = [
                 >
                 </button>
                 <button v-else @click="shareAction(media[index].url, 'N')"></button>
-                <button v-else  @click="openModal(media[index].url, 'N')">Unexplore</button>
+                <button v-else  @click="openModal(media[index].url, 'N')"></button>
               </div>
             </div>
 
