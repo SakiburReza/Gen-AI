@@ -4,15 +4,9 @@ import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted, computed } from 'vue'
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
-import { useRoute } from 'vue-router'
-import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
 import CommunitySidebar from '@/components/CommunitySidebar.vue'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
-
-const { fetchCredits } = useCredits()
-
-// const route = useRoute()
 
 const searchQuery = ref('')
 
