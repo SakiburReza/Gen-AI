@@ -25,7 +25,7 @@ const filteredMedia = computed(() =>
 )
 
 // Functions to open/close modal
-const showPreviewModal = ref(false) 
+const showPreviewModal = ref(false)
 const closePreviewModal = () => {
   showPreviewModal.value = false
   selectedImage.value = null
@@ -33,7 +33,7 @@ const closePreviewModal = () => {
 const openPreviewModal = (mediaItem) => {
   console.log("Image clicked", media);
   console.log("mediaItem", mediaItem);
-  
+
   selectedImage.value = mediaItem
   showPreviewModal.value = true
 }
@@ -180,33 +180,24 @@ onMounted(async () => {
             <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
               <!-- Text Button -->
               <div class="relative group">
-                <!-- Share Button -->
+                <!-- Copy -->
                 <button
-                  @click=""
-                  class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-100 transition duration-300"
+                  @click="copyAction(media[index].prompt)"
+                  class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
                 >
                   <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
+                    width="16"
+                    height="15"
+                    viewBox="0 0 16 15"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <rect width="20" height="20" rx="4" fill="white" />
                     <path
-                      d="M15.9716 4.16699H4.86046C4.47852 4.16699 4.16602 4.47582 4.16602 4.85327V6.91209C4.16602 7.28954 4.47852 7.59836 4.86046 7.59836C5.2424 7.59836 5.5549 7.28954 5.5549 6.91209V5.53954H9.72157V14.4611H8.33268C7.95074 14.4611 7.63824 14.7699 7.63824 15.1474C7.63824 15.5248 7.95074 15.8337 8.33268 15.8337H12.4993C12.8813 15.8337 13.1938 15.5248 13.1938 15.1474C13.1938 14.7699 12.8813 14.4611 12.4993 14.4611H11.1105V5.53954H15.2771V6.91209C15.2771 7.28954 15.5896 7.59836 15.9716 7.59836C16.3535 7.59836 16.666 7.28954 16.666 6.91209V4.85327C16.666 4.47582 16.3535 4.16699 15.9716 4.16699Z"
-                      fill="#474747"
+                      d="M15.1111 0H0.888889C0.4 0 0 0.395294 0 0.878431V3.51373C0 3.99686 0.4 4.39216 0.888889 4.39216C1.37778 4.39216 1.77778 3.99686 1.77778 3.51373V1.75686H7.11111V13.1765H5.33333C4.84444 13.1765 4.44444 13.5718 4.44444 14.0549C4.44444 14.538 4.84444 14.9333 5.33333 14.9333H10.6667C11.1556 14.9333 11.5556 14.538 11.5556 14.0549C11.5556 13.5718 11.1556 13.1765 10.6667 13.1765H8.88889V1.75686H14.2222V3.51373C14.2222 3.99686 14.6222 4.39216 15.1111 4.39216C15.6 4.39216 16 3.99686 16 3.51373V0.878431C16 0.395294 15.6 0 15.1111 0Z"
+                      fill="white"
                     />
                   </svg>
                 </button>
-
-                <!-- Tooltip -->
-                <div
-                  @click=""
-                  class="absolute mb-2 top-0 -right-18.5 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
-                >
-                  <button @click="copyAction(media[index].prompt)"></button>
-                </div>
               </div>
             </div>
           </div>

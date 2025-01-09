@@ -516,7 +516,7 @@ const imageModeOptions = [
             v-model="searchQuery"
             type="text"
             placeholder="Search"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-100"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -558,7 +558,6 @@ const imageModeOptions = [
     </div>
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
-      
       <!-- Left Section: Enhanced Image Grid -->
       <div
         class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
@@ -575,24 +574,15 @@ const imageModeOptions = [
             item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
             'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
           ]"
-          @click="
-            activeFunctionality === 'Face Swap' && media[index] && openImageModal(media[index])
-          "
         >
           <!-- Render Image -->
-
           <img
             v-if="media[index] && media[index].type === 'image'"
             :src="imageUrl() + item.url"
             :alt="'Media ' + index"
             class="h-full max-w-full rounded-lg w-full"
-            :class="[item.orientation === 'P' ? 'object-full' : 'object-cover']"
-            @click="
-              (activeFunctionality === 'Image to Image' ||
-                activeFunctionality === 'Text to Image') &&
-              media[index] &&
-              openPreviewModal(media[index])
-            "
+            :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
+            @click="openPreviewModal(item)"
           />
 
           <!-- Render Video -->
@@ -621,8 +611,11 @@ const imageModeOptions = [
             <div class="relative group">
               <!-- Share Button -->
               <button
-                @click="openModal(media[index].url, media[index].isShared === 'N'? 'Y':'N')"
-                class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
+                @click="openModal(media[index].url, media[index].isShared === 'N' ? 'Y' : 'N')"
+                :class="[
+                  'flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
+                  media[index].isShared === 'Y' ? 'bg-white text-black' : 'bg-gray-600 text-white',
+                ]"
               >
                 <svg
                   width="16"
@@ -633,16 +626,10 @@ const imageModeOptions = [
                 >
                   <path
                     d="M12.4583 10.375C11.5115 10.375 10.6771 10.8307 10.153 11.5236L5.6219 9.25387C5.69713 9.00303 5.75 8.74306 5.75 8.46875C5.75 8.09669 5.67202 7.74297 5.53731 7.41762L10.2793 4.62612C10.807 5.232 11.5827 5.625 12.4583 5.625C14.0437 5.625 15.3333 4.36341 15.3333 2.8125C15.3333 1.26159 14.0437 0 12.4583 0C10.873 0 9.58333 1.26159 9.58333 2.8125C9.58333 3.16991 9.65856 3.50894 9.78337 3.82369L5.02726 6.62337C4.49998 6.0355 3.73549 5.65625 2.875 5.65625C1.28963 5.65625 0 6.91784 0 8.46875C0 10.0197 1.28963 11.2812 2.875 11.2812C3.83749 11.2812 4.68596 10.8122 5.20806 10.0998L9.72424 12.3622C9.64106 12.6248 9.58333 12.8984 9.58333 13.1875C9.58333 14.7384 10.873 16 12.4583 16C14.0437 16 15.3333 14.7384 15.3333 13.1875C15.3333 11.6366 14.0437 10.375 12.4583 10.375Z"
-                    fill="white"
+                    :fill="media[index].isShared === 'Y' ? 'blue' : 'white'"
                   />
                 </svg>
               </button>
-             
-
-              <!-- Tooltip -->
-              <div
-                class="absolute mb-2 top-0 -right-20 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
-              ></div>
             </div>
 
             <!-- Text Button -->
@@ -668,30 +655,35 @@ const imageModeOptions = [
             </div>
 
             <!-- Like Button -->
-            <button
-              class="flex justify-center items-center w-8 h-8 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
-              @click="
-                likeAction(
-                  media[index].url,
-                  media[index].isLiked === 'N' || media[index].isLiked === null ? 'Y' : 'N',
-                )
-              "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                :fill="media[index].isLiked === 'N' ? 'none' : 'bg-blue-600'"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            <div class="relative group">
+              <button
+                @click="
+                  likeAction(
+                    media[index].url,
+                    media[index].isLiked === 'N' || media[index].isLiked === null ? 'Y' : 'N',
+                  )
+                "
+                :class="[
+                  'flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
+                  media[index].isLiked === 'Y' ? 'bg-white text-red' : 'bg-gray-600 text-white',
+                ]"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  :class="media[index].isLiked === 'Y' ? 'fill-red' : 'fill-white'"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z"
+                  />
+                </svg>
+              </button>
+            </div>
 
             <button
               class="flex justify-center items-center w-8 h-8 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
