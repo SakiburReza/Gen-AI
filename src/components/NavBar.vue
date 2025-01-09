@@ -43,7 +43,13 @@ onUnmounted(() => {
 <template>
   <div class="relative flex flex-col items-center justify-center p-4">
     <!-- Logo -->
-    <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-20" />
+    <router-link to="/communitypage">
+      <img
+        src="/images/zeuxis.png"
+        alt="Flowbite logo"
+        class="w-30 h-20 cursor-pointer hover:opacity transition-opacity"
+      />
+    </router-link>
     <!-- Text -->
     <fwb-badge
       :class="`flex items-center justify-between border mt-3 rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition-all duration-200`"

@@ -186,7 +186,7 @@ const fetchMedia = async (label: string) => {
         orientation: item.orientation,
         prompt: item.prompt,
         isLiked: item.like,
-        isShared:item.share
+        isShared: item.share,
       }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
@@ -271,12 +271,10 @@ const generateAiContent = async () => {
 
       aiGeneratedMedia.value = response.data.data.map((item) => ({
         url: item.content,
+        type: item.type,
         orientation: item.orientation,
         prompt: item.prompt,
-        isLiked: 'N',
-        isShared: 'N'
       }))
-      console.log("ai:", aiGeneratedMedia.value)
       media.value.unshift(...aiGeneratedMedia.value)
     } else {
       console.error('Failed to generate media:', response)
@@ -287,53 +285,68 @@ const generateAiContent = async () => {
     loading.value = false
   }
 }
-const shareAction = async (imageId:string,action:string) => {
+const shareAction = async (imageId: string, action: 'Y' | 'N') => {
   try {
-    const response = await genAiService.shareImage({imageIds:imageId, isShare:action})
+    const response = await genAiService.shareImage({ imageId: imageId, isShare: action })
     if (response.status === 200) {
-      console.log('Image shared successfully:', response.data);
+      const itemIndex = media.value.findIndex((item) => item.url === imageId)
+      if (itemIndex !== -1) {
+        media.value[itemIndex].isShared = action
+        media.value = [...media.value]
+      }
+
+      console.log('Image shared successfully:', response.data)
+      toastStore.success(response.data.message)
     }
   } catch (error) {
-    console.error('Error sharing the image:', error);
+    console.error('Error sharing the image:', error)
   }
-};
-const likeAction = async (imageId:string,action:string) => {
+}
+const likeAction = async (imageId: string, action: 'Y' | 'N') => {
   try {
-    const response = await genAiService.likeImage({imageIds:imageId, isLike:action})
+    const response = await genAiService.likeImage({ imageId: imageId, isLike: action })
     if (response.status === 200) {
-      console.log('Image Liked successfully:', response.data);
+      const itemIndex = media.value.findIndex((item) => item.url === imageId)
+      if (itemIndex !== -1) {
+        media.value[itemIndex].isLiked = action
+        media.value = [...media.value]
+      }
+      console.log('Image Liked successfully:', response.data)
+      toastStore.success(response.data.message)
     }
   } catch (error) {
-    console.error('Error sharing the image:', error);
+    console.error('Error sharing the image:', error)
   }
-};
+}
 
 const copyAction = async (prompt: string) => {
   if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
     try {
-      await navigator.clipboard.writeText(prompt);
-      console.log('Prompt copied to clipboard:', prompt);
+      await navigator.clipboard.writeText(prompt)
+      toastStore.success('Prompt copied to clipboard')
+      console.log('Prompt copied to clipboard:', prompt)
     } catch (error) {
-      console.error('Failed to copy prompt using Clipboard API:', error);
+      console.error('Failed to copy prompt using Clipboard API:', error)
     }
   } else {
-    console.warn('Clipboard API not supported, using fallback method');
+    console.warn('Clipboard API not supported, using fallback method')
     // Fallback method for unsupported environments
-    const textArea = document.createElement('textarea');
-    textArea.value = prompt;
-    textArea.style.position = 'fixed'; // Avoid scrolling to the bottom
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
+    const textArea = document.createElement('textarea')
+    textArea.value = prompt
+    textArea.style.position = 'fixed' // Avoid scrolling to the bottom
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+    toastStore.success('Prompt copied to clipboard')
     try {
-      document.execCommand('copy');
-      console.log('Prompt copied to clipboard using fallback');
+      document.execCommand('copy')
+      console.log('Prompt copied to clipboard using fallback')
     } catch (err) {
-      console.error('Fallback: Unable to copy prompt:', err);
+      console.error('Fallback: Unable to copy prompt:', err)
     }
-    document.body.removeChild(textArea);
+    document.body.removeChild(textArea)
   }
-};
+}
 
 //Dropdown property
 
@@ -544,8 +557,13 @@ const imageModeOptions = [
                     fill="#FFFFFF"
                   />
                 </svg>
-                <button v-if="media[index].isShared==='N'" @click="shareAction(media[index].url,'Y')">Add to Explore</button>
-                <button v-else @click="shareAction(media[index].url,'N')">Unexplore</button>
+                <button
+                  v-if="media[index].isShared === 'N' || media[index].isShared === null"
+                  @click="shareAction(media[index].url, 'Y')"
+                >
+                  Add to Explore
+                </button>
+                <button v-else @click="shareAction(media[index].url, 'N')">Unexplore</button>
               </div>
             </div>
 
@@ -596,12 +614,17 @@ const imageModeOptions = [
             <!-- Like Button -->
             <button
               class="flex justify-center items-center w-8 h-8 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
-               @click="likeAction(media[index].url,media[index].isLiked === 'N' ? 'Y' : 'N')"
+              @click="
+                likeAction(
+                  media[index].url,
+                  media[index].isLiked === 'N' || media[index].isLiked === null ? 'Y' : 'N',
+                )
+              "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5"
-                :fill="media[index].isLiked === 'N' ? 'none' : 'currentColor'"
+                :fill="media[index].isLiked === 'N' ? 'none' : 'bg-blue-600'"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
