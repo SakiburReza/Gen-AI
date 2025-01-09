@@ -601,25 +601,14 @@ const imageModeOptions = [
         @click="fetchLikedMedia(activeFunctionality)"
         class="w-12 h-12 flex justify-center items-center bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 transition duration-300"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-gray-600"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z"
-          />
+        <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.8281 0C18.363 0 17.0198 0.467469 15.8358 1.38945C14.7007 2.27336 13.9449 3.39919 13.5 4.21784C13.0551 3.39913 12.2993 2.27336 11.1642 1.38945C9.98024 0.467469 8.63699 0 7.17188 0C3.08327 0 0 3.36727 0 7.8326C0 12.6567 3.8466 15.9573 9.66985 20.9539C10.6587 21.8025 11.7796 22.7643 12.9446 23.7901C13.0982 23.9255 13.2954 24 13.5 24C13.7046 24 13.9018 23.9255 14.0554 23.7901C15.2205 22.7642 16.3413 21.8024 17.3308 20.9534C23.1534 15.9573 27 12.6567 27 7.8326C27 3.36727 23.9167 0 19.8281 0Z" fill="#3526E1"/>
+          <circle cx="25" cy="7" r="6.5" fill="#E12629" stroke="white"/>
         </svg>
       </button>
     </div>
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
-
       <!-- Left Section: Enhanced Image Grid -->
       <div
         class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
@@ -746,7 +735,7 @@ const imageModeOptions = [
                 </svg>
               </button>
             </div>
-
+            <!-- Delete Button -->
             <button
               @click="openModal(media[index].url, 'delete')"
               class="flex justify-center items-center w-8 h-8 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
@@ -771,6 +760,7 @@ const imageModeOptions = [
           </div>
         </div>
       </div>
+
 
       <!-- Floating Buttons Section -->
 
