@@ -593,12 +593,12 @@ const imageModeOptions = [
           <!-- Heart Button -->
           <button @click="togglefetchMedia(activeFunctionality)"
             class="w-12 h-12 flex justify-center items-center bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="currentColor"
-              viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z" />
-            </svg>
+            <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.8281 0C18.363 0 17.0198 0.467469 15.8358 1.38945C14.7007 2.27336 13.9449 3.39919 13.5 4.21784C13.0551 3.39913 12.2993 2.27336 11.1642 1.38945C9.98024 0.467469 8.63699 0 7.17188 0C3.08327 0 0 3.36727 0 7.8326C0 12.6567 3.8466 15.9573 9.66985 20.9539C10.6587 21.8025 11.7796 22.7643 12.9446 23.7901C13.0982 23.9255 13.2954 24 13.5 24C13.7046 24 13.9018 23.9255 14.0554 23.7901C15.2205 22.7642 16.3413 21.8024 17.3308 20.9534C23.1534 15.9573 27 12.6567 27 7.8326C27 3.36727 23.9167 0 19.8281 0Z" fill="#3526E1"/>
+          <circle cx="25" cy="7" r="6.5" fill="#E12629" stroke="white"/>
+        </svg>
           </button>
+          
     </div>
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
@@ -612,28 +612,28 @@ const imageModeOptions = [
           item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
           'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
         ]" @click="
-            activeFunctionality === 'Face Swap' && media[index] && openImageModal(media[index])
+            activeFunctionality === 'Face Swap' && filteredMedia[index] && openImageModal(filteredMedia[index])
             ">
           <!-- Render Image -->
 
-          <img v-if="media[index] && media[index].type === 'image'" :src="imageUrl() + item.url" :alt="'Media ' + index"
+          <img v-if="filteredMedia[index] && filteredMedia[index].type === 'image'" :src="imageUrl() + item.url" :alt="'Media ' + index"
             class="h-full max-w-full rounded-lg w-full"
             :class="[item.orientation === 'P' ? 'object-full' : 'object-cover']" @click="
               (activeFunctionality === 'Image to Image' ||
                 activeFunctionality === 'Text to Image') &&
-              media[index] &&
-              openPreviewModal(media[index])
+                filteredMedia[index] &&
+              openPreviewModal(filteredMedia[index])
               " />
 
           <!-- Render Video -->
 
-          <video v-else-if="media[index] && media[index].type === 'video'" :src="imageUrl() + media[index].url" controls
+          <video v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'" :src="imageUrl() + filteredMedia[index].url" controls
             class="w-full h-full object-contain max-w-full" @click="
               (activeFunctionality === 'Text to Video' ||
                 activeFunctionality === 'Image to Video' ||
                 activeFunctionality === 'Templates') &&
-              media[index] &&
-              openPreviewModal(media[index])
+                filteredMedia[index] &&
+              openPreviewModal(filteredMedia[index])
               "></video>
 
           <!------------------------------------------------------ Roney ----------------------------------------->
@@ -646,13 +646,13 @@ const imageModeOptions = [
               <button
                 @click="openModal(media[index].url, media[index].isShared === 'N' ? 'Y' : 'N')"
                 :class="[
-                  'flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
+                  'flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
                   media[index].isShared === 'Y' ? 'bg-white text-black' : 'bg-gray-600 text-white',
                 ]"
               >
                 <svg
-                  width="16"
-                  height="16"
+                  width="10"
+                  height="10"
                   viewBox="0 0 16 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -669,8 +669,8 @@ const imageModeOptions = [
             <div class="relative group">
               <!-- Copy -->
               <button @click="copyAction(media[index].prompt)"
-                class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300">
-                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                class="flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300">
+                <svg width="10" height="10" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M15.1111 0H0.888889C0.4 0 0 0.395294 0 0.878431V3.51373C0 3.99686 0.4 4.39216 0.888889 4.39216C1.37778 4.39216 1.77778 3.99686 1.77778 3.51373V1.75686H7.11111V13.1765H5.33333C4.84444 13.1765 4.44444 13.5718 4.44444 14.0549C4.44444 14.538 4.84444 14.9333 5.33333 14.9333H10.6667C11.1556 14.9333 11.5556 14.538 11.5556 14.0549C11.5556 13.5718 11.1556 13.1765 10.6667 13.1765H8.88889V1.75686H14.2222V3.51373C14.2222 3.99686 14.6222 4.39216 15.1111 4.39216C15.6 4.39216 16 3.99686 16 3.51373V0.878431C16 0.395294 15.6 0 15.1111 0Z"
                     fill="white" />
@@ -688,13 +688,13 @@ const imageModeOptions = [
                   )
                 "
                 :class="[
-                  'flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
+                  'flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
                   media[index].isLiked === 'Y' ? 'bg-white text-red' : 'bg-gray-600 text-white',
                 ]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
+                  class="h-3 w-3"
                   :class="media[index].isLiked === 'Y' ? 'fill-red' : 'fill-white'"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -711,11 +711,11 @@ const imageModeOptions = [
             <!-- Delete Button -->
             <button
               @click="openModal(media[index].url, 'delete')"
-              class="flex justify-center items-center w-8 h-8 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
+              class="flex justify-center items-center w-5 h-5 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
             >
               <svg
-                width="15"
-                height="16"
+                width="10"
+                height="10"
                 viewBox="0 0 15 16"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
