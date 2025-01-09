@@ -145,6 +145,17 @@ class GenAIService {
       headers: this.getAuthHeaders(),
     })
   }
+  getLikedMedia(params) {
+    return axios.get(this.url + '/get-liked-media?type=' + params, {
+      headers: this.getAuthHeaders(),
+    })
+  }
+  deleteMedia(params) {
+    return axios.get(this.url + '/delete-image/' + params, {
+      headers: this.getAuthHeaders(),
+    })
+  }
+
 }
 
 export default new GenAIService()

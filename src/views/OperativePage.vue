@@ -34,6 +34,14 @@ const isModalOpen = ref(false)
 const action = ref(null)
 const selectedImageUrl = ref(null)
 
+// Dynamic action text for modal content
+const actionText = computed(() => {
+  if (action.value === 'Y') return 'Add to Explore'
+  if (action.value === 'N') return 'Unexplore'
+  if (action.value === 'delete') return 'Delete'
+  return ''
+})
+
 // Function to open the modal and set action + image URL
 const openModal = (imageUrl, selectedAction) => {
   selectedImageUrl.value = imageUrl
@@ -125,15 +133,7 @@ function setActive(button) {
 }
 
 // Active functionality state
-
-const activeFunctionality = ref<
-  | 'Text to Image'
-  | 'Face Swap'
-  | 'Text to Video'
-  | 'Image to Video'
-  | 'Image to Image'
-  | 'Templates'
->('Text to Image')
+const activeFunctionality = ref<string>('Text to Image')
 
 function changeFunctionality(mode) {
   console.log(mode)
@@ -175,6 +175,23 @@ const selectedRatio = ref('Landscape')
 
 const selectedOutput = ref(1)
 
+const deleteAction = async (imageId) => {
+  const { data: response } = await genAiService.deleteMedia(imageId)
+  if (response.status) {
+    toastStore.success('Deleted successfully')
+    // Remove the deleted item from the mediaItems array
+    // Find the index of the item to be deleted
+    const itemIndex = media.value.findIndex((item) => item.url === imageId)
+    if (itemIndex !== -1) {
+      // Remove the item from the media array
+      media.value.splice(itemIndex, 1) // Removes the item at the found index
+
+      // Trigger reactivity by updating the media array
+      media.value = [...media.value] // This will reassign and trigger reactivity
+    }
+  }
+}
+
 // Fetch Images / Videos from API
 
 const fetchMedia = async (label: string) => {
@@ -182,6 +199,43 @@ const fetchMedia = async (label: string) => {
 
   try {
     const { data: response } = await genAiService.getMedia(label)
+
+    if (response.status && Array.isArray(response.data)) {
+      // Map data with type detection (image/video) for initial load
+
+      media.value = response.data.map((item) => ({
+        url: item.content,
+
+        type:
+          item.type ||
+          (label === 'text-to-video' ||
+          label === 'image-to-video' ||
+          label === 'template-video' ||
+          (label === 'face-swap' && item.orientation == null)
+            ? 'video'
+            : 'image'),
+        orientation: item.orientation,
+        prompt: item.prompt,
+        isLiked: item.like,
+        isShared: item.share,
+      }))
+    } else {
+      console.error('Failed to fetch images: Invalid response format')
+    }
+  } catch (error) {
+    console.error('Error fetching images:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+const fetchLikedMedia = async (label: string) => {
+  loading.value = true
+  if (label === 'Text to Image') label = 'text-to-image'
+  else if (label === 'Image to Image') label = 'image-to-image'
+
+  try {
+    const { data: response } = await genAiService.getLikedMedia(label)
 
     if (response.status && Array.isArray(response.data)) {
       // Map data with type detection (image/video) for initial load
@@ -304,11 +358,18 @@ const confirmAction = async () => {
 
   try {
     console.log(`Action: ${action.value}, Image URL: ${selectedImageUrl.value}`)
+    let response
 
-    // Perform the share/unshare action
-    // Replace this with your API call or business logic
-    const response = await shareAction(selectedImageUrl.value, action.value)
-    console.log('Response:', response)
+    if (action.value === 'delete') {
+      response = await deleteAction(selectedImageUrl.value)
+      closeModal() // Close the modal after successful action
+    } else {
+      response = await shareAction(selectedImageUrl.value, action.value)
+      closeModal() // Close the modal after successful action
+    }
+
+    console.log('Response:', response.data.message)
+    toastStore.success(response.data.message)
 
     closeModal() // Close the modal after successful action
   } catch (error) {
@@ -537,7 +598,7 @@ const imageModeOptions = [
 
       <!-- Heart Button -->
       <button
-        @click="toggleFavorite"
+        @click="fetchLikedMedia(activeFunctionality)"
         class="w-12 h-12 flex justify-center items-center bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 transition duration-300"
       >
         <svg
@@ -558,7 +619,6 @@ const imageModeOptions = [
     </div>
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
-      
       <!-- Left Section: Enhanced Image Grid -->
       <div
         class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
@@ -621,7 +681,7 @@ const imageModeOptions = [
             <div class="relative group">
               <!-- Share Button -->
               <button
-                @click="openModal(media[index].url, media[index].isShared === 'N'? 'Y':'N')"
+                @click="openModal(media[index].url, media[index].isShared === 'N' ? 'Y' : 'N')"
                 class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
               >
                 <svg
@@ -637,7 +697,6 @@ const imageModeOptions = [
                   />
                 </svg>
               </button>
-             
 
               <!-- Tooltip -->
               <div
@@ -694,6 +753,7 @@ const imageModeOptions = [
             </button>
 
             <button
+              @click="openModal(media[index].url, 'delete')"
               class="flex justify-center items-center w-8 h-8 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
             >
               <svg
@@ -991,8 +1051,15 @@ const imageModeOptions = [
       <!-- Modal Content -->
       <p class="mt-2 text-gray-600">
         Are you sure you want to
-        <span class="font-bold text-blue-600">
-          {{ action === 'Y' ? 'Add to Explore' : 'Unexplore' }}
+        <span
+          class="font-bold"
+          :class="{
+            'text-blue-600': action === 'Y',
+            'text-red-600': action === 'N',
+            'text-gray-600': action === 'delete',
+          }"
+        >
+          {{ actionText }}
         </span>
         this item?
       </p>
@@ -1007,8 +1074,12 @@ const imageModeOptions = [
         </button>
         <button
           @click="confirmAction"
-          :class="action === 'Y' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red'"
           class="px-4 py-2 text-sm text-white rounded-md transition"
+          :class="{
+            'bg-blue-600 hover:bg-blue-700': action === 'Y',
+            'bg-red-600 hover:bg-red-700': action === 'N',
+            'bg-gray-600 hover:bg-gray-700': action === 'delete',
+          }"
         >
           Confirm
         </button>
