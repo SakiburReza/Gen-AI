@@ -123,7 +123,7 @@ onMounted(async () => {
     <!-- Search Bar and Heart Button -->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar -->
-      <div class="flex items-center w-full max-w-2xl border border-gray-300 rounded-md">
+      <div class="flex items-center w-full max-w-3xl border border-gray-300 rounded-md">
         <svg
           width="24"
           height="24"
@@ -145,26 +145,6 @@ onMounted(async () => {
         />
         <!-- Add the SVG icon inside the search bar -->
       </div>
-      <!-- Heart Button -->
-      <button
-        @click=""
-        class="ml-4 flex justify-center items-center w-12 h-12 bg-gray-300 text-white border border-gray-300 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z"
-          />
-        </svg>
-      </button>
     </div>
 
     <div class="flex flex-row h-full overflow-hidden">

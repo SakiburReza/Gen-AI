@@ -15,7 +15,7 @@ import genAiService from '@/services/gen-ai'
 
 import { useToastStore } from '@/stores/toast'
 
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { useRoute } from 'vue-router'
@@ -350,6 +350,9 @@ const copyAction = async (prompt: string) => {
   }
 }
 
+const filteredMedia = computed(() =>
+  media.value.filter((item) => item.prompt.toLowerCase().includes(searchQuery.value.toLowerCase())),
+)
 
 //Dropdown property
 
@@ -469,7 +472,26 @@ const imageModeOptions = [
         placeholder="Search"
         class="w-full px-4 py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-gray-200"
       />
-      <!-- Add the SVG icon inside the search bar -->
+      <!-- Heart Button -->
+      <button
+        @click=""
+        class="ml-4 flex justify-center items-center w-12 h-12 bg-gray-300 text-white border border-gray-300 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z"
+          />
+        </svg>
+      </button>
     </div>
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
@@ -482,7 +504,7 @@ const imageModeOptions = [
           <fwb-spinner size="12" />
         </div>
         <div
-          v-for="(item, index) in media"
+          v-for="(item, index) in filteredMedia"
           :key="index"
           class="relative overflow-hidden rounded-lg"
           :class="[
