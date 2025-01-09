@@ -30,23 +30,23 @@ const searchQuery = ref('')
 const route = useRoute()
 
 // Reactive state for modal
-const isModalOpen = ref(false);
-const action = ref(null);
-const selectedImageUrl = ref(null);
+const isModalOpen = ref(false)
+const action = ref(null)
+const selectedImageUrl = ref(null)
 
 // Function to open the modal and set action + image URL
 const openModal = (imageUrl, selectedAction) => {
-  selectedImageUrl.value = imageUrl;
-  action.value = selectedAction;
-  isModalOpen.value = true;
-};
+  selectedImageUrl.value = imageUrl
+  action.value = selectedAction
+  isModalOpen.value = true
+}
 
 // Function to close the modal
 const closeModal = () => {
-  isModalOpen.value = false;
-  action.value = null;
-  selectedImageUrl.value = null;
-};
+  isModalOpen.value = false
+  action.value = null
+  selectedImageUrl.value = null
+}
 
 const toastStore = useToastStore()
 
@@ -300,21 +300,21 @@ const generateAiContent = async () => {
   }
 }
 const confirmAction = async () => {
-  if (!selectedImageUrl.value || !action.value) return;
+  if (!selectedImageUrl.value || !action.value) return
 
   try {
-    console.log(`Action: ${action.value}, Image URL: ${selectedImageUrl.value}`);
+    console.log(`Action: ${action.value}, Image URL: ${selectedImageUrl.value}`)
 
     // Perform the share/unshare action
     // Replace this with your API call or business logic
-    const response = await shareAction(selectedImageUrl.value, action.value);
-    console.log("Response:", response);
+    const response = await shareAction(selectedImageUrl.value, action.value)
+    console.log('Response:', response)
 
-    closeModal(); // Close the modal after successful action
+    closeModal() // Close the modal after successful action
   } catch (error) {
-    console.error("Error confirming action:", error);
+    console.error('Error confirming action:', error)
   }
-};
+}
 const shareAction = async (imageId: string, action: 'Y' | 'N') => {
   try {
     const response = await genAiService.shareImage({ imageId: imageId, isShare: action })
@@ -350,6 +350,7 @@ const likeAction = async (imageId: string, action: 'Y' | 'N') => {
 }
 
 const copyAction = async (prompt: string) => {
+  console.log('ssss')
   if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
     try {
       await navigator.clipboard.writeText(prompt)
@@ -385,8 +386,8 @@ const filteredMedia = computed(() =>
 const router = useRouter()
 
 const goToExplore = () => {
-  router.push("/communitypage");
-};
+  router.push('/communitypage')
+}
 
 //Dropdown property
 
@@ -619,46 +620,50 @@ const imageModeOptions = [
             <div class="relative group">
               <!-- Share Button -->
               <button
+                @click="openModal(media[index].url, media[index].isShared === 'N'? 'Y':'N')"
                 class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
               >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12.4583 10.375C11.5115 10.375 10.6771 10.8307 10.153 11.5236L5.6219 9.25387C5.69713 9.00303 5.75 8.74306 5.75 8.46875C5.75 8.09669 5.67202 7.74297 5.53731 7.41762L10.2793 4.62612C10.807 5.232 11.5827 5.625 12.4583 5.625C14.0437 5.625 15.3333 4.36341 15.3333 2.8125C15.3333 1.26159 14.0437 0 12.4583 0C10.873 0 9.58333 1.26159 9.58333 2.8125C9.58333 3.16991 9.65856 3.50894 9.78337 3.82369L5.02726 6.62337C4.49998 6.0355 3.73549 5.65625 2.875 5.65625C1.28963 5.65625 0 6.91784 0 8.46875C0 10.0197 1.28963 11.2812 2.875 11.2812C3.83749 11.2812 4.68596 10.8122 5.20806 10.0998L9.72424 12.3622C9.64106 12.6248 9.58333 12.8984 9.58333 13.1875C9.58333 14.7384 10.873 16 12.4583 16C14.0437 16 15.3333 14.7384 15.3333 13.1875C15.3333 11.6366 14.0437 10.375 12.4583 10.375Z" fill="white"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12.4583 10.375C11.5115 10.375 10.6771 10.8307 10.153 11.5236L5.6219 9.25387C5.69713 9.00303 5.75 8.74306 5.75 8.46875C5.75 8.09669 5.67202 7.74297 5.53731 7.41762L10.2793 4.62612C10.807 5.232 11.5827 5.625 12.4583 5.625C14.0437 5.625 15.3333 4.36341 15.3333 2.8125C15.3333 1.26159 14.0437 0 12.4583 0C10.873 0 9.58333 1.26159 9.58333 2.8125C9.58333 3.16991 9.65856 3.50894 9.78337 3.82369L5.02726 6.62337C4.49998 6.0355 3.73549 5.65625 2.875 5.65625C1.28963 5.65625 0 6.91784 0 8.46875C0 10.0197 1.28963 11.2812 2.875 11.2812C3.83749 11.2812 4.68596 10.8122 5.20806 10.0998L9.72424 12.3622C9.64106 12.6248 9.58333 12.8984 9.58333 13.1875C9.58333 14.7384 10.873 16 12.4583 16C14.0437 16 15.3333 14.7384 15.3333 13.1875C15.3333 11.6366 14.0437 10.375 12.4583 10.375Z"
+                    fill="white"
+                  />
                 </svg>
               </button>
+             
 
               <!-- Tooltip -->
               <div
                 class="absolute mb-2 top-0 -right-20 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
-              >
-
-                <button
-                  v-if="media[index].isShared === 'N' || media[index].isShared === null"
-                    @click="openModal(media[index].url, 'Y')"
-                >
-                </button>
-                <button v-else @click="shareAction(media[index].url, 'N')"></button>
-                <button v-else  @click="openModal(media[index].url, 'N')"></button>
-              </div>
+              ></div>
             </div>
 
             <!-- Text Button -->
             <div class="relative group">
               <!-- Copy -->
               <button
+                @click="copyAction(media[index].prompt)"
                 class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
               >
-                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15.1111 0H0.888889C0.4 0 0 0.395294 0 0.878431V3.51373C0 3.99686 0.4 4.39216 0.888889 4.39216C1.37778 4.39216 1.77778 3.99686 1.77778 3.51373V1.75686H7.11111V13.1765H5.33333C4.84444 13.1765 4.44444 13.5718 4.44444 14.0549C4.44444 14.538 4.84444 14.9333 5.33333 14.9333H10.6667C11.1556 14.9333 11.5556 14.538 11.5556 14.0549C11.5556 13.5718 11.1556 13.1765 10.6667 13.1765H8.88889V1.75686H14.2222V3.51373C14.2222 3.99686 14.6222 4.39216 15.1111 4.39216C15.6 4.39216 16 3.99686 16 3.51373V0.878431C16 0.395294 15.6 0 15.1111 0Z" fill="white"/>
+                <svg
+                  width="16"
+                  height="15"
+                  viewBox="0 0 16 15"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.1111 0H0.888889C0.4 0 0 0.395294 0 0.878431V3.51373C0 3.99686 0.4 4.39216 0.888889 4.39216C1.37778 4.39216 1.77778 3.99686 1.77778 3.51373V1.75686H7.11111V13.1765H5.33333C4.84444 13.1765 4.44444 13.5718 4.44444 14.0549C4.44444 14.538 4.84444 14.9333 5.33333 14.9333H10.6667C11.1556 14.9333 11.5556 14.538 11.5556 14.0549C11.5556 13.5718 11.1556 13.1765 10.6667 13.1765H8.88889V1.75686H14.2222V3.51373C14.2222 3.99686 14.6222 4.39216 15.1111 4.39216C15.6 4.39216 16 3.99686 16 3.51373V0.878431C16 0.395294 15.6 0 15.1111 0Z"
+                    fill="white"
+                  />
                 </svg>
               </button>
-
-              <!-- Tooltip -->
-              <div
-                @click=""
-                class="absolute mb-2 top-0 -right-18.5 transform -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-white text-blue-600 rounded-full shadow-lg px-4 py-1 text-sm font-small flex items-center gap-1 transition-all duration-300 whitespace-nowrap"
-              >
-                <button @click="copyAction(media[index].prompt)"></button>
-              </div>
             </div>
 
             <!-- Like Button -->
@@ -690,12 +695,23 @@ const imageModeOptions = [
             <button
               class="flex justify-center items-center w-8 h-8 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
             >
-              <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0.975098 4.6875L1.80538 14.7105C1.86488 15.4333 2.48057 16 3.20613 16H10.8563C11.5818 16 12.1975 15.4333 12.257 14.7105L13.0873 4.6875H0.975098ZM4.687 14.125C4.44163 14.125 4.23519 13.9341 4.21963 13.6855L3.75088 6.12303C3.73485 5.86441 3.93122 5.64194 4.18941 5.62591C4.45719 5.60713 4.67007 5.80581 4.68653 6.06444L5.15528 13.6269C5.17188 13.8948 4.95997 14.125 4.687 14.125ZM7.49994 13.6562C7.49994 13.9153 7.29029 14.125 7.03119 14.125C6.7721 14.125 6.56244 13.9153 6.56244 13.6562V6.09375C6.56244 5.83466 6.7721 5.625 7.03119 5.625C7.29029 5.625 7.49994 5.83466 7.49994 6.09375V13.6562ZM10.3115 6.12306L9.84275 13.6856C9.82735 13.9316 9.62225 14.1367 9.34563 14.1241C9.08744 14.1081 8.89107 13.8856 8.9071 13.627L9.37585 6.06447C9.39188 5.80584 9.61847 5.61769 9.87297 5.62594C10.1312 5.64197 10.3275 5.86444 10.3115 6.12306Z" fill="white"/>
-                <path d="M13.125 1.875H10.3125V1.40625C10.3125 0.630813 9.68169 0 8.90625 0H5.15625C4.38081 0 3.75 0.630813 3.75 1.40625V1.875H0.9375C0.419719 1.875 0 2.29472 0 2.8125C0 3.33022 0.419719 3.75 0.9375 3.75C5.24894 3.75 8.81372 3.75 13.125 3.75C13.6428 3.75 14.0625 3.33022 14.0625 2.8125C14.0625 2.29472 13.6428 1.875 13.125 1.875ZM9.375 1.875H4.6875V1.40625C4.6875 1.14762 4.89762 0.9375 5.15625 0.9375H8.90625C9.16488 0.9375 9.375 1.14762 9.375 1.40625V1.875Z" fill="white"/>
+              <svg
+                width="15"
+                height="16"
+                viewBox="0 0 15 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.975098 4.6875L1.80538 14.7105C1.86488 15.4333 2.48057 16 3.20613 16H10.8563C11.5818 16 12.1975 15.4333 12.257 14.7105L13.0873 4.6875H0.975098ZM4.687 14.125C4.44163 14.125 4.23519 13.9341 4.21963 13.6855L3.75088 6.12303C3.73485 5.86441 3.93122 5.64194 4.18941 5.62591C4.45719 5.60713 4.67007 5.80581 4.68653 6.06444L5.15528 13.6269C5.17188 13.8948 4.95997 14.125 4.687 14.125ZM7.49994 13.6562C7.49994 13.9153 7.29029 14.125 7.03119 14.125C6.7721 14.125 6.56244 13.9153 6.56244 13.6562V6.09375C6.56244 5.83466 6.7721 5.625 7.03119 5.625C7.29029 5.625 7.49994 5.83466 7.49994 6.09375V13.6562ZM10.3115 6.12306L9.84275 13.6856C9.82735 13.9316 9.62225 14.1367 9.34563 14.1241C9.08744 14.1081 8.89107 13.8856 8.9071 13.627L9.37585 6.06447C9.39188 5.80584 9.61847 5.61769 9.87297 5.62594C10.1312 5.64197 10.3275 5.86444 10.3115 6.12306Z"
+                  fill="white"
+                />
+                <path
+                  d="M13.125 1.875H10.3125V1.40625C10.3125 0.630813 9.68169 0 8.90625 0H5.15625C4.38081 0 3.75 0.630813 3.75 1.40625V1.875H0.9375C0.419719 1.875 0 2.29472 0 2.8125C0 3.33022 0.419719 3.75 0.9375 3.75C5.24894 3.75 8.81372 3.75 13.125 3.75C13.6428 3.75 14.0625 3.33022 14.0625 2.8125C14.0625 2.29472 13.6428 1.875 13.125 1.875ZM9.375 1.875H4.6875V1.40625C4.6875 1.14762 4.89762 0.9375 5.15625 0.9375H8.90625C9.16488 0.9375 9.375 1.14762 9.375 1.40625V1.875Z"
+                  fill="white"
+                />
               </svg>
             </button>
-
           </div>
         </div>
       </div>
@@ -948,63 +964,56 @@ const imageModeOptions = [
     <!--
     <ShowModalWithDownloadButton :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->
   </div>
- <!-- Modal -->
- <div
-      v-if="isModalOpen"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-    >
-      <div
-        class="bg-white rounded-lg shadow-xl w-96 p-6 relative"
-      >
-        <!-- Close Button -->
+  <!-- Modal -->
+  <div
+    v-if="isModalOpen"
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  >
+    <div class="bg-white rounded-lg shadow-xl w-96 p-6 relative">
+      <!-- Close Button -->
+      <button @click="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Modal Title -->
+      <h2 class="text-lg font-semibold text-gray-800">Confirm Action</h2>
+
+      <!-- Modal Content -->
+      <p class="mt-2 text-gray-600">
+        Are you sure you want to
+        <span class="font-bold text-blue-600">
+          {{ action === 'Y' ? 'Add to Explore' : 'Unexplore' }}
+        </span>
+        this item?
+      </p>
+
+      <!-- Buttons -->
+      <div class="mt-6 flex justify-end gap-3">
         <button
           @click="closeModal"
-          class="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+          class="px-4 py-2 text-sm text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            class="w-5 h-5"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          Cancel
         </button>
-
-        <!-- Modal Title -->
-        <h2 class="text-lg font-semibold text-gray-800">
-          Confirm Action
-        </h2>
-
-        <!-- Modal Content -->
-        <p class="mt-2 text-gray-600">
-          Are you sure you want to
-          <span class="font-bold text-blue-600">
-            {{ action === 'Y' ? 'Add to Explore' : 'Unexplore' }}
-          </span>
-          this item?
-        </p>
-
-        <!-- Buttons -->
-        <div class="mt-6 flex justify-end gap-3">
-          <button
-            @click="closeModal"
-            class="px-4 py-2 text-sm text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition"
-          >
-            Cancel
-          </button>
-          <button
-            @click="confirmAction"
-            :class="action === 'Y' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red'"
-            class="px-4 py-2 text-sm text-white rounded-md transition"
-          >
-            Confirm
-          </button>
-        </div>
+        <button
+          @click="confirmAction"
+          :class="action === 'Y' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red'"
+          class="px-4 py-2 text-sm text-white rounded-md transition"
+        >
+          Confirm
+        </button>
       </div>
     </div>
+  </div>
 </template>
 
 <style scoped>
