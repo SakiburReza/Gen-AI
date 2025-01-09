@@ -1,112 +1,126 @@
 <script setup lang="ts">
-import InvoiceCard from '@/components/InvoiceCard.vue';
-import genAiService from "@/services/gen-ai";
-import { computed, onMounted, onUnmounted, ref } from 'vue';
-import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue';
+import InvoiceCard from '@/components/InvoiceCard.vue'
+import genAiService from '@/services/gen-ai'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue'
+import { useRoute } from 'vue-router'
+import { useToastStore } from '@/stores/toast'
+import { useCredits } from '@/utils/utils'
+const route = useRoute()
+const toastStore = useToastStore()
+const { fetchCredits } = useCredits()
 
 const billinInformation = ref({
-  plan_name: "",
-  credit: "",
-  last_billing_time: "",
-  last_billing_amount: "",
-  last_purchased_credit: "",
-});
+  plan_name: '',
+  credit: '',
+  last_billing_time: '',
+  last_billing_amount: '',
+  last_purchased_credit: '',
+})
 
 const billingInfo = async () => {
   try {
-    const response = await genAiService.billingInformation();
-    console.log(response.data);
+    const response = await genAiService.billingInformation()
+    console.log(response.data)
     if (response.data.status) {
       if (response.data.data.subscription) {
-        billinInformation.value.plan_name = (response.data.data.subscription.plan_name === null ||
-          response.data.data.subscription.plan_name === "null" ||
-          response.data.data.subscription.plan_name === undefined)
-          ? "No plan yet"
-          : response.data.data.subscription.plan_name;
+        billinInformation.value.plan_name =
+          response.data.data.subscription.plan_name === null ||
+          response.data.data.subscription.plan_name === 'null' ||
+          response.data.data.subscription.plan_name === undefined
+            ? 'No plan yet'
+            : response.data.data.subscription.plan_name
 
-        billinInformation.value.credit = (response.data.data.subscription.credit === null ||
-          response.data.data.subscription.credit === "null" ||
-          response.data.data.subscription.credit === undefined)
-          ? "0.00"
-          : response.data.data.subscription.credit;
+        billinInformation.value.credit =
+          response.data.data.subscription.credit === null ||
+          response.data.data.subscription.credit === 'null' ||
+          response.data.data.subscription.credit === undefined
+            ? '0.00'
+            : response.data.data.subscription.credit
 
-          billinInformation.value.last_purchased_credit = (response.data.data.subscription.last_purchased_credit === null ||
-          response.data.data.subscription.last_purchased_credit === "null" ||
-          response.data.data.subscription.last_purchased_credit === undefined)
-          ? "0.00"
-          : response.data.data.subscription.last_purchased_credit;
+        billinInformation.value.last_purchased_credit =
+          response.data.data.subscription.last_purchased_credit === null ||
+          response.data.data.subscription.last_purchased_credit === 'null' ||
+          response.data.data.subscription.last_purchased_credit === undefined
+            ? '0.00'
+            : response.data.data.subscription.last_purchased_credit
 
+        billinInformation.value.last_billing_time =
+          response.data.data.subscription.last_billing_time === null ||
+          response.data.data.subscription.last_billing_time === 'null' ||
+          response.data.data.subscription.last_billing_time === undefined
+            ? 'No date available'
+            : response.data.data.subscription.last_billing_time
 
-          billinInformation.value.last_billing_time = (response.data.data.subscription.last_billing_time === null ||
-          response.data.data.subscription.last_billing_time === "null" ||
-          response.data.data.subscription.last_billing_time === undefined)
-          ? "No date available"
-          : response.data.data.subscription.last_billing_time;
-
-          billinInformation.value.last_billing_amount = (response.data.data.subscription.last_billing_amount === null ||
-          response.data.data.subscription.last_billing_amount === "null" ||
-          response.data.data.subscription.last_billing_amount === undefined)
-          ? "0.00"
-          : response.data.data.subscription.last_billing_amount;
-
+        billinInformation.value.last_billing_amount =
+          response.data.data.subscription.last_billing_amount === null ||
+          response.data.data.subscription.last_billing_amount === 'null' ||
+          response.data.data.subscription.last_billing_amount === undefined
+            ? '0.00'
+            : response.data.data.subscription.last_billing_amount
       }
       if (response.data.data.last_purchase) {
-
-
-        billinInformation.value.last_billing_time = response.data.data.last_purchase.last_billing_time;
-        billinInformation.value.last_billing_amount = response.data.data.last_purchase.last_billing_amount;
-        billinInformation.value.last_purchased_credit = response.data.data.last_purchased_credit;
+        billinInformation.value.last_billing_time =
+          response.data.data.last_purchase.last_billing_time
+        billinInformation.value.last_billing_amount =
+          response.data.data.last_purchase.last_billing_amount
+        billinInformation.value.last_purchased_credit = response.data.data.last_purchased_credit
       }
     } else {
-      console.error("Invalid response structure:", response);
+      console.error('Invalid response structure:', response)
     }
   } catch (error) {
-    console.error("Error fetching billing information:", error);
+    console.error('Error fetching billing information:', error)
   }
-};
+}
 
 const showBuyMoreCreditsModal = ref(false) // Modal visibility
 const BuyMoreCredits = async () => {
-  console.log("Executing More Credits");
+  console.log('Executing More Credits')
   showBuyMoreCreditsModal.value = true
-};
+}
 const closeBuyMoreCreditsModal = () => {
   showBuyMoreCreditsModal.value = false
-
 }
 
-const showInvoiceCard = ref(false);
+const showInvoiceCard = ref(false)
 
+async function cancleAction() {
+  console.log("sss")
+  const response = await genAiService.cancelSubscription()
+  if (response.status) {
+    toastStore.success(response.data.message)
+  }
+}
 
 function toggleInvoiceCard() {
-  showInvoiceCard.value = !showInvoiceCard.value;
+  showInvoiceCard.value = !showInvoiceCard.value
 }
 
 function closeInvoiceCard() {
-  showInvoiceCard.value = false;
+  showInvoiceCard.value = false
 }
 
 // Close AccountCard when clicking outside
 function handleClickOutside(event) {
-  const invoiceCard = document.querySelector('.account-card');
+  const invoiceCard = document.querySelector('.account-card')
   if (invoiceCard && !invoiceCard.contains(event.target)) {
-    closeInvoiceCard();
+    closeInvoiceCard()
   }
 }
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-  billingInfo(); // Fetch billing data on mount
-});
+  document.addEventListener('click', handleClickOutside)
+  billingInfo() // Fetch billing data on mount
+})
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
-});
-
+  document.removeEventListener('click', handleClickOutside)
+})
 
 // Dynamic dashed line
-const dashLength = ref(26); // Adjust this number for dash length
-const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
+const dashLength = ref(26) // Adjust this number for dash length
+const dashedLine = computed(() => '- '.repeat(dashLength.value).trim())
 </script>
 
 <template>
@@ -114,9 +128,10 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-bold mb-4">Billing</h1>
       <!-- Button Hidden on Mobile and Shown on Medium Screens and Above -->
-      <button @click="() => $router.push('/operativepage')"
-        class=" hidden md:relative md:w-auto md:inline-block bg-blue-600 text-white px-4 py-2 
-         rounded-lg text-sm sm:mb-10">
+      <button
+        @click="() => $router.push('/operativepage')"
+        class="hidden md:relative md:w-auto md:inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm sm:mb-10"
+      >
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
@@ -133,22 +148,24 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-4 text-sm"></p>
               <p class="text-md flex items-center text-silverChalice">
-                <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
+                <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2" />
                 ${{ billinInformation.last_purchased_credit }}
               </p>
             </div>
-            <br>
+            <br />
             <div class="border-solid lg:border-dashed mt-4">
               <p class="text-center text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
             </div>
-            <br>
+            <br />
             <div class="flex items-center justify-between">
               <p class="text-xs text-silverChalice mt-2">
                 <!-- {{ cardOne.date }} -->
               </p>
               <button
-                class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
-                Change Plan
+                @click="cancleAction"
+                class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap"
+              >
+                Cancel
               </button>
             </div>
           </div>
@@ -161,18 +178,20 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-4 text-sm">Credits</p>
               <p class="text-md flex items-center text-silverChalice">
-                <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2">
+                <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2" />
                 ${{ billinInformation.credit }}
               </p>
             </div>
-            <br>
+            <br />
             <div class="border-solid lg:border-dashed">
               <p class="text-center text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
             </div>
             <div class="flex items-center justify-between mt-7">
               <p class="text-xs text-silverChalice mt-1"></p>
-              <button @click="BuyMoreCredits"
-                class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap">
+              <button
+                @click="BuyMoreCredits"
+                class="text-sm bg-ravenBlack text-white px-4 py-2 rounded-2xl hover:bg-ravenBlack whitespace-nowrap"
+              >
                 Buy More
               </button>
             </div>
@@ -184,17 +203,20 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
           <div>
             <div class="flex justify-between items-center">
               <h3 class="text-xl font-semibold mb-1">Invoices</h3>
-              <button class="text-sm text-blue-600 px-4 py-2 rounded-2xl whitespace-nowrap" @click="toggleInvoiceCard">
+              <button
+                class="text-sm text-blue-600 px-4 py-2 rounded-2xl whitespace-nowrap"
+                @click="toggleInvoiceCard"
+              >
                 Get invoice
               </button>
             </div>
-            <br><br>
+            <br /><br />
             <div class="border-dashed border-da lg:border-dashed">
               <p class="text-center text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
             </div>
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-2 text-sm">Price</p>
-              <p class="font-bold text-lg"> ${{ billinInformation.last_billing_amount }}</p>
+              <p class="font-bold text-lg">${{ billinInformation.last_billing_amount }}</p>
             </div>
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-2 text-sm">Billing date</p>
@@ -205,10 +227,8 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
       </div>
     </div>
 
-
     <!-- Modal Component -->
     <BuyMoreCreditsModal :isOpen="showBuyMoreCreditsModal" @close="closeBuyMoreCreditsModal" />
-
   </div>
 
   <div v-if="showInvoiceCard">
@@ -218,8 +238,9 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim());
     <!-- Invoice Card -->
     <InvoiceCard
       class="absolute-middle z-50 mx-auto sm:right-12 sm:max-w-sm md:right-16 md:max-w-md lg:right-20 lg:max-w-lg xl:right-80 xl:max-w-xl rounded-md p-4"
-      v-if="showInvoiceCard" @close="toggleInvoiceCard" />
+      v-if="showInvoiceCard"
+      @close="toggleInvoiceCard"
+    />
   </div>
-
 </template>
 <style scoped></style>

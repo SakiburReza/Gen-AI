@@ -79,7 +79,7 @@ onMounted(
           if (response.status) {
             await fetchCredits()
           }
-          toastStore.success(response.data)
+          toastStore.success(response.data.message)
         }
       } catch (error) { }
     }

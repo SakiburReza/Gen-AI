@@ -31,7 +31,7 @@
                 fill="currentColor"
               />
             </svg>
-            Explore
+            Zeuxis Gallery
           </div>
         </li>
 
