@@ -43,6 +43,7 @@ export default {
         silverChalice: '#A2A2A2',
         ravenBlack: '#3D3D3D',
         dimGray: '#6D6D6D',
+        darkGray: '#474747',
 
         // Color Code added by Abeer 22/12/2024
 

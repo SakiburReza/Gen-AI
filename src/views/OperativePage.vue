@@ -558,6 +558,7 @@ const imageModeOptions = [
     </div>
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
+      
       <!-- Left Section: Enhanced Image Grid -->
       <div
         class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
