@@ -17,6 +17,8 @@ import { useToastStore } from '@/stores/toast'
 
 import { ref, watch, onMounted, computed } from 'vue'
 
+import { FwbButton, FwbSpinner, FwbModal } from 'flowbite-vue'
+import { useRoute } from 'vue-router'
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
@@ -29,11 +31,24 @@ const searchQuery = ref('')
 
 const route = useRoute()
 
-// const router = useRouter();
+// Reactive state for modal
+const isModalOpen = ref(false);
+const action = ref(null);
+const selectedImageUrl = ref(null);
 
-// const creditsFromQuery = router.currentRoute.value.query.credits || 10;
+// Function to open the modal and set action + image URL
+const openModal = (imageUrl, selectedAction) => {
+  selectedImageUrl.value = imageUrl;
+  action.value = selectedAction;
+  isModalOpen.value = true;
+};
 
-// console.log("lll",creditsFromQuery)
+// Function to close the modal
+const closeModal = () => {
+  isModalOpen.value = false;
+  action.value = null;
+  selectedImageUrl.value = null;
+};
 
 const toastStore = useToastStore()
 
@@ -66,7 +81,6 @@ const closePreviewModal = () => {
   showPreviewModal.value = false
   selectedImage.value = null
 }
-
 // States to store images from the ImageInputCard components
 
 const referenceImage = ref<File | null>(null)
@@ -287,6 +301,22 @@ const generateAiContent = async () => {
     loading.value = false
   }
 }
+const confirmAction = async () => {
+  if (!selectedImageUrl.value || !action.value) return;
+
+  try {
+    console.log(`Action: ${action.value}, Image URL: ${selectedImageUrl.value}`);
+
+    // Perform the share/unshare action
+    // Replace this with your API call or business logic
+    const response = await shareAction(selectedImageUrl.value, action.value);
+    console.log("Response:", response);
+
+    closeModal(); // Close the modal after successful action
+  } catch (error) {
+    console.error("Error confirming action:", error);
+  }
+};
 const shareAction = async (imageId: string, action: 'Y' | 'N') => {
   try {
     const response = await genAiService.shareImage({ imageId: imageId, isShare: action })
@@ -605,10 +635,11 @@ const imageModeOptions = [
 
                 <button
                   v-if="media[index].isShared === 'N' || media[index].isShared === null"
-                  @click="shareAction(media[index].url, 'Y')"
+                    @click="openModal(media[index].url, 'Y')"
                 >
                 </button>
                 <button v-else @click="shareAction(media[index].url, 'N')"></button>
+                <button v-else  @click="openModal(media[index].url, 'N')">Unexplore</button>
               </div>
             </div>
 
@@ -919,6 +950,63 @@ const imageModeOptions = [
     <!--
     <ShowModalWithDownloadButton :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->
   </div>
+ <!-- Modal -->
+ <div
+      v-if="isModalOpen"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div
+        class="bg-white rounded-lg shadow-xl w-96 p-6 relative"
+      >
+        <!-- Close Button -->
+        <button
+          @click="closeModal"
+          class="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-5 h-5"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <!-- Modal Title -->
+        <h2 class="text-lg font-semibold text-gray-800">
+          Confirm Action
+        </h2>
+
+        <!-- Modal Content -->
+        <p class="mt-2 text-gray-600">
+          Are you sure you want to
+          <span class="font-bold text-blue-600">
+            {{ action === 'Y' ? 'Add to Explore' : 'Unexplore' }}
+          </span>
+          this item?
+        </p>
+
+        <!-- Buttons -->
+        <div class="mt-6 flex justify-end gap-3">
+          <button
+            @click="closeModal"
+            class="px-4 py-2 text-sm text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition"
+          >
+            Cancel
+          </button>
+          <button
+            @click="confirmAction"
+            :class="action === 'Y' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red'"
+            class="px-4 py-2 text-sm text-white rounded-md transition"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
 </template>
 
 <style scoped>
