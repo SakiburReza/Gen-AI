@@ -100,14 +100,15 @@ const handleOutsideClick = (event) => {
           <div v-else-if="image?.type === 'video'" class="w-full">
             <video v-if="fileUrl" :src="fileUrl" controls
               class="rounded-lg w-full max-h-[calc(100vh-12rem)] object-contain"></video>
-          </div>
-
+          </div>    
+          <p class="mt-5">{{ image.prompt }}</p>
           <!-- Download Button -->
           <a v-if="image?.url" :href="fileUrl" :download="getFilename(image.url)"
             class="flex items-center justify-center text-blue-600 text-sm font-semibold py-2 px-4 rounded hover:bg-blue-600 hover:text-white mt-4">
             <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-4 h-4 mr-2" />
             DOWNLOAD
           </a>
+      
         </div>
       </div>
     </div>

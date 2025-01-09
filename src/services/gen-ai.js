@@ -81,7 +81,7 @@ class GenAIService {
   subscribePackages(subscribePackage, recurringConfirmation, recurringCadence) {
     return axios.post(
       this.url +
-      `/checkoutSubscribe?subscribePackage=${subscribePackage}&recurringConfirmation=${recurringConfirmation}&recurringCadence=${recurringCadence}`,
+        `/checkoutSubscribe?subscribePackage=${subscribePackage}&recurringConfirmation=${recurringConfirmation}&recurringCadence=${recurringCadence}`,
       {},
       {
         headers: this.getAuthHeaders(),
@@ -97,12 +97,9 @@ class GenAIService {
   //   )
   // }
   getPaymentSync() {
-    return axios.get(
-      this.url + `/square/paymentDetails`,
-      {
-        headers: this.getAuthHeaders(),
-      },
-    )
+    return axios.get(this.url + `/square/paymentDetails`, {
+      headers: this.getAuthHeaders(),
+    })
   }
 
   fetchUserProfile() {
@@ -127,7 +124,7 @@ class GenAIService {
   billingInformation() {
     return axios.get(this.url + '/billingInfo', {
       headers: this.getAuthHeaders(),
-    });
+    })
   }
   getCommunityMedia() {
     return axios.get(this.url + '/share/communityImage')
@@ -140,6 +137,11 @@ class GenAIService {
   }
   likeImage(data) {
     return axios.post(this.url + '/like-image', data, {
+      headers: this.getAuthHeaders(),
+    })
+  }
+  cancelSubscription() {
+    return axios.get(this.url + `/cancelSubscription`, {
       headers: this.getAuthHeaders(),
     })
   }
