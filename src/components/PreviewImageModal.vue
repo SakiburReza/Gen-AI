@@ -57,7 +57,6 @@ const fetchFile = async () => {
 
 // Watch for changes in image.url and isOpen to fetch the file when image.url is set
 watch([() => props.image?.url, () => props.isOpen], ([imageUrl, isOpen]) => {
-  console.log('Watching image.url and isOpen:', imageUrl, isOpen);
   if (isOpen && imageUrl) {
     fetchFile();
   }
