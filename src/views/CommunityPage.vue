@@ -125,31 +125,34 @@ onMounted(async () => {
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar -->
       <div class="flex items-center w-full max-w-3xl border border-gray-300 rounded-md">
+        <div class="relative w-full">
         <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          class="ml-2"
+          class="h-5 w-5 absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
           <path
-            d="M23.707 22.293L16.882 15.468C18.204 13.835 19 11.76 19 9.50002C19 4.26202 14.738 0 9.49997 0C4.26197 0 0 4.26197 0 9.49997C0 14.738 4.26202 19 9.50002 19C11.76 19 13.835 18.204 15.468 16.882L22.293 23.707C22.488 23.902 22.744 24 23 24C23.256 24 23.512 23.902 23.707 23.707C24.098 23.316 24.098 22.684 23.707 22.293ZM9.50002 17C5.364 17 2.00002 13.636 2.00002 9.49997C2.00002 5.36395 5.364 1.99997 9.50002 1.99997C13.636 1.99997 17 5.36395 17 9.49997C17 13.636 13.636 17 9.50002 17Z"
-            fill="#6D6D6D"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"
           />
         </svg>
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Search"
-          class="w-full px-4 py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300"
         />
+        </div>
         <!-- Add the SVG icon inside the search bar -->
       </div>
     </div>
 
     <div class="flex flex-row h-full overflow-hidden">
-      <div class="w-4/5 h-full mt-8 mb-5 overflow-y-auto">
+      <div class="w-4/5 h-full mt-4 mb-5 overflow-y-auto">
         <!-- Left Section: Enhanced Image Grid -->
         <div
           class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-0 pr-2 overflow-y-auto"
@@ -183,7 +186,7 @@ onMounted(async () => {
                 <!-- Copy -->
                 <button
                   @click="copyAction(media[index].prompt)"
-                  class="flex justify-center items-center w-8 h-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
+                  class="flex justify-center items-center w-7 h-7 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
                 >
                   <svg
                     width="16"
