@@ -25,6 +25,8 @@ import PreviewImageModal from '@/components/PreviewImageModal.vue'
 
 const { fetchCredits } = useCredits()
 
+const searchQuery = ref('')
+
 const route = useRoute()
 
 // const router = useRouter();
@@ -348,6 +350,7 @@ const copyAction = async (prompt: string) => {
   }
 }
 
+
 //Dropdown property
 
 // const activeModeDropDown = ref('image')
@@ -458,6 +461,16 @@ const imageModeOptions = [
 <template>
   <div class="flex flex-col h-screen">
     <Navbar />
+
+    <div class="flex items-center w-full max-w-sm border border-gray-300 rounded-md ml-15">
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="Search"
+        class="w-full px-4 py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+      />
+      <!-- Add the SVG icon inside the search bar -->
+    </div>
 
     <div class="flex flex-col sm:flex-row sm:flex-wrap w-full">
       <!-- Left Section: Enhanced Image Grid -->
