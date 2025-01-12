@@ -180,11 +180,11 @@ onMounted(async () => {
                 <!-- Copy -->
                 <button
                   @click="copyAction(media[index].prompt)"
-                  class="flex justify-center items-center w-7 h-7 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
+                  class="flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
                 >
                   <svg
-                    width="16"
-                    height="15"
+                    width="10"
+                    height="10"
                     viewBox="0 0 16 15"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

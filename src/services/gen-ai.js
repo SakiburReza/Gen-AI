@@ -79,10 +79,24 @@ class GenAIService {
   }
 
   subscribePackages(subscribePackage, recurringConfirmation, recurringCadence) {
+    console.log('no package found');
+    
     return axios.post(
       this.url +
         `/checkoutSubscribe?subscribePackage=${subscribePackage}&recurringConfirmation=${recurringConfirmation}&recurringCadence=${recurringCadence}`,
       {},
+      {
+        headers: this.getAuthHeaders(),
+      },
+    )
+  }
+  
+  changesubscribePackages(subscribePackage) {
+    console.log('package change');
+    
+    return axios.get(
+      this.url +
+        `/changeSubscriptionPlan?subscribePackage=${subscribePackage}`,
       {
         headers: this.getAuthHeaders(),
       },

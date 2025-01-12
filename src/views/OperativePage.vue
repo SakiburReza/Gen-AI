@@ -580,7 +580,7 @@ const imageModeOptions = [
           <div class="flex-1">
             <div class="relative">
               <input v-model="searchQuery" type="text" placeholder="Search"
-                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" />
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:ring-blue-300" />
               <svg xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5 absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
