@@ -309,6 +309,7 @@ const generateAiContent = async () => {
       formData.append('image', referenceImage.value!)
 
       formData.append('prompt', description.value)
+      formData.append('type','image-to-video')
 
       response = await genAiService.imageToVideo(formData)
     } else if (activeFunctionality.value === 'Image to Image') {
