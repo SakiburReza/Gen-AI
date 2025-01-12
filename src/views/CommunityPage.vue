@@ -117,7 +117,7 @@ onMounted(async () => {
     <!-- Search Bar and Heart Button -->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar -->
-      <div class="flex items-center w-full max-w-3xl border border-gray-300 rounded-md">
+      <div class="flex items-center w-full md:w-[69%] pr-2 md:pr-0 md:mr-0 space-x-4">
         <div class="relative w-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -145,11 +145,11 @@ onMounted(async () => {
     </div>
 
     <div class="flex flex-row overflow-hidden">
-      <div class="flex-4 w-4/5 h-full mt-4 mb-5 overflow-y-auto">
+      <div class="flex-4 w-4/5 h-full mt-1 mb-5 overflow-y-auto">
         <!-- Left Section: Enhanced Image Grid -->
         <div
           class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
-          style="max-height: calc(78vh - 4rem); overflow-y: auto"
+          style="max-height: calc(90vh - 4rem); overflow-y: auto"
         >
           <!-- Display spinner while loading images -->
           <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
