@@ -145,12 +145,12 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="flex flex-row h-full overflow-hidden">
-      <div class="w-4/5 h-full mt-4 mb-5 overflow-y-auto">
+    <div class="flex flex-row overflow-hidden">
+      <div class="flex-4 w-4/5 h-full mt-4 mb-5 overflow-y-auto">
         <!-- Left Section: Enhanced Image Grid -->
         <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-0 pr-2 overflow-y-auto"
-          style="max-height: calc(90vh - 4rem); overflow-y: auto"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
+          style="max-height: calc(78vh - 4rem); overflow-y: auto"
         >
           <!-- Display spinner while loading images -->
           <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
