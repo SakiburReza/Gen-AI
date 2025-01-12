@@ -7,7 +7,7 @@ import ShowModalForImage from '@/components/ShowModalForImage.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, watch, onMounted, computed, onUnmounted } from 'vue'
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
@@ -476,7 +476,7 @@ const goToExplore = () => {
 // const activeModeDropDown = ref('image')
 
 const isImageDropdownOpen = ref(false)
-
+const dropdownRef = ref(null); // Ref for the dropdown container
 const selectedLabel = ref('Text to Image')
 
 const selectedImageDropDown = ref(null)
@@ -500,6 +500,12 @@ function selectVideoOption(option) {
 
   isImageDropdownOpen.value = false // Close the dropdown
 }
+// Function to handle clicks outside the dropdown
+function handleOutsideClick(event) {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+    isImageDropdownOpen.value = false; // Close the dropdown
+  }
+}
 
 // Fetch images when the component is mounted
 
@@ -521,11 +527,14 @@ onMounted(async () => {
   //     }
   //   } catch (error) {}
   // }
-
+  document.addEventListener('click', handleOutsideClick);
   selectImageOption(imageModeOptions[0])
 
   fetchMedia('text-to-image') // Initial load
 })
+onUnmounted(() => {
+  document.removeEventListener('click', handleOutsideClick);
+});
 const videoModeOptions = [
   {
     id: '21',
@@ -829,7 +838,7 @@ const imageModeOptions = [
         <div class="px-6 mx-auto w-full flex justify-center">
           <div class="grid grid-cols-1 gap-4 w-full sm:w-64 md:w-80 lg:w-full">
             <!-- Dropdown for Text to Image -->
-            <div class="relative">
+            <div class="relative" ref="dropdownRef">
               <!-- Dropdown Button -->
               <button
                 @click="isImageDropdownOpen = !isImageDropdownOpen"
