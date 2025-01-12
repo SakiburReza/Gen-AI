@@ -38,7 +38,7 @@
         <!-- Create Link with Dropdown for Text to Image -->
         <li>
           <div
-            @click="toggleCreateDropdown"
+
             class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all cursor-pointer"
           >
             <svg
@@ -59,7 +59,7 @@
           </div>
 
           <!-- Dropdown for "Text to Image" -->
-          <ul v-show="isCreateDropdownOpen" class="space-y-2 pl-6 mt-2">
+          <ul class="space-y-2 pl-6 mt-2">
             <li>
               <router-link
                 :to="{ path: '/operativepage' }"
@@ -83,7 +83,7 @@
             </li>
           </ul>
 
-          <ul v-show="isCreateDropdownOpen" class="space-y-2 pl-6 mt-2">
+          <ul class="space-y-2 pl-6 mt-2">
             <li>
               <router-link
                 :to="{
@@ -101,7 +101,7 @@
             </li>
           </ul>
 
-          <ul v-show="isCreateDropdownOpen" class="space-y-2 pl-6 mt-2">
+          <ul class="space-y-2 pl-6 mt-2">
             <li>
               <router-link
                 :to="{
@@ -120,7 +120,7 @@
             </li>
           </ul>
 
-          <ul v-show="isCreateDropdownOpen" class="space-y-2 pl-6 mt-2">
+          <ul class="space-y-2 pl-6 mt-2">
             <li>
               <router-link
                 :to="{
@@ -139,7 +139,7 @@
             </li>
           </ul>
 
-          <ul v-show="isCreateDropdownOpen" class="space-y-2 pl-6 mt-2">
+          <ul  class="space-y-2 pl-6 mt-2">
             <li>
               <router-link
                 :to="{
@@ -159,7 +159,7 @@
               </router-link>
             </li>
           </ul>
-          <ul v-show="isCreateDropdownOpen" class="space-y-2 pl-6 mt-2">
+          <ul class="space-y-2 pl-6 mt-2">
           <li>
             <router-link
               :to="{
@@ -234,15 +234,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-
-// Reactive state for controlling the dropdown
-const isCreateDropdownOpen = ref(false);
-
-// Method to toggle the visibility of the dropdown
-const toggleCreateDropdown = () => {
-  isCreateDropdownOpen.value = !isCreateDropdownOpen.value;
-};
+// import { ref } from 'vue';
+//
+// // Reactive state for controlling the dropdown
+// const isCreateDropdownOpen = ref(false);
+//
+// // Method to toggle the visibility of the dropdown
+// const toggleCreateDropdown = () => {
+//   isCreateDropdownOpen.value = !isCreateDropdownOpen.value;
+// };
 
 // Method to handle hard refresh logic (if needed)
 const hardRefresh = () => {
