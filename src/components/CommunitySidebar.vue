@@ -88,7 +88,7 @@
               <router-link
                 :to="{
               path: '/operativepage',
-              //query: { mode: 'video', activeFunctionality: 'Templates' },
+              query: { mode: 'image', functionality: 'image-to-image' },
             }"
                 class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
               >
@@ -106,7 +106,7 @@
               <router-link
                 :to="{
               path: '/operativepage',
-              //query: { mode: 'video', activeFunctionality: 'Templates' },
+              query: { mode: 'video', functionality: 'image-to-video' },
             }"
                 class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
               >
@@ -125,7 +125,7 @@
               <router-link
                 :to="{
               path: '/operativepage',
-              //query: { mode: 'video', activeFunctionality: 'Templates' },
+              query: { mode: 'video', functionality: 'text-to-video' },
             }"
                 class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
               >
@@ -144,7 +144,7 @@
               <router-link
                 :to="{
               path: '/operativepage',
-              //query: { mode: 'video', activeFunctionality: 'Templates' },
+              query: { mode: 'video', functionality: 'face-swap' },
             }"
                 class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
               >
@@ -164,7 +164,7 @@
             <router-link
               :to="{
               path: '/operativepage',
-              //query: { mode: 'video', activeFunctionality: 'Templates' },
+              query: { mode: 'video', functionality: 'templates' },
             }"
               class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
             >
