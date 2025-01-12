@@ -243,6 +243,10 @@ const fetchLikedMedia = async (label: string) => {
   loading.value = true
   if (label === 'Text to Image') label = 'text-to-image'
   else if (label === 'Image to Image') label = 'image-to-image'
+  else if (label === 'Text to Video') label = 'text-to-video'
+  else if (label === 'Image to Video') label = 'image-to-video'
+  else if (label === 'Face Swap') label = 'face-swap'
+  else if (label === 'Templates') label = 'templates'
 
   try {
     const { data: response } = await genAiService.getLikedMedia(label)
@@ -476,7 +480,7 @@ const goToExplore = () => {
 // const activeModeDropDown = ref('image')
 
 const isImageDropdownOpen = ref(false)
-const dropdownRef = ref(null); // Ref for the dropdown container
+const dropdownRef = ref(null) // Ref for the dropdown container
 const selectedLabel = ref('Text to Image')
 
 const selectedImageDropDown = ref(null)
@@ -503,7 +507,7 @@ function selectVideoOption(option) {
 // Function to handle clicks outside the dropdown
 function handleOutsideClick(event) {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
-    isImageDropdownOpen.value = false; // Close the dropdown
+    isImageDropdownOpen.value = false // Close the dropdown
   }
 }
 
@@ -527,14 +531,14 @@ onMounted(async () => {
   //     }
   //   } catch (error) {}
   // }
-  document.addEventListener('click', handleOutsideClick);
+  document.addEventListener('click', handleOutsideClick)
   selectImageOption(imageModeOptions[0])
 
   fetchMedia('text-to-image') // Initial load
 })
 onUnmounted(() => {
-  document.removeEventListener('click', handleOutsideClick);
-});
+  document.removeEventListener('click', handleOutsideClick)
+})
 const videoModeOptions = [
   {
     id: '21',
