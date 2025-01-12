@@ -232,7 +232,7 @@ const fetchMedia = async (label: string) => {
   else if (label === 'Text to Video') label = 'text-to-video'
   else if (label === 'Image to Video') label = 'image-to-video'
   else if (label === 'Face Swap') label = 'face-swap'
-  else if (label === 'Templates') label = 'template-video'
+  else if (label === 'Templates') label = 'templates'
 
   try {
     const { data: response } = await genAiService.getMedia(label)
@@ -247,7 +247,7 @@ const fetchMedia = async (label: string) => {
           item.type ||
           (label === 'text-to-video' ||
           label === 'image-to-video' ||
-          label === 'template-video' ||
+          label === 'templates' ||
           (label === 'face-swap' && item.orientation == null)
             ? 'video'
             : 'image'),
@@ -695,9 +695,7 @@ const imageModeOptions = [
             controls
             class="w-full h-full object-contain max-w-full"
             @click="
-              (activeFunctionality === 'Text to Video' ||
-                activeFunctionality === 'Image to Video' ||
-                activeFunctionality === 'Templates') &&
+              (activeFunctionality === 'Face Swap' ) &&
               filteredMedia[index] &&
               openPreviewModal(filteredMedia[index])
             "
