@@ -12,7 +12,6 @@ const searchQuery = ref('')
 
 const toastStore = useToastStore()
 
-
 // Computed property to filter media based on the search query
 const filteredMedia = computed(() =>
   media.value.filter((item) => item.prompt.toLowerCase().includes(searchQuery.value.toLowerCase())),
@@ -25,8 +24,8 @@ const closePreviewModal = () => {
   selectedImage.value = null
 }
 const openPreviewModal = (mediaItem) => {
-  console.log("Image clicked", media);
-  console.log("mediaItem", mediaItem);
+  console.log('Image clicked', media)
+  console.log('mediaItem', mediaItem)
 
   selectedImage.value = mediaItem
   showPreviewModal.value = true
@@ -91,7 +90,7 @@ const fetchMedia = async () => {
       media.value = response.data.map((item) => ({
         url: item.content,
 
-        type: 'image',
+        type: item.type,
         orientation: item.orientation,
         prompt: item.prompt,
         isLiked: item.like,
@@ -120,26 +119,26 @@ onMounted(async () => {
       <!-- Search Bar -->
       <div class="flex items-center w-full max-w-3xl border border-gray-300 rounded-md">
         <div class="relative w-full">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"
+            />
+          </svg>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300"
           />
-        </svg>
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Search"
-          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300"
-        />
         </div>
         <!-- Add the SVG icon inside the search bar -->
       </div>
@@ -154,7 +153,7 @@ onMounted(async () => {
         >
           <!-- Display spinner while loading images -->
           <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
-            <fwb-spinner size="12"/>
+            <fwb-spinner size="12" />
           </div>
           <div
             v-for="(item, index) in filteredMedia"
@@ -166,13 +165,22 @@ onMounted(async () => {
             ]"
           >
             <!-- Render Image -->
-            <img v-if="media[index] && media[index].type === 'image'"
+            <img
+              v-if="media[index] && media[index].type === 'image'"
               :src="imageUrl() + item.url"
               :alt="'Media ' + index"
               class="h-full max-w-full rounded-lg w-full"
               :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
               @click="openPreviewModal(item)"
             />
+            <!-- Render Video -->
+
+            <video
+              v-else-if="media[index] && media[index].type === 'video'"
+              :src="imageUrl() + media[index].url"
+              controls
+              class="w-full h-full object-contain max-w-full"
+            ></video>
             <!-- Floating Buttons -->
             <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
               <!-- Text Button -->

@@ -7,7 +7,7 @@ import ShowModalForImage from '@/components/ShowModalForImage.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
-import { ref, watch, onMounted, computed, onUnmounted } from 'vue'
+import { ref, watch, onMounted, computed, onUnmounted, nextTick } from 'vue'
 import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
@@ -126,42 +126,69 @@ function setActive(button) {
 
 // Active functionality state
 const activeFunctionality = ref<string>('Text to Image')
-
-function changeFunctionality(mode) {
-  console.log(mode)
-
-  activeFunctionality.value = mode
+function convertToTitleCase(input) {
+  if (!input) return 'Text to Image'
+  return input
+    .split('-') // Split the string by hyphens
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+    .join(' ') // Join the words with spaces
 }
 
-// Watcher to trigger fetchImages based on activeFunctionality changes
+function initializeFromQueryParams() {
+  const mode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode || 'image'; // Default to 'image'
+  let functionality = Array.isArray(route.query.functionality)
+    ? route.query.functionality[0]
+    : route.query.functionality;
 
-watch(activeFunctionality, async (newValue) => {
-  if (newValue === 'Face Swap') {
-    await fetchMedia('face-swap')
-  } else if (newValue === 'Text to Image') {
-    await fetchMedia('text-to-image')
-  } else if (newValue === 'Image to Image') {
-    await fetchMedia('image-to-image')
-  } else if (newValue === 'Image to Video') {
-    await fetchMedia('image-to-video')
-  } else if (newValue === 'Text to Video') {
-    await fetchMedia('text-to-video')
-  } else if (newValue === 'Templates') {
-    await fetchMedia('template-video')
+  // Fallback to default functionality
+  functionality = functionality || (mode === 'video' ? 'text-to-video' : 'text-to-image');
+  fetchMedia(functionality)
+
+  // Convert functionality to title case for matching options
+  const normalizedFunctionality = convertToTitleCase(functionality).toLowerCase();
+
+  console.log('Mode:', mode);
+  console.log('Functionality:', functionality);
+
+  // Set mode and ensure active mode is valid
+  if (mode === 'video' || mode === 'image') {
+    activeMode.value = mode;
+    setActive(mode); // Ensure mode-dependent logic runs
   }
-})
 
-watch(activeMode, async (newValue) => {
-  if (newValue === 'video') {
-    activeFunctionality.value = 'Text to Video'
+  // Find and set the matching functionality
+  const options = mode === 'video' ? videoModeOptions : imageModeOptions;
+  const option = options.find((opt) => opt.text.toLowerCase() === normalizedFunctionality);
 
-    await fetchMedia('text-to-video')
-  } else if (newValue === 'image') {
-    activeFunctionality.value = 'Text to Image'
-
-    await fetchMedia('text-to-image')
+  if (option) {
+    nextTick(() => {
+      mode === 'video' ? selectVideoOption(option) : selectImageOption(option);
+    });
+  } else {
+    console.warn('Functionality not found in available options');
   }
-})
+}
+
+// Unified watcher for functionality and mode changes
+watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => {
+  const functionalityMap = {
+    'Text to Video': 'text-to-video',
+    'Image to Video': 'image-to-video',
+    'Face Swap': 'face-swap',
+    Templates: 'templates',
+    'Text to Image': 'text-to-image',
+    'Image to Image': 'image-to-image',
+  };
+
+  // Determine functionality based on the active mode
+  const defaultFunctionality = newMode === 'video' ? 'text-to-video' : 'text-to-image';
+
+  // Fetch media only when necessary
+  const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality;
+  if (functionalityKey) {
+    await fetchMedia(functionalityKey);
+  }
+});
 
 const selectedRatio = ref('Landscape')
 
@@ -205,7 +232,7 @@ const fetchMedia = async (label: string) => {
   else if (label === 'Text to Video') label = 'text-to-video'
   else if (label === 'Image to Video') label = 'image-to-video'
   else if (label === 'Face Swap') label = 'face-swap'
-  else if (label === 'Templates') label = 'template-video'
+  else if (label === 'Templates') label = 'templates'
 
   try {
     const { data: response } = await genAiService.getMedia(label)
@@ -220,7 +247,7 @@ const fetchMedia = async (label: string) => {
           item.type ||
           (label === 'text-to-video' ||
           label === 'image-to-video' ||
-          label === 'template-video' ||
+          label === 'templates' ||
           (label === 'face-swap' && item.orientation == null)
             ? 'video'
             : 'image'),
@@ -487,12 +514,10 @@ const selectedImageDropDown = ref(null)
 
 function selectImageOption(option) {
   selectedLabel.value = option.text // Update the selected label
-
   selectedImageDropDown.value = option.imageSrc // Update the selected image
-
   activeFunctionality.value = option.text
-
   isImageDropdownOpen.value = false // Close the dropdown
+  console.log(selectedLabel.value, selectedImageDropDown.value, activeFunctionality.value)
 }
 
 function selectVideoOption(option) {
@@ -514,27 +539,9 @@ function handleOutsideClick(event) {
 // Fetch images when the component is mounted
 
 onMounted(async () => {
-  // console.log(route.query.checkoutId)
-
-  // if (route.query) {
-  //   try {
-  //     const checkoutId = route.query.checkoutId
-
-  //     const transactionId = route.query.transactionId
-
-  //     console.log('checkoutId :', checkoutId, 'transactionId:', transactionId)
-
-  //     if (checkoutId && transactionId) {
-  //       const response = await genAiService.getPaymentSync(checkoutId, transactionId)
-
-  //       toastStore.success(response.data)
-  //     }
-  //   } catch (error) {}
-  // }
+  initializeFromQueryParams()
   document.addEventListener('click', handleOutsideClick)
   selectImageOption(imageModeOptions[0])
-
-  fetchMedia('text-to-image') // Initial load
 })
 onUnmounted(() => {
   document.removeEventListener('click', handleOutsideClick)
@@ -582,14 +589,15 @@ const imageModeOptions = [
 <template>
   <div class="flex flex-col h-screen">
     <Navbar />
-    <div class="flex items-center w-full space-x-4 pr-16 justify-between">
+    <!-- Search Button on Top -->
+    <div class="flex items-center w-full md:w-[69%] pr-2 md:pr-0 md:mr-0 space-x-4">
       <!-- Explore Button -->
       <button
         type="button"
         @click="goToExplore"
         class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 ml-15"
       >
-        < Explore
+        Explore
       </button>
 
       <!-- Search Input -->
@@ -687,9 +695,7 @@ const imageModeOptions = [
             controls
             class="w-full h-full object-contain max-w-full"
             @click="
-              (activeFunctionality === 'Text to Video' ||
-                activeFunctionality === 'Image to Video' ||
-                activeFunctionality === 'Templates') &&
+              (activeFunctionality === 'Face Swap' ) &&
               filteredMedia[index] &&
               openPreviewModal(filteredMedia[index])
             "
@@ -1100,7 +1106,7 @@ const imageModeOptions = [
           class="px-4 py-2 text-sm text-white rounded-md transition"
           :class="{
             'bg-blue-600 hover:bg-blue-700': action === 'Y',
-            'bg-red hover:bg-red': action === 'N'||'delete',
+            'bg-red hover:bg-red': action === 'N' || 'delete',
             //'bg-gray-600 hover:bg-gray-700': action === 'delete',
           }"
         >
