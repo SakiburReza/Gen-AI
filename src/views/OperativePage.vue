@@ -642,7 +642,7 @@ const imageModeOptions = [
           class="relative overflow-hidden rounded-lg"
           :class="[
             item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
-            'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40',
+            'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-80',
           ]"
           @click="
             activeFunctionality === 'Face Swap' &&
