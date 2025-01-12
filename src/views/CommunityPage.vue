@@ -118,7 +118,7 @@ onMounted(async () => {
     <!-- Search Bar and Heart Button -->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar -->
-      <div class="flex items-center w-full max-w-5xl border border-gray-300 rounded-md">
+      <div class="flex items-center w-full max-w-3xl border border-gray-300 rounded-md">
         <div class="relative w-full">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -202,7 +202,9 @@ onMounted(async () => {
       </div>
     </div>
     <!-- Sidebar Component -->
-    <CommunitySidebar class="w-30 md:w-30" />
+    <div class="w-30 md:w-64 bg-white shadow-md border-l border-gray-300">
+      <CommunitySidebar class="w-full"/>
+    </div>
     <!-- Modal Component -->
     <PreviewImageModal
       :isOpen="showPreviewModal"
