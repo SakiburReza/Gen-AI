@@ -1100,8 +1100,8 @@ const imageModeOptions = [
           class="px-4 py-2 text-sm text-white rounded-md transition"
           :class="{
             'bg-blue-600 hover:bg-blue-700': action === 'Y',
-            'bg-red hover:bg-red': action === 'N',
-            'bg-gray-600 hover:bg-gray-700': action === 'delete',
+            'bg-red hover:bg-red': action === 'N'||'delete',
+            //'bg-gray-600 hover:bg-gray-700': action === 'delete',
           }"
         >
           Confirm
