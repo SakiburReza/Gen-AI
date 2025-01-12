@@ -529,25 +529,25 @@ onMounted(async () => {
 const videoModeOptions = [
   {
     id: '21',
-    imageSrc: '/public/images/icon/text-to-video.svg',
+    imageSrc: '/images/icon/text-to-video.svg',
     text: 'Text to Video',
   },
 
   {
     id: '22',
-    imageSrc: '/public/images/icon/image-to-video.svg',
+    imageSrc: '/images/icon/image-to-video.svg',
     text: 'Image to Video',
   },
 
   {
     id: '23',
-    imageSrc: '/public/images/icon/face-swap.svg',
+    imageSrc: '/images/icon/face-swap.svg',
     text: 'Face Swap',
   },
 
   {
     id: '24',
-    imageSrc: '/public/images/icon/templates.svg',
+    imageSrc: '/images/icon/templates.svg',
     text: 'Templates',
   },
 ]
@@ -555,12 +555,12 @@ const videoModeOptions = [
 const imageModeOptions = [
   {
     id: '11',
-    imageSrc: '/public/images/icon/text-to-image.svg',
+    imageSrc: '/images/icon/text-to-image.svg',
     text: 'Text to Image',
   },
   {
     id: '12',
-    imageSrc: '/public/images/icon/image-to-image.svg',
+    imageSrc: '/images/icon/image-to-image.svg',
     text: 'Image to Image',
   },
 ]
