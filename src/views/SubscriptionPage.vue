@@ -7,6 +7,7 @@ import genAiService from '@/services/gen-ai'
 import { useRoute } from 'vue-router'
 import { useToastStore } from '@/stores/toast'
 import { useCredits } from '@/utils/utils'
+import router from '@/router'
 const route = useRoute()
 const toastStore = useToastStore()
 const { fetchCredits } = useCredits()
@@ -71,15 +72,15 @@ onMounted(
     if (route.query) {
       try {
         const payment = route.query.payment
-
         const customerId = route.query.customer
-
         if (payment === "success" && customerId) {
           const response = await genAiService.getPaymentSync()
           if (response.status) {
+            toastStore.success(response.data.message)
             await fetchCredits()
+            router.replace({ path: route.path });
           }
-          toastStore.success(response.data.message)
+          
         }
       } catch (error) { }
     }

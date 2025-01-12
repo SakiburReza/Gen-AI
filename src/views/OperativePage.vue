@@ -453,7 +453,6 @@ const likeAction = async (imageId: string, action: 'Y' | 'N') => {
 }
 
 const copyAction = async (prompt: string) => {
-  console.log('ssss')
   if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
     try {
       await navigator.clipboard.writeText(prompt)
