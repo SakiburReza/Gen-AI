@@ -639,7 +639,7 @@ const imageModeOptions = [
 
           <!------------------------------------------------------ Roney ----------------------------------------->
           <!-- Floating Social Buttons -->
-          <div v-if="media[index] && media[index].type === 'image'"
+          <div v-if="media[index]"
             class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
             <!-- Share Button with Group Class -->
             <div class="relative group">
