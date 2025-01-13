@@ -147,7 +147,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col flex-wrap lg:flex-row gap-5 space-y-4 sm:space-y-6">
+  <div class="flex flex-col flex-wrap lg:flex-row gap-5 space-y-4 sm:space-y-6 min-w-90">
     <!-- First Card Component -->
 
     <div
@@ -167,10 +167,11 @@ watch(
         'translate-y-2': buttonText !== 'Current Package', // Keep in line
         'bg-tertiary': data.title !== 'Next Up Creator',
       }"
+          
     >
       <!-- Title -->
       <h2
-        class="text-3xl font-semibold mb-4 md:text-left"
+        class="text-3xl font-semibold mb-4 md:text-left "
         :class="data.title === 'Next Up Creator' ? 'text-white' : 'text-black'"
       >
         {{ data.title }}
