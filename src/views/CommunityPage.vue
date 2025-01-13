@@ -117,7 +117,7 @@ onMounted(async () => {
     <!-- Search Bar and Heart Button -->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar -->
-      <div class="flex items-center w-full max-w-5xl border border-gray-300 rounded-md">
+      <div class="flex items-center w-full md:w-[69%] pr-2 md:pr-0 md:mr-0 space-x-4">
         <div class="relative w-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -144,11 +144,11 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="flex flex-row h-full overflow-hidden">
-      <div class="w-4/5 h-full mt-4 mb-5 overflow-y-auto">
+    <div class="flex flex-row overflow-hidden">
+      <div class="flex-4 w-4/5 h-full mt-1 mb-5 overflow-y-auto">
         <!-- Left Section: Enhanced Image Grid -->
         <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-0 pr-2 overflow-y-auto"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
           style="max-height: calc(90vh - 4rem); overflow-y: auto"
         >
           <!-- Display spinner while loading images -->
@@ -210,7 +210,9 @@ onMounted(async () => {
       </div>
     </div>
     <!-- Sidebar Component -->
-    <CommunitySidebar class="w-30 md:w-30" />
+    <div class="w-30 md:w-64 bg-white shadow-md border-l border-gray-300">
+      <CommunitySidebar class="w-full"/>
+    </div>
     <!-- Modal Component -->
     <PreviewImageModal
       :isOpen="showPreviewModal"
