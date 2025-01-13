@@ -1082,8 +1082,7 @@ const imageModeOptions = [
           class="font-bold"
           :class="{
             'text-blue-600': action === 'Y',
-            'text-red': action === 'N',
-            'text-gray-600': action === 'delete',
+            'text-red': action === 'N' || action === 'delete',
           }"
         >
           {{ actionText }}
@@ -1103,9 +1102,8 @@ const imageModeOptions = [
           @click="confirmAction"
           class="px-4 py-2 text-sm text-white rounded-md transition"
           :class="{
-            'bg-blue-600 hover:bg-blue-700': action === 'Y',
-            'bg-red hover:bg-red': action === 'N' || 'delete',
-            //'bg-gray-600 hover:bg-gray-700': action === 'delete',
+            'bg-blue-700 hover:bg-blue-700': action === 'Y',
+            'bg-red hover:bg-red': action === 'N' || action === 'delete',
           }"
         >
           Confirm
