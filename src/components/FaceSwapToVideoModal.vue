@@ -66,7 +66,7 @@ const turnIntoVideoAction = async () => {
     //const file = new File([blob], getFilename(props.image.url), { type: blob.type });
 
     let type = "face-swap"
-    formData.append('image', props.image.url); // Correctly use image.url
+    formData.append('image_url', props.image.url); // Correctly use image.url
     formData.append('prompt', prompt.value);
     formData.append('type', type)
 

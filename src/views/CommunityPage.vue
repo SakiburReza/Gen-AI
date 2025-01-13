@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ShowModalForImage from '@/components/ShowModalForImage.vue'
+import ShowModalForImage from '@/components/FaceSwapToVideoModal.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted, computed } from 'vue'
@@ -11,11 +11,27 @@ import PreviewImageModal from '@/components/PreviewImageModal.vue'
 const searchQuery = ref('')
 
 const toastStore = useToastStore()
-
+const media = ref<
+  {
+    url: string
+    type: 'image' | 'video'
+    orientation: 'P' | 'L'
+    isLiked: 'Y' | 'N'
+    isShared: 'Y' | 'N'
+    prompt: string
+  }[]
+>([])
 // Computed property to filter media based on the search query
-const filteredMedia = computed(() =>
-  media.value.filter((item) => item.prompt.toLowerCase().includes(searchQuery.value.toLowerCase())),
-)
+const filteredMedia = computed(() => {
+  // If searchQuery is null or empty, return the entire media array
+  if (!searchQuery.value || searchQuery.value.trim() === '') {
+    return media.value
+  }
+  return media.value.filter((item) => {
+    const prompt = item.prompt ? item.prompt.toLowerCase() : '' // Safely handle null prompts
+    return prompt.includes(searchQuery.value.toLowerCase())
+  })
+})
 
 // Functions to open/close modal
 const showPreviewModal = ref(false)
@@ -38,16 +54,7 @@ const selectedImage = ref(null) // Selected image or video
 
 // States
 // const description = ref('')
-const media = ref<
-  {
-    url: string
-    type: 'image' | 'video'
-    orientation: 'P' | 'L'
-    isLiked: 'Y' | 'N'
-    isShared: 'Y' | 'N'
-    prompt: string
-  }[]
->([])
+
 const loading = ref(false) // Track loading state
 
 const copyAction = async (prompt: string) => {
@@ -89,7 +96,6 @@ const fetchMedia = async () => {
       // Map data with type detection (image/video) for initial load
       media.value = response.data.map((item) => ({
         url: item.content,
-
         type: item.type,
         orientation: item.orientation,
         prompt: item.prompt,
@@ -166,7 +172,7 @@ onMounted(async () => {
           >
             <!-- Render Image -->
             <img
-              v-if="media[index] && media[index].type === 'image'"
+              v-if="filteredMedia[index] && filteredMedia[index].type === 'image'"
               :src="imageUrl() + item.url"
               :alt="'Media ' + index"
               class="h-full max-w-full rounded-lg w-full"
@@ -176,8 +182,8 @@ onMounted(async () => {
             <!-- Render Video -->
 
             <video
-              v-else-if="media[index] && media[index].type === 'video'"
-              :src="imageUrl() + media[index].url"
+              v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
+              :src="imageUrl() + filteredMedia[index].url"
               controls
               class="w-full h-full object-contain max-w-full"
             ></video>
