@@ -167,6 +167,7 @@ function initializeFromQueryParams() {
   } else {
     console.warn('Functionality not found in available options')
   }
+  router.replace({ path: route.path });
 }
 
 // Unified watcher for functionality and mode changes
