@@ -3,7 +3,7 @@ import CustomizationCard from '@/components/CustomizationCard.vue'
 import DescriptionCard from '@/components/DescriptionCard.vue'
 import ImageInputCard from '@/components/ImageInputCard.vue'
 import Navbar from '@/components/NavBar.vue'
-import ShowModalForImage from '@/components/ShowModalForImage.vue'
+import ShowModalForImage from '@/components/FaceSwapToVideoModal.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
@@ -535,6 +535,17 @@ function handleOutsideClick(event) {
   }
 }
 
+function onImageClick(filteredSingleMedia) {
+  if (activeFunctionality.value === 'Face Swap' && filteredSingleMedia) {
+    openImageModal(filteredSingleMedia)
+  } else if (
+    activeFunctionality.value === 'Image to Image' ||
+    (activeFunctionality.value === 'Text to Image' && filteredSingleMedia)
+  ) {
+    openPreviewModal(filteredSingleMedia)
+  }
+}
+
 // Fetch images when the component is mounted
 
 onMounted(async () => {
@@ -664,26 +675,15 @@ const imageModeOptions = [
             item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
             'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-100',
           ]"
-          @click="
-            activeFunctionality === 'Face Swap' &&
-            filteredMedia[index] &&
-            openImageModal(filteredMedia[index])
-          "
         >
           <!-- Render Image -->
-
           <img
             v-if="filteredMedia[index] && filteredMedia[index].type === 'image'"
             :src="imageUrl() + item.url"
             :alt="'Media ' + index"
             class="h-full max-w-full rounded-lg w-full"
             :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
-            @click="
-              (activeFunctionality === 'Image to Image' ||
-                activeFunctionality === 'Text to Image') &&
-              filteredMedia[index] &&
-              openPreviewModal(filteredMedia[index])
-            "
+            @click="onImageClick(filteredMedia[index])"
           />
 
           <!-- Render Video -->
@@ -693,11 +693,6 @@ const imageModeOptions = [
             :src="imageUrl() + filteredMedia[index].url"
             controls
             class="w-full h-full object-contain max-w-full"
-            @click="
-              activeFunctionality === 'Face Swap' &&
-              filteredMedia[index] &&
-              openPreviewModal(filteredMedia[index])
-            "
           ></video>
 
           <!------------------------------------------------------ Roney ----------------------------------------->

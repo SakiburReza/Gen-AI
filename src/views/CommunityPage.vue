@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ShowModalForImage from '@/components/ShowModalForImage.vue'
+import ShowModalForImage from '@/components/FaceSwapToVideoModal.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted, computed } from 'vue'
