@@ -606,7 +606,7 @@ const imageModeOptions = [
             v-model="searchQuery"
             type="text"
             placeholder="Search"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:ring-blue-300"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
