@@ -167,6 +167,7 @@ function initializeFromQueryParams() {
   } else {
     console.warn('Functionality not found in available options')
   }
+  router.replace({ path: route.path });
 }
 
 // Unified watcher for functionality and mode changes
@@ -617,7 +618,7 @@ const imageModeOptions = [
             v-model="searchQuery"
             type="text"
             placeholder="Search"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:ring-blue-300"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -1077,8 +1078,7 @@ const imageModeOptions = [
           class="font-bold"
           :class="{
             'text-blue-600': action === 'Y',
-            'text-red': action === 'N',
-            'text-gray-600': action === 'delete',
+            'text-red': action === 'N' || action === 'delete',
           }"
         >
           {{ actionText }}
@@ -1098,9 +1098,8 @@ const imageModeOptions = [
           @click="confirmAction"
           class="px-4 py-2 text-sm text-white rounded-md transition"
           :class="{
-            'bg-blue-600 hover:bg-blue-700': action === 'Y',
-            'bg-red hover:bg-red': action === 'N' || 'delete',
-            //'bg-gray-600 hover:bg-gray-700': action === 'delete',
+            'bg-blue-700 hover:bg-blue-700': action === 'Y',
+            'bg-red hover:bg-red': action === 'N' || action === 'delete',
           }"
         >
           Confirm

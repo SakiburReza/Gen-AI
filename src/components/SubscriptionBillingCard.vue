@@ -86,7 +86,6 @@ const closeBuyMoreCreditsModal = () => {
 const showInvoiceCard = ref(false)
 
 async function cancleAction() {
-  console.log("sss")
   const response = await genAiService.cancelSubscription()
   if (response.status) {
     toastStore.success(response.data.message)
