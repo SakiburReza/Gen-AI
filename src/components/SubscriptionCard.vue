@@ -54,12 +54,15 @@ const ZeuxItNow = async () => {
   emit('button-clicked')
 
   try {
-    let response;
-    if (creditInformation.value.currentPackagePrice === 0 )
+    let response, response2
+    if (creditInformation.value.currentPackagePrice === 0) {
       response = await genAiService.subscribePackages(props.data.title, true, 'Month')
-    else 
-      response = await genAiService.changesubscribePackages(props.data.title)
-    
+    } else {
+      response2 = await genAiService.changesubscribePackages(props.data.title)
+      if(response2.status){
+        toastStore.success(response2.data.message) 
+      }
+    }
     if (response.status) {
       toastStore.success(response.data.message)
     }

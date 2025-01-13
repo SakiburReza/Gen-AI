@@ -135,37 +135,37 @@ function convertToTitleCase(input) {
 }
 
 function initializeFromQueryParams() {
-  const mode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode || 'image'; // Default to 'image'
+  const mode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode || 'image' // Default to 'image'
   let functionality = Array.isArray(route.query.functionality)
     ? route.query.functionality[0]
-    : route.query.functionality;
+    : route.query.functionality
 
   // Fallback to default functionality
-  functionality = functionality || (mode === 'video' ? 'text-to-video' : 'text-to-image');
+  functionality = functionality || (mode === 'video' ? 'text-to-video' : 'text-to-image')
   fetchMedia(functionality)
 
   // Convert functionality to title case for matching options
-  const normalizedFunctionality = convertToTitleCase(functionality).toLowerCase();
+  const normalizedFunctionality = convertToTitleCase(functionality).toLowerCase()
 
-  console.log('Mode:', mode);
-  console.log('Functionality:', functionality);
+  console.log('Mode:', mode)
+  console.log('Functionality:', functionality)
 
   // Set mode and ensure active mode is valid
   if (mode === 'video' || mode === 'image') {
-    activeMode.value = mode;
-    setActive(mode); // Ensure mode-dependent logic runs
+    activeMode.value = mode
+    setActive(mode) // Ensure mode-dependent logic runs
   }
 
   // Find and set the matching functionality
-  const options = mode === 'video' ? videoModeOptions : imageModeOptions;
-  const option = options.find((opt) => opt.text.toLowerCase() === normalizedFunctionality);
+  const options = mode === 'video' ? videoModeOptions : imageModeOptions
+  const option = options.find((opt) => opt.text.toLowerCase() === normalizedFunctionality)
 
   if (option) {
     nextTick(() => {
-      mode === 'video' ? selectVideoOption(option) : selectImageOption(option);
-    });
+      mode === 'video' ? selectVideoOption(option) : selectImageOption(option)
+    })
   } else {
-    console.warn('Functionality not found in available options');
+    console.warn('Functionality not found in available options')
   }
 }
 
@@ -178,17 +178,17 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
     Templates: 'templates',
     'Text to Image': 'text-to-image',
     'Image to Image': 'image-to-image',
-  };
+  }
 
   // Determine functionality based on the active mode
-  const defaultFunctionality = newMode === 'video' ? 'text-to-video' : 'text-to-image';
+  const defaultFunctionality = newMode === 'video' ? 'text-to-video' : 'text-to-image'
 
   // Fetch media only when necessary
-  const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality;
+  const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality
   if (functionalityKey) {
-    await fetchMedia(functionalityKey);
+    await fetchMedia(functionalityKey)
   }
-});
+})
 
 const selectedRatio = ref('Landscape')
 
@@ -694,7 +694,7 @@ const imageModeOptions = [
             controls
             class="w-full h-full object-contain max-w-full"
             @click="
-              (activeFunctionality === 'Face Swap' ) &&
+              activeFunctionality === 'Face Swap' &&
               filteredMedia[index] &&
               openPreviewModal(filteredMedia[index])
             "
@@ -842,7 +842,6 @@ const imageModeOptions = [
 
       <div class="w-full sm:w-[30%] p-6 flex-shrink-0">
         <!-- Facility Card -->
-
         <!-- Dropdown used v-for options -->
         <div class="px-6 mx-auto w-full flex justify-center">
           <div class="grid grid-cols-1 gap-4 w-full sm:w-64 md:w-80 lg:w-full">
