@@ -77,10 +77,11 @@ const turnIntoVideoAction = async () => {
 
     console.log("API Response:", response);
 
-    if (response?.success) {
-      toastStore.success(response.data.message || 'Video generated successfully!');
+    if (response?.data?.status) {
+      toastStore.success(response?.data.message)
       // Update credits after successful content generation
       await fetchCredits()
+      close();
     } else {
       console.error("Error in API response:", response);
       toastStore.error(response.data.message || 'Failed to generate video. Please try again.');
