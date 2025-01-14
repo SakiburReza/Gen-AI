@@ -545,7 +545,7 @@ function onImageClick(filteredSingleMedia) {
     activeFunctionality.value === 'Image to Image' ||
     (activeFunctionality.value === 'Text to Image' && filteredSingleMedia)
   ) {
-    openPreviewModal(filteredSingleMedia)
+    openImageModal(filteredSingleMedia)
   }
 }
 

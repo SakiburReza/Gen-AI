@@ -111,8 +111,7 @@ onMounted(() => {
         <div class="flex flex-col space-y-2 mt-4">
           <p class="text-ravenBlack text-md font-bold">Credits Purchase</p>
           <p class="text-silverChalice text-xs break-words">
-            Note: To enjoy subscriber benefits such as fast track, you must have an active subscription plan; buying
-            extra credits alone will not suffice. Credits expire in 2 years and are non-transferable and non-refundable.
+            Note: Credits expire in 2 years and are non-transferable and non-refundable.
           </p>
         </div>
       </div>
@@ -130,7 +129,8 @@ onMounted(() => {
               <p class="text-3xl md:text-xl font-bold text-gray-800 mt-2 group-hover:text-white">{{ feature.credits
                 }}</p>
               <br>
-              <p class="text-lg md:text-md font-semibold text-ravenBlack mt-2 group-hover:text-white">${{ feature.price }}
+              <p class="text-lg md:text-md font-semibold text-ravenBlack mt-2 group-hover:text-white">${{ feature.price
+                }}
               </p>
             </button>
           </div>
