@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onUnmounted, ref } from 'vue';
+import { onBeforeUnmount, onUnmounted, ref, watch } from 'vue';
 import genAiService from '@/services/gen-ai';
 import { useToastStore } from '@/stores/toast'
 import { useCredits } from '@/utils/utils'
@@ -25,6 +25,9 @@ const props = defineProps({
       title: "A bottom-up image of a girl walking confidently down the city streets",
     }),
   },
+
+
+
 })
 
 // Emits
@@ -36,6 +39,8 @@ const prompt = ref<string | null>(null);
 
 const isLoading = ref(false);
 
+const promptError = ref<string | null>(null); // Track prompt validation errors
+
 
 // Helper to extract filename from URL
 const getFilename = (url: string): string => {
@@ -43,53 +48,90 @@ const getFilename = (url: string): string => {
   return parts[parts.length - 1] || 'download';
 };
 
+
+
+// // API call to convert the image to a video
+// const turnIntoVideoAction = async () => {
+//   console.log("Executing turnIntoVideoAction");
+
+//   if (!props.image || !props.image.url) {
+//     alert('No image selected.');
+//     return;
+//   }
+//   if (!prompt.value) {
+//     alert('Please enter a prompt.');
+//     return;
+//   }
+
+//   isLoading.value = true; // Show loading state
+//   try {
+//     const formData = new FormData();
+
+//     const imgResponse = await fetch(props.image.url);
+//     const blob = await imgResponse.blob();
+
+//     // Convert the Blob to a File with a filename
+//     //const file = new File([blob], getFilename(props.image.url), { type: blob.type });
+
+//     let type = "face-swap"
+//     formData.append('image_url', props.image.url); // Correctly use image.url
+//     formData.append('prompt', prompt.value);
+//     formData.append('type', type)
+
+//     console.log("Sending formData:", { image: props.image.url, prompt: prompt.value });
+
+//     // Assuming genAiService.imageToVideo is an API client that handles requests
+//     const response = await genAiService.imageToVideo(formData);
+
+//     console.log("API Response:", response);
+
+//     if (response?.success) {
+//       toastStore.success(response.data.message || 'Video generated successfully!');
+//       // Update credits after successful content generation
+//       await fetchCredits()
+//     } else {
+//       console.error("Error in API response:", response);
+//       toastStore.error(response.data.message || 'Failed to generate video. Please try again.');
+//     }
+//   } catch (error) {
+//     console.error("Error occurred:", error);
+//     toastStore.error(error || 'Failed to generate video. Please try again.');
+//   } finally {
+//     isLoading.value = false; // Hide loading state
+//   }
+// };
+
 // API call to convert the image to a video
 const turnIntoVideoAction = async () => {
-  console.log("Executing turnIntoVideoAction");
-  if (!props.image || !props.image.url) {
-    alert('No image selected.');
-    return;
-  }
-  if (!prompt.value) {
-    alert('Please enter a prompt.');
-    return;
-  }
+  promptError.value = !prompt.value ? "Prompt is required." : null;
 
-  isLoading.value = true; // Show loading state
+  if (promptError.value || !props.image?.url) return;
+
+  isLoading.value = true;
   try {
     const formData = new FormData();
-
     const imgResponse = await fetch(props.image.url);
     const blob = await imgResponse.blob();
 
-    // Convert the Blob to a File with a filename
-    //const file = new File([blob], getFilename(props.image.url), { type: blob.type });
-
-    let type = "face-swap"
-    formData.append('image_url', props.image.url); // Correctly use image.url
+    let type = "face-swap";
+    formData.append('image_url', props.image.url);
     formData.append('prompt', prompt.value);
-    formData.append('type', type)
+    formData.append('type', type);
 
-    console.log("Sending formData:", { image: props.image.url, prompt: prompt.value });
-
-    // Assuming genAiService.imageToVideo is an API client that handles requests
     const response = await genAiService.imageToVideo(formData);
 
-    console.log("API Response:", response);
-
-    if (response?.success) {
-      toastStore.success(response.data.message || 'Video generated successfully!');
+    if (response?.data?.status) {
+      toastStore.success(response?.data.message)
       // Update credits after successful content generation
       await fetchCredits()
+      close();
     } else {
-      console.error("Error in API response:", response);
       toastStore.error(response.data.message || 'Failed to generate video. Please try again.');
     }
   } catch (error) {
-    console.error("Error occurred:", error);
     toastStore.error(error || 'Failed to generate video. Please try again.');
   } finally {
-    isLoading.value = false; // Hide loading state
+    isLoading.value = false;
   }
 };
 
@@ -97,7 +139,13 @@ const turnIntoVideoAction = async () => {
 const close = () => {
   emit('close');
   prompt.value = "";
+  promptError.value = null;
 };
+
+// Watcher for prompt validation
+watch(prompt, (newVal) => {
+  promptError.value = !newVal ? "Prompt is required." : null;
+});
 
 const handleOutsideClick = (event) => {
   if (event.target === event.currentTarget) {
@@ -150,12 +198,14 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
             <!-- Title -->
             <!-- <h3 v-if="image?.type === 'image'" class="text-sm font-semibold text-gray-900 mb-6">Photo Details</h3> -->
             <!-- <h3 v-else-if="image?.type === 'video'" class="text-sm font-semibold text-gray-900 mb-6">Video Details</h3> -->
+
             <!-- Prompt -->
             <div class="mb-7">
-              <p class="text-gray-600 font-bold text-xs">Prompt :</p>
+              <p class="text-gray-600 font-bold text-xs">Prompt:</p>
               <input v-model="prompt" type="text"
                 class="w-full p-2 border border-silverChalice rounded-lg text-sm text-gray-900"
                 placeholder="Enter your prompt here" />
+              <p v-if="promptError" class="text-red text-sm font-bold mt-1">{{ promptError }}</p>
             </div>
             <!-- Action Buttons -->
             <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-start">
@@ -168,6 +218,8 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
                 Image Reference
               </button>
             </div>
+
+
             <!-- Download Link -->
             <div class="mt-5 text-center">
               <a :href="image?.url" :download="image?.url ? getFilename(image.url) : null"
