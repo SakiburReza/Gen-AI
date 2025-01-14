@@ -128,6 +128,7 @@ function setActive(button) {
 
 // Active functionality state
 const activeFunctionality = ref<string>('Text to Image')
+
 function convertToTitleCase(input) {
   if (!input) return 'Text to Image'
   return input
@@ -552,6 +553,7 @@ function selectVideoOption(option) {
 
   isImageDropdownOpen.value = false // Close the dropdown
 }
+
 // Function to handle clicks outside the dropdown
 function handleOutsideClick(event) {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
@@ -657,11 +659,12 @@ const imageModeOptions = [
       </button>
     </div>
 
-    <div class="flex overflow-y-auto">
+    <div class="flex flex-col sm:flex-row">
       <!-- Left Section: Enhanced Image Grid -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
         style="max-height: calc(78vh - 4rem); overflow-y: auto">
         <!-- Display spinner while loading images -->
+
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />
         </div>

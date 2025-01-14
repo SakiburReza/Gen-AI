@@ -8,7 +8,7 @@
 
     <!-- Logo -->
     <div class="px-6 py-4 flex justify-center">
-      <img src="/images/zeuxis.png" alt="Zeuxis Logo" class="w-30 h-20" />
+      <img src="/images/zlogo.png" alt="Zeuxis Logo" class="w-40 h-3" />
     </div>
 
     <!-- Menu Items -->
@@ -41,7 +41,7 @@
         <li>
           <div
 
-            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all cursor-pointer"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2"
           >
             <svg
               width="25"
@@ -49,7 +49,7 @@
               viewBox="0 0 25 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 mr-3 text-black-2 group-hover:text-white transition-all"
+              class="w-6 h-6 mr-3 text-black-2"
             >
               <path d="M0.5 20.8633L10.6455 10.7177L13.7823 13.8545L3.63675 24L0.5 20.8633Z" fill="currentColor"/>
               <path d="M15.6547 5.71094L11.6494 9.71676L14.7866 12.854L18.7924 8.84867L15.6547 5.71094Z" fill="currentColor"/>
@@ -217,6 +217,32 @@
             Subscribe
           </router-link>
         </li>
+        <li>
+          <router-link
+            :to="{
+              path: '/feedbackpage',
+              //query: { mode: 'video', activeFunctionality: 'Templates' },
+            }"
+            class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 mr-3 fill-current text-[#000000] group-hover:text-white transition-all">
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 20.25c4.556 0 8.25-3.694 8.25-8.25S16.556 3.75 12 3.75 3.75 7.444 3.75 12c0 1.074.197 2.1.555 3.045l-.805 3.221a.75.75 0 00.91.91l3.22-.806A8.235 8.235 0 0012 20.25z"
+              />
+            </svg>
+            Feedback
+          </router-link>
+        </li>
+
         <li>
           <a
             href="#"
