@@ -28,7 +28,7 @@
       <form @submit.prevent="submitForm">
         <!-- Name -->
         <div class="mb-4">
-          <label for="name" class="block text-sm font-medium mb-1">Name</label>
+          <label for="name" class="block text-sm text-black-2 font-medium mb-1">Name</label>
           <div class="relative">
             <input
               type="text"
@@ -59,7 +59,7 @@
 
         <!-- Question -->
         <div class="mb-4">
-          <label for="question" class="block text-sm font-medium mb-1">Question</label>
+          <label for="question" class="block text-sm text-black-2 font-medium mb-1">Question</label>
           <div class="relative">
             <input
               type="text"
@@ -85,7 +85,7 @@
 
         <!-- Email -->
         <div class="mb-4">
-          <label for="email" class="block text-sm font-medium mb-1">Email</label>
+          <label for="email" class="block text-sm text-black-2 font-medium mb-1">Email</label>
           <div class="relative">
             <input
               type="email"
@@ -124,7 +124,7 @@
 
         <!-- Message -->
         <div class="mb-4">
-          <label for="message" class="block text-sm font-medium mb-1">Message</label>
+          <label for="message" class="block text-sm text-black-2 font-medium mb-1">Message</label>
           <textarea
             id="message"
             v-model="form.message"
@@ -139,7 +139,7 @@
           <button
             type="button"
             @click="resetForm"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition"
+            class="px-4 py-2 bg-gray-300 text-black-2 rounded hover:bg-gray-400 transition"
           >
             Cancel
           </button>
