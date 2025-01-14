@@ -45,9 +45,9 @@ onUnmounted(() => {
     <!-- Logo -->
     <router-link to="/communitypage">
       <img
-        src="/images/zeuxis.png"
+        src="/images/zeuxis-logo.png"
         alt="Flowbite logo"
-        class="w-30 h-20 cursor-pointer hover:opacity transition-opacity"
+        class="w-35 h-20 cursor-pointer hover:opacity transition-opacity"
       />
     </router-link>
     <!-- Text -->
