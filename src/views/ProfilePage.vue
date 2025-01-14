@@ -11,7 +11,7 @@
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
-    
+
     <!-- Profile Form -->
 
     <div class="max-w-2xl mx-auto p-4 sm:p-6 bg-white border border-b-gray-400 shadow-md rounded-md mt-1">
@@ -71,8 +71,8 @@
             />
             <!-- SVG Icon -->
             <svg
-              width="24"
-              height="26"
+              width="20"
+              height="20"
               viewBox="0 0 24 26"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -108,8 +108,8 @@
             />
             <!-- SVG Icon -->
             <svg
-              width="24"
-              height="18"
+              width="20"
+              height="20"
               viewBox="0 0 24 18"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -156,8 +156,8 @@
               @click="togglePasswordVisibility"
               xmlns="http://www.w3.org/2000/svg"
               class="absolute inset-y-0 right-2 my-auto cursor-pointer"
-              width="24"
-              height="18"
+              width="26"
+              height="20"
               viewBox="0 0 24 18"
               fill="none"
             >

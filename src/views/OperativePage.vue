@@ -126,6 +126,7 @@ function setActive(button) {
 
 // Active functionality state
 const activeFunctionality = ref<string>('Text to Image')
+
 function convertToTitleCase(input) {
   if (!input) return 'Text to Image'
   return input
@@ -167,7 +168,7 @@ function initializeFromQueryParams() {
   } else {
     console.warn('Functionality not found in available options')
   }
-  router.replace({ path: route.path });
+  router.replace({ path: route.path })
 }
 
 // Unified watcher for functionality and mode changes
@@ -529,6 +530,7 @@ function selectVideoOption(option) {
 
   isImageDropdownOpen.value = false // Close the dropdown
 }
+
 // Function to handle clicks outside the dropdown
 function handleOutsideClick(event) {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
@@ -658,13 +660,15 @@ const imageModeOptions = [
       </button>
     </div>
 
-    <div class="flex overflow-y-auto">
+    <div class="flex flex-col sm:flex-row">
       <!-- Left Section: Enhanced Image Grid -->
+
       <div
-        class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
+        class="grid grid-cols-2 gap-4 ml-15 mb-5 mt-6 pr-2 w-full p-4 sm:grid-cols-3 items-center justify-center"
         style="max-height: calc(78vh - 4rem); overflow-y: auto"
       >
         <!-- Display spinner while loading images -->
+
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />
         </div>
