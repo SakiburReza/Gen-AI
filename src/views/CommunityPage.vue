@@ -6,6 +6,7 @@ import { useToastStore } from '@/stores/toast'
 import { imageUrl } from '@/utils/utils'
 import { FwbSpinner } from 'flowbite-vue'
 import { computed, onMounted, ref } from 'vue'
+import PreviewImageModal from '@/components/PreviewImageModal.vue'
 
 
 
@@ -34,42 +35,44 @@ const filteredMedia = computed(() => {
   })
 })
 
-// Functions to open/close modal
-// const showPreviewModal = ref(false)
-// const closePreviewModal = () => {
-//   showPreviewModal.value = false
-//   selectedImage.value = null
-// }
-// const openPreviewModal = (mediaItem) => {
-//   console.log('Image clicked', media)
-//   console.log('mediaItem', mediaItem)
-
-//   selectedImage.value = mediaItem
-//   showPreviewModal.value = true
-// }
-// States to store images from the ImageInputCard components
-// const referenceImage = ref<File | null>(null)
-// const faceImage = ref<File | null>(null)
-
-// States
-// const description = ref('')
-
-
 const selectedImage = ref(null) // Selected image or video
 
-const showImageModal = ref(false)
-const showModal = ref(false) // Modal visibility
-
-const openImageModal = (mediaItem) => {
-  selectedImage.value = mediaItem
-
-  showModal.value = true
-  showImageModal.value = true
-}
-const closeImageModal = () => {
-  showImageModal.value = false
+//Functions to open/close modal
+const showPreviewModal = ref(false)
+const closePreviewModal = () => {
+  showPreviewModal.value = false
   selectedImage.value = null
 }
+const openPreviewModal = (mediaItem) => {
+  console.log('Image clicked', media)
+  console.log('mediaItem', mediaItem)
+
+  selectedImage.value = mediaItem
+  showPreviewModal.value = true
+}
+//States to store images from the ImageInputCard components
+const referenceImage = ref<File | null>(null)
+const faceImage = ref<File | null>(null)
+
+//States
+const description = ref('')
+
+
+// const selectedImage = ref(null) // Selected image or video
+
+// const showImageModal = ref(false)
+// const showModal = ref(false) // Modal visibility
+
+// const openImageModal = (mediaItem) => {
+//   selectedImage.value = mediaItem
+
+//   showModal.value = true
+//   showImageModal.value = true
+// }
+// const closeImageModal = () => {
+//   showImageModal.value = false
+//   selectedImage.value = null
+// }
 
 
 const loading = ref(false) // Track loading state
@@ -194,7 +197,7 @@ onMounted(async () => {
               :alt="'Media ' + index"
               class="h-full max-w-full rounded-lg w-full"
               :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
-              @click="openImageModal(item)"
+              @click="openPreviewModal(item)"
             />
             <!-- Render Video -->
 
@@ -237,13 +240,13 @@ onMounted(async () => {
       <CommunitySidebar class="w-full"/>
     </div>
     <!-- Modal Component -->
-    <!-- <PreviewImageModal
+    <PreviewImageModal
       :isOpen="showPreviewModal"
       @close="closePreviewModal"
       :image="selectedImage"
-    /> -->
+    />
 
-    <ShowModalForImage :isOpen="showImageModal" @close="closeImageModal" :image="selectedImage" />
+    <!-- <ShowModalForImage :isOpen="showImageModal" @close="closeImageModal" :image="selectedImage" /> -->
   </div>
 </template>
 
