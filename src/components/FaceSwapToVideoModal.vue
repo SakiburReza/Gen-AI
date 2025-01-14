@@ -201,7 +201,10 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
 
             <!-- Prompt -->
             <div class="mb-7">
-              <p class="text-gray-600 font-bold text-xs">Prompt:</p>
+              <!-- <p class="text-gray-600 font-bold text-xs">Prompt:</p> -->
+              <p v-if="image?.prompt" class="mt-5 text-xl font-bold text-darkGray" style="padding: 9px;">
+              {{ image.prompt }}
+            </p>
               <input v-model="prompt" type="text"
                 class="w-full p-2 border border-silverChalice rounded-lg text-sm text-gray-900"
                 placeholder="Enter your prompt here" />
