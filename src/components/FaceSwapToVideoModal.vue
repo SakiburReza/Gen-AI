@@ -201,13 +201,13 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
 
             <!-- Prompt -->
             <div class="mb-7">
-              <p v-if="image?.prompt" class="text-gray-700 font-semibold text-sm mb-1 uppercase tracking-wide">Prompt</p>
+              <p v-if="image?.prompt" class="text-gray-700 font-semibold text-sm mb-1 uppercase tracking-wide">Existing Prompt</p>
               <textarea v-if="image?.prompt"
                 class="w-full p-2 border border-silverChalice rounded-lg text-lg mb-2 font-bold text-darkGray bg-tertiary align-top resize-none"
                 style="line-height: 1.5; overflow:auto;"
                 placeholder="Your prompt will appear here">{{ image.prompt }}</textarea>
 
-              <p class="text-gray-700 font-semibold text-sm uppercase tracking-wide mb-1">Enter your prompt here</p>
+              <p class="text-gray-700 font-semibold text-sm uppercase tracking-wide mb-1">Enter Prompt for Video</p>
 
               <input v-model="prompt" type="text"
                 class="w-full p-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
