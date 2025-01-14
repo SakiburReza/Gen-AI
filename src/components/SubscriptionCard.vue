@@ -4,7 +4,9 @@ import { defineProps, defineEmits } from 'vue'
 import genAiService from '@/services/gen-ai'
 import { useRouter } from 'vue-router'
 import { useToastStore } from '@/stores/toast'
+import { useCredits } from '@/utils/utils'
 const toastStore = useToastStore()
+const { fetchCredits } = useCredits()
 
 const router = useRouter() // Vue Router instance
 // Define the emits to handle custom events
@@ -60,6 +62,7 @@ const ZeuxItNow = async () => {
     } else {
       response2 = await genAiService.changesubscribePackages(props.data.title)
       if(response2.status){
+        await fetchCredits();
         toastStore.success(response2.data.message) 
       }
     }

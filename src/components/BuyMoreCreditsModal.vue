@@ -69,7 +69,7 @@ const fetchprops = async () => {
 const extraCreditBuy = async (plan: Plan) => {
   try {
     console.log("Selected plan:", plan); // Log the selected plan
-    const response = await genAiService.subscribePackages(plan.name, true, "Month");
+    const response = await genAiService.subscribePackages(plan.name, false, "Month");
     const redirectUrl = response.data;
     console.log('Subscription successful:', response);
     if (redirectUrl) {

@@ -1,32 +1,34 @@
 <template>
   <div class="flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
-    <div class="w-full max-w-4xl mx-auto bg-white border rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
+    <div class="w-full mx-auto bg-white border rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
       <h2 class="text-lg font-semibold text-black-2 mb-4">Invoices</h2>
 
       <!-- Header Row -->
       <div
-        class="grid grid-cols-6 gap-2 text-xs sm:text-sm font-medium text-black-2 border-b border-black-2 pb-4"
+        class="grid grid-cols-12 gap-4 text-xs sm:text-sm font-bold text-black-2 border-b border-black-2 pb-4"
       >
-        <div class="col-span-2 sm:col-span-1">Product</div>
-        <div class="col-span-2 sm:col-span-1">Reference</div>
-        <div class="col-span-2 sm:col-span-1 ml-4">Date</div>
-        <div class="hidden sm:block text-center">Status</div>
-        <div class="hidden sm:block text-center">Amount</div>
-        <div class="hidden sm:block text-center">Download</div>
+        <div class="col-span-2">Product</div>
+        <div class="col-span-2">Reference</div>
+        <div class="col-span-2 text-center">Date</div>
+        <div class="col-span-1 text-center">Status</div>
+        <div class="col-span-1 text-center">Amount</div>
+        <div class="col-span-2 text-center">Bill Purpose</div>
+        <div class="col-span-2 text-center">Download</div>
       </div>
 
       <!-- Data Rows -->
       <div
         v-for="(invoice, index) in invoices"
         :key="index"
-        class="grid grid-cols-6 gap-2 text-xs sm:text-sm text-black-2 items-center py-3 border-b border-black-2"
+        class="grid grid-cols-12 gap-4 gap-y-2 text-xs sm:text-sm text-black-2 items-center py-4 border-b border-black-2"
       >
-        <div class="col-span-1 font-medium">{{ invoice.product }}</div>
-        <div class="col-span-1 truncate">{{ invoice.transactionId }}</div>
-        <div class="col-span-1 ml-2">{{ invoice.billingTime }}</div>
+        <div class="col-span-2 font-medium">{{ invoice.product }}</div>
+        <div class="col-span-2 truncate">{{ invoice.transactionId }}</div>
+        <div class="col-span-2">{{ invoice.billingTime }}</div>
         <div class="col-span-1 text-center">{{ invoice.STATUS }}</div>
-        <div class="col-span-1 text-center font-medium ml-2">{{ invoice.AMOUNT }} USD</div>
-        <div class="col-span-1 flex justify-center">
+        <div class="col-span-1 text-center font-medium">{{ invoice.AMOUNT }} USD</div>
+        <div class="col-span-2 text-center font-medium">{{ invoice.billingReason }}</div>
+        <div class="col-span-2 flex justify-center">
           <a
             href="javascript:void(0);"
             @click="handleDownload(invoice.receiptUrl)"
@@ -54,6 +56,7 @@
     </div>
   </div>
 </template>
+
 
 
 <script setup>
