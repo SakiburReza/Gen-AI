@@ -110,7 +110,7 @@ onMounted(() => {
 
         <div class="flex flex-col space-y-2 mt-4">
           <p class="text-ravenBlack text-md font-bold">Credits Purchase</p>
-          <p class="text-silverChalice text-xs break-words">
+          <p class="text-xs break-words">
             Note: Credits expire in 2 years and are non-transferable and non-refundable.
           </p>
         </div>

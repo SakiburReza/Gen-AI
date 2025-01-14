@@ -157,11 +157,13 @@
 
 <script setup>
 import Navbar from '@/components/NavBar.vue'
-
+import { useToastStore } from '@/stores/toast'
 import { useRouter } from 'vue-router'
 import { reactive } from 'vue'
+import genAiService from "@/services/gen-ai";
 
 const router = useRouter()
+const toastStore = useToastStore()
 
 // Define the form data object
 const form = reactive({
@@ -179,10 +181,32 @@ const resetForm = () => {
   form.message = ''
 }
 
-const submitForm = () => {
+const submitForm = async () => {
   console.log("Form Submitted:", form);
+  const FeedbackEmail = {
+      name: form.name,
+      question: form.question,
+      email: form.email,
+      message: form.message
+    }
+  try {
+  
+    
+    const response = await genAiService.saveFeedback(FeedbackEmail);
 
-  // Add your API call or logic here
+    console.log(response);
+    if (response?.data.status) {
+      toastStore.success(response?.data.message)
+      //
+    } else {
+      console.error("Invalid response structure:", response);
+    }
+    // Reset form after submission
+    resetForm()
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+  }
+
 };
 
 const goBack = () => {

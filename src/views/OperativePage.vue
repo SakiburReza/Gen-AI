@@ -192,7 +192,7 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
     'Text to Video': 'text-to-video',
     'Image to Video': 'image-to-video',
     'Face Swap': 'face-swap',
-    Templates: 'templates',
+    'Templates (Beta)' : 'templates',
     'Text to Image': 'text-to-image',
     'Image to Image': 'image-to-image',
   }
@@ -258,7 +258,7 @@ const fetchMedia = async (label: string) => {
   else if (label === 'Text to Video') label = 'text-to-video'
   else if (label === 'Image to Video') label = 'image-to-video'
   else if (label === 'Face Swap') label = 'face-swap'
-  else if (label === 'Templates') label = 'templates'
+  else if (label === 'Templates (Beta)') label = 'templates'
 
   try {
     const { data: response } = await genAiService.getMedia(label)
@@ -299,7 +299,7 @@ const fetchLikedMedia = async (label: string) => {
   else if (label === 'Text to Video') label = 'text-to-video'
   else if (label === 'Image to Video') label = 'image-to-video'
   else if (label === 'Face Swap') label = 'face-swap'
-  else if (label === 'Templates') label = 'templates'
+  else if (label === 'Templates (Beta)') label = 'templates'
 
   try {
     const { data: response } = await genAiService.getLikedMedia(label)
@@ -380,7 +380,7 @@ const generateAiContent = async () => {
       formData.append('num_images', selectedOutput.value.toString())
 
       response = await genAiService.imageToImage(formData)
-    } else if (activeFunctionality.value === 'Templates') {
+    } else if (activeFunctionality.value === 'Templates (Beta)') {
       // Create form data for file and video index
 
       const formData = new FormData()
@@ -604,7 +604,7 @@ const videoModeOptions = [
   {
     id: '24',
     imageSrc: '/images/icon/templates.svg',
-    text: 'Templates',
+    text: 'Templates (Beta)',
   },
 ]
 
@@ -888,7 +888,7 @@ const imageModeOptions = [
             Zeuxis
           </fwb-button>
         </div>
-        <div v-if="activeFunctionality === 'Templates'" class="bg-white p-6 space-y-6 flex-shrink-0">
+        <div v-if="activeFunctionality === 'Templates (Beta)'" class="bg-white p-6 space-y-6 flex-shrink-0">
           <!-- Video Carousel -->
           <VideoCarousel @video-selected="(object) => (selectedVideo = object)" />
 

@@ -169,6 +169,11 @@ class GenAIService {
       headers: this.getAuthHeaders(),
     })
   }
+  saveFeedback(data) {
+    return axios.post(this.url + '/user/feedback', data, {
+      headers: this.getAuthHeaders(),
+    })
+  }
 
 }
 
