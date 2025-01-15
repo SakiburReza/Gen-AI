@@ -139,7 +139,7 @@ function convertToTitleCase(input) {
 
 function initializeFromQueryParams() {
   console.log('intitial functionality', activeFunctionality.value);
-  
+
   const queryMode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode // Default to 'image'
   let functionality = Array.isArray(route.query.functionality)
     ? route.query.functionality[0]
@@ -149,7 +149,7 @@ function initializeFromQueryParams() {
   // Fallback to default functionality
   // functionality = functionality || (mode === 'video' ? 'text-to-video' : 'text-to-image')
   const mode = queryMode || localStorage.getItem('mode') || 'image'
-  functionality =  functionality || localStorage.getItem('functionality') || (mode === 'video' ? 'text-to-video' : 'text-to-image')
+  functionality = functionality || localStorage.getItem('functionality') || (mode === 'video' ? 'text-to-video' : 'text-to-image')
 
   console.log('f', functionality);
   console.log('fmode', mode);
@@ -163,8 +163,8 @@ function initializeFromQueryParams() {
 
   // Set mode and ensure active mode is valid
   if (mode === 'video' || mode === 'image') {
-    console.log('mode to set',mode);
-    
+    console.log('mode to set', mode);
+
     activeMode.value = mode
     setActive(mode) // Ensure mode-dependent logic runs
   }
@@ -192,7 +192,7 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
     'Text to Video': 'text-to-video',
     'Image to Video': 'image-to-video',
     'Face Swap': 'face-swap',
-    'Templates (Beta)' : 'templates',
+    'Templates (Beta)': 'templates',
     'Text to Image': 'text-to-image',
     'Image to Image': 'image-to-image',
   }
@@ -201,7 +201,7 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
   const defaultFunctionality = newMode === 'video' ? 'text-to-video' : 'text-to-image'
 
   // Fetch media only when necessary
-  
+
   const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality
 
   activeFunctionality.value = newFunctionality;
@@ -210,7 +210,7 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
 
     localStorage.setItem('mode', newMode)
     localStorage.setItem('functionality', newFunctionality)
-    
+
   }
   console.log('stored Mode:', localStorage.getItem('mode'))
   console.log('stored Functionality:', localStorage.getItem('functionality'))
@@ -314,7 +314,7 @@ const fetchLikedMedia = async (label: string) => {
           item.type ||
           (label === 'text-to-video' ||
             label === 'image-to-video' ||
-            label === 'template-video' ||
+            label === 'templates' ||
             (label === 'face-swap' && item.orientation == null)
             ? 'video'
             : 'image'),
