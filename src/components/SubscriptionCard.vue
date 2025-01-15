@@ -63,6 +63,8 @@ const ZeuxItNow = async () => {
       response2 = await genAiService.changesubscribePackages(props.data.title)
       if(response2.status){
         await fetchCredits();
+        //window.location.reload()
+        // props.isButtonDisabled.value = false
         toastStore.success(response2.data.message) 
       }
     }

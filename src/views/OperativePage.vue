@@ -127,7 +127,7 @@ function setActive(button) {
 }
 
 // Active functionality state
-const activeFunctionality = ref<string>('Text to Image')
+const activeFunctionality = ref<string>('')
 
 function convertToTitleCase(input) {
   if (!input) return 'Text to Image'
@@ -139,7 +139,6 @@ function convertToTitleCase(input) {
 
 function initializeFromQueryParams() {
   console.log('intitial functionality', activeFunctionality.value);
-
   const queryMode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode // Default to 'image'
   let functionality = Array.isArray(route.query.functionality)
     ? route.query.functionality[0]
@@ -151,7 +150,7 @@ function initializeFromQueryParams() {
   const mode = queryMode || localStorage.getItem('mode') || 'image'
   functionality = functionality || localStorage.getItem('functionality') || (mode === 'video' ? 'text-to-video' : 'text-to-image')
 
-  fetchMedia(functionality)
+  // fetchMedia(functionality)
 
   localStorage.setItem('mode', mode)
   localStorage.setItem('functionality', functionality)

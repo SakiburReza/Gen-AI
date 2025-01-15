@@ -85,13 +85,13 @@ onMounted(fetchprops)
   >
     <div class="bg-white rounded-lg shadow-md w-full max-w-lg mx-4 md:w-1/1">
       <div class="bg-tertiary p-6 ">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0">
+        <div class="flex flex-row items-start md:items-center justify-between space-y-4 md:space-y-0">
             <div class="flex items-center space-x-4">
               <h2 class="text-xl md:text-2xl text-black font-bold">My Credits:</h2>
               <img src="/public/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5">
               <h2 class="text-xl md:text-2xl text-black font-bold">{{ credits }}</h2>
             </div>
-            <img src="/images/zeuxis-logo.png" alt="Logo" class="object-contain">
+            <img src="/images/zeuxis-logo.png" alt="Logo" class="md:w-35 w-25 object-contain">
         </div>
         <div class="flex flex-col space-y-2 mt-4">
           <p class="text-ravenBlack text-md font-bold">Credits Purchase</p>
