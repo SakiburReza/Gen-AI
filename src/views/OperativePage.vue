@@ -597,12 +597,6 @@ const videoModeOptions = [
 
   {
     id: '23',
-    imageSrc: '/images/icon/face-swap.svg',
-    text: 'Face Swap',
-  },
-
-  {
-    id: '24',
     imageSrc: '/images/icon/templates.svg',
     text: 'Templates (Beta)',
   },
@@ -618,6 +612,11 @@ const imageModeOptions = [
     id: '12',
     imageSrc: '/images/icon/image-to-image.svg',
     text: 'Image to Image',
+  },
+  {
+    id: '13',
+    imageSrc: '/images/icon/face-swap.svg',
+    text: 'Face Swap',
   },
 ]
 </script>
@@ -851,7 +850,7 @@ const imageModeOptions = [
             </div>
             <!-- Second Image Card -->
             <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white rounded-lg shadow-2xl">
-              <ImageInputCard title="Insert Face Image" @input="(file) => (faceImage = file)" />
+              <ImageInputCard title="Insert Your Face Image" @input="(file) => (faceImage = file)" />
             </div>
           </div>
 
@@ -892,7 +891,7 @@ const imageModeOptions = [
           <!-- Video Carousel -->
           <VideoCarousel @video-selected="(object) => (selectedVideo = object)" />
 
-          <ImageInputCard title="Face Image" @input="(file) => (referenceImage = file)" />
+          <ImageInputCard title="Insert Your Face Image" @input="(file) => (referenceImage = file)" />
           <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
             Zeuxis
           </fwb-button>

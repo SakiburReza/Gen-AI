@@ -113,7 +113,7 @@ const turnIntoVideoAction = async () => {
     const imgResponse = await fetch(props.image.url);
     const blob = await imgResponse.blob();
 
-    let type = "face-swap";
+    let type = "image-to-video";
     formData.append('image_url', props.image.url);
     formData.append('prompt', prompt.value);
     formData.append('type', type);
