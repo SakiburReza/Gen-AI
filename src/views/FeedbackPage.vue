@@ -67,6 +67,7 @@
               v-model="form.question"
               class="w-full bg-gray-100 border border-gray-300 rounded p-2 pr-10"
               placeholder="Enter question"
+              required
             />
             <svg
               class="absolute inset-y-0 right-3 w-5 h-5 text-gray-500 my-auto"
@@ -93,6 +94,7 @@
               v-model="form.email"
               class="w-full bg-gray-100 border border-gray-300 rounded p-2 pr-10"
               placeholder="Enter email"
+              required
             />
             <svg
               width="20"
@@ -131,6 +133,7 @@
             class="w-full bg-gray-100 border border-gray-300 rounded p-2"
             placeholder="Enter message"
             rows="4"
+            required
           ></textarea>
         </div>
 
@@ -160,7 +163,7 @@ import Navbar from '@/components/NavBar.vue'
 import { useToastStore } from '@/stores/toast'
 import { useRouter } from 'vue-router'
 import { reactive } from 'vue'
-import genAiService from "@/services/gen-ai";
+import genAiService from '@/services/gen-ai'
 
 const router = useRouter()
 const toastStore = useToastStore()
@@ -182,32 +185,29 @@ const resetForm = () => {
 }
 
 const submitForm = async () => {
-  console.log("Form Submitted:", form);
+  console.log('Form Submitted:', form)
   const FeedbackEmail = {
-      name: form.name,
-      question: form.question,
-      email: form.email,
-      message: form.message
-    }
+    name: form.name,
+    question: form.question,
+    email: form.email,
+    message: form.message,
+  }
   try {
-  
-    
-    const response = await genAiService.saveFeedback(FeedbackEmail);
+    const response = await genAiService.saveFeedback(FeedbackEmail)
 
-    console.log(response);
+    console.log(response)
     if (response?.data.status) {
       toastStore.success(response?.data.message)
       //
     } else {
-      console.error("Invalid response structure:", response);
+      console.error('Invalid response structure:', response)
     }
     // Reset form after submission
     resetForm()
   } catch (error) {
-    console.error("Error fetching user profile:", error);
+    console.error('Error fetching user profile:', error)
   }
-
-};
+}
 
 const goBack = () => {
   router.push('/operativepage')
