@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import genAiService from '@/services/gen-ai'
 import { useCredits } from '@/utils/utils'
+import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
 
 const { credits, fetchCredits } = useCredits()
 
@@ -64,9 +65,12 @@ const extraCreditBuy = async (plan: Plan) => {
 }
 
 const handleClick = (index: number) => {
+  if (loading.value >= 0) return
   selectedPlan.value = index
+  loading.value = index
   extraCreditBuy(plans.value[index])
 }
+const loading = ref(-1) // Track loading state
 
 onMounted(fetchprops)
 </script>
@@ -80,14 +84,16 @@ onMounted(fetchprops)
     aria-modal="true"
   >
     <div class="bg-white rounded-lg shadow-md w-full max-w-lg mx-4 md:w-1/1">
-      <div class="bg-tertiary p-6 ">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0">
+      <div class="bg-tertiary p-6">
+        <div
+          class="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0"
+        >
           <div class="flex items-center justify-between space-x-4">
             <div class="flex items-center space-x-4">
               <h2 class="text-xl md:text-2xl text-black font-bold">My Credits:</h2>
               <h2 class="text-xl md:text-2xl text-black font-bold">{{ credits }}</h2>
-              <img src="/public/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5 ml-1">
-              <img src="/images/zeuxis-logo.png" alt="Logo" class="h-8 md:h-2 w-auto pl-36">
+              <img src="/public/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5 ml-1" />
+              <img src="/images/zeuxis-logo.png" alt="Logo" class="h-8 md:h-2 w-auto pl-36" />
             </div>
           </div>
         </div>
@@ -105,24 +111,33 @@ onMounted(fetchprops)
           :key="index"
           @click="!props.isButtonDisabled && handleClick(index)"
           :class="{
-            'bg-black text-gray-500 cursor-not-allowed':
+            'bg-gray-300 text-gray-500 cursor-not-allowed':
               props.isButtonDisabled || (selectedPlan !== null && selectedPlan !== index),
-            'bg-tertiary': selectedPlan === index,
+            'bg-gray-300': selectedPlan === index,
             'hover:bg-blue-600': !props.isButtonDisabled && selectedPlan === null,
           }"
           class="p-4 rounded-lg flex flex-col justify-between shadow-sm h-355 items-end group transition-all duration-300 w-full text-left cursor-pointer"
           role="button"
           tabindex="0"
-          aria-pressed="selectedPlan === index"
+          :aria-pressed="selectedPlan === index"
+          :disabled="loading >= 0"
         >
-          <div class="flex items-center justify-center w-full">
+          <div
+            v-if="loading == index"
+            class="inset-0 w-full h-full flex justify-center items-center bg-opacity-70 rounded-lg"
+          >
+            <fwb-spinner size="12" class="text-blue-600 animate-spin" />
+          </div>
+          <div v-else class="flex items-center justify-center w-full">
             <img
               src="/images/icon/StartIcon.svg"
               alt="Start Icon"
               class="w-4 h-5 ml-2 mb-14 mr-0.5"
             />
             <div class="flex flex-col items-center p-4 rounded-lg">
-              <p class="text-3xl md:text-xl font-bold text-gray-800 mt-2">{{ feature.credits }}</p>
+              <p class="text-3xl md:text-xl font-bold text-gray-800 mt-2">
+                {{ feature.credits }}
+              </p>
               <p class="text-lg md:text-md font-semibold text-ravenBlack mt-2">
                 ${{ feature.price }}
               </p>

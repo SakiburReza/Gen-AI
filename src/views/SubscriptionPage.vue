@@ -8,9 +8,11 @@ import { useRoute } from 'vue-router'
 import { useToastStore } from '@/stores/toast'
 import { useCredits } from '@/utils/utils'
 import router from '@/router'
+import { FwbSpinner } from 'flowbite-vue'
 const route = useRoute()
 const toastStore = useToastStore()
 const { fetchCredits } = useCredits()
+const loading = ref(false) // Track loading state
 
 const plans = ref([]) // Create a ref for the plans list
 const isButtonDisabled = ref(false) // Track button state (whether it is disabled)
@@ -73,7 +75,9 @@ onMounted(async () => {
       const payment = route.query.payment
       const customerId = route.query.customer
       if (payment === 'success' && customerId) {
-        await delay(5000) // Wait for 5 seconds
+        loading.value = true
+        await delay(3000) // Wait for 5 seconds
+        loading.value = false
         await fetchCredits()
         router.replace({ path: route.path })
       }
@@ -117,6 +121,9 @@ onMounted(async () => {
           BILLING
         </button>
       </div>
+    </div>
+    <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
+      <fwb-spinner size="12" />
     </div>
 
     <!-- Subscription Plans Section -->
