@@ -251,25 +251,4 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.grid {
-  scrollbar-width: thin; /* Firefox */
-
-  scrollbar-color: #ccc #f0f0f0; /* Firefox */
-}
-
-.grid::-webkit-scrollbar {
-  width: 8px; /* Width for vertical scrollbar */
-}
-
-.grid::-webkit-scrollbar-thumb {
-  background-color: #ccc; /* Scrollbar color */
-
-  border-radius: 4px; /* Rounded scrollbar */
-}
-
-.grid::-webkit-scrollbar-track {
-  background: #f0f0f0; /* Scrollbar track */
-}
-
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 </style>
