@@ -102,7 +102,7 @@ onMounted(() => {
               <h2 class="text-xl md:text-2xl text-black font-bold">My Credits:</h2>
               <h2 class="text-xl md:text-2xl text-black font-bold">{{ credits }}</h2>
               <img src="/public/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5 ml-1">
-              <img src="/images/zeuxis.png" alt="Logo" class="h-8 md:h-11 w-auto pl-36">
+              <img src="/images/zeuxis-logo.png" alt="Logo" class="h-8 md:h-2 w-auto pl-36">
             </div>
           </div>
 

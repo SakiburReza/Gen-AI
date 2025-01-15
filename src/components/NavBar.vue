@@ -47,7 +47,7 @@ onUnmounted(() => {
       <img
         src="/images/zeuxis-logo.png"
         alt="Flowbite logo"
-        class="w-35 h-20 cursor-pointer hover:opacity transition-opacity"
+        class="w-40 h-4 cursor-pointer items-center justify-center hover:opacity transition-opacity"
       />
     </router-link>
     <!-- Text -->

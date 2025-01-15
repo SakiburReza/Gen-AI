@@ -89,7 +89,7 @@ onMounted(() => {
     </div>
 
     <div class="absolute top-4 inset-x-0 flex justify-center z-10">
-      <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-23" />
+      <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="w-40 h-4" />
     </div>
 
     <!-- Card Container -->
