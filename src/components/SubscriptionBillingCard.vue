@@ -3,12 +3,8 @@ import InvoiceCard from '@/components/InvoiceCard.vue'
 import genAiService from '@/services/gen-ai'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue'
-import { useRoute } from 'vue-router'
 import { useToastStore } from '@/stores/toast'
-import { useCredits } from '@/utils/utils'
-const route = useRoute()
 const toastStore = useToastStore()
-const { fetchCredits } = useCredits()
 
 const billinInformation = ref({
   plan_name: '',
@@ -21,7 +17,7 @@ const billinInformation = ref({
 const billingInfo = async () => {
   try {
     const response = await genAiService.billingInformation()
-    console.log('bill', response.data.data.lastPurchaseCredit)
+    // console.log('bill', response.data.data)
     if (response.data.status) {
       if (response.data.data.subscription) {
         billinInformation.value.plan_name =
@@ -37,36 +33,29 @@ const billingInfo = async () => {
             response.data.data.subscription.credit === undefined
             ? 0
             : response.data.data.subscription.credit
-
-        billinInformation.value.last_purchased_credit =
-          !response.data.data.lastPurchaseCredit ||
-            response.data.data.lastPurchaseCredit === 'null'
-            ? 0
-            : response.data.data.lastPurchaseCredit
-
-        billinInformation.value.last_billing_time =
-          response.data.data.subscription.last_billing_time === null ||
-            response.data.data.subscription.last_billing_time === 'null' ||
-            response.data.data.subscription.last_billing_time === undefined
-            ? 'No date available'
-            : response.data.data.subscription.last_billing_time
-
-        billinInformation.value.last_billing_amount =
-          response.data.data.subscription.last_billing_amount === null ||
-            response.data.data.subscription.last_billing_amount === 'null' ||
-            response.data.data.subscription.last_billing_amount === undefined
-            ? '0'
-            : response.data.data.subscription.last_billing_amount
       }
       if (response.data.data.last_purchase) {
         billinInformation.value.last_billing_time =
-          response.data.data.last_purchase.last_billing_time
-        billinInformation.value.last_billing_amount =
-          response.data.data.last_purchase.last_billing_amount
-        // billinInformation.value.last_purchased_credit = response.data.data.last_purchased_credit
-      }
-      console.log(billinInformation.value);
+          response.data.data.last_purchase.last_billing_time === null ||
+            response.data.data.last_purchase.last_billing_time === 'null' ||
+            response.data.data.last_purchase.last_billing_time === undefined
+            ? 'No date available'
+            : response.data.data.last_purchase.last_billing_time
 
+        billinInformation.value.last_billing_amount =
+          response.data.data.last_purchase.last_billing_amount === null ||
+            response.data.data.last_purchase.last_billing_amount === 'null' ||
+            response.data.data.last_purchase.last_billing_amount === undefined
+            ? 0
+            : response.data.data.last_purchase.last_billing_amount
+      }
+      billinInformation.value.last_purchased_credit =
+        response.data.data.lastPurchaseCredit === null ||
+          response.data.data.lastPurchaseCredit === undefined ||
+          response.data.data.lastPurchaseCredit === 'null'
+          ? 0
+          : response.data.data.lastPurchaseCredit
+      // console.log(billinInformation.value);
     } else {
       console.error('Invalid response structure:', response)
     }
@@ -145,14 +134,14 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim())
             <h3 class="text-xl font-semibold mb-1">{{ billinInformation.plan_name }}</h3>
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-4 text-sm"></p>
-              <p class="text-md flex items-center text-silverChalice">
+              <p class="text-md flex items-center font-bold">
                 <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2" />
                 {{ billinInformation.credit }}
               </p>
             </div>
             <br />
             <div class="border-solid lg:border-dashed mt-4">
-              <p class="text-center text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
+              <p class="text-center font-bold text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
             </div>
             <br />
             <div class="flex items-center justify-between">
@@ -172,8 +161,8 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim())
           <div>
             <h3 class="text-xl font-semibold mb-1">Purchased</h3>
             <div class="flex items-center justify-between">
-              <p class="text-silverChalice mb-4 text-sm">Credits</p>
-              <p class="text-md flex items-center text-silverChalice">
+              <p class="mb-4 text-sm">Credits</p>
+              <p class="text-md flex items-center font-bold">
                 <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2" />
                 {{ billinInformation.last_purchased_credit }}
               </p>
@@ -206,11 +195,11 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim())
               <p class="text-center text-sm md:text-base lg:text-lg">{{ dashedLine }}</p>
             </div>
             <div class="flex items-center justify-between">
-              <p class="text-silverChalice mb-2 text-sm">Price</p>
+              <p class="text-sm">Price</p>
               <p class="font-bold text-lg">${{ billinInformation.last_billing_amount }}</p>
             </div>
             <div class="flex items-center justify-between">
-              <p class="text-silverChalice mb-2 text-sm">Billing date</p>
+              <p class="text-sm">Billing date</p>
               <p class="font-bold text-md">{{ billinInformation.last_billing_time }}</p>
             </div>
           </div>
@@ -227,8 +216,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim())
     <div class="fixed inset-0 bg-opacity-25 z-40" @click="closeInvoiceCard"></div>
 
     <!-- Invoice Card -->
-    <InvoiceCard
-      class="absolute-middle z-50 mx-auto sm:right-12  md:right-16  lg:right-20  xl:right-80  rounded-md"
+    <InvoiceCard class="absolute-middle z-50 mx-auto sm:right-12  md:right-16  lg:right-20  xl:right-80  rounded-md"
       v-if="showInvoiceCard" @close="toggleInvoiceCard" />
     <!-- <InvoiceCard
       class="absolute-middle z-50 mx-auto w-full sm:w-[600px] md:w-[800px] lg:w-[1000px] xl:w-[1200px] rounded-md p-4"
