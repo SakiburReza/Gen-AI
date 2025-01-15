@@ -64,7 +64,9 @@
           <ul class="space-y-2 pl-6 mt-2">
             <li>
               <router-link
-                :to="{ path: '/operativepage' }"
+                :to="{ path: '/operativepage',
+                  query: { mode: 'image', functionality: 'text-to-image' }
+                 }"
                 class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
               >
                 <svg
@@ -146,7 +148,7 @@
               <router-link
                 :to="{
               path: '/operativepage',
-              query: { mode: 'video', functionality: 'face-swap' },
+              query: { mode: 'image', functionality: 'face-swap' },
             }"
                 class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
               >
