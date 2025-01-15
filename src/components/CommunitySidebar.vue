@@ -8,7 +8,7 @@
 
     <!-- Logo -->
     <div class="px-6 py-4 flex justify-center">
-      <img src="/images/zeuxis-logo.png" alt="Zeuxis Logo" class="w-40 h-4" />
+      <img src="/images/zeuxis-logo.png" alt="Zeuxis Logo"/>
     </div>
 
     <!-- Menu Items -->
