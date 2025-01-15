@@ -16,7 +16,7 @@ const props = defineProps({
     required: true,
   },
   image: {
-    type: Object as () => { url: string; type: string } | null,
+    type: Object as () => { url: string; type: string; prompt: string } | null,
     default: null,
   },
   promtsDetails: {
@@ -113,16 +113,18 @@ const turnIntoVideoAction = async () => {
     const imgResponse = await fetch(props.image.url);
     const blob = await imgResponse.blob();
 
-    let type = "face-swap";
+    let type = "image-to-video";
     formData.append('image_url', props.image.url);
     formData.append('prompt', prompt.value);
     formData.append('type', type);
 
     const response = await genAiService.imageToVideo(formData);
 
-    if (response?.success) {
-      toastStore.success(response.data.message || 'Video generated successfully!');
-      await fetchCredits();
+    if (response?.data?.status) {
+      toastStore.success(response?.data.message)
+      // Update credits after successful content generation
+      await fetchCredits()
+      close();
     } else {
       toastStore.error(response.data.message || 'Failed to generate video. Please try again.');
     }
@@ -199,12 +201,24 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
 
             <!-- Prompt -->
             <div class="mb-7">
-              <p class="text-gray-600 font-bold text-xs">Prompt:</p>
+              <p v-if="image?.prompt" class="text-gray-700 font-semibold text-sm mb-2 uppercase tracking-wide">Existing Prompt</p>
+              <p v-if="image?.prompt"
+                class="w-full p-2 border border-silverChalice rounded-lg text-lg mb-10 font-bold text-darkGray bg-tertiary align-top resize-none"
+                style="line-height: 1.5; overflow:auto;"
+                placeholder="Your prompt will appear here">{{ image.prompt }}</p>
+
+              <p class="text-gray-700 font-semibold text-sm uppercase tracking-wide mb-1">Enter Prompt for Video</p>
+
               <input v-model="prompt" type="text"
-                class="w-full p-2 border border-silverChalice rounded-lg text-sm text-gray-900"
+                class="w-full p-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your prompt here" />
-              <p v-if="promptError" class="text-red text-sm font-bold mt-1">{{ promptError }}</p>
+
+
+              <p v-if="promptError" class="text-red text-sm font-bold mt-1">
+                {{ promptError }}
+              </p>
             </div>
+
             <!-- Action Buttons -->
             <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-start">
               <button @click="turnIntoVideoAction" :disabled="isLoading"

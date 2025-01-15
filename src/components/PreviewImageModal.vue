@@ -112,12 +112,17 @@ const handleOutsideClick = (event) => {
 
           <!-- Prompt Section -->
           <div style="float: left; text-align: left;" class="w-full">
-            <p class="mt-5 text-xl font-bold text-black flex items-start justify-start" style="padding: 10px;">
+            <!-- <p class="mt-5 text-xl font-bold text-black flex items-start justify-start" style="padding: 10px;">
               Prompt of the Image &nbsp;
             </p>
             <p v-if="image?.prompt" class="mt-5 text-xl font-bold text-darkGray bg-tertiary" style="padding: 10px;">
               {{ image.prompt }}
-            </p>
+            </p> -->
+            <p v-if="image?.prompt" class=" mt-5 text-gray-700 font-semibold text-sm mb-1 uppercase tracking-wide"> Prompt of the Image</p>
+              <textarea v-if="image?.prompt"
+                class="w-full p-2 border border-silverChalice rounded-lg text-lg mb-2 font-bold text-darkGray bg-tertiary align-top resize-none"
+                style="line-height: 1.5; overflow:auto;"
+                placeholder="Your prompt will appear here">{{ image.prompt }}</textarea>
           </div>
         </div>
 

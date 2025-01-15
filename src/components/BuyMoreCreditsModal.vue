@@ -69,7 +69,7 @@ const fetchprops = async () => {
 const extraCreditBuy = async (plan: Plan) => {
   try {
     console.log("Selected plan:", plan); // Log the selected plan
-    const response = await genAiService.subscribePackages(plan.name, true, "Month");
+    const response = await genAiService.subscribePackages(plan.name, false, "Month");
     const redirectUrl = response.data;
     console.log('Subscription successful:', response);
     if (redirectUrl) {
@@ -110,33 +110,31 @@ onMounted(() => {
 
         <div class="flex flex-col space-y-2 mt-4">
           <p class="text-ravenBlack text-md font-bold">Credits Purchase</p>
-          <p class="text-silverChalice text-xs break-words">
-            Note: To enjoy subscriber benefits such as fast track, you must have an active subscription plan; buying
-            extra credits alone will not suffice. Credits expire in 2 years and are non-transferable and non-refundable.
+          <p class="text-xs break-words">
+            Note: Credits expire in 2 years and are non-transferable and non-refundable.
           </p>
         </div>
       </div>
 
       <!-- Cards Container -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-6">
-        <div v-for="(feature, index) in plans" :key="index"
-          class="bg-tertiary p-4 rounded-lg flex flex-col justify-between shadow-sm h-355 items-end group hover:bg-blue-600 transition-all duration-300">
+        <button v-for="(feature, index) in plans" :key="index" @click="extraCreditBuy(feature)"
+          class="bg-tertiary p-4 rounded-lg flex flex-col justify-between shadow-sm h-355 items-end group hover:bg-blue-600 transition-all duration-300 w-full text-left">
           <div class="flex items-center justify-center w-full">
             <img src="/public/images/icon/StartIcon.svg" alt="Start Icon"
               class="w-4 h-5 ml-2 mb-14 mr-0.5 group-hover:filter group-hover:brightness-0 group-hover:invert">
-            <button @click="extraCreditBuy(feature)"
-              class="flex flex-col items-center p-4 rounded-lg transition-all duration-300">
-              <!-- Hover effect on the <p> tags based on the parent .group hover state -->
-              <p class="text-3xl md:text-xl font-bold text-gray-800 mt-2 group-hover:text-white">{{ feature.credits
-                }}</p>
-              <br>
-              <p class="text-lg md:text-md font-semibold text-ravenBlack mt-2 group-hover:text-white">${{ feature.price }}
+            <div class="flex flex-col items-center p-4 rounded-lg transition-all duration-300">
+              <p class="text-3xl md:text-xl font-bold text-gray-800 mt-2 group-hover:text-white">{{ feature.credits }}
               </p>
-            </button>
+              <br>
+              <p class="text-lg md:text-md font-semibold text-ravenBlack mt-2 group-hover:text-white">
+                ${{ feature.price }}
+              </p>
+            </div>
           </div>
-        </div>
-
+        </button>
       </div>
+
 
 
     </div>

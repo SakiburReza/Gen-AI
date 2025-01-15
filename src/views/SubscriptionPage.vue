@@ -57,7 +57,6 @@ const fetchPlans = async () => {
         }
       })
       .filter((plan) => plan != null) // Filter out null plans
-    console.log('ssaa', plans.value)
   } catch (error) {
     console.error('Error fetching plans:', error)
   }

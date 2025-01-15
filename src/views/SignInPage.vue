@@ -37,6 +37,12 @@ const submitForm = async () => {
   }
 }
 
+const isPasswordVisible = ref(false);
+
+const togglePasswordVisibility = () => {
+  isPasswordVisible.value = !isPasswordVisible.value;
+};
+
 const props = defineProps({
   isButtonDisabled: {
     type: Boolean,
@@ -56,7 +62,7 @@ const props = defineProps({
 
     <!-- Logo -->
     <div class="relative flex flex-col items-center justify-center  top-1">
-      <img src="/images/zeuxis.png" alt="Flowbite logo" class="w-30 h-23" />
+      <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="w-30 h-23" />
     </div>
 
 
@@ -82,13 +88,13 @@ const props = defineProps({
       <div class="lg:w-1/4 flex flex-col justify-center items-center px-4 h-full bg-white"> <br>
         <!-- Form Container -->
         <div class="w-full max-w-md ">
-          <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Sign In</h2>
+          <h2 class="text-2xl font-bold mb-6 text-center text-black-2">Sign In</h2>
 
           <!-- Sign-In Form -->
           <form @submit.prevent="submitForm" class="space-y-6">
             <!-- Email -->
             <div>
-              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+              <label for="email" class="block text-sm font-medium text-black-2">Email</label>
               <input id="email" v-model="username" type="email" placeholder="Enter your email"
                 class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
                 aria-label="Email" required />
@@ -96,10 +102,57 @@ const props = defineProps({
 
             <!-- Password -->
             <div>
-              <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-              <input id="password" v-model="password" type="password" placeholder="Enter your password"
-                class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
-                aria-label="Password" required />
+              <label for="password" class="block text-sm font-medium text-black-2">Password</label>
+              <div class="relative mt-1">
+                <input
+                  :type="isPasswordVisible ? 'text' : 'password'"
+                  id="password"
+                  v-model="password"
+                  class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
+                  placeholder="Enter your password"
+                  aria-label="Password" required
+                />
+              <!-- SVG Icon for Toggle -->
+              <svg
+                v-if="!isPasswordVisible"
+                @click="togglePasswordVisibility"
+                xmlns="http://www.w3.org/2000/svg"
+                class="absolute inset-y-0 right-2 my-auto cursor-pointer"
+                width="26"
+                height="20"
+                viewBox="0 0 24 18"
+                fill="none"
+              >
+                <path
+                  d="M11.99 3C7.03 3 3 8 3 8s4.03 5 8.99 5c4.96 0 9-5 9-5s-4.03-5-8.99-5zm0 8.5c-1.93 0-3.5-1.57-3.5-3.5S10.06 4.5 11.99 4.5c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5z"
+                  fill="#6D6D6D"
+                />
+                <circle cx="11.99" cy="8" r="1.5" fill="#6D6D6D" />
+              </svg>
+              <svg
+                v-else
+                @click="togglePasswordVisibility"
+                xmlns="http://www.w3.org/2000/svg"
+                class="absolute inset-y-0 right-2 my-auto cursor-pointer"
+                width="24"
+                height="18"
+                viewBox="0 0 24 18"
+                fill="none"
+              >
+                <path
+                  d="M11.99 3C7.03 3 3 8 3 8s4.03 5 8.99 5c4.96 0 9-5 9-5s-4.03-5-8.99-5zm0 8.5c-1.93 0-3.5-1.57-3.5-3.5S10.06 4.5 11.99 4.5c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5z"
+                  fill="#6D6D6D"
+                />
+                <line
+                  x1="3"
+                  y1="3"
+                  x2="21"
+                  y2="15"
+                  stroke="#6D6D6D"
+                  stroke-width="2"
+                />
+              </svg>
+            </div>
             </div>
 
             <!-- Submit Button -->

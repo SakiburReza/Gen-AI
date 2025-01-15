@@ -71,7 +71,7 @@ const submitForm = async () => {
       class="absolute top-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-start z-9"
     >
       <!-- Logo -->
-      <img src="/images/zeuxis.png" alt="Zeuxis logo" class="w-30 h-23" />
+      <img src="/images/zeuxis-logo.png" alt="Zeuxis logo" class="w-30 h-23" />
     </div>
 
     <!-- Left Side - Image and Text -->
@@ -220,7 +220,7 @@ const submitForm = async () => {
     >
       <div class="bg-white p-6 rounded-lg max-w-3xl w-full">
         <div class="flex justify-center items-center mt-1 top-1">
-          <img src="/images/zeuxis.png" alt="Zeuxis logo" class="w-30 h-23" />
+          <img src="/images/zeuxis-logo.png" alt="Zeuxis logo" class="w-30 h-23" />
         </div>
         <div class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
           <div
