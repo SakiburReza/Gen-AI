@@ -320,7 +320,7 @@ const fetchLikedMedia = async (label: string) => {
           item.type ||
           (label === 'text-to-video' ||
             label === 'image-to-video' ||
-            label === 'template-video' ||
+            label === 'templates' ||
             (label === 'face-swap' && item.orientation == null)
             ? 'video'
             : 'image'),
