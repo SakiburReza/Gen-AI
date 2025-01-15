@@ -122,7 +122,7 @@ function setActive(button) {
   }
 
   activeMode.value = button
-  localStorage.setItem('mode', button)
+  localStorage.setItem('mode', activeMode.value)
   localStorage.setItem('functionality', activeFunctionality.value)
 }
 
@@ -139,39 +139,45 @@ function convertToTitleCase(input) {
 
 function initializeFromQueryParams() {
   console.log('intitial functionality', activeFunctionality.value);
-  
+
   const queryMode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode // Default to 'image'
   let functionality = Array.isArray(route.query.functionality)
     ? route.query.functionality[0]
     : route.query.functionality
-  console.log('query param', route.query.functionality);
+  // console.log('query param', route.query.functionality);
+  // console.log('query param', route.query.mode);
 
   // Fallback to default functionality
-  // functionality = functionality || (mode === 'video' ? 'text-to-video' : 'text-to-image')
   const mode = queryMode || localStorage.getItem('mode') || 'image'
-  functionality =  functionality || localStorage.getItem('functionality') || (mode === 'video' ? 'text-to-video' : 'text-to-image')
+  functionality = functionality || localStorage.getItem('functionality') || (mode === 'video' ? 'text-to-video' : 'text-to-image')
 
-  console.log('f', functionality);
-  console.log('fmode', mode);
   fetchMedia(functionality)
 
+  localStorage.setItem('mode', mode)
+  localStorage.setItem('functionality', functionality)
   // Convert functionality to title case for matching options
   const normalizedFunctionality = convertToTitleCase(functionality).toLowerCase()
 
-  console.log('current Mode:', mode)
-  console.log('current Functionality:', functionality)
+  // console.log('normalized F:', normalizedFunctionality)
+  // console.log('current Mode:', mode)
+  // console.log('current Functionality:', functionality)
 
   // Set mode and ensure active mode is valid
   if (mode === 'video' || mode === 'image') {
-    console.log('mode to set',mode);
-    
+    console.log('mode to set', mode);
     activeMode.value = mode
     setActive(mode) // Ensure mode-dependent logic runs
   }
 
   // Find and set the matching functionality
   const options = mode === 'video' ? videoModeOptions : imageModeOptions
+  // options.forEach((opt, index) => {
+  //   console.log(`Option ${index}:`, opt.text.toLowerCase());
+  // });
   const option = options.find((opt) => opt.text.toLowerCase() === normalizedFunctionality)
+
+  // console.log('option: ', options);
+  // console.log('option: ', option);
 
   if (option) {
     nextTick(() => {
@@ -180,8 +186,8 @@ function initializeFromQueryParams() {
   } else {
     console.warn('Functionality not found in available options')
   }
-  console.log('stored Mode:', localStorage.getItem('mode'))
-  console.log('stored Functionality:', localStorage.getItem('functionality'))
+  // console.log('stored Mode:', localStorage.getItem('mode'))
+  // console.log('stored Functionality:', localStorage.getItem('functionality'))
   activeFunctionality.value = functionality;
   router.replace({ path: route.path });
 }
@@ -192,7 +198,7 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
     'Text to Video': 'text-to-video',
     'Image to Video': 'image-to-video',
     'Face Swap': 'face-swap',
-    'Templates (Beta)' : 'templates',
+    'Templates (Beta)': 'templates',
     'Text to Image': 'text-to-image',
     'Image to Image': 'image-to-image',
   }
@@ -200,9 +206,10 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
   // Determine functionality based on the active mode
   const defaultFunctionality = newMode === 'video' ? 'text-to-video' : 'text-to-image'
 
-  // Fetch media only when necessary
-  
+  // Fetch media only when necessary  
   const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality
+  // console.log('functionality change w:', functionalityKey)
+  // console.log('functionality change w:', newMode)
 
   activeFunctionality.value = newFunctionality;
   if (functionalityKey) {
@@ -210,10 +217,9 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
 
     localStorage.setItem('mode', newMode)
     localStorage.setItem('functionality', newFunctionality)
-    
   }
-  console.log('stored Mode:', localStorage.getItem('mode'))
-  console.log('stored Functionality:', localStorage.getItem('functionality'))
+  // console.log('stored Mode w:', localStorage.getItem('mode'))
+  // console.log('stored Functionality w:', localStorage.getItem('functionality'))
 })
 
 const selectedRatio = ref('Landscape')
