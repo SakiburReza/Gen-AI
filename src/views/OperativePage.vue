@@ -665,7 +665,7 @@ const imageModeOptions = [
       </button>
     </div>
 
-    <div class="flex flex-col sm:flex-row md:flex-row flex-1">
+    <div class="flex flex-col md:flex-row flex-1">
       <!-- Left Section: Enhanced Image Grid -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[75%] mx-auto ml-15 mb-5 mt-6 overflow-y-auto pr-2"
         style="max-height: calc(90vh - 4rem); overflow-y: auto">
