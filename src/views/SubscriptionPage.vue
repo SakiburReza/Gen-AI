@@ -145,7 +145,7 @@ onMounted(async () => {
       />
     </div>
       <!-- Banner for current package -->
-      <div class="bg-yellow-100 text-yellow-800 p-3 text-center font-medium px-4 sm:px-5 sm:my-3 xl:mx-40 lg:px-4 py-4 rounded">
+      <div class="bg-yellow-100 text-yellow-800 p-3 text-center font-medium px-4 sm:px-5 sm:my-3 xl:mx-40 lg:px-4 py-4 rounded mt-5">
         <span class="font-bold text-lg">★</span> Note: If you upgrade your account you will only be charged the difference between your current and the new package.
     </div>
 
