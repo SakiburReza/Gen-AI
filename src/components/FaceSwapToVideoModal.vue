@@ -25,11 +25,7 @@ const props = defineProps({
       title: "A bottom-up image of a girl walking confidently down the city streets",
     }),
   },
-
-
-
 })
-
 // Emits
 const emit = defineEmits(['close'])
 
@@ -41,13 +37,14 @@ const isLoading = ref(false);
 
 const promptError = ref<string | null>(null); // Track prompt validation errors
 
+const loading = ref<boolean>(false);
+const error = ref<string | null>(null);
+const fileUrl = ref<string | null>(null);
+
 
 // Helper to extract filename from URL
-const getFilename = (url: string): string => {
-  const parts = url.split('/');
-  return parts[parts.length - 1] || 'download';
-};
-
+const getFilename = (url: string): string =>
+  `${url.split('/').pop() || 'download'}${props.image?.type === 'image' ? '.png' : '.mp4'}`;
 
 
 // // API call to convert the image to a video
@@ -101,6 +98,32 @@ const getFilename = (url: string): string => {
 //   }
 // };
 
+
+
+// Fetch file when image.url is available
+const fetchFile = async () => {
+  console.log('fetchFile called');
+  if (props.image?.url) {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await fetch(imageUrl() + props.image.url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch the file');
+      }
+      const fileBlob = await response.blob();
+      fileUrl.value = URL.createObjectURL(fileBlob);
+      loading.value = false;
+      console.log('File URL:', fileUrl.value);
+    } catch (err) {
+      error.value = `Failed to fetch the file: ${err.message}`;
+      console.error('Error fetching file:', err);
+    } finally {
+      loading.value = false;
+    }
+  }
+};
+
 // API call to convert the image to a video
 const turnIntoVideoAction = async () => {
   promptError.value = !prompt.value ? "Prompt is required." : null;
@@ -147,27 +170,18 @@ watch(prompt, (newVal) => {
   promptError.value = !newVal ? "Prompt is required." : null;
 });
 
+watch([() => props.image?.url, () => props.isOpen], ([imageUrl, isOpen]) => {
+  if (isOpen && imageUrl) {
+    loading.value = true;
+    fetchFile();
+  }
+});
+
 const handleOutsideClick = (event) => {
   if (event.target === event.currentTarget) {
     close();
   }
 }
-
-
-const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: string): Promise<File> => {
-  try {
-    // Fetch the Blob data from the Blob URL
-    const response = await fetch(blobUrl);
-    const blob = await response.blob();
-
-    // Create a File object from the Blob
-    return new File([blob], fileName, { type: mimeType });
-  } catch (error) {
-    console.error('Error converting blob URL to File:', error);
-    throw error; // Rethrow the error for higher-level handling
-  }
-};
-
 
 </script>
 <template>
@@ -201,11 +215,12 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
 
             <!-- Prompt -->
             <div class="mb-7">
-              <p v-if="image?.prompt" class="text-gray-700 font-semibold text-sm mb-2 uppercase tracking-wide">Existing Prompt</p>
+              <p v-if="image?.prompt" class="text-gray-700 font-semibold text-sm mb-2 uppercase tracking-wide">Existing
+                Prompt</p>
               <p v-if="image?.prompt"
                 class="w-full p-2 border border-silverChalice rounded-lg text-lg mb-10 font-bold text-darkGray bg-tertiary align-top resize-none"
-                style="line-height: 1.5; overflow:auto;"
-                placeholder="Your prompt will appear here">{{ image.prompt }}</p>
+                style="line-height: 1.5; overflow:auto;" placeholder="Your prompt will appear here">{{ image.prompt }}
+              </p>
 
               <p class="text-gray-700 font-semibold text-sm uppercase tracking-wide mb-1">Enter Prompt for Video</p>
 
@@ -230,13 +245,11 @@ const convertToImageFile = async (blobUrl: string, fileName: string, mimeType: s
                 Image Reference
               </button>
             </div>
-
-
             <!-- Download Link -->
             <div class="mt-5 text-center">
-              <a :href="image?.url" :download="image?.url ? getFilename(image.url) : null"
+              <a v-if="image?.url" :href="fileUrl" :download="getFilename(image.url)"
                 class="flex items-start justify-start text-black text-xs px-1 font-semibold py-3">
-                <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-5 h-5 mr-1.5">
+                <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-5 h-5 mr-1.5" />
                 DOWNLOAD
               </a>
             </div>
