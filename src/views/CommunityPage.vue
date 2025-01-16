@@ -174,7 +174,7 @@ onMounted(async () => {
       <!-- Image Grid Section -->
       <div class="flex-1 mt-1 mb-5 overflow-y-auto">
         <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[75%] mx-auto ml-15 mb-5 mt-6 overflow-y-auto pr-1"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[75%] mx-auto ml-15 mb-5 mt-4 overflow-y-auto pr-1"
           style="max-height: calc(90vh - 4rem); overflow-y: auto"
         >
           <!-- Display spinner while loading images -->
