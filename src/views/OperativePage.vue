@@ -209,7 +209,7 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
   const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality
   // console.log('functionality change w:', functionalityKey)
   // console.log('functionality change w:', newMode)
-
+  searchQuery.value = ''
   activeFunctionality.value = newFunctionality;
   if (functionalityKey) {
     await fetchMedia(functionalityKey)
