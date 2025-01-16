@@ -206,6 +206,7 @@ onMounted(async () => {
               :src="imageUrl() + filteredMedia[index].url"
               controls
               class="w-full h-full object-contain max-w-full"
+              @click="openPreviewModal(item)"
             ></video>
             <!-- Floating Buttons -->
             <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">

@@ -688,7 +688,8 @@ const imageModeOptions = [
 
           <video v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
             :src="imageUrl() + filteredMedia[index].url" controls
-            class="w-full h-full object-contain max-w-full"></video>
+            class="w-full h-full object-contain max-w-full"
+            @click="openPreviewModal(item)"></video>
 
           <!------------------------------------------------------ Roney ----------------------------------------->
           <!-- Floating Social Buttons -->
@@ -772,7 +773,6 @@ const imageModeOptions = [
 
         <button @click="setActive('video')" :class="[
           'flex items-center px-4 py-2 rounded-lg font-medium transition',
-
           activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
         ]">
           <span class="material-icons">videocam</span>
