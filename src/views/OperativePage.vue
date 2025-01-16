@@ -123,7 +123,7 @@ function setActive(button) {
 
   activeMode.value = button
   localStorage.setItem('mode', activeMode.value)
-  localStorage.setItem('functionality', activeFunctionality.value)
+  // localStorage.setItem('functionality', activeFunctionality.value)
 }
 
 // Active functionality state
@@ -138,7 +138,7 @@ function convertToTitleCase(input) {
 }
 
 function initializeFromQueryParams() {
-  console.log('intitial functionality', activeFunctionality.value);
+  // console.log('intitial functionality', activeFunctionality.value);
   const queryMode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode // Default to 'image'
   let functionality = Array.isArray(route.query.functionality)
     ? route.query.functionality[0]
@@ -163,16 +163,13 @@ function initializeFromQueryParams() {
 
   // Set mode and ensure active mode is valid
   if (mode === 'video' || mode === 'image') {
-    console.log('mode to set', mode);
+    // console.log('mode to set', mode);
     activeMode.value = mode
     setActive(mode) // Ensure mode-dependent logic runs
   }
 
   // Find and set the matching functionality
   const options = mode === 'video' ? videoModeOptions : imageModeOptions
-  // options.forEach((opt, index) => {
-  //   console.log(`Option ${index}:`, opt.text.toLowerCase());
-  // });
   const option = options.find((opt) => opt.text.toLowerCase() === normalizedFunctionality)
 
   // console.log('option: ', options);
@@ -473,7 +470,12 @@ const likeAction = async (imageId: string, action: 'Y' | 'N') => {
       const itemIndex = media.value.findIndex((item) => item.url === imageId)
       if (itemIndex !== -1) {
         media.value[itemIndex].isLiked = action
-        media.value = [...media.value]
+        // media.value = [...media.value]
+        // console.log(media.value.length)
+        if(isLikedState.value){
+          media.value.splice(itemIndex, 1)
+          media.value = [...media.value]
+        }
       }
       console.log('Image Liked successfully:', response.data)
       toastStore.success(response.data.message)
