@@ -209,7 +209,7 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
   const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality
   // console.log('functionality change w:', functionalityKey)
   // console.log('functionality change w:', newMode)
-
+  searchQuery.value = ''
   activeFunctionality.value = newFunctionality;
   if (functionalityKey) {
     await fetchMedia(functionalityKey)
@@ -690,7 +690,7 @@ const imageModeOptions = [
 
           <!------------------------------------------------------ Roney ----------------------------------------->
           <!-- Floating Social Buttons -->
-          <div v-if="media[index]" class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
+          <div v-if="media[index]" class="absolute top-2 right-2 flex flex-row gap-2 items-center">
             <!-- Share Button with Group Class -->
             <div class="relative group">
               <!-- Share Button -->
@@ -955,10 +955,4 @@ const imageModeOptions = [
 
 <style scoped>
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-
-/* Custom fractional row span */
-.row-span-1-5 {
-  grid-row: span 2 / span 1;
-  /* Span 1.5 rows */
-}
 </style>
