@@ -110,7 +110,7 @@ onMounted(async () => {
     </transition>
 
     <!-- Header and Button Section -->
-    <div v-if="!showBillingSection" class="flex justify-between items-center mb-2 w-full">
+    <div v-if="!showBillingSection" class="flex justify-between items-center mb-7 w-full">
       <h1
         v-show="!showBillingSection"
         class="text-xl sm:text-2xl lg:text-3xl font-bold text-center ml-6 xl:ml-70 transition-opacity duration-500 ease-in-out opacity-0"

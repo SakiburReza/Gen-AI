@@ -28,6 +28,9 @@ const loading = ref<boolean>(false);
 const error = ref<string | null>(null);
 const fileUrl = ref<string | null>(null);
 
+const imgUrl = ref(null) // URL for the image
+const isPortrait = ref(false) // Flag to track orientation
+
 const getFilename = (url: string): string =>
   `${url.split('/').pop() || 'download'}${props.image?.type === 'image' ? '.png' : '.mp4'}`;
 
@@ -63,6 +66,10 @@ watch([() => props.image?.url, () => props.isOpen], ([imageUrl, isOpen]) => {
     fetchFile();
   }
 });
+
+watch(fileUrl, () => {
+  checkOrientation();
+});
 // Close handler
 const close = () => {
   emit('close');
@@ -70,6 +77,14 @@ const close = () => {
   fileUrl.value = null;
   loading.value = false;
 };
+
+const checkOrientation = () => {
+  const img = new Image();
+  img.src = imgUrl.value;
+  img.onload = () => {
+    isPortrait.value = img.height > img.width;
+  };
+}
 
 // Handle click outside to close
 const handleOutsideClick = (event) => {
@@ -81,8 +96,8 @@ const handleOutsideClick = (event) => {
 
 <template>
   <div class="fixed inset-0 flex justify-center items-center" v-if="loading">
-  <div class="w-8 h-8 border-4 border-blue-900 border-t-transparent rounded-full animate-spin"></div>
-</div>
+    <div class="w-8 h-8 border-4 border-blue-900 border-t-transparent rounded-full animate-spin"></div>
+  </div>
 
   <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" @click="handleOutsideClick"
     v-if="isOpen && !loading">
@@ -95,14 +110,15 @@ const handleOutsideClick = (event) => {
       </button>
 
       <!-- Content Wrapper -->
-      <div class="flex flex-col gap-6 w-full">
+      <div class="flex flex-col w-full">
         <!-- Image or Video Section -->
         <div class="w-full flex flex-col items-start">
           <!-- Image Display -->
-          <div v-if="image?.type === 'image'" class="w-full">
+          <div v-if="image?.type === 'image'" class="w-full flex justify-center items-center">
             <img v-if="fileUrl" :src="fileUrl" alt="Generated Image"
-              class="rounded-lg w-full max-h-[calc(80vh-12rem)] object-contain" />
+              class="rounded-lg w-full max-w-[80vw] max-h-[calc(80vh-12rem)] object-contain" />
           </div>
+
 
           <!-- Video Display -->
           <div v-else-if="image?.type === 'video'" class="w-full">
@@ -112,20 +128,20 @@ const handleOutsideClick = (event) => {
 
           <!-- Prompt Section -->
           <div style="float: left; text-align: left;" class="w-full">
-            <!-- <p class="mt-5 text-xl font-bold text-black flex items-start justify-start" style="padding: 10px;">
-              Prompt of the Image &nbsp;
+            <p class="mt-1 text-lg font-bold text-black flex items-start justify-start uppercase tracking-wider" style="padding: 10px;">
+              Prompt of the Image
             </p>
-            <p v-if="image?.prompt" class="mt-5 text-xl font-bold text-darkGray bg-tertiary" style="padding: 10px;">
+            <p v-if="image?.prompt" class="text-sm font-bold text-darkGray bg-tertiary rounded-lg tracking-normal" style="padding: 10px;">
               {{ image.prompt }}
-            </p> -->
-            <p v-if="image?.prompt" class=" mt-5 text-gray-700 font-semibold text-sm mb-1 uppercase tracking-wide"> Prompt of the Image</p>
-              <textarea v-if="image?.prompt"
-                class="w-full p-2 border border-silverChalice rounded-lg text-lg mb-2 font-bold text-darkGray bg-tertiary align-top resize-none"
-                style="line-height: 1.5; overflow:auto;"
-                placeholder="Your prompt will appear here">{{ image.prompt }}</textarea>
+            </p>
+            <!-- <p v-if="image?.prompt" class=" mt-5 text-gray-700 font-bold text-md mb-1 uppercase tracking-wide"> Prompt
+              of the Image</p>
+            <textarea v-if="image?.prompt"
+              class="w-full p-2 rounded-lg text-sm readonly mb-2 font-bold text-darkGray bg-tertiary align-top resize-none"
+              style="line-height: 1.5; overflow: auto;" placeholder="Your prompt will appear here"
+              readonly>{{ image.prompt }}</textarea> -->
           </div>
         </div>
-
         <!-- Download Button -->
         <a v-if="image?.url" :href="fileUrl" :download="getFilename(image.url)"
           class="flex items-center justify-center text-blue-600 text-sm font-bold py-2 px-4 rounded hover:bg-blue-600 hover:text-white mt-4">
