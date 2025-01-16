@@ -48,12 +48,10 @@ const creditInformation = ref({
 })
 
 const otherPrice = ref<number | null>(null)
-const isDisabled = ref(false)
 // Methods
 const ZeuxItNow = async () => {
   if (props.isButtonDisabled) return
-
-  emit('button-clicked',isDisabled)
+  emit('button-clicked',true)
 
   try {
     let response, response2
@@ -63,14 +61,10 @@ const ZeuxItNow = async () => {
       response2 = await genAiService.changesubscribePackages(props.data.title)
       if(response2.status){
         await fetchCredits();
-        isDisabled.value = true;
-        //window.location.reload()
-        // props.isButtonDisabled.value = false
+        emit('button-clicked', false);
         toastStore.success(response2.data.message) 
+        initializePricies()
       }
-    }
-    if (response.status) {
-      toastStore.success(response.data.message)
     }
     toastStore.success(response.data.message)
     const redirectUrl = response.data
@@ -137,11 +131,13 @@ const buttonText = computed(() => {
     return 'Upgrade'
   }
 })
-
-// Lifecycle hooks
-onMounted(() => {
+function initializePricies(){
   fetchCurrentPrice()
   fetchOtherPrice()
+}
+// Lifecycle hooks
+onMounted(() => {
+  initializePricies()
 })
 
 watch(
@@ -169,7 +165,7 @@ watch(
         'w-full max-w-sm border rounded-3xl p-5 relative transition-transform duration-300': true,
         'border-blue-600': isStyle,
         'bg-blue-600': !isStyle,
-        'scale-110 -translate-y-4': buttonText === 'Current Package', // Move up
+        'scale-110 -translate-y-4': buttonText === 'Current Package',
         'translate-y-2': buttonText !== 'Current Package', // Keep in line
         'bg-tertiary': data.title !== 'Next Up Creator',
       }"
@@ -235,7 +231,7 @@ watch(
       <!-- CTA Button -->
       <button
         @click="ZeuxItNow"
-        :disabled="isButtonDisabled"
+        :disabled="props.isButtonDisabled"
         :class="{
           'w-full text-sm py-3 rounded-lg': true,
           'bg-black text-white hover:bg-gray-800':
