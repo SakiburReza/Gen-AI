@@ -150,7 +150,7 @@ function initializeFromQueryParams() {
   const mode = queryMode || localStorage.getItem('mode') || 'image'
   functionality = functionality || localStorage.getItem('functionality') || (mode === 'video' ? 'text-to-video' : 'text-to-image')
 
-  // fetchMedia(functionality)
+  fetchMedia(functionality)
 
   localStorage.setItem('mode', mode)
   localStorage.setItem('functionality', functionality)
@@ -955,10 +955,4 @@ const imageModeOptions = [
 
 <style scoped>
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-
-/* Custom fractional row span */
-.row-span-1-5 {
-  grid-row: span 2 / span 1;
-  /* Span 1.5 rows */
-}
 </style>
