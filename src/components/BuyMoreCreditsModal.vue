@@ -112,7 +112,7 @@ onMounted(fetchprops)
             'bg-gray-300': selectedPlan === index,
             'hover:bg-blue-600': !props.isButtonDisabled && selectedPlan === null,
           }"
-          class="p-4 rounded-lg flex flex-col justify-between shadow-sm h-355 items-end group transition-all duration-300 w-full text-left cursor-pointer"
+          class="rounded-lg flex flex-col justify-between shadow-sm items-end group transition-all duration-300 w-full text-left cursor-pointer"
           role="button"
           tabindex="0"
           :aria-pressed="selectedPlan === index"
@@ -128,7 +128,7 @@ onMounted(fetchprops)
             <img
               src="/images/icon/StartIcon.svg"
               alt="Start Icon"
-              class="w-4 h-5 ml-2 mb-14 mr-0.5"
+              class="w-4 h-5 ml-2 mb-8 mr-0.5"
             />
             <div class="flex flex-col items-center p-4 rounded-lg">
               <p class="text-3xl md:text-xl font-bold text-gray-800 mt-2">

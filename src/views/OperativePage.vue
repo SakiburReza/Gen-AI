@@ -138,13 +138,13 @@ function convertToTitleCase(input) {
 }
 
 function initializeFromQueryParams() {
-  console.log('intitial functionality', activeFunctionality.value);
+  // console.log('intitial functionality', activeFunctionality.value);
   const queryMode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode // Default to 'image'
   let functionality = Array.isArray(route.query.functionality)
     ? route.query.functionality[0]
     : route.query.functionality
-  console.log('query param', route.query.functionality);
-  console.log('query param', route.query.mode);
+  // console.log('query param', route.query.functionality);
+  // console.log('query param', route.query.mode);
 
   // Fallback to default functionality
   const mode = queryMode || localStorage.getItem('mode') || 'image'
@@ -157,22 +157,19 @@ function initializeFromQueryParams() {
   // Convert functionality to title case for matching options
   const normalizedFunctionality = convertToTitleCase(functionality).toLowerCase()
 
-  console.log('normalized F:', normalizedFunctionality)
-  console.log('current Mode:', mode)
-  console.log('current Functionality:', functionality)
+  // console.log('normalized F:', normalizedFunctionality)
+  // console.log('current Mode:', mode)
+  // console.log('current Functionality:', functionality)
 
   // Set mode and ensure active mode is valid
   if (mode === 'video' || mode === 'image') {
-    console.log('mode to set', mode);
+    // console.log('mode to set', mode);
     activeMode.value = mode
     setActive(mode) // Ensure mode-dependent logic runs
   }
 
   // Find and set the matching functionality
   const options = mode === 'video' ? videoModeOptions : imageModeOptions
-  // options.forEach((opt, index) => {
-  //   console.log(`Option ${index}:`, opt.text.toLowerCase());
-  // });
   const option = options.find((opt) => opt.text.toLowerCase() === normalizedFunctionality)
 
   // console.log('option: ', options);
@@ -185,8 +182,8 @@ function initializeFromQueryParams() {
   } else {
     console.warn('Functionality not found in available options')
   }
-  console.log('stored Mode:', localStorage.getItem('mode'))
-  console.log('stored Functionality:', localStorage.getItem('functionality'))
+  // console.log('stored Mode:', localStorage.getItem('mode'))
+  // console.log('stored Functionality:', localStorage.getItem('functionality'))
   activeFunctionality.value = functionality;
   router.replace({ path: route.path });
 }
@@ -473,7 +470,12 @@ const likeAction = async (imageId: string, action: 'Y' | 'N') => {
       const itemIndex = media.value.findIndex((item) => item.url === imageId)
       if (itemIndex !== -1) {
         media.value[itemIndex].isLiked = action
-        media.value = [...media.value]
+        // media.value = [...media.value]
+        // console.log(media.value.length)
+        if(isLikedState.value){
+          media.value.splice(itemIndex, 1)
+          media.value = [...media.value]
+        }
       }
       console.log('Image Liked successfully:', response.data)
       toastStore.success(response.data.message)
