@@ -204,7 +204,7 @@ onMounted(async () => {
               class="w-full h-full object-contain max-w-full"
             ></video>
             <!-- Floating Buttons -->
-            <<div v-if="media[index]" class="absolute top-3 right-1.5 flex flex-row gap-2 items-center">
+            <<div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
               <!-- Text Button -->
               <div class="relative group">
                 <!-- Copy -->

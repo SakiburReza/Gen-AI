@@ -1,6 +1,6 @@
 <script setup>
 import { FwbCard } from 'flowbite-vue'
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref, defineProps, defineEmits, watch} from 'vue'
 
 // Props
 const props = defineProps({
@@ -8,7 +8,18 @@ const props = defineProps({
     type: String,
     default: 'Insert Image', // Default title
   },
+  resetKey: {
+    type: Number,
+    default: 0,
+  }
 })
+
+watch(
+  () => props.resetKey,
+  () => {
+    imageUrl.value = null; // Clear the selected image
+  }
+);
 
 // Emit event
 const emit = defineEmits(['input']) // This will emit the selected file to the parent component
