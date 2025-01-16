@@ -10,7 +10,7 @@ const { fetchCredits } = useCredits()
 
 const router = useRouter() // Vue Router instance
 // Define the emits to handle custom events
-const emit = defineEmits(['button-clicked'])
+const emit = defineEmits(['button-clicked', 'package-changed'])
 
 // Define props
 const props = defineProps({
@@ -37,17 +37,12 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  creditInformation: {
+    type: Object,
+    default: {},
+  }
 })
 
-// State management
-const creditInformation = ref({
-  currentPackage: '',
-  credits: 0,
-  generatedBy: '',
-  currentPackagePrice: 0,
-})
-
-const otherPrice = ref<number | null>(null)
 // Methods
 const ZeuxItNow = async () => {
   if (props.isButtonDisabled) return
@@ -55,7 +50,7 @@ const ZeuxItNow = async () => {
 
   try {
     let response, response2
-    if (creditInformation.value.currentPackagePrice === 0) {
+    if (props.creditInformation.currentPackagePrice === 0) {
       response = await genAiService.subscribePackages(props.data.title, true, 'Month')
     } else {
       response2 = await genAiService.changesubscribePackages(props.data.title)
@@ -63,10 +58,10 @@ const ZeuxItNow = async () => {
         await fetchCredits();
         emit('button-clicked', false);
         toastStore.success(response2.data.message)
-        initializePricies()
       }
     }
     toastStore.success(response.data.message)
+    
     const redirectUrl = response.data
 
     if (redirectUrl) {
@@ -79,73 +74,22 @@ const ZeuxItNow = async () => {
   }
 }
 
-const fetchCurrentPrice = async () => {
-  try {
-    const response = await genAiService.getCreditInfo()
-    if (response?.data?.currentPackagePrice) {
-      creditInformation.value.currentPackagePrice =
-        parseFloat(response.data.currentPackagePrice) || 0
-    } else {
-      console.error('Current package price not found in response', response)
-      creditInformation.value.currentPackagePrice = 0
-    }
-  } catch (error) {
-    console.error('Error fetching current price:', error)
-  }
-}
-const fetchOtherPrice = async () => {
-  try {
-    const response = await genAiService.fetchSubscribePlan()
-
-    if (response?.data) {
-      const matchedPlan = response.data.find((plan) => plan.planName === props.data.title)
-
-      if (matchedPlan?.price != null) {
-        otherPrice.value = parseFloat(matchedPlan.price.toFixed(2)) || 0
-      } else {
-        console.error('Matching plan not found or price is missing')
-        otherPrice.value = null
-      }
-    } else {
-      console.error('Invalid response structure', response)
-      otherPrice.value = null
-    }
-  } catch (error) {
-    console.error('Error fetching other package price:', error)
-    otherPrice.value = null
-  }
-}
-
 // Computed properties
 const buttonText = computed(() => {
-  if (otherPrice.value === null) {
+  if (props.data?.priceOrig === null) {
     return 'Loading...'
   }
 
-  const currentPrice = creditInformation.value.currentPackagePrice
-  if (currentPrice === otherPrice.value) {
+  const currentPrice = props.creditInformation.currentPackagePrice
+  if (currentPrice === props.data?.priceOrig) {
     return 'Current Package'
-  } else if (currentPrice > otherPrice.value) {
+  } else if (currentPrice > props.data?.priceOrig) {
     return 'Downgrade'
   } else {
     return 'Upgrade'
   }
 })
-function initializePricies(){
-  fetchCurrentPrice()
-  fetchOtherPrice()
-}
-// Lifecycle hooks
-onMounted(() => {
-  initializePricies()
-})
 
-watch(
-  () => props.data.title,
-  () => {
-    fetchOtherPrice()
-  },
-)
 </script>
 
 <template>
