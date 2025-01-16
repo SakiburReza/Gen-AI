@@ -13,6 +13,7 @@ const route = useRoute()
 const toastStore = useToastStore()
 const { fetchCredits } = useCredits()
 const loading = ref(false) // Track loading state
+const currentPackage = ref(null) // Track if there is a current package
 
 const plans = ref([]) // Create a ref for the plans list
 const isButtonDisabled = ref(false) // Track button state (whether it is disabled)
@@ -65,6 +66,10 @@ const fetchPlans = async () => {
   }
 }
 
+const disableButton = () => {
+      isButtonDisabled.value = true;
+    };
+
 const toggleBillingSection = () => {
   showBillingSection.value = !showBillingSection.value // Toggles the billing section visibility
 }
@@ -76,7 +81,7 @@ onMounted(async () => {
       const customerId = route.query.customer
       if (payment === 'success' && customerId) {
         loading.value = true
-        await delay(3000) // Wait for 5 seconds
+        await delay(3000)
         loading.value = false
         await fetchCredits()
         router.replace({ path: route.path })
@@ -136,8 +141,12 @@ onMounted(async () => {
         :data="feature"
         :isStyle="index % 2 == 0"
         :isButtonDisabled="isButtonDisabled"
-        @button-clicked="isButtonDisabled = true"
+         @button-clicked="(value) => (isButtonDisabled = value)"
       />
+    </div>
+      <!-- Banner for current package -->
+      <div class="bg-yellow-100 text-yellow-800 p-3 text-center font-medium px-4 sm:px-5 sm:my-3 xl:mx-40 lg:px-4 py-4 rounded">
+        <span class="font-bold text-lg">★</span> Note: If you upgrade your account you will only be charged the difference between your current and the new package.
     </div>
 
     <!-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-2 lg:px-4 gap-4 md:gap-6 py-4 sm:py-2 lg:py-8 

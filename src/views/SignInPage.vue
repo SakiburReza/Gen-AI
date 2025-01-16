@@ -62,7 +62,7 @@ const props = defineProps({
 
     <!-- Logo -->
     <div class="relative flex flex-col items-center justify-center  top-1">
-      <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="w-30 h-23" />
+      <img src="/images/zeuxis-logo.png" alt="Flowbite logo" class="mt-5" />
     </div>
 
 

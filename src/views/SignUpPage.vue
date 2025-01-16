@@ -71,7 +71,7 @@ const submitForm = async () => {
       class="absolute top-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-start z-9"
     >
       <!-- Logo -->
-      <img src="/images/zeuxis-logo.png" alt="Zeuxis logo" class="w-30 h-23" />
+      <img src="/images/zeuxis-logo.png" alt="Zeuxis logo" class="mt-5" />
     </div>
 
     <!-- Left Side - Image and Text -->
@@ -103,7 +103,7 @@ const submitForm = async () => {
     <div class="lg:w-1/4 flex flex-col justify-center items-center px-6 h-full bg-white">
       <!-- Form Container -->
       <div class="w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-3 text-center text-gray-800">Sign Up</h2>
+        <h2 class="text-2xl font-bold mb-3 text-center text-gray-800 mt-5">Sign Up</h2>
 
         <!-- Sign-Up Form -->
         <form @submit.prevent="submitForm" class="space-y-6">

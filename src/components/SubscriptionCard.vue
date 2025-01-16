@@ -48,12 +48,12 @@ const creditInformation = ref({
 })
 
 const otherPrice = ref<number | null>(null)
-
+const isDisabled = ref(false)
 // Methods
 const ZeuxItNow = async () => {
   if (props.isButtonDisabled) return
 
-  emit('button-clicked')
+  emit('button-clicked',isDisabled)
 
   try {
     let response, response2
@@ -63,6 +63,9 @@ const ZeuxItNow = async () => {
       response2 = await genAiService.changesubscribePackages(props.data.title)
       if(response2.status){
         await fetchCredits();
+        isDisabled.value = true;
+        //window.location.reload()
+        // props.isButtonDisabled.value = false
         toastStore.success(response2.data.message) 
       }
     }
