@@ -123,7 +123,7 @@ function setActive(button) {
 
   activeMode.value = button
   localStorage.setItem('mode', activeMode.value)
-  localStorage.setItem('functionality', activeFunctionality.value)
+  // localStorage.setItem('functionality', activeFunctionality.value)
 }
 
 // Active functionality state
@@ -143,23 +143,23 @@ function initializeFromQueryParams() {
   let functionality = Array.isArray(route.query.functionality)
     ? route.query.functionality[0]
     : route.query.functionality
-  // console.log('query param', route.query.functionality);
-  // console.log('query param', route.query.mode);
+  console.log('query param', route.query.functionality);
+  console.log('query param', route.query.mode);
 
   // Fallback to default functionality
   const mode = queryMode || localStorage.getItem('mode') || 'image'
   functionality = functionality || localStorage.getItem('functionality') || (mode === 'video' ? 'text-to-video' : 'text-to-image')
 
-  // fetchMedia(functionality)
+  fetchMedia(functionality)
 
   localStorage.setItem('mode', mode)
   localStorage.setItem('functionality', functionality)
   // Convert functionality to title case for matching options
   const normalizedFunctionality = convertToTitleCase(functionality).toLowerCase()
 
-  // console.log('normalized F:', normalizedFunctionality)
-  // console.log('current Mode:', mode)
-  // console.log('current Functionality:', functionality)
+  console.log('normalized F:', normalizedFunctionality)
+  console.log('current Mode:', mode)
+  console.log('current Functionality:', functionality)
 
   // Set mode and ensure active mode is valid
   if (mode === 'video' || mode === 'image') {
@@ -185,8 +185,8 @@ function initializeFromQueryParams() {
   } else {
     console.warn('Functionality not found in available options')
   }
-  // console.log('stored Mode:', localStorage.getItem('mode'))
-  // console.log('stored Functionality:', localStorage.getItem('functionality'))
+  console.log('stored Mode:', localStorage.getItem('mode'))
+  console.log('stored Functionality:', localStorage.getItem('functionality'))
   activeFunctionality.value = functionality;
   router.replace({ path: route.path });
 }
