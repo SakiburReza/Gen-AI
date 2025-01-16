@@ -174,7 +174,7 @@ onMounted(async () => {
       <!-- Image Grid Section -->
       <div class="flex-1 mt-1 mb-5 overflow-y-auto">
         <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[75%] mx-auto ml-15 mb-5 mt-6 overflow-y-auto pr-1"
           style="max-height: calc(90vh - 4rem); overflow-y: auto"
         >
           <!-- Display spinner while loading images -->
@@ -208,8 +208,10 @@ onMounted(async () => {
       </div>
 
       <!-- Sidebar Section -->
-      <div class="w-full md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none">
-        <CommunitySidebar class="w-90" />
+      <div class="w-full md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none rounded-3xl">
+        <div class="w-80 rounded-3xl overflow-hidden">
+          <CommunitySidebar class="w-full" />
+        </div>
       </div>
     </div>
 

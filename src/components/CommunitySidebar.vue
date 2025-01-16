@@ -1,7 +1,7 @@
 <template>
   <!-- Community Side Bar -->
   <div
-    class="md:fixed md:top-2 md:right-5 w-full md:p-6 flex-shrink-2 h-screen bg-gray-100 shadow-lg rounded-3xl flex flex-col md:w-72 lg:w-80 xl:w-96 md:transition-transform md:transform md:translate-x-full lg:translate-x-0 md:mr-1"
+    class="md:fixed md:top-2 md:right-5 w-full md:p-6 flex-shrink-2 h-screen bg-gray-100 shadow-lg rounded-3xl flex flex-col md:w-72 lg:w-80 xl:w-96 md:transition-transform md:transform md:translate-x-full lg:translate-x-0 mr-1"
     :class="{ 'translate-x-0': isOpen }"
   >
 
