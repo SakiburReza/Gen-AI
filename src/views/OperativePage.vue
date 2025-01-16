@@ -202,7 +202,7 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
   // Determine functionality based on the active mode
   const defaultFunctionality = newMode === 'video' ? 'text-to-video' : 'text-to-image'
 
-  // Fetch media only when necessary  
+  // Fetch media only when necessary
   const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality
   // console.log('functionality change w:', functionalityKey)
   // console.log('functionality change w:', newMode)
@@ -665,10 +665,10 @@ const imageModeOptions = [
       </button>
     </div>
 
-    <div class="flex flex-col sm:flex-row">
+    <div class="flex flex-col sm:flex-row md:flex-row flex-1">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
-        style="max-height: calc(78vh - 4rem); overflow-y: auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[75%] mx-auto ml-15 mb-5 mt-6 overflow-y-auto pr-2"
+        style="max-height: calc(90vh - 4rem); overflow-y: auto">
         <!-- Display spinner while loading images -->
 
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
