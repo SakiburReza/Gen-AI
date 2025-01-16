@@ -112,7 +112,7 @@ const handleOutsideClick = (event) => {
       <!-- Content Wrapper -->
       <div class="flex flex-col w-full">
         <!-- Image or Video Section -->
-        <div class="w-full flex flex-col items-start">
+        <div class="min-w-180 flex flex-col items-start">
           <!-- Image Display -->
           <div v-if="image?.type === 'image'" class="w-full flex justify-center items-center">
             <img v-if="fileUrl" :src="fileUrl" alt="Generated Image"
