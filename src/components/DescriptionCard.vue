@@ -1,6 +1,6 @@
 <script setup>
 import { FwbCard } from 'flowbite-vue'
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, watch } from 'vue'
 import { FwbTextarea } from 'flowbite-vue'
 
 const emit = defineEmits(['input'])
@@ -9,6 +9,19 @@ const localDescription = ref('')
 const handleInput = () => {
   emit('input', localDescription.value) // Emit the updated value
 }
+
+const props = defineProps({
+  resetKey: {
+    type: Number,
+    default: 0,
+  }});
+
+watch(
+  () => props.resetKey,
+  () => {
+    localDescription.value = '';
+  }
+);
 </script>
 
 <template>
@@ -19,9 +32,14 @@ const handleInput = () => {
         Describe
       </h6>
       <!-- Textarea -->
-      <fwb-textarea class="w-full h-16 sm:h-40 sm:w-120 text-dimGray text-xs" :rows="2"
-      label=""
-        v-model.lazy="localDescription" placeholder="Describe an image you want to create..." @input="handleInput" />
+      <fwb-textarea
+        class="w-full h-16 sm:h-40 sm:w-120 text-dimGray text-xs"
+        :rows="2"
+        label=""
+        v-model.lazy="localDescription"
+        placeholder="Describe an image you want to create..."
+        @input="handleInput"
+      />
     </div>
   </fwb-card>
 </template>

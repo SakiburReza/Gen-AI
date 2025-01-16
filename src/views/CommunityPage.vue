@@ -166,15 +166,15 @@ onMounted(async () => {
             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300"
           />
         </div>
-        <!-- Add the SVG icon inside the search bar -->
       </div>
     </div>
 
-    <div class="flex flex-row overflow-hidden">
-      <div class="flex-4 w-4/5 h-full mt-1 mb-5 overflow-y-auto">
-        <!-- Left Section: Enhanced Image Grid -->
+    <!-- Content Section -->
+    <div class="flex flex-col md:flex-row flex-1">
+      <!-- Image Grid Section -->
+      <div class="flex-1 mt-1 mb-5 overflow-y-auto">
         <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[75%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[75%] mx-auto ml-15 mb-5 mt-4 overflow-y-auto pr-1"
           style="max-height: calc(90vh - 4rem); overflow-y: auto"
         >
           <!-- Display spinner while loading images -->
@@ -185,10 +185,7 @@ onMounted(async () => {
             v-for="(item, index) in filteredMedia"
             :key="index"
             class="relative overflow-hidden rounded-lg"
-            :class="[
-              item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
-              'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300',
-            ]"
+            :class="[item.orientation === 'P' ? 'row-span-2' : 'row-span-1']"
           >
             <!-- Render Image -->
             <img
@@ -200,7 +197,6 @@ onMounted(async () => {
               @click="openPreviewModal(item)"
             />
             <!-- Render Video -->
-
             <video
               v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
               :src="imageUrl() + filteredMedia[index].url"
@@ -209,7 +205,7 @@ onMounted(async () => {
               @click="openPreviewModal(item)"
             ></video>
             <!-- Floating Buttons -->
-            <div class="absolute bottom-2 right-2 flex flex-col gap-2 items-center">
+            <<div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
               <!-- Text Button -->
               <div class="relative group">
                 <!-- Copy -->
@@ -235,21 +231,24 @@ onMounted(async () => {
           </div>
         </div>
       </div>
+
+      <!-- Sidebar Section -->
+      <div class="w-full md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none rounded-3xl">
+        <div class="w-80 rounded-3xl overflow-hidden">
+          <CommunitySidebar class="w-full" />
+        </div>
+      </div>
     </div>
-    <!-- Sidebar Component -->
-    <div class="w-30 md:w-64 bg-white shadow-md border-l border-gray-300">
-      <CommunitySidebar class="w-full"/>
-    </div>
+
     <!-- Modal Component -->
     <PreviewImageModal
       :isOpen="showPreviewModal"
       @close="closePreviewModal"
       :image="selectedImage"
     />
-
-    <!-- <ShowModalForImage :isOpen="showImageModal" @close="closeImageModal" :image="selectedImage" /> -->
   </div>
 </template>
+
 
 <style scoped>
 </style>

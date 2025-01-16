@@ -17,7 +17,7 @@ import PreviewImageModal from '@/components/PreviewImageModal.vue'
 const { fetchCredits } = useCredits()
 
 const searchQuery = ref('')
-
+const resetKey = ref(0); 
 const route = useRoute()
 
 // Reactive state for modal
@@ -202,7 +202,7 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
   // Determine functionality based on the active mode
   const defaultFunctionality = newMode === 'video' ? 'text-to-video' : 'text-to-image'
 
-  // Fetch media only when necessary  
+  // Fetch media only when necessary
   const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality
   // console.log('functionality change w:', functionalityKey)
   // console.log('functionality change w:', newMode)
@@ -406,7 +406,7 @@ const generateAiContent = async () => {
       toastStore.success(response?.data.message)
 
       await fetchCredits()
-
+      resetKey.value++;
       aiGeneratedMedia.value = response.data.data.map((item) => ({
         url: item.content,
         type: item.type,
@@ -665,10 +665,10 @@ const imageModeOptions = [
       </button>
     </div>
 
-    <div class="flex flex-col sm:flex-row">
+    <div class="flex flex-col md:flex-row flex-1">
       <!-- Left Section: Enhanced Image Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:w-[65%] ml-15 mb-5 mt-6 overflow-y-auto pr-2"
-        style="max-height: calc(78vh - 4rem); overflow-y: auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[75%] mx-auto ml-15 mb-5 mt-6 overflow-y-auto pr-2"
+        style="max-height: calc(90vh - 4rem); overflow-y: auto">
         <!-- Display spinner while loading images -->
 
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
@@ -842,7 +842,7 @@ const imageModeOptions = [
         <div v-if="activeFunctionality === 'Text to Image'" class="bg-white p-6 space-y-6 flex-shrink-0">
           <CustomizationCard @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectOutput="(output) => (selectedOutput = output)" />
-          <DescriptionCard @input="(value) => (description = value)" />
+          <DescriptionCard @input="(value) => (description = value)"  :resetKey="resetKey" />
           <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
             Zeux IT
           </fwb-button>
@@ -853,11 +853,11 @@ const imageModeOptions = [
           <div class="w-full space-y-6">
             <!-- First Image Card -->
             <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-gray-200 rounded-lg shadow-lg">
-              <ImageInputCard title="Insert Reference Face Image" @input="(file) => (referenceImage = file)" />
+              <ImageInputCard title="Insert Reference Face Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey"/>
             </div>
             <!-- Second Image Card -->
             <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white rounded-lg shadow-2xl">
-              <ImageInputCard title="Insert Your Face Image" @input="(file) => (faceImage = file)" />
+              <ImageInputCard title="Insert Your Face Image" @input="(file) => (faceImage = file)" :resetKey="resetKey"/>
             </div>
           </div>
 
@@ -869,15 +869,15 @@ const imageModeOptions = [
           </fwb-button>
         </div>
         <div v-if="activeFunctionality === 'Text to Video'" class="bg-white p-6 space-y-6 flex-shrink-0">
-          <DescriptionCard @input="(value) => (description = value)" />
+          <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey"  />
           <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
             Zeuxis
           </fwb-button>
         </div>
         <div v-if="activeFunctionality === 'Image to Video'" class="bg-white p-6 space-y-6 flex-shrink-0">
           <!-- Modify ImageInputCard to bind the selected images -->
-          <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" />
-          <DescriptionCard @input="(value) => (description = value)" />
+          <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey"/>
+          <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey"  />
 
           <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
             Zeuxis
@@ -887,8 +887,8 @@ const imageModeOptions = [
           <CustomizationCard @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectOutput="(output) => (selectedOutput = output)" />
           <!-- Modify ImageInputCard to bind the selected images -->
-          <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" />
-          <DescriptionCard @input="(value) => (description = value)" />
+          <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
+          <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
 
           <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
             Zeuxis
@@ -898,7 +898,7 @@ const imageModeOptions = [
           <!-- Video Carousel -->
           <VideoCarousel @video-selected="(object) => (selectedVideo = object)" />
 
-          <ImageInputCard title="Insert Your Face Image" @input="(file) => (referenceImage = file)" />
+          <ImageInputCard title="Insert Your Face Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey"/>
           <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">
             Zeuxis
           </fwb-button>
