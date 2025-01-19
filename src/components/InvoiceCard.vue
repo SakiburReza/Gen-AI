@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isInvoiceVisible"
-    class="fixed inset-0 flex justify-center items-center z-50"
+    class="fixed inset-0 flex justify-center items-center min-h-screen p-4 sm:p-6 lg:p-8"
     @click.self="closeInvoice"
   >
   <div class="w-full mx-auto bg-white border rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
