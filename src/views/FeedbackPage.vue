@@ -61,7 +61,6 @@
               v-model="form.question"
               class="w-full bg-gray-100 border border-gray-300 rounded p-2 pr-10"
               placeholder="Enter question"
-              required
             />
             <svg
               class="absolute inset-y-0 right-3 w-5 h-5 text-gray-500 my-auto"
@@ -88,7 +87,6 @@
               v-model="form.email"
               class="w-full bg-gray-100 border border-gray-300 rounded p-2 pr-10"
               placeholder="Enter email"
-              required
             />
             <svg
               width="20"

@@ -128,7 +128,8 @@ const navigateTo = (url) => {
 const logout = () => {
   // Clear user-related data (e.g., authentication token)
   localStorage.removeItem('authToken') // Adjust the key as per your app
-  sessionStorage.clear() // Optional: Clear session data
+  sessionStorage.clear() // Optional: Clear session 
+  localStorage.clear()
   // Redirect to login page
   router.push('/')
 }
