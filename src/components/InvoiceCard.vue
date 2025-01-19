@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 flex justify-center items-center">
+  <div v-if="isInvoiceVisible" class="fixed inset-0 flex justify-center items-center z-50" @click.self="closeInvoice">
     <div class="w-full mx-auto bg-white border rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
       <h2 class="text-lg font-semibold text-black-2 mb-4">Invoices</h2>
 
@@ -92,6 +92,12 @@ const handleDownload = (url) => {
   }
   // Ensure the URL is downloadable
 }
+
+const isInvoiceVisible = ref(true); // Controls the visibility of the invoice
+
+const closeInvoice = () => {
+  isInvoiceVisible.value = false; // Close the invoice when clicking outside
+};
 // Fetch data when the component is mounted
 onMounted(fetchInvoices);
 </script>
