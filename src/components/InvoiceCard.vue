@@ -1,19 +1,20 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+  <div class="fixed inset-0 flex justify-center items-center">
     <div class="w-full mx-auto bg-white border rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
       <h2 class="text-lg font-semibold text-black-2 mb-4">Invoices</h2>
 
       <!-- Header Row -->
       <div
-        class="grid grid-cols-12 gap-4 text-xs sm:text-sm font-bold text-black-2 border-b border-black-2 pb-4"
+        class="grid grid-cols-12 gap-0 md:gap-4 text-xs sm:text-sm font-bold text-black-2 border-b border-black-2 pb-4"
       >
         <div class="col-span-2">Product</div>
         <div class="col-span-2">Reference</div>
-        <div class="col-span-2 text-center">Date</div>
+        <div class="col-span-1 text-center">Date</div>
         <div class="col-span-1 text-center">Status</div>
-        <div class="col-span-1 text-center">Amount</div>
+        <div class="col-span-2 text-center">Amount</div>
         <div class="col-span-2 text-center">Bill Purpose</div>
         <div class="col-span-2 text-center">Download</div>
+
       </div>
 
       <!-- Data Rows -->
@@ -24,7 +25,7 @@
       >
         <div class="col-span-2 font-medium">{{ invoice.product }}</div>
         <div class="col-span-2 truncate">{{ invoice.transactionId }}</div>
-        <div class="col-span-2">{{ invoice.billingTime }}</div>
+        <div class="col-span-2">{{ new Date(invoice.billingTime).toLocaleDateString() }}</div>
         <div class="col-span-1 text-center">{{ invoice.STATUS }}</div>
         <div class="col-span-1 text-center font-medium">{{ invoice.AMOUNT }} USD</div>
         <div class="col-span-2 text-center font-medium">{{ invoice.billingReason }}</div>
