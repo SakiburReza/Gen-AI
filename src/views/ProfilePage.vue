@@ -141,7 +141,7 @@
 
         <!-- Password -->
         <div class="mb-4 mt-8">
-          <label for="password" class="block text-sm font-medium text-black-2"> Password </label>
+          <label for="password" class="block text-sm font-medium text-black-2">New Password </label>
           <div class="relative mt-1">
             <!-- Input Field -->
             <input
@@ -149,7 +149,7 @@
               id="password"
               v-model="profile.password"
               class="block w-full rounded-md border-gray-300 bg-gray-100 p-2 pr-10"
-              placeholder="Enter your password"
+              placeholder="Enter your new password"
             />
             <!-- SVG Icon for Toggle -->
             <svg
@@ -324,7 +324,7 @@ const uploadLogo = (event) => {
 const saveProfile = async () => {
   if (isSaveDisabled.value) {
     console.log('No changes detected, skipping save.')
-    return // Prevent API call if nothing changed
+    return
   }
 
   try {
@@ -340,9 +340,15 @@ const saveProfile = async () => {
       }),
     )
 
+    // Handle the case where the profile picture is cleared
     if (profile.value.logo) {
+      // If a new logo is uploaded
       console.log('Uploading logo:', profile.value.logo.name)
       formData.append('profilePicture', profile.value.logo, profile.value.logo.name)
+    } else if (profile.value.logoPreview === '') {
+      // If logo was cleared, send an empty string to the backend
+      console.log('Clearing logo, sending empty value.')
+      formData.append('profilePicture', '')
     }
 
     console.log('FormData contents:')
@@ -359,7 +365,6 @@ const saveProfile = async () => {
       originalProfile.value.name = profile.value.name
       originalProfile.value.password = ''
       originalProfile.value.logo = profile.value.logoPreview
-      profile.value.password = '' // Clear password after saving
     } else {
       console.error('Unexpected response format:', response)
       toastStore.error('Failed to update profile. Please try again.')
@@ -370,12 +375,14 @@ const saveProfile = async () => {
   }
 }
 
+
+
 // Reset changes
 const cancelChanges = () => {
-  profile.value.name = ''
-  profile.value.password = ''
-  profile.value.logo = null
-  profile.value.logoPreview = originalProfile.value.logo
+  profile.value.name = "";
+  profile.value.password = "";
+  profile.value.logo = null;
+  profile.value.logoPreview = null;
 }
 
 // Delete account confirmation
