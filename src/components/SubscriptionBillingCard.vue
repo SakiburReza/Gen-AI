@@ -6,6 +6,8 @@ import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue'
 import { useToastStore } from '@/stores/toast'
 const toastStore = useToastStore()
 
+const emit = defineEmits(['subscription-change'])
+
 const billinInformation = ref({
   plan_name: '',
   credit: '',
@@ -78,6 +80,7 @@ const showInvoiceCard = ref(false)
 async function cancleAction() {
   const response = await genAiService.cancelSubscription()
   if (response.status) {
+    emit('subscription-change', true)
     toastStore.success(response.data.message)
   }
 }
