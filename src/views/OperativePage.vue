@@ -669,7 +669,7 @@ const imageModeOptions = [
           </button>
         </template>
         <template #content>
-      <span :class="isLikedState ? 'text-red' : 'text-white'">
+      <span :class="isLikedState ? 'text-white' : 'text-white'">
         {{ isLikedState ? 'Remove filter' : 'Filter by favourites' }}
       </span>
         </template>
