@@ -222,7 +222,7 @@ const handleOutsideClick = (event) => {
                 style="line-height: 1.5; overflow:auto;" placeholder="Your prompt will appear here">{{ image.prompt }}
               </p> -->
               <textarea v-if="image?.prompt"
-              class="w-full h-30 p-2 rounded-lg text-sm readonly mb-2 font-bold text-darkGray bg-tertiary align-top resize-none"
+              class="w-full p-2 rounded-lg text-sm readonly mb-2 font-bold text-darkGray bg-tertiary align-top resize-none"
               style="line-height: 1.5; overflow: auto;" placeholder="Your prompt will appear here"
               readonly>{{ image.prompt }}</textarea>
 
