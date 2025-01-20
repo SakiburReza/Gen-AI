@@ -10,6 +10,18 @@ const toastStore = useToastStore()
 
 const isButtonDisabled = ref(false)
 
+// Password visibility states
+const isPasswordVisible = ref(false)
+const isConfirmPasswordVisible = ref(false)
+
+const togglePasswordVisibility = () => {
+  isPasswordVisible.value = !isPasswordVisible.value
+}
+
+const toggleConfirmPasswordVisibility = () => {
+  isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value
+}
+
 // Reactive form data object
 const formData = ref({
   name: '',
@@ -58,18 +70,13 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <div
-    class="flex justify-center items-center min-h-screen relative"
-    style="
+  <div class="flex justify-center items-center min-h-screen relative" style="
       background-image: url('/images/BG.jpg');
       background-size: cover;
       background-position: center;
-    "
-  >
+    ">
     <!-- Logo in Front of Background -->
-    <div
-      class="absolute top-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-start z-9"
-    >
+    <div class="absolute top-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-start z-9">
       <!-- Logo -->
       <img src="/images/zeuxis-logo.png" alt="Zeuxis logo" class="mt-5" />
     </div>
@@ -77,11 +84,7 @@ const submitForm = async () => {
     <!-- Left Side - Image and Text -->
     <div class="relative lg:w-1/4 hidden sm:flex justify-center h-full items-center">
       <!-- Background Image with Overlay -->
-      <img
-        src="/public/images/Rectangle.png"
-        alt="Background Image"
-        class="w-full h-full object-cover"
-      />
+      <img src="/public/images/Rectangle.png" alt="Background Image" class="w-full h-full object-cover" />
 
       <!-- Overlay Content -->
       <div class="absolute inset-0 flex flex-col p-6">
@@ -92,11 +95,7 @@ const submitForm = async () => {
       </div>
 
       <!-- Secondary Display Image -->
-      <img
-        src="/public/images/slides.png"
-        alt="Secondary Display Image"
-        class="absolute bottom-0 left-0 w-full"
-      />
+      <img src="/public/images/slides.png" alt="Secondary Display Image" class="absolute bottom-0 left-0 w-full" />
     </div>
 
     <!-- Right Side - Sign-Up Form -->
@@ -110,96 +109,92 @@ const submitForm = async () => {
           <!-- Full Name -->
           <div>
             <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
-            <input
-              id="fullName"
-              v-model="formData.name"
-              type="text"
-              placeholder="Enter your full name"
+            <input id="fullName" v-model="formData.name" type="text" placeholder="Enter your full name"
               class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
-              aria-label="Full Name"
-              required
-            />
+              aria-label="Full Name" required />
           </div>
 
           <!-- Email -->
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              id="email"
-              v-model="formData.email"
-              type="email"
-              placeholder="Enter your email"
+            <input id="email" v-model="formData.email" type="email" placeholder="Enter your email"
               class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
-              aria-label="Email"
-              required
-            />
+              aria-label="Email" required />
           </div>
 
           <!-- Password -->
-          <div>
+          <div class="relative">
             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              id="password"
-              v-model="formData.password"
-              type="password"
+            <input :type="isPasswordVisible ? 'text' : 'password'" id="password" v-model="formData.password"
               placeholder="Enter your password"
-              class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
-              aria-label="Password"
-              required
-            />
+              class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition pr-10"
+              required />
+            <!-- Toggle Password Visibility Icon -->
+            <svg v-if="!isPasswordVisible" @click="togglePasswordVisibility" xmlns="http://www.w3.org/2000/svg"
+              class="absolute right-3 top-8 cursor-pointer" width="24" height="18" viewBox="0 0 24 18" fill="none">
+              <path
+                d="M11.99 3C7.03 3 3 8 3 8s4.03 5 8.99 5c4.96 0 9-5 9-5s-4.03-5-8.99-5zm0 8.5c-1.93 0-3.5-1.57-3.5-3.5S10.06 4.5 11.99 4.5c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5z"
+                fill="#6D6D6D" />
+              <circle cx="11.99" cy="8" r="1.5" fill="#6D6D6D" />
+            </svg>
+            <svg v-else @click="togglePasswordVisibility" xmlns="http://www.w3.org/2000/svg"
+              class="absolute right-3 top-8 cursor-pointer" width="24" height="18" viewBox="0 0 24 18" fill="none">
+              <path
+                d="M11.99 3C7.03 3 3 8 3 8s4.03 5 8.99 5c4.96 0 9-5 9-5s-4.03-5-8.99-5zm0 8.5c-1.93 0-3.5-1.57-3.5-3.5S10.06 4.5 11.99 4.5c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5z"
+                fill="#6D6D6D" />
+              <line x1="3" y1="3" x2="21" y2="15" stroke="#6D6D6D" stroke-width="2" />
+            </svg>
           </div>
 
           <!-- Confirm Password -->
-          <div class="mt-4">
-            <label for="confirmPassword" class="block text-sm font-medium text-gray-700"
-              >Confirm Password</label
-            >
-            <input
-              id="confirmPassword"
-              v-model="formData.confirmPassword"
-              type="password"
-              placeholder="Confirm your password"
-              class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition"
-              aria-label="Confirm Password"
-              required
-            />
-            <!-- Error message -->
+          <div class="relative">
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <input :type="isConfirmPasswordVisible ? 'text' : 'password'" id="confirmPassword"
+              v-model="formData.confirmPassword" placeholder="Confirm your password"
+              class="w-full border-0 border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500 p-2 transition pr-10"
+              required />
+            <!-- Toggle Confirm Password Visibility Icon -->
+            <svg v-if="!isConfirmPasswordVisible" @click="toggleConfirmPasswordVisibility"
+              xmlns="http://www.w3.org/2000/svg" class="absolute right-3 top-8 cursor-pointer" width="24" height="18"
+              viewBox="0 0 24 18" fill="none">
+              <path
+                d="M11.99 3C7.03 3 3 8 3 8s4.03 5 8.99 5c4.96 0 9-5 9-5s-4.03-5-8.99-5zm0 8.5c-1.93 0-3.5-1.57-3.5-3.5S10.06 4.5 11.99 4.5c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5z"
+                fill="#6D6D6D" />
+              <circle cx="11.99" cy="8" r="1.5" fill="#6D6D6D" />
+            </svg>
+            <svg v-else @click="toggleConfirmPasswordVisibility" xmlns="http://www.w3.org/2000/svg"
+              class="absolute right-3 top-8 cursor-pointer" width="24" height="18" viewBox="0 0 24 18" fill="none">
+              <path
+                d="M11.99 3C7.03 3 3 8 3 8s4.03 5 8.99 5c4.96 0 9-5 9-5s-4.03-5-8.99-5zm0 8.5c-1.93 0-3.5-1.57-3.5-3.5S10.06 4.5 11.99 4.5c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5z"
+                fill="#6D6D6D" />
+              <line x1="3" y1="3" x2="21" y2="15" stroke="#6D6D6D" stroke-width="2" />
+            </svg>
+
             <p v-if="passwordMismatch" class="text-red text-sm mt-2">Passwords do not match.</p>
           </div>
 
+
+
+
           <!-- Checkbox -->
           <div class="flex items-center">
-            <input
-              type="checkbox"
-              id="agree"
-              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              aria-label="Accept Terms"
-              required
-            />
+            <input type="checkbox" id="agree" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              aria-label="Accept Terms" required />
             <label for="agree" class="ml-2 text-sm text-gray-600">
               I agree to the
-              <button
-                type="button"
-                class="text-blue-600 hover:underline"
-                @click="showTermsModal = true"
-              >
-                Terms and Conditions</button
-              >.
+              <button type="button" class="text-blue-600 hover:underline" @click="showTermsModal = true">
+                Terms and Conditions</button>.
             </label>
           </div>
 
           <!-- Submit Button -->
           <div class="flex justify-end">
-            <button
-              :disabled="isButtonDisabled"
-              class="bg-blue-600 text-white px-6 py-3 rounded-full transition"
+            <button :disabled="isButtonDisabled" class="bg-blue-600 text-white px-6 py-3 rounded-full transition"
               :class="{
                 'w-full text-sm py-3 rounded-lg': true,
                 'bg-black text-white hover:bg-gray-800': !isButtonDisabled,
                 'bg-gray-300 text-gray-500 cursor-not-allowed': isButtonDisabled,
-              }"
-              aria-label="Sign Up"
-            >
+              }" aria-label="Sign Up">
               Sign Up
             </button>
           </div>
@@ -214,18 +209,14 @@ const submitForm = async () => {
     </div>
 
     <!-- Terms Modal -->
-    <div
-      v-if="showTermsModal"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-    >
+    <div v-if="showTermsModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white p-6 rounded-lg max-w-3xl w-full">
         <div class="flex justify-center items-center mt-1 top-1">
           <img src="/images/zeuxis-logo.png" alt="Zeuxis logo" class="w-30 h-23" />
         </div>
         <div class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
           <div
-            class="overflow-y-auto max-h-96 p-4 bg-tertiary border border-grey rounded-md text-sm text-gray-800 leading-relaxed"
-          >
+            class="overflow-y-auto max-h-96 p-4 bg-tertiary border border-grey rounded-md text-sm text-gray-800 leading-relaxed">
             <p class="font-semibold text-gray-900">Last Updated: 31st December 2024</p>
 
             <h3 class="text-2xl font-bold mb-4">Terms and Conditions</h3>
@@ -455,10 +446,8 @@ const submitForm = async () => {
           </div>
         </div>
         <div class="flex justify-end mt-4">
-          <button
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-            @click="showTermsModal = false"
-          >
+          <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            @click="showTermsModal = false">
             Close
           </button>
         </div>

@@ -23,7 +23,7 @@ emit('selectOutput', selectedOutput.value)
     <div class="p-5">
       <!-- Title -->
       <h6 class="mb-2 text-lg sm:text-xl font-bold tracking-tight text-black dark:text-white">
-        Customization
+        Customize
       </h6>
 
       <!-- Image Ratio -->

@@ -28,7 +28,7 @@ watch(
   <fwb-card class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white">
     <div class="p-5">
       <!-- Title -->
-      <h6 class="mb-2 text-sm font-bold tracking-tight text-black dark:text-white sm:text-md">
+      <h6 class="mb-2 text-lg sm:text-xl font-bold tracking-tight text-black dark:text-white sm:text-md">
         Describe
       </h6>
       <!-- Textarea -->
