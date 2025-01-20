@@ -8,7 +8,7 @@ import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted, computed, onUnmounted, nextTick } from 'vue'
-import { FwbButton, FwbCard, FwbSpinner } from 'flowbite-vue'
+import { FwbButton, FwbTooltip, FwbSpinner } from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
@@ -17,7 +17,7 @@ import PreviewImageModal from '@/components/PreviewImageModal.vue'
 const { fetchCredits } = useCredits()
 
 const searchQuery = ref('')
-const resetKey = ref(0); 
+const resetKey = ref(0);
 const route = useRoute()
 
 // Reactive state for modal
@@ -654,15 +654,26 @@ const imageModeOptions = [
       </div>
 
       <!-- Heart Button -->
-      <button @click="togglefetchMedia(activeFunctionality)"
-        class="w-12 h-12 flex justify-center items-center bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 transition duration-300">
-        <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M19.8281 0C18.363 0 17.0198 0.467469 15.8358 1.38945C14.7007 2.27336 13.9449 3.39919 13.5 4.21784C13.0551 3.39913 12.2993 2.27336 11.1642 1.38945C9.98024 0.467469 8.63699 0 7.17188 0C3.08327 0 0 3.36727 0 7.8326C0 12.6567 3.8466 15.9573 9.66985 20.9539C10.6587 21.8025 11.7796 22.7643 12.9446 23.7901C13.0982 23.9255 13.2954 24 13.5 24C13.7046 24 13.9018 23.9255 14.0554 23.7901C15.2205 22.7642 16.3413 21.8024 17.3308 20.9534C23.1534 15.9573 27 12.6567 27 7.8326C27 3.36727 23.9167 0 19.8281 0Z"
-            fill='#3526E1'/>
-          <circle cx="25" cy="7" r="6.5" :fill="isLikedState ? '#E12629' : '#808080'" stroke="white" />
-        </svg>
-      </button>
+      <fwb-tooltip placement="top">
+        <template #trigger>
+          <button
+            @click="togglefetchMedia(activeFunctionality)"
+            class="w-12 h-12 flex justify-center items-center bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 transition duration-300"
+          >
+            <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M19.8281 0C18.363 0 17.0198 0.467469 15.8358 1.38945C14.7007 2.27336 13.9449 3.39919 13.5 4.21784C13.0551 3.39913 12.2993 2.27336 11.1642 1.38945C9.98024 0.467469 8.63699 0 7.17188 0C3.08327 0 0 3.36727 0 7.8326C0 12.6567 3.8466 15.9573 9.66985 20.9539C10.6587 21.8025 11.7796 22.7643 12.9446 23.7901C13.0982 23.9255 13.2954 24 13.5 24C13.7046 24 13.9018 23.9255 14.0554 23.7901C15.2205 22.7642 16.3413 21.8024 17.3308 20.9534C23.1534 15.9573 27 12.6567 27 7.8326C27 3.36727 23.9167 0 19.8281 0Z"
+                fill='#3526E1'/>
+              <circle cx="25" cy="7" r="6.5" :fill="isLikedState ? '#E12629' : '#808080'" stroke="white" />
+            </svg>
+          </button>
+        </template>
+        <template #content>
+      <span :class="isLikedState ? 'text-white' : 'text-white'">
+        {{ isLikedState ? 'Remove filter' : 'Filter by favourites' }}
+      </span>
+        </template>
+      </fwb-tooltip>
     </div>
 
     <div class="flex flex-col md:flex-row flex-1">

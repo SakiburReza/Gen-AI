@@ -1,7 +1,13 @@
 <template>
-  <div class="bg-white min-h-screen p-4 sm:p-6 lg:p-8"
-       style="background-image: url('/images/BG.jpg'); background-size: cover; background-position: left;">
-    <Navbar/>
+  <div
+    class="bg-white min-h-screen p-4 sm:p-6 lg:p-8"
+    style="
+      background-image: url('/images/BG.jpg');
+      background-size: cover;
+      background-position: left;
+    "
+  >
+    <Navbar />
 
     <!-- Back Button -->
     <div
@@ -16,7 +22,9 @@
     </div>
 
     <!-- Profile Form -->
-    <div class="max-w-2xl mx-auto p-4 sm:p-6 bg-white border border-b-gray-400 shadow-md rounded-md mt-8">
+    <div
+      class="max-w-2xl mx-auto p-4 sm:p-6 bg-white border border-b-gray-400 shadow-md rounded-md mt-8"
+    >
       <h2 class="text-2xl font-bold mb-8 text-black-2">Manage Profile</h2>
 
       <form @submit.prevent="saveProfile" class="mt-6">
@@ -55,12 +63,9 @@
           </div>
         </div>
 
-
         <!-- Account Name -->
         <div class="mb-4 mt-8">
-          <label for="name" class="block text-sm font-medium text-black-2">
-            Account Name
-          </label>
+          <label for="name" class="block text-sm font-medium text-black-2"> Account Name </label>
           <div class="relative mt-1">
             <!-- Input Field -->
             <input
@@ -69,6 +74,7 @@
               v-model="profile.name"
               class="block w-full rounded-md border-gray-300 bg-gray-100 p-2 pr-10"
               placeholder="Enter your name"
+              required
             />
             <!-- SVG Icon -->
             <svg
@@ -91,12 +97,9 @@
           </div>
         </div>
 
-
         <!-- Account Email -->
         <div class="mb-4 mt-8">
-          <label for="email" class="block text-sm font-medium text-black-2">
-            Account Email
-          </label>
+          <label for="email" class="block text-sm font-medium text-black-2"> Account Email </label>
           <div class="relative mt-1">
             <!-- Input Field -->
             <input
@@ -136,12 +139,9 @@
           </div>
         </div>
 
-
         <!-- Password -->
         <div class="mb-4 mt-8">
-          <label for="password" class="block text-sm font-medium text-black-2">
-            Password
-          </label>
+          <label for="password" class="block text-sm font-medium text-black-2">New Password </label>
           <div class="relative mt-1">
             <!-- Input Field -->
             <input
@@ -149,7 +149,7 @@
               id="password"
               v-model="profile.password"
               class="block w-full rounded-md border-gray-300 bg-gray-100 p-2 pr-10"
-              placeholder="Enter your password"
+              placeholder="Enter your new password"
             />
             <!-- SVG Icon for Toggle -->
             <svg
@@ -182,18 +182,10 @@
                 d="M11.99 3C7.03 3 3 8 3 8s4.03 5 8.99 5c4.96 0 9-5 9-5s-4.03-5-8.99-5zm0 8.5c-1.93 0-3.5-1.57-3.5-3.5S10.06 4.5 11.99 4.5c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5z"
                 fill="#6D6D6D"
               />
-              <line
-                x1="3"
-                y1="3"
-                x2="21"
-                y2="15"
-                stroke="#6D6D6D"
-                stroke-width="2"
-              />
+              <line x1="3" y1="3" x2="21" y2="15" stroke="#6D6D6D" stroke-width="2" />
             </svg>
           </div>
         </div>
-
 
         <!-- Action Buttons -->
         <div class="flex items-center justify-center gap-4 mt-6 flex-wrap">
@@ -202,18 +194,23 @@
             @click="cancelChanges"
             class="px-3 py-2 bg-gray-300 text-black-2 rounded-md hover:bg-gray-400"
           >
-            Cancel
+            Clear
           </button>
           <button
             type="submit"
-            class="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            :disabled="isSaveDisabled"
+            :class="{
+              'bg-blue-900 cursor-not-allowed': isSaveDisabled,
+              'bg-blue-600 hover:bg-blue-700': !isSaveDisabled,
+            }"
+            class="px-5 py-2 text-white rounded-md transition duration-200"
           >
             Save
           </button>
           <button
             type="button"
             @click="deleteAccount"
-            class="px-7 py-2 bg-red text-white rounded-md hover:bg-red"
+            class="cursor-not-allowed px-7 py-2 bg-red text-white rounded-md hover:bg-red"
           >
             Delete Account
           </button>
@@ -221,133 +218,183 @@
       </form>
     </div>
   </div>
-
 </template>
 
-
 <script setup>
-import { ref, onMounted } from "vue";
-import Navbar from "@/components/NavBar.vue";
-import genAiService from "@/services/gen-ai";
+import { ref, computed, onMounted, watch } from 'vue'
+import Navbar from '@/components/NavBar.vue'
+import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-
 const toastStore = useToastStore()
 
+// Reactive profile data
 const profile = ref({
-  name: "",
-  email: "",
-  password: "",
-  logo: "",
-  logoPreview: "",
-});
+  name: '',
+  email: '',
+  password: '',
+  logo: null,
+  logoPreview: '',
+})
 
-const isPasswordVisible = ref(false);
+// Store original profile data for change detection
+const originalProfile = ref({
+  name: '',
+  password: '',
+  logo: null,
+})
 
+// Track password visibility
+const isPasswordVisible = ref(false)
+
+// Fetch user profile from API
 const fetchUserProfile = async () => {
   try {
-    const response = await genAiService.fetchUserProfile();
+    const response = await genAiService.fetchUserProfile()
     if (response.data.status) {
-      profile.value.name = response.data.data.userProfile.name;
-      profile.value.email = response.data.data.userProfile.email;
+      profile.value.name = response.data.data.userProfile.name
+      profile.value.email = response.data.data.userProfile.email
       profile.value.logoPreview = response.data.data.profilePicture
+
+      // Store original values for change detection
+      originalProfile.value.name = profile.value.name
+      originalProfile.value.password = '' // Password should be empty initially
+      originalProfile.value.logo = profile.value.logoPreview
     } else {
-      console.error("Invalid response structure:", response);
+      console.error('Invalid response structure:', response)
     }
   } catch (error) {
-    console.error("Error fetching user profile:", error);
+    console.error('Error fetching user profile:', error)
   }
-};
+}
 
-// Password visibility toggle method
+// Computed property: Enable save button only if any changes are detected
+const isSaveDisabled = computed(() => {
+  return (
+    profile.value.name === originalProfile.value.name &&
+    profile.value.password === originalProfile.value.password &&
+    profile.value.logoPreview === originalProfile.value.logo
+  )
+})
+
+// Watcher: Automatically disable Save button when no changes are made
+watch([profile, () => profile.value.logoPreview], () => {
+  console.log('Changes detected: Save button state updated')
+})
+
+// Toggle password visibility
 const togglePasswordVisibility = () => {
-  isPasswordVisible.value = !isPasswordVisible.value;
-};
+  isPasswordVisible.value = !isPasswordVisible.value
+}
 
-// Upload logo method
+// Upload and validate logo
 const uploadLogo = (event) => {
-  const file = event.target.files[0];
+  const file = event.target.files[0]
 
-  // Validate file existence
-  if (!file) {
-    return;
+  if (!file) return
+
+  if (
+    !file.type.match('image/png') &&
+    !file.type.match('image/jpeg') &&
+    !file.type.match('image/jpg')
+  ) {
+    toastStore.error('Invalid file format. Please upload a PNG or JPEG.')
+    return
   }
 
-  // Validate file type
-  if (!file.type.match("image/png") && !file.type.match("image/jpeg") && !file.type.match("image/jpg")) {
-    return;
-  }
-
-  // Validate dimensions
-  const img = new Image();
-  img.src = URL.createObjectURL(file);
+  const img = new Image()
+  img.src = URL.createObjectURL(file)
   img.onload = () => {
     if (img.width >= 200 && img.height >= 200) {
-      profile.value.logo = file;
-      profile.value.logoPreview = img.src;
-      console.log("Logo uploaded:", file.name);
+      profile.value.logo = file
+      profile.value.logoPreview = img.src
+      console.log('Logo uploaded:', file.name)
     } else {
-      toastStore.error(img?.data.message)
+      toastStore.error('Image must be at least 200x200 pixels.')
     }
-  };
+  }
   img.onerror = () => {
-    toastStore.error(img?.data.message)
-  };
-};
+    toastStore.error('Invalid image file.')
+  }
+}
 
-
+// Save profile
 const saveProfile = async () => {
+  if (isSaveDisabled.value) {
+    console.log('No changes detected, skipping save.')
+    return
+  }
+
   try {
-    console.log(profile.value.name)
+    console.log('Saving profile:', profile.value.name)
+
     const formData = new FormData()
     formData.append(
       'userProfileInfo',
       JSON.stringify({
         name: profile.value.name,
-        email: null,
-        password: profile.value.password != null ? profile.value.password : null,
-      })
+        email: profile.value.email,
+        password: profile.value.password || null,
+      }),
     )
+
+    // Handle the case where the profile picture is cleared
     if (profile.value.logo) {
-      console.log("Logo file:", profile.value.logo);
-      formData.append("profilePicture", profile.value.logo, profile.value.logo.name);
+      // If a new logo is uploaded
+      console.log('Uploading logo:', profile.value.logo.name)
+      formData.append('profilePicture', profile.value.logo, profile.value.logo.name)
+    } else if (profile.value.logoPreview === '') {
+      // If logo was cleared, send an empty string to the backend
+      console.log('Clearing logo, sending empty value.')
+      formData.append('profilePicture', '')
     }
-    console.log("FormData contents:");
+
+    console.log('FormData contents:')
     for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
+      console.log(`${key}:`, value)
     }
-    const response = await genAiService.saveProfile(formData);
-    console.log(response);
-    if (response?.data.status) {
-      toastStore.success(response?.data.message)
-      //
+
+    const response = await genAiService.saveProfile(formData)
+
+    if (response?.data?.status) {
+      toastStore.success(response.data.message)
+
+      // Update original profile values after successful save
+      originalProfile.value.name = profile.value.name
+      originalProfile.value.password = ''
+      originalProfile.value.logo = profile.value.logoPreview
     } else {
-      console.error("Invalid response structure:", response);
+      console.error('Unexpected response format:', response)
+      toastStore.error('Failed to update profile. Please try again.')
     }
   } catch (error) {
-    console.error("Error fetching user profile:", error);
+    console.error('Error saving user profile:', error)
+    toastStore.error('An error occurred while saving your profile.')
   }
-};
+}
 
+
+
+// Reset changes
 const cancelChanges = () => {
   profile.value.name = "";
-  profile.value.email = "";
   profile.value.password = "";
   profile.value.logo = null;
   profile.value.logoPreview = null;
-};
+}
 
+// Delete account confirmation
 const deleteAccount = () => {
-  if (confirm("Are you sure you want to delete your account?")) {
-    alert("Account deleted successfully.");
-  }
-};
+  //logic will be set here
+}
 
+// Navigate back to previous page
 const goBack = () => {
-  router.push("/operativepage");
-};
+  router.push('/operativepage')
+}
 
-onMounted(fetchUserProfile);
+// Load profile data when component mounts
+onMounted(fetchUserProfile)
 </script>
