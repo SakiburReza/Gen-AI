@@ -217,10 +217,14 @@ const handleOutsideClick = (event) => {
             <div class="mb-7">
               <p v-if="image?.prompt" class="text-gray-700 font-semibold text-sm mb-2 uppercase tracking-wide">Existing
                 Prompt</p>
-              <p v-if="image?.prompt"
+              <!-- <p v-if="image?.prompt"
                 class="w-full p-2 border border-silverChalice rounded-lg text-lg mb-10 font-bold text-darkGray bg-tertiary align-top resize-none"
                 style="line-height: 1.5; overflow:auto;" placeholder="Your prompt will appear here">{{ image.prompt }}
-              </p>
+              </p> -->
+              <textarea v-if="image?.prompt"
+              class="w-full p-2 rounded-lg text-sm readonly mb-2 font-bold text-darkGray bg-tertiary align-top resize-none"
+              style="line-height: 1.5; overflow: auto;" placeholder="Your prompt will appear here"
+              readonly>{{ image.prompt }}</textarea>
 
               <p class="text-gray-700 font-semibold text-sm uppercase tracking-wide mb-1">Enter Prompt for Video</p>
 

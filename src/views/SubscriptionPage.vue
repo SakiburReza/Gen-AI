@@ -101,6 +101,12 @@ const disableButton = () => {
 const toggleBillingSection = () => {
   showBillingSection.value = !showBillingSection.value // Toggles the billing section visibility
 }
+
+function subscriptionChanged(data){
+  if(data){
+    initializePricies()
+  }
+}
 onMounted(async () => {
   fetchPlans() // Call the function to fetch plans
   if (route.query) {
@@ -128,7 +134,7 @@ onMounted(async () => {
       leave-active-class="transition-opacity duration-1000 ease-in-out" enter-from-class="opacity-0"
       enter-to-class="opacity-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
       <div v-if="showBillingSection" class="pt-6 sm:pt-10 lg:pt-15 flex justify-center mb-5">
-        <SubscriptionBillingCard />
+        <SubscriptionBillingCard @subscription-change="subscriptionChanged"/>
       </div>
     </transition>
 
