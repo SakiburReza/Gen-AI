@@ -60,7 +60,7 @@ const ZeuxItNow = async () => {
         toastStore.success(response2.data.message)
       }
     }
-    toastStore.success(response.data.message)
+    //toastStore.success(response.data.message)
     
     const redirectUrl = response.data
 
