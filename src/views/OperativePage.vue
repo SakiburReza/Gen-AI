@@ -344,6 +344,15 @@ const generateAiContent = async () => {
     // Handling different types of functionalities
 
     if (activeFunctionality.value === 'Face Swap') {
+      if(referenceImage.value == null ){
+        toastStore.error("Please Insert A Reference Image")
+        return
+      }
+      else if(faceImage.value == null){
+        toastStore.error("Please Insert Your Face Image")
+        return
+      }
+
       const formData = new FormData()
 
       formData.append('targetImage', referenceImage.value!)
@@ -352,6 +361,13 @@ const generateAiContent = async () => {
 
       response = await genAiService.faceSwap(formData)
     } else if (activeFunctionality.value === 'Text to Image') {
+      
+      if(description.value === ""){
+        console.log("ddd",description.value)
+        toastStore.error("Describe for your image")
+        return
+      }
+      
       response = await genAiService.textToImage({
         text: description.value,
 
@@ -360,8 +376,21 @@ const generateAiContent = async () => {
         num_images: selectedOutput.value,
       })
     } else if (activeFunctionality.value === 'Text to Video') {
+      if(description.value === ""){
+        toastStore.error("Describe for your video")
+        return
+      }
       response = await genAiService.textToVideo({ text: description.value })
     } else if (activeFunctionality.value === 'Image to Video') {
+      if(referenceImage.value === null ){
+        toastStore.error("Please Insert A Reference Image")
+        return
+      }
+      else if(description.value === ""){
+        toastStore.error("Describe for your video")
+        return
+      }
+
       const formData = new FormData()
 
       formData.append('image', referenceImage.value!)
@@ -371,6 +400,14 @@ const generateAiContent = async () => {
 
       response = await genAiService.imageToVideo(formData)
     } else if (activeFunctionality.value === 'Image to Image') {
+      if(referenceImage.value === null ){
+        toastStore.error("Please Insert A Reference Image")
+        return
+      }
+      else if(description.value === ""){
+        toastStore.error("Describe for your video")
+        return
+      }
       const formData = new FormData()
 
       formData.append('image', referenceImage.value!)
@@ -384,7 +421,14 @@ const generateAiContent = async () => {
       response = await genAiService.imageToImage(formData)
     } else if (activeFunctionality.value === 'Templates (Beta)') {
       // Create form data for file and video index
-
+      if(referenceImage.value == null ){
+        toastStore.error("Please Insert Your Face Image")
+        return
+      }
+      else if(selectedVideo.value == null){
+        toastStore.error("Please Select a Template Video")
+        return
+      }
       const formData = new FormData()
 
       formData.append('template_id', selectedVideo.value.id) // Assuming videoIndex is expected by server
@@ -907,7 +951,7 @@ const imageModeOptions = [
         </div>
         <div v-if="activeFunctionality === 'Templates (Beta)'" class="bg-white p-6 space-y-6 flex-shrink-0">
           <!-- Video Carousel -->
-          <VideoCarousel @video-selected="(object) => (selectedVideo = object)" />
+          <VideoCarousel @video-selected="(object) => (selectedVideo = object)" :resetKey="resetKey"/>
 
           <ImageInputCard title="Insert Your Face Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey"/>
           <fwb-button @click="generateAiContent" class="w-full sm:w-64 md:w-80 lg:w-full" color="default">

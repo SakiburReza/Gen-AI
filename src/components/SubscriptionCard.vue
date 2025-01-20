@@ -175,7 +175,7 @@ const buttonText = computed(() => {
       <!-- CTA Button -->
       <button
         @click="ZeuxItNow"
-        :disabled="props.isButtonDisabled"
+        :disabled="props.isButtonDisabled || buttonText === 'Downgrade'"
         :class="{
           'w-full text-sm py-3 rounded-lg': true,
           'bg-black text-white hover:bg-gray-800':
