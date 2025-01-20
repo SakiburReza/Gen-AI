@@ -29,7 +29,7 @@
               id="name"
               v-model="form.name"
               class="w-full bg-gray-100 border border-gray-300 rounded p-2 pr-10"
-              placeholder="Enter name"
+              placeholder="Enter name" required
             />
             <svg
               width="20"
@@ -86,7 +86,7 @@
               id="email"
               v-model="form.email"
               class="w-full bg-gray-100 border border-gray-300 rounded p-2 pr-10"
-              placeholder="Enter email"
+              placeholder="Enter email" required
             />
             <svg
               width="20"
@@ -136,7 +136,7 @@
             @click="resetForm"
             class="px-4 py-2 bg-gray-300 text-black-2 rounded hover:bg-gray-400 transition"
           >
-            Cancel
+            Clear
           </button>
           <button
             type="submit"
