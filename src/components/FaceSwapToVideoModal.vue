@@ -43,9 +43,9 @@ const fileUrl = ref<string | null>(null);
 
 
 // Helper to extract filename from URL
-const getFilename = (url: string): string =>{
+const getFilename = (url: string): string =>
   `${url.split('/').pop() || 'download'}${props.image?.type === 'image' ? '.png' : '.mp4'}`
-}
+
 
 
 

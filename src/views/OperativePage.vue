@@ -748,18 +748,18 @@ const imageModeOptions = [
 
           <!------------------------------------------------------ Roney ----------------------------------------->
           <!-- Floating Social Buttons -->
-          <div v-if="media[index]" class="absolute top-2 right-2 flex flex-row gap-2 items-center">
+          <div v-if="filteredMedia[index]" class="absolute top-2 right-2 flex flex-row gap-2 items-center">
             <!-- Share Button with Group Class -->
             <div class="relative group">
               <!-- Share Button -->
-              <button @click="openModal(media[index].url, media[index].isShared === 'N' ? 'Y' : 'N')" :class="[
+              <button @click="openModal(filteredMedia[index].url, filteredMedia[index].isShared === 'N' ? 'Y' : 'N')" :class="[
                 'flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
-                media[index].isShared === 'Y' ? 'bg-white text-black' : 'bg-gray-600 text-white',
+                filteredMedia[index].isShared === 'Y' ? 'bg-white text-black' : 'bg-gray-600 text-white',
               ]">
                 <svg width="10" height="10" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M12.4583 10.375C11.5115 10.375 10.6771 10.8307 10.153 11.5236L5.6219 9.25387C5.69713 9.00303 5.75 8.74306 5.75 8.46875C5.75 8.09669 5.67202 7.74297 5.53731 7.41762L10.2793 4.62612C10.807 5.232 11.5827 5.625 12.4583 5.625C14.0437 5.625 15.3333 4.36341 15.3333 2.8125C15.3333 1.26159 14.0437 0 12.4583 0C10.873 0 9.58333 1.26159 9.58333 2.8125C9.58333 3.16991 9.65856 3.50894 9.78337 3.82369L5.02726 6.62337C4.49998 6.0355 3.73549 5.65625 2.875 5.65625C1.28963 5.65625 0 6.91784 0 8.46875C0 10.0197 1.28963 11.2812 2.875 11.2812C3.83749 11.2812 4.68596 10.8122 5.20806 10.0998L9.72424 12.3622C9.64106 12.6248 9.58333 12.8984 9.58333 13.1875C9.58333 14.7384 10.873 16 12.4583 16C14.0437 16 15.3333 14.7384 15.3333 13.1875C15.3333 11.6366 14.0437 10.375 12.4583 10.375Z"
-                    :fill="media[index].isShared === 'Y' ? 'blue' : 'white'" />
+                    :fill="filteredMedia[index].isShared === 'Y' ? 'blue' : 'white'" />
                 </svg>
               </button>
             </div>
@@ -767,7 +767,7 @@ const imageModeOptions = [
             <!-- Text Button -->
             <div class="relative group">
               <!-- Copy -->
-              <button @click="copyAction(media[index].prompt)"
+              <button @click="copyAction(filteredMedia[index].prompt)"
                 class="flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300">
                 <svg width="10" height="10" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -781,15 +781,15 @@ const imageModeOptions = [
             <div class="relative group">
               <button @click="
                 likeAction(
-                  media[index].url,
-                  media[index].isLiked === 'N' || media[index].isLiked === null ? 'Y' : 'N',
+                  filteredMedia[index].url,
+                  filteredMedia[index].isLiked === 'N' || filteredMedia[index].isLiked === null ? 'Y' : 'N',
                 )
                 " :class="[
                   'flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
-                  media[index].isLiked === 'Y' ? 'bg-white text-red' : 'bg-gray-600 text-white',
+                  filteredMedia[index].isLiked === 'Y' ? 'bg-white text-red' : 'bg-gray-600 text-white',
                 ]">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"
-                  :class="media[index].isLiked === 'Y' ? 'fill-red' : 'fill-white'" viewBox="0 0 24 24"
+                  :class="filteredMedia[index].isLiked === 'Y' ? 'fill-red' : 'fill-white'" viewBox="0 0 24 24"
                   stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z" />
@@ -797,7 +797,7 @@ const imageModeOptions = [
               </button>
             </div>
             <!-- Delete Button -->
-            <button @click="openModal(media[index].url, 'delete')"
+            <button @click="openModal(filteredMedia[index].url, 'delete')"
               class="flex justify-center items-center w-5 h-5 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300">
               <svg width="10" height="10" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
