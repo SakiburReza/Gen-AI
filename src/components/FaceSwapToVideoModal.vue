@@ -167,7 +167,7 @@ const close = () => {
 
 // Watcher for prompt validation
 watch(prompt, (newVal) => {
-  promptError.value = !newVal ? "Prompt is required." : null;
+ promptError.value = props.isOpen  && !newVal ? "Prompt is required." : null;
 });
 
 watch([() => props.image?.url, () => props.isOpen], ([imageUrl, isOpen]) => {
