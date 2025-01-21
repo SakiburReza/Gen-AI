@@ -405,7 +405,7 @@ const generateAiContent = async () => {
         return
       }
       else if(description.value === ""){
-        toastStore.error("Describe for your video")
+        toastStore.error("Describe for your Image")
         return
       }
       const formData = new FormData()
