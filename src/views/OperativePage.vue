@@ -829,6 +829,7 @@ const imageModeOptions = [
             <div class="relative group">
               <!-- Copy -->
               <button
+                v-if="activeFunctionality !== 'Face Swap'"
                 @click="copyAction(filteredMedia[index].prompt)"
                 class="flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
               >
