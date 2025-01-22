@@ -1,11 +1,27 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import SidebarForHelpComponent from '@/components/SidebarForHelpComponent.vue'
+import HelpCardComponent from '@/components/HelpCardComponent.vue';
 
 const isSidebarOpen = ref(false);
 const toggleSidebar = () => {
     isSidebarOpen.value = !isSidebarOpen.value; // Access the value of isSidebarOpen
 }
+
+const helpData = {
+    title: 'Assistance Center',
+    cards: [
+        { title: "Getting started", description: "To change your email, go to account settings, update your email, save changes and verify." },
+        { title: "How do I change my account email?", description: "To change your email, go to account settings, update your email, save changes and verify." },
+        { title: "In-depth documentations", description: "To change your email, go to account settings, update your email, save changes and verify." },
+        { title: "Create with newcomers", description: "To change your email, go to account settings, update your email, save changes and verify." },
+        { title: "Video tutorials", description: "To change your email, go to account settings, update your email, save changes and verify." },
+        { title: "Prompt crafting", description: "To change your email, go to account settings, update your email, save changes and verify." },
+        { title: "Billing support", description: "To change your email, go to account settings, update your email, save changes and verify." },
+        { title: "How do I create with text", description: "To change your email, go to account settings, update your email, save changes and verify." },
+        { title: "How do I create with image", description: "To change your email, go to account settings, update your email, save changes and verify." },
+    ],
+};
 
 // Handle click outside to close
 const handleOutsideClick = (event) => {
@@ -14,33 +30,18 @@ const handleOutsideClick = (event) => {
     }
 };
 
-// Add event listener for closing sidebar on outside click
-onMounted(() => {
-
-});
-
-onBeforeUnmount(() => {
-
-});
 </script>
 
 <template>
-    <div>
+    <div class="float-right">
         <!-- Sidebar Component: Show on mobile if isSidebarOpen is true -->
         <div v-show="isSidebarOpen" @click="handleOutsideClick"
-            class="sm:hidden fixed inset-0 bg-black bg-opacity-50 z-50">
-            <div class="relative w-64 h-full bg-white p-4" @click.stop>
+            class="sm:hidden fixed inset-0 bg-black bg-opacity-50 z-50 float-right">
+            <div class="relative w-64 h-full bg-white p-4 float-right" @click.stop>
                 <SidebarForHelpComponent />
             </div>
         </div>
-
         <!-- Button to toggle sidebar visibility -->
-        <!-- <button @click="toggleSidebar" class="bg-blue-600 text-white p-2 sm:hidden fixed top-4 left-4">
-            Toggle Sidebar
-        </button> -->
-        <!-- Div to toggle sidebar visibility with multiple icons -->
-        <!-- Div to toggle sidebar visibility with multiple icons, flipped upside down -->
-        <!-- Div to toggle sidebar visibility with multiple icons, stacked vertically -->
         <div @click="toggleSidebar" class="sm:fixed sm:top-10 sm:right-5 w-15 sm:p-6 flex-shrink h-screen bg-tertiary shadow-lg 
             flex flex-col space-y-4  transition-all duration-200 rounded-xl pt-5">
             <img class="h-10 w-15" src="/images/icon/zeuxis.svg" alt="Zeuxis" /> <br>
@@ -62,17 +63,15 @@ onBeforeUnmount(() => {
                         src="/images/icon/templates.svg" alt="Templates" />
                 </div>
             </div>
-
         </div>
-
-
-
-
-
         <!-- Sidebar for larger screens (desktop/tablet) -->
         <div class="hidden sm:block">
             <SidebarForHelpComponent />
         </div>
+    </div>
+
+    <div class="flex-1 min-h-screen overflow-y-auto p-6 ml-16 sm:ml-64">
+        <HelpCardComponent :data="helpData" />
     </div>
 </template>
 

@@ -3,9 +3,9 @@
 <template>
     <!-- Community Side Bar -->
     <div
-      class="sm:fixed sm:top-2 sm:right-5 w-full sm:p-6 flex-shrink-2 h-screen
+      class="sm:fixed sm:top-2 sm:right-5 w-full sm:p-6 flex-shrink-2 h-screen sm:float-right
        bg-gray-100 shadow-lg rounded-3xl flex flex-col sm:w-52 md:w-72 lg:w-80 xl:w-96 sm:transition-transform 
-      sm:transform sm:translate-x-0  mr-1"
+      sm:transform sm:translate-x-0  mr-1 fixed"
       :class="{ 'translate-x-0': isOpen }"
     >
   
