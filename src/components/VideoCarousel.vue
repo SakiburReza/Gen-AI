@@ -1,7 +1,7 @@
 <script setup>
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import '@splidejs/vue-splide/css'
-import { ref, defineEmits, onMounted } from 'vue'
+import { ref, defineEmits, onMounted, watch } from 'vue'
 import { base64ToBlobUrl } from '@/utils/utils'
 import genAiService from '@/services/gen-ai'
 import { FwbSpinner } from 'flowbite-vue'
@@ -11,6 +11,19 @@ const videos = ref([]) // Store fetched videos here
 
 // Current selected video
 const currentVideo = ref(null) // Holds the selected video's attributes
+
+const props = defineProps({
+  resetKey: {
+    type: Number,
+    default: 0,
+  }});
+
+watch(
+  () => props.resetKey,
+  () => {
+    currentVideo.value = '';
+  }
+);
 
 // Emit event to notify parent of video selection
 const emit = defineEmits(['video-selected'])
@@ -34,9 +47,9 @@ const fetchVideos = async () => {
       prompt: item.prompt,
     }))
 
-    if (videos.value.length > 0) {
-      currentVideo.value = videos.value[0] // Set the first video as default
-    }
+    // if (videos.value.length > 0) {
+    //   currentVideo.value = videos.value[0] // Set the first video as default
+    // }
     nextTick(() => {
       const splide = refs.splideRef.splide
       if (splide) {

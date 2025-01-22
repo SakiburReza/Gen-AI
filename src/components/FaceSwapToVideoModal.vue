@@ -44,64 +44,17 @@ const fileUrl = ref<string | null>(null);
 
 // Helper to extract filename from URL
 const getFilename = (url: string): string =>
-  `${url.split('/').pop() || 'download'}${props.image?.type === 'image' ? '.png' : '.mp4'}`;
+  `${url.split('/').pop() || 'download'}${props.image?.type === 'image' ? '.png' : '.mp4'}`
 
-
-// // API call to convert the image to a video
-// const turnIntoVideoAction = async () => {
-//   console.log("Executing turnIntoVideoAction");
-
-//   if (!props.image || !props.image.url) {
-//     alert('No image selected.');
-//     return;
-//   }
-//   if (!prompt.value) {
-//     alert('Please enter a prompt.');
-//     return;
-//   }
-
-//   isLoading.value = true; // Show loading state
-//   try {
-//     const formData = new FormData();
-
-//     const imgResponse = await fetch(props.image.url);
-//     const blob = await imgResponse.blob();
-
-//     // Convert the Blob to a File with a filename
-//     //const file = new File([blob], getFilename(props.image.url), { type: blob.type });
-
-//     let type = "face-swap"
-//     formData.append('image_url', props.image.url); // Correctly use image.url
-//     formData.append('prompt', prompt.value);
-//     formData.append('type', type)
-
-//     console.log("Sending formData:", { image: props.image.url, prompt: prompt.value });
-
-//     // Assuming genAiService.imageToVideo is an API client that handles requests
-//     const response = await genAiService.imageToVideo(formData);
-
-//     console.log("API Response:", response);
-
-//     if (response?.success) {
-//       toastStore.success(response.data.message || 'Video generated successfully!');
-//       // Update credits after successful content generation
-//       await fetchCredits()
-//     } else {
-//       console.error("Error in API response:", response);
-//       toastStore.error(response.data.message || 'Failed to generate video. Please try again.');
-//     }
-//   } catch (error) {
-//     console.error("Error occurred:", error);
-//     toastStore.error(error || 'Failed to generate video. Please try again.');
-//   } finally {
-//     isLoading.value = false; // Hide loading state
-//   }
-// };
 
 
 
 // Fetch file when image.url is available
 const fetchFile = async () => {
+  if (!props.image || !props.image.url) {
+    console.error('Invalid or incomplete image data');
+    return;
+  }
   console.log('fetchFile called');
   if (props.image?.url) {
     loading.value = true;
@@ -163,11 +116,12 @@ const close = () => {
   emit('close');
   prompt.value = "";
   promptError.value = null;
+  fileUrl.value = null; // Reset file URL
 };
 
 // Watcher for prompt validation
 watch(prompt, (newVal) => {
-  promptError.value = !newVal ? "Prompt is required." : null;
+ promptError.value = props.isOpen  && !newVal ? "Prompt is required." : null;
 });
 
 watch([() => props.image?.url, () => props.isOpen], ([imageUrl, isOpen]) => {
@@ -217,10 +171,14 @@ const handleOutsideClick = (event) => {
             <div class="mb-7">
               <p v-if="image?.prompt" class="text-gray-700 font-semibold text-sm mb-2 uppercase tracking-wide">Existing
                 Prompt</p>
-              <p v-if="image?.prompt"
+              <!-- <p v-if="image?.prompt"
                 class="w-full p-2 border border-silverChalice rounded-lg text-lg mb-10 font-bold text-darkGray bg-tertiary align-top resize-none"
                 style="line-height: 1.5; overflow:auto;" placeholder="Your prompt will appear here">{{ image.prompt }}
-              </p>
+              </p> -->
+              <textarea v-if="image?.prompt"
+              class="w-full p-2 rounded-lg text-sm readonly mb-2 font-bold text-darkGray bg-tertiary align-top resize-none"
+              style="line-height: 1.5; overflow: auto;" placeholder="Your prompt will appear here"
+              readonly>{{ image.prompt }}</textarea>
 
               <p class="text-gray-700 font-semibold text-sm uppercase tracking-wide mb-1">Enter Prompt for Video</p>
 
