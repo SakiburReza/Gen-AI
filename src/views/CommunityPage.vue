@@ -132,6 +132,11 @@ const fetchMedia = async () => {
   }
 }
 
+const showMenu = ref(false)
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value
+}
+
 // Fetch images when the component is mounted
 onMounted(async () => {
   fetchMedia()
@@ -140,10 +145,10 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col h-screen">
-    <!-- Search Bar and Heart Button -->
+    <!-- Search Bar-->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
-      <!-- Search Bar -->
-      <div class="flex items-center w-full md:w-[69%] pr-2 md:pr-0 md:mr-0 space-x-4">
+      <!-- Search Bar (Centered) -->
+      <div class="flex items-center w-full md:w-[65%] pr-2 md:pr-0 md:mr-0 space-x-4">
         <div class="relative w-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -167,14 +172,22 @@ onMounted(async () => {
           />
         </div>
       </div>
+
+      <!-- Right-side Menu Button -->
+      <button class="md:hidden p-2 ml-2" @click="toggleMenu">
+        <svg class="w-10 h-10 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
     </div>
+
 
     <!-- Content Section -->
     <div class="flex flex-col md:flex-row flex-1">
       <!-- Image Grid Section -->
       <div class="flex-1 mt-1 mb-5 overflow-y-auto">
         <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[75%] mx-auto ml-15 mb-5 mt-4 overflow-y-auto pr-1"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[60%] mx-auto ml-15 mb-5 mt-4 overflow-y-auto pr-1"
           style="max-height: calc(90vh - 4rem); overflow-y: auto"
         >
           <!-- Display spinner while loading images -->
@@ -233,7 +246,7 @@ onMounted(async () => {
       </div>
 
       <!-- Sidebar Section -->
-      <div class="w-full md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none rounded-3xl">
+      <div class="md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none fixed top-12 right-7 w-60 h-full rounded-3xl overflow-hidden z-50 md:block" :class="{ 'hidden': !showMenu, 'block': showMenu }">
         <div class="w-80 rounded-3xl overflow-hidden">
           <CommunitySidebar class="w-full" />
         </div>
