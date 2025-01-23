@@ -247,7 +247,7 @@ onMounted(async () => {
       <!-- Sidebar Section (Swipes In from Right on Mobile) -->
       <div
         class="md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none fixed top-12 right-0 w-60 h-full rounded-3xl overflow-hidden z-50 md:block transition-transform duration-300"
-        :class="{ 'translate-x-full': !showMenu, 'translate-x-full': showMenu }"
+        :class="{ 'hidden md:block': !showMenu }"
       >
         <div class="w-80 rounded-3xl overflow-hidden">
           <CommunitySidebar class="w-full" />
@@ -260,7 +260,6 @@ onMounted(async () => {
         class="fixed inset-0 z-40 md:hidden"
         @click="showMenu = false"
       ></div>
-
 
 
     </div>
