@@ -3,15 +3,15 @@
 <template>
     <!-- Community Side Bar -->
     <div
-      class="sm:fixed sm:top-2 sm:right-5 w-full sm:p-6 flex-shrink-2 h-screen sm:float-right
-       bg-gray-100 shadow-lg rounded-3xl flex flex-col sm:w-52 md:w-72 lg:w-80 xl:w-96 sm:transition-transform 
-      sm:transform sm:translate-x-0  mr-1 fixed"
+      class="sm:top-2 sm:right-0 w-full sm:p-6 flex-shrink-2 h-screen sm:float-right
+       bg-gray-100 shadow-lg rounded-3xl sm:rounded-3xl flex flex-col sm:w-52 md:w-65 lg:w-80 xl:w-96 sm:transition-transform 
+      sm:transform sm:translate-x-0 fixed"
       :class="{ 'translate-x-0': isOpen }"
     >
   
   
       <!-- Logo -->
-      <div class="px-6 py-4 flex justify-center bg-gray-100">
+      <div class="px-6 py-4 flex justify-start sm:justify-center  bg-gray-100">
         <img src="/images/zeuxis-logo.png" alt="Zeuxis Logo"/>
       </div>
   
