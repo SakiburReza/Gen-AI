@@ -145,7 +145,7 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col h-screen">
-    <!-- Search Bar-->
+    <!-- Search Bar -->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar (Centered) -->
       <div class="flex items-center w-full md:w-[65%] pr-2 md:pr-0 md:mr-0 space-x-4">
@@ -173,14 +173,13 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- Right-side Menu Button -->
+      <!-- Right-side Menu Button (Only Mobile) -->
       <button class="md:hidden p-2 ml-2" @click="toggleMenu">
         <svg class="w-10 h-10 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
         </svg>
       </button>
     </div>
-
 
     <!-- Content Section -->
     <div class="flex flex-col md:flex-row flex-1">
@@ -218,7 +217,7 @@ onMounted(async () => {
               @click="openPreviewModal(item)"
             ></video>
             <!-- Floating Buttons -->
-            <<div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
+            <div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
               <!-- Text Button -->
               <div class="relative group">
                 <!-- Copy -->
@@ -245,12 +244,25 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- Sidebar Section -->
-      <div class="md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none fixed top-12 right-0 w-60 h-full rounded-3xl overflow-hidden z-50 md:block" :class="{ 'hidden': !showMenu, 'block': showMenu }">
+      <!-- Sidebar Section (Swipes In from Right on Mobile) -->
+      <div
+        class="md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none fixed top-12 right-0 w-60 h-full rounded-3xl overflow-hidden z-50 md:block transition-transform duration-300"
+        :class="{ 'translate-x-full': !showMenu, 'translate-x-full': showMenu }"
+      >
         <div class="w-80 rounded-3xl overflow-hidden">
           <CommunitySidebar class="w-full" />
         </div>
       </div>
+
+      <!-- Overlay (Click outside to close on mobile) -->
+      <div
+        v-if="showMenu"
+        class="fixed inset-0 z-40 md:hidden"
+        @click="showMenu = false"
+      ></div>
+
+
+
     </div>
 
     <!-- Modal Component -->
