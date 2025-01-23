@@ -12,8 +12,8 @@ import SignInPage from '@/views/SignInPage.vue'
 import SignUpPage from '@/views/SignUpPage.vue'
 import CommunitySidebar from '@/components/CommunitySidebar.vue'
 import CommunityPage from '@/views/CommunityPage.vue'
-import PreviewImageModal from '@/components/PreviewImageModal.vue'
 import FeedbackPage from '@/views/FeedbackPage.vue'
+import HelpPage from '@/views/HelpPage.vue'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -120,6 +120,12 @@ const router = createRouter({
       path: '/feedbackpage',
       name: 'feedbackpage',
       component: FeedbackPage,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/help',
+      name: 'help',
+      component: HelpPage,
       meta: { requiresAuth: true },
     },
 
