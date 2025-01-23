@@ -148,7 +148,7 @@ onMounted(async () => {
     <!-- Search Bar-->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar (Centered) -->
-      <div class="flex items-center w-full md:w-[69%] pr-2 md:pr-0 md:mr-0 space-x-4">
+      <div class="flex items-center w-full md:w-[65%] pr-2 md:pr-0 md:mr-0 space-x-4">
         <div class="relative w-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -175,7 +175,7 @@ onMounted(async () => {
 
       <!-- Right-side Menu Button -->
       <button class="md:hidden p-2 ml-2" @click="toggleMenu">
-        <svg class="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="w-10 h-10 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
         </svg>
       </button>
@@ -246,7 +246,7 @@ onMounted(async () => {
       </div>
 
       <!-- Sidebar Section -->
-      <div class="md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none fixed top-9 right-9 w-60 h-full rounded-3xl overflow-hidden z-50 md:block" :class="{ 'hidden': !showMenu, 'block': showMenu }">
+      <div class="md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none fixed top-12 right-7 w-60 h-full rounded-3xl overflow-hidden z-50 md:block" :class="{ 'hidden': !showMenu, 'block': showMenu }">
         <div class="w-80 rounded-3xl overflow-hidden">
           <CommunitySidebar class="w-full" />
         </div>
