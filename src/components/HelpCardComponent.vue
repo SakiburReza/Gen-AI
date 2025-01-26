@@ -17,7 +17,7 @@ const props = defineProps({
         </p>
 
         <!-- Scrollable Card Grid Container max-h-[calc(100vh-150px)] sm:w-[250px] md:w-[280px] lg:w-[300px] h-[250px]-->
-        <div class="">
+        <div class="overflow-auto max-h-[calc(100vh-150px)]">
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <div v-for="(card, index) in props.data.cards" :key="index" class="bg-white shadow-lg rounded-md p-5 hover:shadow-2xl transition-all duration-300 
                        w-full  flex flex-col">
