@@ -7,11 +7,11 @@ const emit = defineEmits(["close"]);
 
 const search = ref("");
 const boards = ref([
-    { name: "Vibes" },
-    { name: "Nature" },
-    { name: "Beauty Hill" },
-    { name: "Draft" },
-    { name: "Vault" },
+    { name: "Vibes" , image: "/public/images/vibes.png"  },
+    { name: "Nature", image: "/public/images/nature.png" },
+    { name: "Beauty Hill", image: "/public/images/hill.png" },
+    { name: "Draft"  , image: null},
+    { name: "Vault" , image: null},
 ]);
 
 const filteredBoards = computed(() =>
