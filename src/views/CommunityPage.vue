@@ -145,11 +145,11 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col h-screen">
-    <!-- Search Bar -->
+    <!-- Search Bar-->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
-      <!-- Search Bar (Centered) -->
-      <div class="flex items-center w-full md:w-[65%] pr-2 md:pr-0 md:mr-0 space-x-4">
-        <div class="relative w-full">
+      <!-- Search Bar -->
+      <div class="flex items-center w-full md:w-[66%] pr-2 md:pr-0 md:mr-0 space-x-4">
+        <div class="relative w-[98%] sm:w-[90%] md:w-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5 absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500"
@@ -171,14 +171,13 @@ onMounted(async () => {
             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300"
           />
         </div>
+        <!-- Button on Right -->
+        <button class="md:hidden p-2" @click="toggleMenu">
+          <svg class="w-8 h-10 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
       </div>
-
-      <!-- Right-side Menu Button (Only Mobile) -->
-      <button class="md:hidden p-2 ml-2" @click="toggleMenu">
-        <svg class="w-10 h-10 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-        </svg>
-      </button>
     </div>
 
     <!-- Content Section -->
@@ -217,51 +216,52 @@ onMounted(async () => {
               @click="openPreviewModal(item)"
             ></video>
             <!-- Floating Buttons -->
-            <div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
-              <!-- Text Button -->
-              <div class="relative group">
-                <!-- Copy -->
-                <button
-                  @click="copyAction(media[index].prompt)"
-                  class="flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
+            <<div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
+            <!-- Text Button -->
+            <div class="relative group">
+              <!-- Copy -->
+              <button
+                @click="copyAction(media[index].prompt)"
+                class="flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
+              >
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 16 15"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 16 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M15.1111 0H0.888889C0.4 0 0 0.395294 0 0.878431V3.51373C0 3.99686 0.4 4.39216 0.888889 4.39216C1.37778 4.39216 1.77778 3.99686 1.77778 3.51373V1.75686H7.11111V13.1765H5.33333C4.84444 13.1765 4.44444 13.5718 4.44444 14.0549C4.44444 14.538 4.84444 14.9333 5.33333 14.9333H10.6667C11.1556 14.9333 11.5556 14.538 11.5556 14.0549C11.5556 13.5718 11.1556 13.1765 10.6667 13.1765H8.88889V1.75686H14.2222V3.51373C14.2222 3.99686 14.6222 4.39216 15.1111 4.39216C15.6 4.39216 16 3.99686 16 3.51373V0.878431C16 0.395294 15.6 0 15.1111 0Z"
-                      fill="white"
-                    />
-                  </svg>
-                </button>
-              </div>
+                  <path
+                    d="M15.1111 0H0.888889C0.4 0 0 0.395294 0 0.878431V3.51373C0 3.99686 0.4 4.39216 0.888889 4.39216C1.37778 4.39216 1.77778 3.99686 1.77778 3.51373V1.75686H7.11111V13.1765H5.33333C4.84444 13.1765 4.44444 13.5718 4.44444 14.0549C4.44444 14.538 4.84444 14.9333 5.33333 14.9333H10.6667C11.1556 14.9333 11.5556 14.538 11.5556 14.0549C11.5556 13.5718 11.1556 13.1765 10.6667 13.1765H8.88889V1.75686H14.2222V3.51373C14.2222 3.99686 14.6222 4.39216 15.1111 4.39216C15.6 4.39216 16 3.99686 16 3.51373V0.878431C16 0.395294 15.6 0 15.1111 0Z"
+                    fill="white"
+                  />
+                </svg>
+              </button>
             </div>
+          </div>
           </div>
         </div>
       </div>
 
       <!-- Sidebar Section (Swipes In from Right on Mobile) -->
-      <div
-        class="md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none fixed top-12 right-0 w-60 h-full rounded-3xl overflow-hidden z-50 md:block transition-transform duration-300"
-        :class="{ 'hidden md:block': !showMenu }"
-      >
-        <div class="w-80 rounded-3xl overflow-hidden">
-          <CommunitySidebar class="w-full" />
+      <div>
+        <!-- Sidebar -->
+        <div
+          class="md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none fixed top-0 right-0 w-60 h-full rounded-l-3xl shadow-lg z-50 md:block transition-transform duration-200"
+          :class="{ 'translate-x-full sm:translate-x-0': !showMenu }"
+        >
+          <div class="w-full rounded-l-3xl overflow-hidden">
+            <CommunitySidebar class="w-full" />
+          </div>
         </div>
+
+        <!-- Overlay (Click outside to close on mobile) -->
+        <div
+          v-if="showMenu"
+          class="fixed inset-0 z-40 md:hidden"
+          @click="showMenu = false"
+        ></div>
       </div>
-
-      <!-- Overlay (Click outside to close on mobile) -->
-      <div
-        v-if="showMenu"
-        class="fixed inset-0 z-40 md:hidden"
-        @click="showMenu = false"
-      ></div>
-
-
     </div>
 
     <!-- Modal Component -->
