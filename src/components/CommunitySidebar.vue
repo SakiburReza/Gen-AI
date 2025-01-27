@@ -254,7 +254,7 @@
 
         <li>
           <a
-            href="#"
+            href="/help"
             class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg"
