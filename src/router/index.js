@@ -14,6 +14,9 @@ import CommunitySidebar from '@/components/CommunitySidebar.vue'
 import CommunityPage from '@/views/CommunityPage.vue'
 import FeedbackPage from '@/views/FeedbackPage.vue'
 import HelpPage from '@/views/HelpPage.vue'
+import GalleryPage from '@/views/GalleryPage.vue'
+import BoardAllImages from '@/views/BoardAllImages.vue'
+import CreateBoardModal from '@/components/CreateBoardModal.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 
 const isAuthenticated = () => {
@@ -130,6 +133,23 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/gallerypage',
+      name: 'gallerypage',
+      component: GalleryPage,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/boardallimages',
+      name: 'boardallimages',
+      component: BoardAllImages,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/modal',
+      name: 'modal',
+      component: CreateBoardModal,
+      meta: { requiresAuth: true },
+    }    {
       path: '/savedboardcomponent',
       name: 'savedboardcomponent',
       component: SavedBoardComponent,

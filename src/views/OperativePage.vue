@@ -576,6 +576,10 @@ const goToExplore = () => {
   router.push('/communitypage')
 }
 
+const goToGallery = () => {
+  router.push('/gallerypage')
+}
+
 //Dropdown property
 
 // const activeModeDropDown = ref('image')
@@ -679,9 +683,17 @@ const imageModeOptions = [
       <button
         type="button"
         @click="goToExplore"
-        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 ml-15"
+        class="px-4 py-2 bg-slate-600 text-white rounded-md hover:bg-blue-700 transition duration-300 ml-15"
       >
         Explore
+      </button>
+
+      <button
+        type="button"
+        @click="goToGallery"
+        class="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 ml-15"
+      >
+        Gallery
       </button>
 
       <!-- Search Input -->
