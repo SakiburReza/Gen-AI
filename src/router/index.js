@@ -14,6 +14,7 @@ import CommunitySidebar from '@/components/CommunitySidebar.vue'
 import CommunityPage from '@/views/CommunityPage.vue'
 import FeedbackPage from '@/views/FeedbackPage.vue'
 import HelpPage from '@/views/HelpPage.vue'
+import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -126,6 +127,12 @@ const router = createRouter({
       path: '/help',
       name: 'help',
       component: HelpPage,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/savedboardcomponent',
+      name: 'savedboardcomponent',
+      component: SavedBoardComponent,
       meta: { requiresAuth: true },
     },
 
