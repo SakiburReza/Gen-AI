@@ -14,6 +14,8 @@ import CommunitySidebar from '@/components/CommunitySidebar.vue'
 import CommunityPage from '@/views/CommunityPage.vue'
 import FeedbackPage from '@/views/FeedbackPage.vue'
 import HelpPage from '@/views/HelpPage.vue'
+import GalleryPage from '@/views/GalleryPage.vue'
+import BoardAllImages from '@/views/BoardAllImages.vue'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -128,7 +130,18 @@ const router = createRouter({
       component: HelpPage,
       meta: { requiresAuth: true },
     },
-
+    {
+      path: '/gallerypage',
+      name: 'gallerypage',
+      component: GalleryPage,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/boardallimages',
+      name: 'boardallimages',
+      component: BoardAllImages,
+      meta: { requiresAuth: true },
+    }
   ],
 });
 router.beforeEach((to, from, next) => {

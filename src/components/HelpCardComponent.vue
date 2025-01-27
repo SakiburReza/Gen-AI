@@ -9,18 +9,18 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="max-w-5xl px-4">
+    <div class="max-w-5xl lg:px-4">
         <!-- Title Section -->
         <h1 class="text-2xl sm:text-xl font-bold text-center mt-10 mb-1">Need Help?</h1>
         <p class="text-center text-gray-500 mb-10 max-w-sm mx-auto text-md">
             Access helpful resources, detailed documentation, and the latest system updates.
         </p>
 
-        <!-- Scrollable Card Grid Container -->
+        <!-- Scrollable Card Grid Container max-h-[calc(100vh-150px)] sm:w-[250px] md:w-[280px] lg:w-[300px] h-[250px]-->
         <div class="overflow-auto max-h-[calc(100vh-150px)]">
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-5">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <div v-for="(card, index) in props.data.cards" :key="index" class="bg-white shadow-lg rounded-md p-5 hover:shadow-2xl transition-all duration-300 
-                       w-full sm:w-[250px] md:w-[280px] lg:w-[300px] h-[250px] flex flex-col">
+                       w-full  flex flex-col">
 
                     <img src="/images/icon/helpBox.svg" class="h-10 w-10" alt="Zeuxis Logo" />
 
