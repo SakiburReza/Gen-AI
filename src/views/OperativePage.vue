@@ -576,6 +576,10 @@ const goToExplore = () => {
   router.push('/communitypage')
 }
 
+const goToGallery = () => {
+  router.push('/gallerypage')
+}
+
 //Dropdown property
 
 // const activeModeDropDown = ref('image')
@@ -620,6 +624,8 @@ function onImageClick(filteredSingleMedia) {
     openImageModal(filteredSingleMedia)
   }
 }
+
+
 
 // Fetch images when the component is mounted
 
@@ -679,9 +685,17 @@ const imageModeOptions = [
       <button
         type="button"
         @click="goToExplore"
-        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 ml-15"
+        class="px-4 py-2 bg-slate-600 text-white rounded-md hover:bg-blue-700 transition duration-300 ml-15"
       >
         Explore
+      </button>
+
+      <button
+        type="button"
+        @click="goToGallery"
+        class="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 ml-15"
+      >
+        Gallery
       </button>
 
       <!-- Search Input -->
@@ -786,12 +800,14 @@ const imageModeOptions = [
             @click="openPreviewModal(item)"
           ></video>
 
+
           <!------------------------------------------------------ Roney ----------------------------------------->
           <!-- Floating Social Buttons -->
           <div
             v-if="filteredMedia[index]"
             class="absolute top-2 right-2 flex flex-row gap-2 items-center"
           >
+
             <!-- Share Button with Group Class -->
             <div class="relative group">
               <!-- Share Button -->
@@ -904,7 +920,24 @@ const imageModeOptions = [
                 />
               </svg>
             </button>
+
+            <!-- Overlay Controls Container -->
+
+              <div class="relative group">
+                <!-- Save Button (Bottom-Right) -->
+                <button
+                  type="button"
+                  @click=""
+                  class="absolute top-25 right-0 flex flex-row items-center px-3 py-1 text-white rounded-md hover:bg-blue-600 transition-opacity duration-200 opacity-0 group-hover:opacity-100"
+                >
+                  Save
+                </button>
+              </div>
+
           </div>
+
+
+
         </div>
       </div>
 

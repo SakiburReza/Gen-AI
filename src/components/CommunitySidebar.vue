@@ -7,12 +7,19 @@
 
 
     <!-- Logo -->
-    <div class="px-6 py-4 flex justify-center bg-gray-100">
-      <img src="/images/zeuxis-logo.png" alt="Zeuxis Logo"/>
+    <div class="w-full px-6 py-4 flex items-center bg-gray-100">
+      <div class="flex items-center space-x-0">
+        <img src="/images/zeuxis-logo.png" alt="Zeuxis Logo" class="h-auto w-39 sm:w-32 md:w-40 lg:w-48 xl:w-56 ml-0"/>
+        <button class="md:hidden p-2" @click="closeMenu">
+          <svg class="w-7 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Menu Items -->
-    <nav class="flex-1 overflow-y-auto">
+    <nav class="flex-1 overflow-y-auto h-screen sm:h-auto">
       <ul class="space-y-2 px-4">
         <!-- Explore Link -->
         <li>
@@ -247,7 +254,7 @@
 
         <li>
           <a
-            href="#"
+            href="/help"
             class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all"
           >
             <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -264,17 +271,16 @@
 </template>
 
 <script setup>
-// import { ref } from 'vue';
-//
-// // Reactive state for controlling the dropdown
-// const isCreateDropdownOpen = ref(false);
-//
-// // Method to toggle the visibility of the dropdown
-// const toggleCreateDropdown = () => {
-//   isCreateDropdownOpen.value = !isCreateDropdownOpen.value;
-// };
+import { ref } from 'vue';
 
-// Method to handle hard refresh logic (if needed)
+const showMenu = ref(true); // Set to true if menu is initially open
+
+// Close the menu only
+const closeMenu = () => {
+  showMenu.value = false;
+};
+
+// Optional: Hard refresh function
 const hardRefresh = () => {
   window.location.reload(true);
 };
