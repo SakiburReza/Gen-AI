@@ -1,12 +1,24 @@
 <script setup>
+import {ref} from 'vue'
 import { FwbTooltip } from 'flowbite-vue'
 import {useRouter } from 'vue-router'
 import AccountCard from '@/components/AccountCard.vue'
-import {ref} from 'vue'
+import {ref} from 'vue'import AccountCard from '@/components/AccountCard.vue'
+
+
 
 
 
 const router = useRouter()
+const showAccountCard = ref(false);
+const isClicked = ref(false);
+
+
+const  toggleAccountCard=()=> {
+  showAccountCard.value = !showAccountCard.value;
+  isClicked.value = !isClicked.value;
+}
+
 const goToExplore = () => {
   router.push('/operativepage')
 }
@@ -35,7 +47,7 @@ function closeAccountCard() {
 
     <div class="flex flex-1">
       <div
-        class="sidebar border h-screen w-[45px] left-0 flex flex-col justify-between items-center py-4"
+        class="sidebar border fixed left-0 h-screen w-[45px] left-0 flex flex-col justify-between items-center py-4"
       >
         <div class="flex flex-col items-center gap-4 flex-1 justify-center">
           <fwb-tooltip placement="right">
@@ -70,7 +82,7 @@ function closeAccountCard() {
 
           <FwbTooltip placement="right">
             <template #trigger>
-              <img src="/public/images/icon/profileIcon.svg" alt="profileIcon" class="cursor-pointer" />
+              <img src="/public/images/icon/profileIcon.svg" alt="profileIcon" class="cursor-pointer" @click="toggleAccountCard" />
             </template>
             <template #content> Profile </template>
           </FwbTooltip>
