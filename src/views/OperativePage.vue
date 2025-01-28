@@ -648,12 +648,6 @@ const videoModeOptions = [
     imageSrc: '/images/icon/image-to-video.svg',
     text: 'Image to Video',
   },
-
-  {
-    id: '23',
-    imageSrc: '/images/icon/templates.svg',
-    text: 'Templates (Beta)',
-  },
 ]
 
 const imageModeOptions = [
@@ -667,11 +661,6 @@ const imageModeOptions = [
     imageSrc: '/images/icon/image-to-image.svg',
     text: 'Image to Image',
   },
-  {
-    id: '13',
-    imageSrc: '/images/icon/face-swap.svg',
-    text: 'Face Swap',
-  },
 ]
 </script>
 
@@ -681,6 +670,32 @@ const imageModeOptions = [
       <!-- Left Section: Facility Card and Dynamic Content -->
 
       <div class="w-full sm:w-[30%] p-6 flex-shrink-0">
+        <!-- Floating Buttons Section -->
+        <div class="flex flex-row items-center justify-center mb-5">
+          <!-- Image Button -->
+          <button
+            @click="setActive('image')"
+            :class="[
+              'flex items-center px-4 py-2 rounded-lg font-medium transition',
+
+              activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            ]"
+          >
+            <span class="material-icons">image</span>
+          </button>
+
+          <!-- Video Button -->
+
+          <button
+            @click="setActive('video')"
+            :class="[
+              'flex items-center px-4 py-2 rounded-lg font-medium transition',
+              activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            ]"
+          >
+            <span class="material-icons">videocam</span>
+          </button>
+        </div>
         <!-- Facility Card -->
         <!-- Dropdown used v-for options -->
         <div class="px-6 mx-auto w-full flex justify-center">
@@ -913,7 +928,7 @@ const imageModeOptions = [
         <div
           v-for="(item, index) in filteredMedia"
           :key="index"
-          class="relative overflow-hidden rounded-lg"
+          class="relative overflow-hidden"
           :class="[
             item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
             'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-100',
@@ -924,7 +939,7 @@ const imageModeOptions = [
             v-if="filteredMedia[index] && filteredMedia[index].type === 'image'"
             :src="imageUrl() + item.url"
             :alt="'Media ' + index"
-            class="h-full max-w-full rounded-lg w-full"
+            class="h-full max-w-full w-full"
             :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
             @click="onImageClick(filteredMedia[index])"
           />
@@ -1072,34 +1087,6 @@ const imageModeOptions = [
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Floating Buttons Section -->
-      <div class="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex z-50">
-        <!-- Image Button -->
-
-        <button
-          @click="setActive('image')"
-          :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
-
-            activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-          ]"
-        >
-          <span class="material-icons">image</span>
-        </button>
-
-        <!-- Video Button -->
-
-        <button
-          @click="setActive('video')"
-          :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
-            activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-          ]"
-        >
-          <span class="material-icons">videocam</span>
-        </button>
       </div>
     </div>
     <!-- Modal Component -->

@@ -146,12 +146,12 @@ onMounted(async () => {
 
 <template>
   <DefaultLayout>
-      <div class="flex items-center justify-between px-14 py-2 z-10 w-full">
+      <div class="flex items-center justify-between px-14 py-2 sticky top-0 z-10 w-full">
         <!-- Left Section -->
-        <div class="flex items-center space-x-4 text-sm sm:text-base md:text-lg">
-          <span class="text-gray-400 cursor-pointer hover:text-black-2">For You</span>
-          <span class="text-gray-400 cursor-pointer hover:text-black-2">Following</span>
-          <span class="text-gray-400 cursor-pointer hover:text-black-2">Favourites</span>
+        <div class="flex items-center space-x-10 text-sm sm:text-base md:text-lg">
+          <span class="text-gray-400 cursor-pointer hover:text-black-2 font-inter font-semibold text-[15px]">For You</span>
+          <span class="text-gray-400 cursor-pointer hover:text-black-2 font-inter font-semibold text-[15px]">Following</span>
+          <span class="text-gray-400 cursor-pointer hover:text-black-2 font-inter font-semibold text-[15px]">Favourites</span>
         </div>
 
         <!-- Search Bar (Right Aligned) -->
