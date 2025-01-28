@@ -647,13 +647,7 @@ const videoModeOptions = [
     id: '22',
     imageSrc: '/images/icon/image-to-video.svg',
     text: 'Image to Video',
-  },
-
-  {
-    id: '23',
-    imageSrc: '/images/icon/templates.svg',
-    text: 'Templates (Beta)',
-  },
+  }
 ]
 
 const imageModeOptions = [
@@ -666,12 +660,7 @@ const imageModeOptions = [
     id: '12',
     imageSrc: '/images/icon/image-to-image.svg',
     text: 'Image to Image',
-  },
-  {
-    id: '13',
-    imageSrc: '/images/icon/face-swap.svg',
-    text: 'Face Swap',
-  },
+  }
 ]
 </script>
 
