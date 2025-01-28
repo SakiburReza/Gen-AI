@@ -7,6 +7,7 @@ import { imageUrl } from '@/utils/utils'
 import { FwbSpinner } from 'flowbite-vue'
 import { computed, onMounted, ref } from 'vue'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
+import DefaultLayout from '@/layout/DefaultLayout.vue'
 
 
 
@@ -144,11 +145,12 @@ onMounted(async () => {
 </script>
 
 <template>
+  <DefaultLayout>
   <div class="flex flex-col h-screen">
     <!-- Search Bar-->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar (Centered) -->
-      <div class="flex items-center w-full md:w-[65%] pr-2 md:pr-0 md:mr-0 space-x-4">
+      <div class="flex items-center w-full pr-2 md:pr-0 md:mr-0 space-x-4">
         <div class="relative w-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +189,7 @@ onMounted(async () => {
       <!-- Image Grid Section -->
       <div class="flex-1 mt-1 mb-5 overflow-y-auto">
         <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-xs md:max-w-[60%] mx-auto ml-15 mb-5 mt-4 overflow-y-auto pr-1"
+          class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full mx-auto p-10 overflow-y-auto"
           style="max-height: calc(90vh - 4rem); overflow-y: auto"
         >
           <!-- Display spinner while loading images -->
@@ -197,7 +199,7 @@ onMounted(async () => {
           <div
             v-for="(item, index) in filteredMedia"
             :key="index"
-            class="relative overflow-hidden rounded-lg"
+            class="relative overflow-hidden"
             :class="[item.orientation === 'P' ? 'row-span-2' : 'row-span-1']"
           >
             <!-- Render Image -->
@@ -205,7 +207,7 @@ onMounted(async () => {
               v-if="filteredMedia[index] && filteredMedia[index].type === 'image'"
               :src="imageUrl() + item.url"
               :alt="'Media ' + index"
-              class="h-full max-w-full rounded-lg w-full"
+              class="h-full max-w-full w-full"
               :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
               @click="openPreviewModal(item)"
             />
@@ -244,13 +246,6 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-
-      <!-- Sidebar Section -->
-      <div class="md:w-64 md:ml-5 mt-5 md:mt-0 flex justify-center md:flex-none fixed top-12 right-7 w-60 h-full rounded-3xl overflow-hidden z-50 md:block" :class="{ 'hidden': !showMenu, 'block': showMenu }">
-        <div class="w-80 rounded-3xl overflow-hidden">
-          <CommunitySidebar class="w-full" />
-        </div>
-      </div>
     </div>
 
     <!-- Modal Component -->
@@ -260,6 +255,7 @@ onMounted(async () => {
       :image="selectedImage"
     />
   </div>
+</DefaultLayout>
 </template>
 
 
