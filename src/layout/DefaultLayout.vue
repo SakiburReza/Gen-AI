@@ -1,4 +1,5 @@
 <script setup>
+import { FwbTooltip, FwbButton } from 'flowbite-vue'
 </script>
 
 <template>
@@ -8,16 +9,46 @@
     </div>
 
     <div class="flex flex-1">
-      <div class="sidebar border h-screen w-[45px] left-0 flex flex-col justify-between items-center py-4">
+      <div
+        class="sidebar border h-screen w-[45px] left-0 flex flex-col justify-between items-center py-4"
+      >
         <div class="flex flex-col items-center gap-4 flex-1 justify-center">
-          <img src="/public/images/icon/homeIcon.svg" alt="homeIcon" />
-          <img src="/public/images/icon/plusIcon.svg" alt="plusIcon" />
-          <img src="/public/images/icon/dataIcon.svg" alt="dataIcon" />
+          <fwb-tooltip placement="right">
+            <template #trigger>
+              <img src="/public/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+            </template>
+            <template #content> Home </template>
+          </fwb-tooltip>
+
+          <fwb-tooltip placement="right">
+            <template #trigger>
+              <img src="/public/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+            </template>
+            <template #content> Create </template>
+          </fwb-tooltip>
+
+          <fwb-tooltip placement="right">
+            <template #trigger>
+              <img src="/public/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
+            </template>
+            <template #content> Explore </template>
+          </fwb-tooltip>
         </div>
 
         <div class="flex flex-col items-center gap-4">
-          <img src="/public/images/icon/QuestionIcon.svg" alt="questionIcon" />
-          <img src="/public/images/icon/profileIcon.svg" alt="profileIcon" />
+          <FwbTooltip placement="right">
+            <template #trigger>
+              <img src="/public/images/icon/QuestionIcon.svg" alt="questionIcon" />
+            </template>
+            <template #content> Help </template>
+          </FwbTooltip>
+
+          <FwbTooltip placement="right">
+            <template #trigger>
+              <img src="/public/images/icon/profileIcon.svg" alt="profileIcon" />
+            </template>
+            <template #content> Profile </template>
+          </FwbTooltip>
         </div>
       </div>
 
@@ -28,4 +59,3 @@
     </div>
   </div>
 </template>
-
