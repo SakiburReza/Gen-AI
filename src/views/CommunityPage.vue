@@ -146,11 +146,18 @@ onMounted(async () => {
 
 <template>
   <DefaultLayout>
-    <!-- Search Bar-->
-    <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
-      <!-- Search Bar (Centered) -->
-      <div class="flex items-center w-full pr-2 md:pr-0 md:mr-0 space-x-4">
-        <div class="relative w-full">
+    <div class="flex flex-col h-screen">
+      <!-- Search Bar-->
+      <div class="flex items-center justify-between px-4 py-2 sticky top-0 z-10 w-full">
+        <!-- Left Section -->
+        <div class="flex items-center space-x-4 text-sm sm:text-base md:text-lg">
+          <span class="text-gray-400 cursor-pointer hover:text-black-2">For You</span>
+          <span class="text-gray-400 cursor-pointer hover:text-black-2">Following</span>
+          <span class="text-gray-400 cursor-pointer hover:text-black-2">Favourites</span>
+        </div>
+
+        <!-- Search Bar (Right Aligned) -->
+        <div class="relative group w-full max-w-xs md:max-w-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5 absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500"
@@ -169,55 +176,47 @@ onMounted(async () => {
             v-model="searchQuery"
             type="text"
             placeholder="Search"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-0 focus:border-gray-300"
           />
         </div>
       </div>
 
-      <!-- Right-side Menu Button -->
-      <button class="md:hidden p-2 ml-2" @click="toggleMenu">
-        <svg class="w-10 h-10 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-        </svg>
-      </button>
-    </div>
-
-
-    <!-- Content Section -->
-      <!-- Image Grid Section -->
-      <div class="flex-1 mt-1 mb-5 overflow-y-auto p-15 ">
-        <div
-          class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full mx-auto overflow-y-auto rounded-t-2xl"
-        >
-          <!-- Display spinner while loading images -->
-          <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
-            <fwb-spinner size="12" />
-          </div>
+      <!-- Content Section -->
+      <div class="flex flex-col md:flex-row flex-1 ">
+        <!-- Image Grid Section -->
+        <div class="flex-1 mt-1 mb-5 overflow-y-hidden p-4 ">
           <div
-            v-for="(item, index) in filteredMedia"
-            :key="index"
-            class="relative overflow-hidden"
-            :class="[item.orientation === 'P' ? 'row-span-2' : 'row-span-1']"
+            class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full mx-auto overflow-y-auto rounded-t-2xl"
           >
-            <!-- Render Image -->
-            <img
-              v-if="filteredMedia[index] && filteredMedia[index].type === 'image'"
-              :src="imageUrl() + item.url"
-              :alt="'Media ' + index"
-              class="h-full max-w-full w-full"
-              :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
-              @click="openPreviewModal(item)"
-            />
-            <!-- Render Video -->
-            <video
-              v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
-              :src="imageUrl() + filteredMedia[index].url"
-              controls
-              class="w-full h-full object-contain max-w-full"
-              @click="openPreviewModal(item)"
-            ></video>
-            <!-- Floating Buttons -->
-            <div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
+            <!-- Display spinner while loading images -->
+            <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
+              <fwb-spinner size="12" />
+            </div>
+            <div
+              v-for="(item, index) in filteredMedia"
+              :key="index"
+              class="relative overflow-hidden"
+              :class="[item.orientation === 'P' ? 'row-span-2' : 'row-span-1']"
+            >
+              <!-- Render Image -->
+              <img
+                v-if="filteredMedia[index] && filteredMedia[index].type === 'image'"
+                :src="imageUrl() + item.url"
+                :alt="'Media ' + index"
+                class="h-full max-w-full w-full"
+                :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
+                @click="openPreviewModal(item)"
+              />
+              <!-- Render Video -->
+              <video
+                v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
+                :src="imageUrl() + filteredMedia[index].url"
+                controls
+                class="w-full h-full object-contain max-w-full"
+                @click="openPreviewModal(item)"
+              ></video>
+              <!-- Floating Buttons -->
+              <<div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
               <!-- Text Button -->
               <div class="relative group">
                 <!-- Copy -->
@@ -240,18 +239,19 @@ onMounted(async () => {
                 </button>
               </div>
             </div>
+            </div>
           </div>
         </div>
       </div>
-    
 
-    <!-- Modal Component -->
-    <PreviewImageModal
-      :isOpen="showPreviewModal"
-      @close="closePreviewModal"
-      :image="selectedImage"
-    />
-</DefaultLayout>
+      <!-- Modal Component -->
+      <PreviewImageModal
+        :isOpen="showPreviewModal"
+        @close="closePreviewModal"
+        :image="selectedImage"
+      />
+    </div>
+  </DefaultLayout>
 </template>
 
 

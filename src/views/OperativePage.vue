@@ -625,6 +625,8 @@ function onImageClick(filteredSingleMedia) {
   }
 }
 
+
+
 // Fetch images when the component is mounted
 
 onMounted(async () => {
@@ -798,12 +800,14 @@ const imageModeOptions = [
             @click="openPreviewModal(item)"
           ></video>
 
+
           <!------------------------------------------------------ Roney ----------------------------------------->
           <!-- Floating Social Buttons -->
           <div
             v-if="filteredMedia[index]"
             class="absolute top-2 right-2 flex flex-row gap-2 items-center"
           >
+
             <!-- Share Button with Group Class -->
             <div class="relative group">
               <!-- Share Button -->
@@ -916,7 +920,24 @@ const imageModeOptions = [
                 />
               </svg>
             </button>
+
+            <!-- Overlay Controls Container -->
+
+              <div class="relative group">
+                <!-- Save Button (Bottom-Right) -->
+                <button
+                  type="button"
+                  @click=""
+                  class="absolute top-25 right-0 flex flex-row items-center px-3 py-1 text-white rounded-md hover:bg-blue-600 transition-opacity duration-200 opacity-0 group-hover:opacity-100"
+                >
+                  Save
+                </button>
+              </div>
+
           </div>
+
+
+
         </div>
       </div>
 
