@@ -186,7 +186,7 @@ onMounted(async () => {
         <!-- Image Grid Section -->
         <div class="flex-1 mt-1 mb-5 overflow-y-hidden p-4 ">
           <div
-            class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full mx-auto max-h-[calc(88vh-4rem)] overflow-y-auto rounded-t-2xl"
+            class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full mx-auto overflow-y-auto rounded-t-2xl"
           >
             <!-- Display spinner while loading images -->
             <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
