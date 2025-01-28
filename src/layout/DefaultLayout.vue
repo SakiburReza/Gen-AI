@@ -1,11 +1,23 @@
 <script setup>
+import {ref} from 'vue'
 import { FwbTooltip } from 'flowbite-vue'
 import {useRouter } from 'vue-router'
+import AccountCard from '@/components/AccountCard.vue'
+
 
 
 
 
 const router = useRouter()
+const showAccountCard = ref(false);
+const isClicked = ref(false);
+
+
+const  toggleAccountCard=()=> {
+  showAccountCard.value = !showAccountCard.value;
+  isClicked.value = !isClicked.value;
+}
+
 const goToExplore = () => {
   router.push('/operativepage')
 }
@@ -47,14 +59,14 @@ const goToExplore = () => {
         <div class="flex flex-col items-center gap-4">
           <FwbTooltip placement="right">
             <template #trigger>
-              <img src="/public/images/icon/QuestionIcon.svg" alt="questionIcon" class="cursor-pointer" />
+              <img src="/public/images/icon/QuestionIcon.svg" alt="questionIcon" class="cursor-pointer"/>
             </template>
             <template #content> Help </template>
           </FwbTooltip>
 
           <FwbTooltip placement="right">
             <template #trigger>
-              <img src="/public/images/icon/profileIcon.svg" alt="profileIcon" class="cursor-pointer" />
+              <img src="/public/images/icon/profileIcon.svg" alt="profileIcon" class="cursor-pointer" @click="toggleAccountCard" />
             </template>
             <template #content> Profile </template>
           </FwbTooltip>
@@ -67,4 +79,9 @@ const goToExplore = () => {
       </div>
     </div>
   </div>
+  <AccountCard
+        class="fixed bottom-25 right-80 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+        v-if="showAccountCard"
+        @close="toggleAccountCard"
+      />
 </template>
