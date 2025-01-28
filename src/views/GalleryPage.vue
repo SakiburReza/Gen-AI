@@ -2,6 +2,7 @@
 import Navbar from '@/components/NavBar.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
+import DefaultLayout from '@/layout/DefaultLayout.vue'
 
 const router = useRouter()
 
@@ -26,8 +27,7 @@ const createBoard = () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen">
-    <Navbar />
+  <DefaultLayout>
 
     <div class="flex justify-between p-4">
       <div><img class="h-12 w-12" src="/public/images/icon/filterIcon.svg" alt="" /></div>
@@ -68,7 +68,7 @@ const createBoard = () => {
         </div>
       </div>
     </div>
-  </div>
+  </DefaultLayout>
 
   <!-- Modal -->
   <div
@@ -78,7 +78,7 @@ const createBoard = () => {
     <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
       <!-- Modal Header -->
       <div class="flex items-center justify-between border-b pb-4">
-        <h2 class="text-lg font-medium">Create Board</h2>
+        <h2 class="text-xl font-medium">Create Board</h2>
         <button @click="isOpen = false" class="text-gray-400 hover:text-gray-600">✕</button>
       </div>
 
