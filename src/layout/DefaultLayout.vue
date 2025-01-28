@@ -31,7 +31,7 @@ const goToExplore = () => {
 
     <div class="flex flex-1">
       <div
-        class="sidebar border h-screen w-[45px] left-0 flex flex-col justify-between items-center py-4"
+        class="sidebar border fixed left-0 h-screen w-[45px] left-0 flex flex-col justify-between items-center py-4"
       >
         <div class="flex flex-col items-center gap-4 flex-1 justify-center">
           <fwb-tooltip placement="right">
