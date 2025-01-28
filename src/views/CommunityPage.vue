@@ -180,15 +180,21 @@ onMounted(async () => {
       </div>
     </div>
 
+      <!-- Right-side Menu Button -->
+      <button class="md:hidden p-2 ml-2" @click="toggleMenu">
+        <svg class="w-10 h-10 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
 
 
     <!-- Content Section -->
-    <div class="flex flex-col md:flex-row flex-1">
+    <div class="flex flex-col md:flex-row flex-1 ">
       <!-- Image Grid Section -->
-      <div class="flex-1 mt-0 mb-5 overflow-y-auto">
+      <div class="flex-1 mt-1 mb-5 overflow-y-auto p-4 ">
         <div
-          class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full mx-auto p-10 overflow-y-auto"
-          style="max-height: calc(90vh - 4rem); overflow-y: auto"
+          class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full mx-auto overflow-y-auto rounded-t-2xl"
         >
           <!-- Display spinner while loading images -->
           <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
