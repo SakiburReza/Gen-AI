@@ -88,11 +88,11 @@ function closeAccountCard() {
   
   <div v-if="showAccountCard">
       <div
-        class="fixed inset-0 bg-opacity-25 z-0"
+        class="inset-0 bg-opacity-25 z-0"
         @click="closeAccountCard"
       ></div>
       <AccountCard
-        class="right-80 z-10 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+        class="right-80 bottom-25 fixed bottom-0 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
         v-if="showAccountCard"
         @close="toggleAccountCard"
       />

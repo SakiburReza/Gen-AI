@@ -146,9 +146,7 @@ onMounted(async () => {
 
 <template>
   <DefaultLayout>
-    <div class="flex flex-col h-screen">
-      <!-- Search Bar-->
-      <div class="flex items-center justify-between px-4 py-2 sticky top-0 z-10 w-full">
+      <div class="flex items-center justify-between px-14 py-2 z-10 w-full">
         <!-- Left Section -->
         <div class="flex items-center space-x-4 text-sm sm:text-base md:text-lg">
           <span class="text-gray-400 cursor-pointer hover:text-black-2">For You</span>
@@ -182,7 +180,7 @@ onMounted(async () => {
       </div>
 
       <!-- Content Section -->
-      <div class="flex flex-col md:flex-row flex-1 ">
+      <div class="flex flex-col md:flex-row flex-1 p-10">
         <!-- Image Grid Section -->
         <div class="flex-1 mt-1 mb-5 overflow-y-hidden p-4 ">
           <div
@@ -216,7 +214,7 @@ onMounted(async () => {
                 @click="openPreviewModal(item)"
               ></video>
               <!-- Floating Buttons -->
-              <<div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
+              <div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
               <!-- Text Button -->
               <div class="relative group">
                 <!-- Copy -->
@@ -250,7 +248,6 @@ onMounted(async () => {
         @close="closePreviewModal"
         :image="selectedImage"
       />
-    </div>
   </DefaultLayout>
 </template>
 

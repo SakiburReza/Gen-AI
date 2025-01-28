@@ -13,6 +13,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
+import DefaultLayout from '@/layout/DefaultLayout.vue'
 
 const { fetchCredits } = useCredits()
 
@@ -677,9 +678,7 @@ const imageModeOptions = [
 </script>
 
 <template>
-  <div class="flex flex-col h-screen">
-    <Navbar />
-    <!-- Search Button on Top -->
+  <DefaultLayout>
     <div class="flex items-center w-full md:w-[69%] pr-2 md:pr-0 md:mr-0 space-x-4">
       <!-- Explore Button -->
       <button
@@ -1202,7 +1201,7 @@ const imageModeOptions = [
 
     <!--
     <ShowModalWithDownloadButton :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->
-  </div>
+</DefaultLayout>
   <!-- Modal -->
   <div
     v-if="isModalOpen"
