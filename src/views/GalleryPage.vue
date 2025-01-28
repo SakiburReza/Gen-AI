@@ -2,6 +2,7 @@
 import Navbar from '@/components/NavBar.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
+import DefaultLayout from '@/layout/DefaultLayout.vue'
 
 const router = useRouter()
 
@@ -26,8 +27,7 @@ const createBoard = () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen">
-    <Navbar />
+  <DefaultLayout>
 
     <div class="flex justify-between p-4">
       <div><img class="h-12 w-12" src="/public/images/icon/filterIcon.svg" alt="" /></div>
@@ -68,7 +68,7 @@ const createBoard = () => {
         </div>
       </div>
     </div>
-  </div>
+  </DefaultLayout>
 
   <!-- Modal -->
   <div
