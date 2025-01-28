@@ -147,47 +147,45 @@ onMounted(async () => {
 <template>
   <DefaultLayout>
   <div class="flex flex-col h-screen">
-    <!-- Search Bar-->
-    <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
-      <!-- Search Bar (Centered) -->
-      <div class="flex items-center w-full pr-2 md:pr-0 md:mr-0 space-x-4">
-        <div class="relative w-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"
-            />
-          </svg>
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300"
-          />
-        </div>
+    <div class="flex items-center justify-between px-12 py-2 sticky top-0 z-10 w-full">
+      <!-- Left Section -->
+      <div class="flex items-center space-x-4 text-sm sm:text-base md:text-lg">
+        <span class="text-gray-400 cursor-pointer hover:text-black-2">For You</span>
+        <span class="text-gray-400 cursor-pointer hover:text-black-2">Following</span>
+        <span class="text-gray-400 cursor-pointer hover:text-black-2">Favourites</span>
       </div>
 
-      <!-- Right-side Menu Button -->
-      <button class="md:hidden p-2 ml-2" @click="toggleMenu">
-        <svg class="w-10 h-10 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      <!-- Search Bar (Right Aligned) -->
+      <div class="relative group w-full max-w-xs md:max-w-sm">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"
+          />
         </svg>
-      </button>
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Search"
+          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-0 focus:border-gray-300"
+        />
+      </div>
     </div>
+
 
 
     <!-- Content Section -->
     <div class="flex flex-col md:flex-row flex-1">
       <!-- Image Grid Section -->
-      <div class="flex-1 mt-1 mb-5 overflow-y-auto">
+      <div class="flex-1 mt-0 mb-5 overflow-y-auto">
         <div
           class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full mx-auto p-10 overflow-y-auto"
           style="max-height: calc(90vh - 4rem); overflow-y: auto"
