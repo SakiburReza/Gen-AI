@@ -922,18 +922,17 @@ const imageModeOptions = [
             </button>
 
             <!-- Overlay Controls Container -->
-            <div class="absolute top-27 right-0 flex flex-row items-center">
+
               <div class="relative group">
                 <!-- Save Button (Bottom-Right) -->
                 <button
                   type="button"
                   @click=""
-                  class="px-3 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition-opacity duration-200 opacity-0 group-hover:opacity-100"
+                  class="absolute top-25 right-0 flex flex-row items-center px-3 py-1 text-white rounded-md hover:bg-blue-600 transition-opacity duration-200 opacity-0 group-hover:opacity-100"
                 >
                   Save
                 </button>
               </div>
-            </div>
 
           </div>
 

@@ -149,7 +149,8 @@ const router = createRouter({
       name: 'modal',
       component: CreateBoardModal,
       meta: { requiresAuth: true },
-    }    {
+    },
+    {
       path: '/savedboardcomponent',
       name: 'savedboardcomponent',
       component: SavedBoardComponent,
