@@ -688,13 +688,13 @@ const imageModeOptions = [
         Explore
       </button>
 
-      <button
+      <!-- <button
         type="button"
         @click="goToGallery"
         class="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 ml-15"
       >
         Gallery
-      </button>
+      </button> -->
 
       <!-- Search Input -->
       <div class="flex-1">

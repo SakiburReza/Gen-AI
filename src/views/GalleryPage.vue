@@ -78,7 +78,7 @@ const createBoard = () => {
     <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
       <!-- Modal Header -->
       <div class="flex items-center justify-between border-b pb-4">
-        <h2 class="text-lg font-medium">Create Board</h2>
+        <h2 class="text-xl font-medium">Create Board</h2>
         <button @click="isOpen = false" class="text-gray-400 hover:text-gray-600">✕</button>
       </div>
 
