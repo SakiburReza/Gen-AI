@@ -6,7 +6,7 @@ import AccountCard from '@/components/AccountCard.vue'
 import InvoiceCard from '@/components/InvoiceCard.vue'
 import VideoCarousel from '@/components/VideoCarousel.vue'
 import BuyMoreCreditsModal from '@/components/BuyMoreCreditsModal.vue'
-import {jwtDecode } from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import VerificationPage from '@/views/VerificationPage.vue'
 import SignInPage from '@/views/SignInPage.vue'
 import SignUpPage from '@/views/SignUpPage.vue'
@@ -46,7 +46,7 @@ const router = createRouter({
       path: '/operativepage',
       name: 'operativepage',
       component: OperativePage,
-       meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
     },
     {
       path: '/',
@@ -64,13 +64,13 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: ProfilePage,
-       meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
     },
     {
       path: '/subscription',
       name: 'subscription',
       component: SubscriptionPage,
-       meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
     },
     // {
     //   path: '/subscription-billing',
@@ -81,27 +81,27 @@ const router = createRouter({
       path: '/accountcard',
       name: 'accountcard',
       component: AccountCard,
-       meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
     },
     {
       path: '/morecredit',
       name: 'morecredit',
       component: BuyMoreCreditsModal,
-       meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
     },
 
     {
       path: '/invoicecard',
       name: 'invoicecard',
       component: InvoiceCard,
-       meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
     },
 
     {
       path: '/template',
       name: 'template',
       component: VideoCarousel,
-       meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
     },
     {
       path: '/verification',
@@ -149,12 +149,13 @@ const router = createRouter({
       name: 'modal',
       component: CreateBoardModal,
       meta: { requiresAuth: true },
-    }    {
+    },
+    {
       path: '/savedboardcomponent',
       name: 'savedboardcomponent',
       component: SavedBoardComponent,
       meta: { requiresAuth: true },
-    },
+    }
 
   ],
 });
