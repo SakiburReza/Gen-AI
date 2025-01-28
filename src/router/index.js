@@ -16,6 +16,8 @@ import FeedbackPage from '@/views/FeedbackPage.vue'
 import HelpPage from '@/views/HelpPage.vue'
 import GalleryPage from '@/views/GalleryPage.vue'
 import BoardAllImages from '@/views/BoardAllImages.vue'
+import CreateBoardModal from '@/components/CreateBoardModal.vue'
+import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -141,7 +143,19 @@ const router = createRouter({
       name: 'boardallimages',
       component: BoardAllImages,
       meta: { requiresAuth: true },
-    }
+    },
+    {
+      path: '/modal',
+      name: 'modal',
+      component: CreateBoardModal,
+      meta: { requiresAuth: true },
+    }    {
+      path: '/savedboardcomponent',
+      name: 'savedboardcomponent',
+      component: SavedBoardComponent,
+      meta: { requiresAuth: true },
+    },
+
   ],
 });
 router.beforeEach((to, from, next) => {

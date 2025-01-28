@@ -17,6 +17,7 @@
     "flowbite-vue": "^0.1.6",
     "gen-ai-vue": "file:",
     "jwt-decode": "^4.0.0",
+    "lucide-vue-next": "^0.474.0",
     "pinia": "^2.3.0",
     "vue": "^3.5.13",
     "vue-router": "^4.4.5",
