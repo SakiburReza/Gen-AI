@@ -10,9 +10,10 @@ export default {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      satoshi: ['Satoshi', 'sans-serif'],
+      satoshi: ['Satoshi', 'Inter', 'sans-serif'],
       montserrat: ['Montserrat', 'sans-serif'],
-      gordita: ['Gordita', 'sans-serif']
+      gordita: ['Gordita', 'sans-serif'],
+      inter: ['Inter', 'sans-serif'],
     },
     screens: {
       '2xsm': '375px',
