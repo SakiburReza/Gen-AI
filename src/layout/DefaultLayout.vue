@@ -3,7 +3,7 @@ import {ref} from 'vue'
 import { FwbTooltip } from 'flowbite-vue'
 import {useRouter } from 'vue-router'
 import AccountCard from '@/components/AccountCard.vue'
-import {ref} from 'vue'import AccountCard from '@/components/AccountCard.vue'
+
 
 
 
@@ -22,16 +22,6 @@ const  toggleAccountCard=()=> {
 const goToExplore = () => {
   router.push('/operativepage')
 }
-
-const showAccountCard = ref(false);
-const isClicked = ref(false);
-
-
-function toggleAccountCard() {
-  showAccountCard.value = !showAccountCard.value;
-  isClicked.value = !isClicked.value;
-}
-
 function closeAccountCard() {
   showAccountCard.value = false;
   isClicked.value = false;

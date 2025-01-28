@@ -146,7 +146,6 @@ onMounted(async () => {
 
 <template>
   <DefaultLayout>
-  <div class="flex flex-col h-screen">
     <!-- Search Bar-->
     <div class="flex items-center px-15 py-2 sticky top-0 z-10 w-full">
       <!-- Search Bar (Centered) -->
@@ -185,9 +184,8 @@ onMounted(async () => {
 
 
     <!-- Content Section -->
-    <div class="flex flex-col md:flex-row flex-1 ">
       <!-- Image Grid Section -->
-      <div class="flex-1 mt-1 mb-5 overflow-y-auto p-4 ">
+      <div class="flex-1 mt-1 mb-5 overflow-y-auto p-15 ">
         <div
           class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full mx-auto overflow-y-auto rounded-t-2xl"
         >
@@ -219,7 +217,7 @@ onMounted(async () => {
               @click="openPreviewModal(item)"
             ></video>
             <!-- Floating Buttons -->
-            <<div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
+            <div v-if="media[index]" class="absolute top-8 right-1.5 flex flex-row gap-2 items-center">
               <!-- Text Button -->
               <div class="relative group">
                 <!-- Copy -->
@@ -245,7 +243,7 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-    </div>
+    
 
     <!-- Modal Component -->
     <PreviewImageModal
@@ -253,7 +251,6 @@ onMounted(async () => {
       @close="closePreviewModal"
       :image="selectedImage"
     />
-  </div>
 </DefaultLayout>
 </template>
 
