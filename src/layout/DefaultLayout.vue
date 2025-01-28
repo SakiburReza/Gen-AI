@@ -8,10 +8,8 @@
     </div>
 
     <div class="flex flex-1">
-      <div
-        class="sidebar border h-screen w-[45px] left-0 flex flex-col justify-between items-center py-4"
-      >
-        <div class="flex flex-col items-center gap-4 mt-[250px]">
+      <div class="sidebar border h-screen w-[45px] left-0 flex flex-col justify-between items-center py-4">
+        <div class="flex flex-col items-center gap-4 flex-1 justify-center">
           <img src="/public/images/icon/homeIcon.svg" alt="homeIcon" />
           <img src="/public/images/icon/plusIcon.svg" alt="plusIcon" />
           <img src="/public/images/icon/dataIcon.svg" alt="dataIcon" />
@@ -23,9 +21,11 @@
         </div>
       </div>
 
+      <!-- Main Content -->
       <div class="flex-1 mt-[60px] overflow-auto">
         <slot />
       </div>
     </div>
   </div>
 </template>
+
