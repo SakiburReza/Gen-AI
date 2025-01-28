@@ -1,7 +1,8 @@
 <script setup>
 import { FwbTooltip } from 'flowbite-vue'
 import {useRouter } from 'vue-router'
-
+import AccountCard from '@/components/AccountCard.vue'
+import {ref} from 'vue'
 
 
 
@@ -9,6 +10,21 @@ const router = useRouter()
 const goToExplore = () => {
   router.push('/operativepage')
 }
+
+const showAccountCard = ref(false);
+const isClicked = ref(false);
+
+
+function toggleAccountCard() {
+  showAccountCard.value = !showAccountCard.value;
+  isClicked.value = !isClicked.value;
+}
+
+function closeAccountCard() {
+  showAccountCard.value = false;
+  isClicked.value = false;
+}
+
 </script>
 
 <template>
@@ -45,9 +61,9 @@ const goToExplore = () => {
         </div>
 
         <div class="flex flex-col items-center gap-4">
-          <FwbTooltip placement="right">
+          <FwbTooltip placement="right" >
             <template #trigger>
-              <img src="/public/images/icon/QuestionIcon.svg" alt="questionIcon" class="cursor-pointer" />
+              <img src="/public/images/icon/QuestionIcon.svg" alt="questionIcon" class="cursor-pointer"  @click="toggleAccountCard"/>
             </template>
             <template #content> Help </template>
           </FwbTooltip>
@@ -67,4 +83,17 @@ const goToExplore = () => {
       </div>
     </div>
   </div>
+  
+  <div v-if="showAccountCard">
+      <div
+        class="fixed inset-0 bg-opacity-25 z-0"
+        @click="closeAccountCard"
+      ></div>
+      <AccountCard
+        class="right-80 z-10 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+        v-if="showAccountCard"
+        @close="toggleAccountCard"
+      />
+    </div>
 </template>
+
