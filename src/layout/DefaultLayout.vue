@@ -1,11 +1,20 @@
 <script setup>
-import { FwbTooltip, FwbButton } from 'flowbite-vue'
+import { FwbTooltip } from 'flowbite-vue'
+import {useRouter } from 'vue-router'
+
+
+
+
+const router = useRouter()
+const goToExplore = () => {
+  router.push('/operativepage')
+}
 </script>
 
 <template>
   <div class="flex flex-col h-screen">
     <div class="Header flex items-center border fixed top-0 left-0 w-full bg-white z-10 h-[60px]">
-      <img src="/images/zeuxis-logo.png" alt="zeuxis-logo" class="cursor-pointer ml-5" />
+      <img src="/images/zeuxis-logo.png" alt="zeuxis-logo" class="cursor-pointer ml-5" @click="goToExplore" />
     </div>
 
     <div class="flex flex-1">
@@ -38,14 +47,14 @@ import { FwbTooltip, FwbButton } from 'flowbite-vue'
         <div class="flex flex-col items-center gap-4">
           <FwbTooltip placement="right">
             <template #trigger>
-              <img src="/public/images/icon/QuestionIcon.svg" alt="questionIcon" />
+              <img src="/public/images/icon/QuestionIcon.svg" alt="questionIcon" class="cursor-pointer" />
             </template>
             <template #content> Help </template>
           </FwbTooltip>
 
           <FwbTooltip placement="right">
             <template #trigger>
-              <img src="/public/images/icon/profileIcon.svg" alt="profileIcon" />
+              <img src="/public/images/icon/profileIcon.svg" alt="profileIcon" class="cursor-pointer" />
             </template>
             <template #content> Profile </template>
           </FwbTooltip>
