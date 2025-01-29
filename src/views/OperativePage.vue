@@ -347,104 +347,35 @@ const generateAiContent = async () => {
 
     // Handling different types of functionalities
 
-    if (activeFunctionality.value === 'Face Swap') {
-      if (referenceImage.value == null) {
-        toastStore.error('Please Insert A Reference Image')
-        return
-      } else if (faceImage.value == null) {
-        toastStore.error('Please Insert Your Face Image')
-        return
-      }
-
-      const formData = new FormData()
-
-      formData.append('targetImage', referenceImage.value!)
-
-      formData.append('swapImage', faceImage.value!)
-
-      response = await genAiService.faceSwap(formData)
-    } else if (activeFunctionality.value === 'Text to Image') {
+    if (activeMode.value === 'video') {
       if (description.value === '') {
-        console.log('ddd', description.value)
-        toastStore.error('Describe for your image')
-        return
-      }
-
-      response = await genAiService.textToImage({
-        text: description.value,
-
-        image_size: selectedRatio.value,
-
-        num_images: selectedOutput.value,
-      })
-    } else if (activeFunctionality.value === 'Text to Video') {
-      if (description.value === '') {
-        toastStore.error('Describe for your video')
-        return
-      }
-      response = await genAiService.textToVideo({ text: description.value })
-    } else if (activeFunctionality.value === 'Image to Video') {
-      if (referenceImage.value === null) {
-        toastStore.error('Please Insert A Reference Image')
-        return
-      } else if (description.value === '') {
         toastStore.error('Describe for your video')
         return
       }
 
       const formData = new FormData()
-
       formData.append('image', referenceImage.value!)
-
       formData.append('prompt', description.value)
       formData.append('type', 'image-to-video')
 
-      response = await genAiService.imageToVideo(formData)
-    } else if (activeFunctionality.value === 'Image to Image') {
       if (referenceImage.value === null) {
-        toastStore.error('Please Insert A Reference Image')
-        return
-      } else if (description.value === '') {
+        response = await genAiService.textToVideo(formData)
+      } else response = await genAiService.imageToVideo(formData)
+    } else if (activeMode.value === 'image') {
+      if (description.value === '') {
         toastStore.error('Describe for your Image')
         return
       }
       const formData = new FormData()
-
       formData.append('image', referenceImage.value!)
-
       formData.append('text', description.value)
-
       formData.append('image_size', selectedRatio.value)
-
       formData.append('num_images', selectedOutput.value.toString())
 
-      response = await genAiService.imageToImage(formData)
-    } else if (activeFunctionality.value === 'Templates (Beta)') {
-      // Create form data for file and video index
-      if (referenceImage.value == null) {
-        toastStore.error('Please Insert Your Face Image')
-        return
-      } else if (selectedVideo.value == null) {
-        toastStore.error('Please Select a Template Video')
-        return
-      }
-      const formData = new FormData()
-
-      formData.append('template_id', selectedVideo.value.id) // Assuming videoIndex is expected by server
-
-      formData.append('image', referenceImage.value) // Assuming faceImage is expected by server
-
-      formData.append('prompt', selectedVideo.value.prompt)
-
-      // Make the API call
-
-      response = await genAiService.templateVideo(formData)
-
-      // Handle response
-
-      console.log('Server Response:', response.data)
+      if (referenceImage.value === null) {
+        response = await genAiService.textToImage(formData)
+      } else response = await genAiService.imageToImage(formData)
     }
-
     if (response?.data?.status) {
       toastStore.success(response?.data.message)
 
@@ -696,161 +627,8 @@ const imageModeOptions = [
             <span class="material-icons">videocam</span>
           </button>
         </div>
-        <!-- Facility Card -->
-        <!-- Dropdown used v-for options -->
-        <div class="px-6 mx-auto w-full flex justify-center">
-          <div class="grid grid-cols-1 gap-4 w-full sm:w-64 md:w-80 lg:w-full">
-            <!-- Dropdown for Text to Image -->
-            <div class="relative" ref="dropdownRef">
-              <!-- Dropdown Button -->
-              <button
-                @click="isImageDropdownOpen = !isImageDropdownOpen"
-                class="w-full flex items-center justify-between py-2 px-3 rounded-lg bg-gray-100 border border-gray-300 text-sm text-black focus:ring-2 focus:ring-blue-500"
-              >
-                <div class="flex items-center gap-2">
-                  <img
-                    v-if="activeMode && selectedLabel"
-                    :src="selectedImageDropDown"
-                    alt="Selected Option Icon"
-                    class="h-5 w-5"
-                  />
-
-                  <span>{{ selectedLabel || 'Select Functionality' }}</span>
-                </div>
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
-
-              <div v-if="activeMode === 'image'" class="relative">
-                <!-- Dropdown Options -->
-
-                <div
-                  v-show="isImageDropdownOpen"
-                  @click.outside="isImageDropdownOpen = false"
-                  class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-10"
-                >
-                  <div
-                    v-for="option in imageModeOptions"
-                    :key="option.id"
-                    class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    :class="{ selected: activeFunctionality === option.text }"
-                    @click="selectImageOption(option)"
-                  >
-                    <img :src="option.imageSrc" alt="Text to Image Icon" class="h-5 w-5" />
-
-                    <span>{{ option.text }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div v-if="activeMode === 'video'" class="relative">
-                <!-- Dropdown Options -->
-
-                <div
-                  v-show="isImageDropdownOpen"
-                  @click.outside="isImageDropdownOpen = false"
-                  class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-10"
-                >
-                  <div
-                    v-for="videoOption in videoModeOptions"
-                    :key="videoOption.id"
-                    class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    :class="{ selected: activeFunctionality === videoOption.text }"
-                    @click="selectVideoOption(videoOption)"
-                  >
-                    <img :src="videoOption.imageSrc" :alt="videoOption.text" class="h-5 w-5" />
-
-                    <span>{{ videoOption.text }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <!-- Dynamic Content Based on Selected Functionality -->
-        <div
-          v-if="activeFunctionality === 'Text to Image'"
-          class="bg-white p-6 space-y-6 flex-shrink-0"
-        >
-          <CustomizationCard
-            @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)"
-          />
-          <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
-          <fwb-button
-            @click="generateAiContent"
-            class="w-full sm:w-64 md:w-80 lg:w-full"
-            color="default"
-          >
-            Zeux IT
-          </fwb-button>
-        </div>
-
-        <div
-          v-if="activeFunctionality === 'Face Swap'"
-          class="bg-white p-6 space-y-6 flex-shrink-0 relative"
-        >
-          <!-- Image Cards with Sequencial Positioning -->
-          <div class="w-full space-y-6">
-            <!-- First Image Card -->
-            <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-gray-200 rounded-lg shadow-lg">
-              <ImageInputCard
-                title="Insert Reference Face Image"
-                @input="(file) => (referenceImage = file)"
-                :resetKey="resetKey"
-              />
-            </div>
-            <!-- Second Image Card -->
-            <div class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white rounded-lg shadow-2xl">
-              <ImageInputCard
-                title="Insert Your Face Image"
-                @input="(file) => (faceImage = file)"
-                :resetKey="resetKey"
-              />
-            </div>
-          </div>
-
-          <CustomizationCard
-            @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)"
-          />
-          <!-- Generate Button -->
-          <fwb-button
-            @click="generateAiContent"
-            class="w-full sm:w-64 md:w-80 lg:w-full mt-8"
-            color="default"
-          >
-            Zeuxis
-          </fwb-button>
-        </div>
-        <div
-          v-if="activeFunctionality === 'Text to Video'"
-          class="bg-white p-6 space-y-6 flex-shrink-0"
-        >
-          <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
-          <fwb-button
-            @click="generateAiContent"
-            class="w-full sm:w-64 md:w-80 lg:w-full"
-            color="default"
-          >
-            Zeuxis
-          </fwb-button>
-        </div>
-        <div
-          v-if="activeFunctionality === 'Image to Video'"
-          class="bg-white p-6 space-y-6 flex-shrink-0"
-        >
+        <div class="bg-white p-6 space-y-6 flex-shrink-0">
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard
             title="Insert Image"
@@ -858,54 +636,12 @@ const imageModeOptions = [
             :resetKey="resetKey"
           />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
-
-          <fwb-button
-            @click="generateAiContent"
-            class="w-full sm:w-64 md:w-80 lg:w-full"
-            color="default"
-          >
-            Zeuxis
-          </fwb-button>
-        </div>
-        <div
-          v-if="activeFunctionality === 'Image to Image'"
-          class="bg-white p-6 space-y-6 flex-shrink-0"
-        >
           <CustomizationCard
+            v-if="activeMode === 'image'"
             @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectOutput="(output) => (selectedOutput = output)"
           />
-          <!-- Modify ImageInputCard to bind the selected images -->
-          <ImageInputCard
-            title="Insert Image"
-            @input="(file) => (referenceImage = file)"
-            :resetKey="resetKey"
-          />
-          <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
 
-          <fwb-button
-            @click="generateAiContent"
-            class="w-full sm:w-64 md:w-80 lg:w-full"
-            color="default"
-          >
-            Zeuxis
-          </fwb-button>
-        </div>
-        <div
-          v-if="activeFunctionality === 'Templates (Beta)'"
-          class="bg-white p-6 space-y-6 flex-shrink-0"
-        >
-          <!-- Video Carousel -->
-          <VideoCarousel
-            @video-selected="(object) => (selectedVideo = object)"
-            :resetKey="resetKey"
-          />
-
-          <ImageInputCard
-            title="Insert Your Face Image"
-            @input="(file) => (referenceImage = file)"
-            :resetKey="resetKey"
-          />
           <fwb-button
             @click="generateAiContent"
             class="w-full sm:w-64 md:w-80 lg:w-full"
