@@ -71,7 +71,7 @@ onMounted(() => {
     <div class="flex flex-col items-center gap-4 mt-16">
           <img :src=avatarIcon alt="avatarIcon" class="cursor-pointer" />
     </div>
-    
+
     <div class="flex flex-col items-center gap-4 flex-1 justify-center">
         <fwb-tooltip placement="right">
           <template #trigger>
@@ -120,7 +120,7 @@ onMounted(() => {
       </div>
 
       <div class="flex flex-col items-center gap-4">
-        <div 
+        <div
         @click="toggleAccountCard()"
         >
           <img src="/src/assets/icon/burgerIcon.svg" alt="burgerIcon" class="cursor-pointer" />
@@ -134,7 +134,7 @@ onMounted(() => {
     </div>
 
     <AccountCard
-      class="fixed bottom-25 right-80"
+      class="fixed bottom-39 right-80"
       v-if="showAccountCard"
       @close="toggleAccountCard"
     />
