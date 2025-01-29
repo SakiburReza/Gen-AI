@@ -683,7 +683,7 @@ const imageModeOptions = [
       <div class="w-full sm:w-[30%] p-6 flex-shrink-0">
         <!-- Facility Card -->
         <!-- Dropdown used v-for options -->
-        <div class="px-6  w-80 flex justify-start">
+        <div class="px-6 mx-auto w-full flex justify-center">
           <div class="grid grid-cols-1 gap-4 w-full sm:w-64 md:w-80 lg:w-full">
             <!-- Dropdown for Text to Image -->
             <div class="relative" ref="dropdownRef">
@@ -766,7 +766,7 @@ const imageModeOptions = [
         <!-- Dynamic Content Based on Selected Functionality -->
         <div
           v-if="activeFunctionality === 'Text to Image'"
-          class="bg-white p-6 space-y-6 flex-shrink-0 w-80 sm:w-80"
+          class="bg-white p-6 space-y-6 flex-shrink-0"
         >
           <CustomizationCard
             @selectRatio="(ratio) => (selectedRatio = ratio)"
@@ -775,7 +775,8 @@ const imageModeOptions = [
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
           <fwb-button
             @click="generateAiContent"
-            class="w-30 sm:w-30 md:w-30 lg:w-30 bg-blue-600 ml-39 py-1.5"         
+            class="w-full sm:w-64 md:w-80 lg:w-full"
+            color="default"
           >
             Zeux IT
           </fwb-button>
