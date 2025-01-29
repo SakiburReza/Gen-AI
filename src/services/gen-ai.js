@@ -199,6 +199,13 @@ searchCollabarator(searchData) {
     headers: this.getAuthHeaders(),
   })
 }
+createBoard(data) {
+  return axios.post(this.url + '/user/assignBoard', data, {
+    headers: this.getAuthHeaders(),
+  })
+}
+
+
 
 }
 export default new GenAIService()

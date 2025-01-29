@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import DefaultLayout from '@/layout/DefaultLayout.vue'
 import genAiService from '@/services/gen-ai'
 import { imageUrl } from '@/utils/utils'
@@ -15,17 +15,17 @@ const SearchTerm = ref('')
 const collaboratorSearch = ref([])
 const boards = ref([])
 
-const openBoardImage = (board) => {
-  router.push({ path: '/boardAllImages', query: { board: board } })
+const boardCreateData = ref({
+  boardName: '',
+  collaborators: [],
+})
+const boardCreate = () => {
+  const response = genAiService.createBoard(boardCreateData.value)
+  isOpen.value = false
 }
 
-const createBoard = () => {
-  console.log({
-    boardName: boardName.value,
-    isSecret: isSecret.value,
-    collaborators: collaborators.value,
-  })
-  isOpen.value = false
+const openBoardImage = (board) => {
+  router.push({ path: '/boardAllImages', query: { board: board } })
 }
 
 const getAllBoards = async () => {
@@ -155,7 +155,7 @@ onMounted(() => {
           <label class="block text-sm font-medium text-gray-700">Name</label>
           <input
             type="text"
-            v-model="boardName"
+            v-model="boardCreateData.boardName"
             placeholder="Link 'Places to Go' or 'Recipes to Make'"
             class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           />
@@ -197,7 +197,7 @@ onMounted(() => {
         </div>
         <button
           type="button"
-          @click="createBoard"
+          @click="boardCreate"
           class="w-full rounded-lg bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700"
         >
           Create
