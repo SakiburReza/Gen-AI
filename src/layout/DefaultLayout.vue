@@ -18,7 +18,7 @@ const selectMenuAndNavigate = (menu, goToFunction) => {
   goToFunction() 
 }
 
-const goToExplore = () => {
+const goToOperative = () => {
   router.push('/operativepage')
 }
 
@@ -62,7 +62,7 @@ function closeAccountCard() {
         src="/images/zeuxis-logo.png"
         alt="zeuxis-logo"
         class="cursor-pointer ml-5"
-        @click="goToExplore"
+        @click="goToOperative"
       />
     </div>
 
@@ -104,7 +104,7 @@ function closeAccountCard() {
         <fwb-tooltip placement="right">
           <template #trigger>
             <div
-              @click= "selectMenuAndNavigate('explore', goToExplore)"
+              @click= "selectMenuAndNavigate('explore', goToOperative)"
               :class="[
                 'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
                 selectedMenu === 'explore' ? 'bg-[#D9D9D9]' : '',
