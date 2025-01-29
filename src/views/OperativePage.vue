@@ -604,26 +604,20 @@ const imageModeOptions = [
         <!-- Floating Buttons Section -->
         <div class="flex flex-row items-center justify-center mb-5">
           <!-- Image Button -->
-          <button
-            @click="setActive('image')"
-            :class="[
-              'flex items-center px-4 py-2 rounded-lg font-medium transition',
+          <button @click="setActive('image')" :class="[
+            'flex items-center px-4 py-2 rounded-lg font-medium transition',
 
-              activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-            ]"
-          >
+            activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+          ]">
             <span class="material-icons">image</span>
           </button>
 
           <!-- Video Button -->
 
-          <button
-            @click="setActive('video')"
-            :class="[
-              'flex items-center px-4 py-2 rounded-lg font-medium transition',
-              activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-            ]"
-          >
+          <button @click="setActive('video')" :class="[
+            'flex items-center px-4 py-2 rounded-lg font-medium transition',
+            activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+          ]">
             <span class="material-icons">videocam</span>
           </button>
         </div>
@@ -632,17 +626,12 @@ const imageModeOptions = [
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
-          <CustomizationCard
-            v-if="activeMode === 'image'"
-            @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)"
-          />
+          <CustomizationCard v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)" />
 
-          <fwb-button
-            @click="generateAiContent"
-            class="w-full sm:w-64 md:w-80 lg:w-full"
-            color="default"
-          >
+          <fwb-button @click="generateAiContent"
+            class="float-end bottom-4 right-4 bg-blue-600 px-8 py-1.5 rounded-lg shadow-md 
+            sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10">
             Zeuxis
           </fwb-button>
         </div>
@@ -656,21 +645,13 @@ const imageModeOptions = [
         <div v-if="loading" class="flex justify-center items-center col-span-full row-span-full">
           <fwb-spinner size="12" />
         </div>
-        <div
-          v-for="(item, index) in filteredMedia"
-          :key="index"
-          class="relative overflow-hidden"
-          :class="[
-            item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
-            'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-100',
-          ]"
-        >
+        <div v-for="(item, index) in filteredMedia" :key="index" class="relative overflow-hidden" :class="[
+          item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
+          'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-100',
+        ]">
           <!-- Render Image -->
-          <img
-            v-if="filteredMedia[index] && filteredMedia[index].type === 'image'"
-            :src="imageUrl() + item.url"
-            :alt="'Media ' + index"
-            class="h-full max-w-full w-full"
+          <img v-if="filteredMedia[index] && filteredMedia[index].type === 'image'" :src="imageUrl() + item.url"
+            :alt="'Media ' + index" class="h-full max-w-full w-full"
             :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
             @click="onImageClick(filteredMedia[index])" />
 
@@ -765,34 +746,6 @@ const imageModeOptions = [
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Floating Buttons Section -->
-      <div class="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex z-50">
-        <!-- Image Button -->
-
-        <button
-          @click="setActive('image')"
-          :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
-
-            activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-          ]"
-        >
-          <span class="material-icons">image</span>
-        </button>
-
-        <!-- Video Button -->
-
-        <button
-          @click="setActive('video')"
-          :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
-            activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-          ]"
-        >
-          <span class="material-icons">videocam</span>
-        </button>
       </div>
     </div>
     <!-- Modal Component -->

@@ -8,12 +8,29 @@ import { defineEmits, ref } from 'vue'
 const emit = defineEmits(['selectRatio', 'selectOutput'])
 
 // Default selections
-const selectedRatio = ref('landscape_16_9')
+const selectedRatio = ref('')
 const selectedOutput = ref(1)
 
 // Emit defaults on mount
 emit('selectRatio', selectedRatio.value)
 emit('selectOutput', selectedOutput.value)
+
+const isProcessing = ref(false);
+
+const handleSelection = async (ratio) => {
+  if (isProcessing.value) return; // Prevent multiple clicks
+
+  isProcessing.value = true; // Disable buttons
+  selectedRatio.value = ratio;
+  emit("selectRatio", ratio);
+
+  try {
+    // Simulate API call (Replace with actual API request)
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+  } finally {
+    isProcessing.value = false; // Enable buttons again
+  }
+};
 
 
 </script>
@@ -44,22 +61,47 @@ emit('selectOutput', selectedOutput.value)
           </option>
         </select>
       </div> -->
-      <div class="mt-3 flex flex-wrap gap-2 justify-start">
-        <!-- Portrait Button -->
+      <!-- <div class="mt-3 flex flex-wrap gap-2 justify-start">
+        Portrait Button
         <div @click="() => emit('selectRatio', 'portrait_16_9')"
           :class="['py-2 px-10 rounded-2xl  font-semibold cursor-pointer bg-white hover:bg-tertiary', selectedRatio === 'portrait_16_9' ? 'text-silver' : 'text-ravenBlack']"
           class="flex items-center border">
           <img src="/public/images/icon/portrait.svg" alt="Portrait Button" class="mr-2">
           Portrait
         </div>
-        <!-- Landscape Button -->
+        Landscape Button
         <div @click="() => emit('selectRatio', 'landscape_16_9')"
           :class="['py-1 px-10 rounded-2xl font-semibold cursor-pointer bg-white hover:bg-tertiary', selectedRatio === 'landscape_16_9' ? 'text-silver' : 'text-ravenBlack']"
           class="flex items-center border">
           <img src="/public/images/icon/landscape.svg" alt="Landscape Button" class="rotate-50 mr-2">
           Landscape
         </div>
+      </div> -->
+      <div class="mt-3 flex flex-nowrap gap-1 justify-start sm:flex-wrap xmd:flex xmd:flex-wrap xmd:gap-1">
+        <!-- Portrait Button -->
+        <div @click="handleSelection('portrait_16_9')" :class="[
+          'py-1 px-6 sm:py-2 sm:px-8 md:py-2 xmd:px-10 rounded-xl font-semibold cursor-pointer bg-white hover:bg-tertiary flex items-center border transition-all',
+          selectedRatio === 'portrait_16_9' ? 'text-silver' : 'text-ravenBlack',
+          isProcessing ? 'opacity-50 bg-black cursor-not-allowed' : ''
+        ]" :disabled="isProcessing">
+          <img src="/public/images/icon/portrait.svg" alt="Portrait Button"
+            class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5 xmd:w-4 xmd:h-5">
+          <span class="text-xs sm:text-sm xmd:text-xsm">Portrait</span>
+        </div>
+
+        <!-- Landscape Button -->
+        <div @click="handleSelection('landscape_16_9')" :class="[
+          'py-1 px-6 sm:py-2 sm:px-8 md:py-2 xmd:px-10 rounded-xl font-semibold cursor-pointer bg-white hover:bg-tertiary flex items-center border transition-all',
+          selectedRatio === 'landscape_16_9' ? 'text-silver' : 'text-ravenBlack',
+          isProcessing ? 'opacity-50 cursor-not-allowed' : ''
+        ]" :disabled="isProcessing">
+          <img src="/public/images/icon/landscape.svg" alt="Landscape Button"
+            class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5 xmd:w-4 xmd:h-5">
+          <span class="text-xs sm:text-sm xmd:text-xsm">Landscape</span>
+        </div>
       </div>
+
+
 
 
 
