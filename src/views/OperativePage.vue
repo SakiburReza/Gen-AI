@@ -361,9 +361,8 @@ const generateAiContent = async () => {
       if (referenceImage.value === null) {
         response = await genAiService.textToVideo(formData)
       } else response = await genAiService.imageToVideo(formData)
-    } 
-    else if (activeMode.value === 'image') {
-     if (description.value === '') {
+    } else if (activeMode.value === 'image') {
+      if (description.value === '') {
         toastStore.error('Describe for your Image')
         return
       }
@@ -372,11 +371,10 @@ const generateAiContent = async () => {
       formData.append('text', description.value)
       formData.append('image_size', selectedRatio.value)
       formData.append('num_images', selectedOutput.value.toString())
-      
-      if(referenceImage.value === null){
+
+      if (referenceImage.value === null) {
         response = await genAiService.textToImage(formData)
-      }
-      else response = await genAiService.imageToImage(formData)
+      } else response = await genAiService.imageToImage(formData)
     }
     if (response?.data?.status) {
       toastStore.success(response?.data.message)
@@ -639,6 +637,7 @@ const imageModeOptions = [
           />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
           <CustomizationCard
+            v-if="activeMode === 'image'"
             @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectOutput="(output) => (selectedOutput = output)"
           />
