@@ -689,7 +689,7 @@ const imageModeOptions = [
             <!-- Floating Social Buttons -->
             <div
               v-if="filteredMedia[index]"
-              class="absolute top-2 right-1.5 flex flex-row gap-2 items-center opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-100"
+              class="absolute top-2 right-2 flex flex-row gap-2 items-center opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-100"
             >
               <!-- Share Button -->
               <button
@@ -809,7 +809,7 @@ const imageModeOptions = [
                 </svg>
               </button>
 
-              <div class="fixed top-30 right-4 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
+              <div class="fixed top-30 right-2 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
                 Save
               </div>
 
