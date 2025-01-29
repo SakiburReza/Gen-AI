@@ -46,6 +46,8 @@ export default {
         ravenBlack: '#3D3D3D',
         dimGray: '#6D6D6D',
         darkGray: '#474747',
+        silver: '#C5C5C5 ',
+        orange: '#FF6923',
 
         // Color Code added by Abeer 22/12/2024
 
