@@ -347,104 +347,37 @@ const generateAiContent = async () => {
 
     // Handling different types of functionalities
 
-    if (activeFunctionality.value === 'Face Swap') {
-      if (referenceImage.value == null) {
-        toastStore.error('Please Insert A Reference Image')
-        return
-      } else if (faceImage.value == null) {
-        toastStore.error('Please Insert Your Face Image')
-        return
-      }
-
-      const formData = new FormData()
-
-      formData.append('targetImage', referenceImage.value!)
-
-      formData.append('swapImage', faceImage.value!)
-
-      response = await genAiService.faceSwap(formData)
-    } else if (activeFunctionality.value === 'Text to Image') {
+    if (activeMode.value === 'video') {
       if (description.value === '') {
-        console.log('ddd', description.value)
-        toastStore.error('Describe for your image')
-        return
-      }
-
-      response = await genAiService.textToImage({
-        text: description.value,
-
-        image_size: selectedRatio.value,
-
-        num_images: selectedOutput.value,
-      })
-    } else if (activeFunctionality.value === 'Text to Video') {
-      if (description.value === '') {
-        toastStore.error('Describe for your video')
-        return
-      }
-      response = await genAiService.textToVideo({ text: description.value })
-    } else if (activeFunctionality.value === 'Image to Video') {
-      if (referenceImage.value === null) {
-        toastStore.error('Please Insert A Reference Image')
-        return
-      } else if (description.value === '') {
         toastStore.error('Describe for your video')
         return
       }
 
       const formData = new FormData()
-
       formData.append('image', referenceImage.value!)
-
       formData.append('prompt', description.value)
       formData.append('type', 'image-to-video')
 
-      response = await genAiService.imageToVideo(formData)
-    } else if (activeFunctionality.value === 'Image to Image') {
       if (referenceImage.value === null) {
-        toastStore.error('Please Insert A Reference Image')
-        return
-      } else if (description.value === '') {
+        response = await genAiService.textToVideo(formData)
+      } else response = await genAiService.imageToVideo(formData)
+    } 
+    else if (activeMode.value === 'image') {
+     if (description.value === '') {
         toastStore.error('Describe for your Image')
         return
       }
       const formData = new FormData()
-
       formData.append('image', referenceImage.value!)
-
       formData.append('text', description.value)
-
       formData.append('image_size', selectedRatio.value)
-
       formData.append('num_images', selectedOutput.value.toString())
-
-      response = await genAiService.imageToImage(formData)
-    } else if (activeFunctionality.value === 'Templates (Beta)') {
-      // Create form data for file and video index
-      if (referenceImage.value == null) {
-        toastStore.error('Please Insert Your Face Image')
-        return
-      } else if (selectedVideo.value == null) {
-        toastStore.error('Please Select a Template Video')
-        return
+      
+      if(referenceImage.value === null){
+        response = await genAiService.textToImage(formData)
       }
-      const formData = new FormData()
-
-      formData.append('template_id', selectedVideo.value.id) // Assuming videoIndex is expected by server
-
-      formData.append('image', referenceImage.value) // Assuming faceImage is expected by server
-
-      formData.append('prompt', selectedVideo.value.prompt)
-
-      // Make the API call
-
-      response = await genAiService.templateVideo(formData)
-
-      // Handle response
-
-      console.log('Server Response:', response.data)
+      else response = await genAiService.imageToImage(formData)
     }
-
     if (response?.data?.status) {
       toastStore.success(response?.data.message)
 
@@ -697,9 +630,7 @@ const imageModeOptions = [
           </button>
         </div>
         <!-- Dynamic Content Based on Selected Functionality -->
-        <div
-          class="bg-white p-6 space-y-6 flex-shrink-0"
-        >
+        <div class="bg-white p-6 space-y-6 flex-shrink-0">
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard
             title="Insert Image"
