@@ -1,12 +1,12 @@
 <script setup>
-import { ref,watch, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { FwbTooltip } from 'flowbite-vue'
 import { useRouter } from 'vue-router'
 import AccountCard from '@/components/AccountCard.vue'
 
 const router = useRouter()
 const showAccountCard = ref(false)
-const selectedMenu = ref(localStorage.getItem('selectedMenu') || 'explore')
+const selectedMenu = ref(localStorage.getItem('selectedMenu') || 'boards')
 
 const toggleAccountCard = () => {
   showAccountCard.value = !showAccountCard.value
@@ -15,10 +15,10 @@ const toggleAccountCard = () => {
 const selectMenuAndNavigate = (menu, goToFunction) => {
   selectedMenu.value = selectedMenu.value === menu ? '' : menu
   localStorage.setItem('selectedMenu', menu)
-  goToFunction() 
+  goToFunction()
 }
 
-const goToExplore = () => {
+const goToOperative = () => {
   router.push('/operativepage')
 }
 
@@ -30,16 +30,18 @@ const goToGallery = () => {
   router.push('/gallerypage')
 }
 
-watch(() => router.currentRoute.value.path, (newPath) => {
-  if (newPath.includes('operativepage')) {
-    selectedMenu.value = 'explore'
-  } else if (newPath.includes('communitypage')) {
-    selectedMenu.value = 'home'
-  } else if (newPath.includes('gallerypage')) {
-    selectedMenu.value = 'create'
-  }
-})
-
+watch(
+  () => router.currentRoute.value.path,
+  (newPath) => {
+    if (newPath.includes('gallerypage')) {
+      selectedMenu.value = 'boards'
+    } else if (newPath.includes('communitypage')) {
+      selectedMenu.value = 'home'
+    } else if (newPath.includes('operativepage')) {
+      selectedMenu.value = 'create'
+    }
+  },
+)
 
 onMounted(() => {
   const savedMenu = localStorage.getItem('selectedMenu')
@@ -47,11 +49,6 @@ onMounted(() => {
     selectedMenu.value = savedMenu
   }
 })
-
-
-function closeAccountCard() {
-  showAccountCard.value = false
-}
 </script>
 
 <template>
@@ -62,7 +59,7 @@ function closeAccountCard() {
         src="/images/zeuxis-logo.png"
         alt="zeuxis-logo"
         class="cursor-pointer ml-5"
-        @click="goToExplore"
+        @click="goToOperative"
       />
     </div>
 
@@ -70,7 +67,11 @@ function closeAccountCard() {
     <div
       class="sidebar border fixed left-0 h-screen w-[45px] flex flex-col justify-between items-center py-4"
     >
-      <div class="flex flex-col items-center gap-4 flex-1 justify-center">
+    <div class="flex flex-col items-center gap-4 mt-16">
+          <img src="/src/assets/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
+    </div>
+    
+    <div class="flex flex-col items-center gap-4 flex-1 justify-center">
         <fwb-tooltip placement="right">
           <template #trigger>
             <div
@@ -80,7 +81,7 @@ function closeAccountCard() {
                 selectedMenu === 'home' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/public/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+              <img src="/src/assets/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
             </div>
           </template>
           <template #content> Home </template>
@@ -89,13 +90,13 @@ function closeAccountCard() {
         <fwb-tooltip placement="right">
           <template #trigger>
             <div
-              @click="selectMenuAndNavigate('create', goToGallery)"
+              @click="selectMenuAndNavigate('create', goToOperative)"
               :class="[
                 'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
                 selectedMenu === 'create' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/public/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+              <img src="/src/assets/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
             </div>
           </template>
           <template #content> Create </template>
@@ -104,61 +105,30 @@ function closeAccountCard() {
         <fwb-tooltip placement="right">
           <template #trigger>
             <div
-              @click= "selectMenuAndNavigate('explore', goToExplore)"
+              @click="selectMenuAndNavigate('boards', goToGallery)"
               :class="[
                 'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
-                selectedMenu === 'explore' ? 'bg-[#D9D9D9]' : '',
+                selectedMenu === 'boards' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/public/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
+              <img src="/src/assets/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
             </div>
           </template>
-          <template #content> Explore </template>
+          <template #content> Boards </template>
         </fwb-tooltip>
       </div>
 
       <div class="flex flex-col items-center gap-4">
-        <FwbTooltip placement="right">
-          <template #trigger>
-            <div
-              @click="toggleAccountCard()"
-              :class="[
-                'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
-                selectedMenu === 'help' ? 'bg-[#D9D9D9]' : '',
-              ]"
-            >
-              <img
-                src="/public/images/icon/QuestionIcon.svg"
-                alt="questionIcon"
-                class="cursor-pointer"
-              />
-            </div>
-          </template>
-          <template #content> Help </template>
-        </FwbTooltip>
-
-        <FwbTooltip placement="right">
-          <template #trigger>
-            <div
-              :class="[
-                'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
-                selectedMenu === 'profile' ? 'bg-[#D9D9D9]' : '',
-              ]"
-            >
-              <img
-                src="/public/images/icon/profileIcon.svg"
-                alt="profileIcon"
-                class="cursor-pointer"
-              />
-            </div>
-          </template>
-          <template #content> Profile </template>
-        </FwbTooltip>
+        <div 
+        @click="toggleAccountCard()"
+        >
+          <img src="/src/assets/icon/burgerIcon.svg" alt="burgerIcon" class="cursor-pointer" />
+        </div>
       </div>
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 mt-[60px] overflow-auto">
+    <div class="flex-1 mt-[60px] overflow-auto pl-[45px]">
       <slot />
     </div>
 
