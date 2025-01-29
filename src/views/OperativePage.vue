@@ -600,7 +600,7 @@ const imageModeOptions = [
     <div class="flex flex-col md:flex-row flex-1">
       <!-- Left Section: Facility Card and Dynamic Content -->
 
-      <div class="w-full sm:w-[30%] p-6 flex-shrink-0">
+      <div class="w-full sm:w-[30%] p-2 flex-shrink-0">
         <!-- Floating Buttons Section -->
         <div class="flex flex-row items-center justify-center mb-5">
           <!-- Image Button -->

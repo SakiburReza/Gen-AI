@@ -29,9 +29,7 @@ const createBoard = () => {
 <template>
   <DefaultLayout>
 
-    <div class="p-6 ml-4">
-
-    <div class="flex justify-between p-4">
+    <div class="flex justify-between p-2">
       <div><img class="h-12 w-12" src="/public/images/icon/filterIcon.svg" alt="" /></div>
       <div  @click="isOpen = true">
         <img class="h-12 w-12" src="/public/images/icon/CreateIcon.svg" alt="" />
@@ -70,7 +68,6 @@ const createBoard = () => {
         </div>
       </div>
     </div>
-  </div>
   </DefaultLayout>
 
   <!-- Modal -->

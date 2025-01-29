@@ -128,7 +128,7 @@ onMounted(() => {
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 mt-[60px] overflow-auto">
+    <div class="flex-1 mt-[60px] overflow-auto pl-[45px]">
       <slot />
     </div>
 
