@@ -3,10 +3,11 @@ import { ref, watch, onMounted } from 'vue'
 import { FwbTooltip } from 'flowbite-vue'
 import { useRouter } from 'vue-router'
 import AccountCard from '@/components/AccountCard.vue'
+import avatarIcon from '@/assets/icon/avatarIcon.svg'
 
 const router = useRouter()
 const showAccountCard = ref(false)
-const selectedMenu = ref(localStorage.getItem('selectedMenu') || 'boards')
+const selectedMenu = ref('communitypage')
 
 const toggleAccountCard = () => {
   showAccountCard.value = !showAccountCard.value
@@ -68,7 +69,7 @@ onMounted(() => {
       class="sidebar border fixed left-0 h-screen w-[45px] flex flex-col justify-between items-center py-4"
     >
     <div class="flex flex-col items-center gap-4 mt-16">
-          <img src="/src/assets/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
+          <img :src=avatarIcon alt="avatarIcon" class="cursor-pointer" />
     </div>
     
     <div class="flex flex-col items-center gap-4 flex-1 justify-center">
