@@ -11,24 +11,25 @@ const search = ref("");
 const boards = ref([]); // Store multiple boards
 
 const fetchBoards = async () => {
-    try {
-        const response = await genAiService.getBoardsInfo();
+    
+        try {
+            const response = await genAiService.getBoardsInfo();
 
-        if (response.data.status && Array.isArray(response.data.data)) {
-            boards.value = response.data.data.map((item) => ({
-                url: item.content || "", // Ensure a default value
-                images: item.images || [], // Ensure images is an array
-                collaborators: item.collaborators || [],
-                lastModified: item.lastModified || "Unknown",
-                boardName: item.boardName || "Untitled",
-            }));
-        } else {
-            console.error("Invalid response structure:", response.data);
-            boards.value = []; // Ensure boards is always an array
+            if (response?.data?.status && Array.isArray(response?.data?.data)) {
+                boards.value = response.data.data.map((item) => ({
+                    url: item?.content || "", // Ensure a default value
+                    images: Array.isArray(item?.images) ? item.images : [], // Ensure images is an array
+                    collaborators: Array.isArray(item?.collaborators) ? item.collaborators : [],
+                    lastModified: item?.lastModified || "Unknown",
+                    boardName: item?.boardName || "Untitled",
+                }));
+            } else {
+                console.error("Invalid response structure:", response?.data);
+                boards.value = []; // Ensure boards is always an array
+            }
+        } catch (error) {
+            console.error("Error fetching boards:", error?.response?.data || error.message);
         }
-    } catch (error) {
-        console.error("Error fetching boards:", error);
-    }
 };
 
 const boardSavedData = ref({
@@ -38,20 +39,21 @@ const boardSavedData = ref({
 })
 
 
-const saveBoardImages = async () => {
+const saveBoardImages = async (board) => {
     try {
-        // Define the payload with the data to be saved
+        // Define the payload using board data
         const payload = {
-            boardName: boardSavedData.value.boardName,
-            collaboratorEmails: boardSavedData.value.collaboratorEmails,
-            imageKey: boardSavedData.value.imageKey
+            boardName: board.boardName,
+            collaboratorEmails: board.collaborators || [], // Ensure it's an array
+            imageKey: board.images.length > 0 ? board.images[0].imageKey : "" // Use first image if available
         };
 
         // Call API and pass the data
         const response = await genAiService.saveBoardImages(payload);
+
         if (response.data && response.data.status) {
             console.log("Board images saved successfully!");
-            // Update boardSavedData with the response data
+            // Update boardSavedData with response data
             boardSavedData.value.boardName = response.data.boardName;
             boardSavedData.value.collaboratorEmails = response.data.collaboratorEmails;
             boardSavedData.value.imageKey = response.data.imageKey;

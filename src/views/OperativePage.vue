@@ -600,8 +600,6 @@ const imageModeOptions = [
 const isSaveBoardOpen = ref(false);
 
 const openSaveBoard = () => {
-  console.log("asdfasfasddfasd");
-
   isSaveBoardOpen.value = true;
 };
 
@@ -748,8 +746,7 @@ const closeSaveBoard = () => {
                 </svg>
               </button>
 
-              <div class="fixed top-30 right-2 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs cursor-pointer"
-                >
+              <div class="fixed top-30 right-2 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs cursor-pointer">
                 Save
               </div>
             </div>
