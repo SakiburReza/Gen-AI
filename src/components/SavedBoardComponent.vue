@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import { Plus, X, Search } from "lucide-vue-next";
 import genAiService from '@/services/gen-ai';
+import { imageUrl } from "@/utils/utils";
 
 defineProps({});
 const emit = defineEmits(["close"]);
@@ -12,16 +13,26 @@ const boards = ref([]); // Store multiple boards
 const fetchBoards = async () => {
     try {
         const response = await genAiService.getBoardsInfo();
-        if (response.data.status) {
-            boards.value = response.data.data; // Assuming API returns an array of boards
-           
+
+        if (response.data.status && Array.isArray(response.data.data)) {
+            boards.value = response.data.data.map((item) => ({
+                url: item.content || "", // Ensure a default value
+                images: item.images || [], // Ensure images is an array
+                collaborators: item.collaborators || [],
+                lastModified: item.lastModified || "Unknown",
+                boardName: item.boardName || "Untitled",
+            }));
         } else {
-            console.error("Invalid response structure:", response);
+            console.error("Invalid response structure:", response.data);
+            boards.value = []; // Ensure boards is always an array
         }
     } catch (error) {
         console.error("Error fetching boards:", error);
     }
 };
+
+
+
 
 onMounted(fetchBoards);
 
@@ -35,10 +46,10 @@ const onClose = () => {
     emit("close");
 };
 const handleOutsideClick = (event) => {
-  if (event.target === event.currentTarget) {
-    // close();
-    emit("close");
-  }
+    if (event.target === event.currentTarget) {
+        // close();
+        emit("close");
+    }
 }
 
 // const createBoard = async () => {
@@ -83,7 +94,7 @@ const handleOutsideClick = (event) => {
             <div class="h-72 overflow-y-auto">
                 <div v-for="(board, index) in filteredBoards" :key="index"
                     class="flex items-center gap-4 p-3 hover:bg-gray-100 rounded-md cursor-pointer">
-                    <img v-if="board.images" :src="board.images" :alt="board.boardName"
+                    <img v-if="board.images && board.images.length" :src="imageUrl() + board.images[0].imageKey" :alt="board.boardName"
                         class="w-12 h-12 rounded-md object-cover" />
                     <div v-else class="w-12 h-12 rounded-md bg-gray-300" />
                     <span class="text-base font-medium">{{ board.boardName }}</span>

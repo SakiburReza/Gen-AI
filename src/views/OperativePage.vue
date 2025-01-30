@@ -740,7 +740,7 @@ const closeSaveBoard = () => {
                 </svg>
               </button>
 
-              <button @click="" class="flex w-5 h-5 fixed top-32 left-10">
+              <button @click="openSaveBoard" class="flex w-5 h-5 fixed top-32 left-10">
                 <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M6.42828 6.81419L11.8229 1.09697C12.059 0.846099 12.059 0.439652 11.8229 0.188151C11.5867 -0.0627165 11.203 -0.0627165 10.9668 0.188151L6.0003 5.45189L1.03376 0.188785C0.797568 -0.0620828 0.413932 -0.0620828 0.177143 0.188785C-0.0590478 0.439653 -0.0590478 0.846732 0.177143 1.0976L5.57167 6.81482C5.80542 7.06183 6.19508 7.06183 6.42828 6.81419Z"
@@ -749,7 +749,7 @@ const closeSaveBoard = () => {
               </button>
 
               <div class="fixed top-30 right-2 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs cursor-pointer"
-                @click="openSaveBoard">
+                >
                 Save
               </div>
             </div>
