@@ -1,27 +1,45 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import DefaultLayout from '@/layout/DefaultLayout.vue'
 import genAiService from '@/services/gen-ai'
 import { imageUrl } from '@/utils/utils'
 import { formatDistanceToNow } from 'date-fns'
+import { FwbInput } from 'flowbite-vue'
+import FormField from '@/views/FormField.vue'
+import { useToastStore } from '@/stores/toast'
 
 const router = useRouter()
 const isOpen = ref(false)
-const boardName = ref('')
 const isSecret = ref(false)
-const collaborators = ref('')
 const SearchTerm = ref('')
 const collaboratorSearch = ref([])
 const boards = ref([])
+const toastStore = useToastStore()
 
 const boardCreateData = ref({
   boardName: '',
-  collaborators: [],
+  collaboratorEmails: [],
 })
-const boardCreate = () => {
-  const response = genAiService.createBoard(boardCreateData.value)
+
+const boardCreate = async () => {
+  try {
+    const response = await genAiService.createBoard(boardCreateData.value)
+    toastStore.success(response.data.message)
+    if (response.data) {
+      getAllBoards()
+      getCollaborateBoards()
+    }
+  } catch (error) {
+    console.error('Error creating board:', error)
+  }
   isOpen.value = false
+}
+
+const selectCollaborator = (collaborator) => {
+  boardCreateData.value.collaboratorEmails.push(collaborator.email)
+  collaboratorSearch.value = []
+  SearchTerm.value = ''
 }
 
 const openBoardImage = (board) => {
@@ -85,6 +103,10 @@ watch(SearchTerm, (newVal) => {
   }
 })
 
+const removeCollaborator = (index) => {
+  boardCreateData.value.collaboratorEmails.splice(index, 1)
+}
+
 onMounted(() => {
   getAllBoards()
   getCollaborateBoards()
@@ -104,6 +126,7 @@ onMounted(() => {
       <div v-for="(board, index) in boards" :key="index">
         <div class="w-full pointer-events-auto" @click="openBoardImage(board.name)">
           <img
+            v-if="board.images[0]"
             class="rounded border cursor-pointer w-75 h-50"
             :src="imageUrl() + board.images[0]"
             alt=""
@@ -172,29 +195,55 @@ onMounted(() => {
             <span class="text-gray-500 text-xs"> So only you and collaborators can see it. </span>
           </label>
         </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Add Collaborators</label>
-          <input
-            type="text"
-            @change="handleCollaboratorSearch"
+        <FormField
+          :bold="false"
+          class="md:col-span-3 lg:col-span-3 dark:text-white"
+          label="Add Collaborators"
+        >
+          <!-- Input field always visible -->
+          <fwb-input
             v-model="SearchTerm"
-            placeholder="Search by name or email"
-            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-          />
-          <ul
-            v-if="collaboratorSearch.length > 0"
-            class="mt-2 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto"
-          >
-            <li
-              v-for="(collab, index) in collaboratorSearch"
-              :key="index"
-              @click="selectCollaborator(collab)"
-              class="p-2 cursor-pointer hover:bg-gray-200"
+            class="w-full"
+            placeholder="Search collaborator by name or email"
+            @input="handleCollaboratorSearch"
+          ></fwb-input>
+
+          <!-- Show dropdown only if there are search results -->
+          <div v-if="collaboratorSearch.length > 0" class="relative">
+            <ul
+              class="absolute w-full mt-1 max-h-44 overflow-y-auto border rounded-md bg-white shadow-md dark:bg-gray-800 dark:border-gray-700"
             >
-              {{ collab.name }} - {{ collab.email }}
-            </li>
-          </ul>
-        </div>
+              <li v-for="(collaboratorInfo, index) in collaboratorSearch.slice(0, 5)" :key="index">
+                <div
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                  @click="selectCollaborator(collaboratorInfo)"
+                >
+                  {{ collaboratorInfo.name }} - {{ collaboratorInfo.email }}
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- No Results Message -->
+          <p v-if="SearchTerm && collaboratorSearch.length === 0" class="text-red-500 text-sm mt-1">
+            No collaborator found.
+          </p>
+
+          <!-- Selected Collaborators List -->
+          <div class="mt-2">
+            <div
+              v-for="(collab, idx) in boardCreateData?.collaboratorEmails"
+              :key="idx"
+              class="flex items-center bg-gray-200 px-3 py-1 rounded mb-1"
+            >
+              <span class="flex-grow">{{ collab }}</span>
+              <div class="flex space-x-2">
+                <button class="text-red-400" @click="removeCollaborator(idx)">✕</button>
+              </div>
+            </div>
+          </div>
+        </FormField>
+
         <button
           type="button"
           @click="boardCreate"
