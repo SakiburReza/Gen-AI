@@ -37,6 +37,7 @@ const actionText = computed(() => {
 
 // Function to open the modal and set action + image URL
 const openModal = (imageUrl, selectedAction) => {
+  console.log('Image URL:', imageUrl)
   selectedImage.value = imageUrl
   action.value = selectedAction
   isModalOpen.value = true
@@ -599,9 +600,9 @@ const imageModeOptions = [
 ]
 
 const isSaveBoardOpen = ref(false)
-
+const imageUrlData = ref('')
 const openSaveBoard = (mediaUrl) => {
-  console.log('selectedImageUrl', mediaUrl)
+  imageUrlData.value = mediaUrl;
   isSaveBoardOpen.value = true;
 };
 
@@ -865,7 +866,7 @@ const closeSaveBoard = () => {
     />
 
     <!-- Show SaveBoardComponent when isSaveBoardOpen is true -->
-    <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="selectedImage" />
+    <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"/>
 
     <!--
     <ShowModalWithDownloadButton :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->
