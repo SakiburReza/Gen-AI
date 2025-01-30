@@ -651,9 +651,10 @@ const imageModeOptions = [
         </div>
       </div>
 
+      <div class="flex flex-col h-screen">
       <!-- Right Section: Enhanced Image Grid -->
       <div
-        class="flex-1 mt-1 mb-5 overflow-y-hidden p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8"
+        class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8"
       >
         <div
           class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 rounded-t-2xl overflow-y-auto"
@@ -800,9 +801,10 @@ const imageModeOptions = [
                 </svg>
               </button>
 
+              <!-- Board Button (Bottom Left) -->
               <button
                 @click=""
-                class="flex items-center fixed top-32 left-2 space-x-1"
+                class="flex items-center fixed bottom-4 left-4 space-x-1"
               >
                 <span class="text-white text-sm">Board</span>
                 <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -810,8 +812,8 @@ const imageModeOptions = [
                 </svg>
               </button>
 
-
-              <div class="fixed top-30 right-2 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
+              <!-- Save Button (Bottom Right) -->
+              <div class="fixed bottom-4 right-4 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
                 Save
               </div>
 
@@ -821,6 +823,7 @@ const imageModeOptions = [
         </div>
       </div>
 
+    </div>
     </div>
 
     <!-- Modal Component -->
