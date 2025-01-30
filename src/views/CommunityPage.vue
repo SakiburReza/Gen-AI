@@ -221,7 +221,7 @@ onMounted(async () => {
             class="absolute top-2 right-1.5 flex flex-row gap-2 items-center opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-100"
           >
             <span class="absolute top-0 right-40 text-[14px] font-semibold bg-red-500 text-white px-1 rounded">
-              {{ media[index].owner}}
+              {{ media[index]?.owner?.split(" ")[0] || '' }}
             </span>
 
             <!-- Copy -->
