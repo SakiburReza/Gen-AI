@@ -3,12 +3,16 @@ import { ref, computed, onMounted } from "vue";
 import { Plus, X, Search } from "lucide-vue-next";
 import genAiService from '@/services/gen-ai';
 import { imageUrl } from "@/utils/utils";
+import { useToastStore } from '@/stores/toast'
+
 
 defineProps({});
 const emit = defineEmits(["close"]);
 
 const search = ref("");
 const boards = ref([]); // Store multiple boards
+const toastStore = useToastStore()
+
 
 const fetchBoards = async () => {
     
@@ -34,7 +38,7 @@ const fetchBoards = async () => {
 
 const boardSavedData = ref({
     boardName: '',
-    collaboratorEmails: [],
+    // collaboratorEmails: [],
     imageKey: ''
 })
 
@@ -44,19 +48,19 @@ const saveBoardImages = async (board) => {
         // Define the payload using board data
         const payload = {
             boardName: board.boardName,
-            collaboratorEmails: board.collaborators || [], // Ensure it's an array
-            imageKey: board.images.length > 0 ? board.images[0].imageKey : "" // Use first image if available
+            // collaboratorEmails: board.collaborators || [], // Ensure it's an array
+            imageKey: board.images.length > 0 ? board.images[0].content : "" // Use first image if available
         };
 
         // Call API and pass the data
         const response = await genAiService.saveBoardImages(payload);
 
         if (response.data && response.data.status) {
-            console.log("Board images saved successfully!");
+            toastStore.success(response?.data.message)
             // Update boardSavedData with response data
             boardSavedData.value.boardName = response.data.boardName;
-            boardSavedData.value.collaboratorEmails = response.data.collaboratorEmails;
-            boardSavedData.value.imageKey = response.data.imageKey;
+            // boardSavedData.value.collaboratorEmails = response.data.collaboratorEmails;
+            boardSavedData.value.content = response.data.content;
         } else {
             console.error('Invalid response structure:', response);
         }
@@ -108,7 +112,7 @@ const handleOutsideClick = (event) => {
             <div class="h-72 overflow-y-auto">
                 <div v-for="(board, index) in filteredBoards" :key="index"
                     class="flex items-center gap-4 p-3 hover:bg-gray-100 rounded-md cursor-pointer">
-                    <img v-if="board.images && board.images.length" :src="imageUrl() + board.images[0].imageKey"
+                    <img v-if="board.images && board.images.length" :src="imageUrl() + board.images[0].content"
                         :alt="board.boardName" class="w-12 h-12 rounded-md object-cover" />
                     <div v-else class="w-12 h-12 rounded-md bg-gray-300" />
                     <span class="text-base font-medium" @click="saveBoardImages(board)">{{ board.boardName }}</span>
