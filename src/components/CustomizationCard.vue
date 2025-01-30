@@ -79,27 +79,32 @@ const handleSelection = async (ratio) => {
       </div> -->
       <div class="mt-3 flex flex-nowrap gap-1 justify-start sm:flex-wrap xmd:flex xmd:flex-wrap xmd:gap-1">
         <!-- Portrait Button -->
-        <div @click="handleSelection('portrait_16_9')" :class="[
-          'py-1 px-6 sm:py-2 sm:px-8 md:py-2 xmd:px-10 rounded-xl font-semibold cursor-pointer bg-white hover:bg-tertiary flex items-center border transition-all',
-          selectedRatio === 'portrait_16_9' ? 'text-silver' : 'text-ravenBlack',
-          isProcessing ? 'opacity-50 bg-black cursor-not-allowed' : ''
-        ]" :disabled="isProcessing">
+        <div @click="handleSelection('portrait_16_9')"
+             :class="[
+         'py-2 px-6 sm:py-2 sm:px-8 xmd:px-10 rounded-xl font-semibold cursor-pointer flex items-center border transition-all',
+         selectedRatio === 'portrait_16_9' ? 'bg-tertiary text-black-2 border-tertiary' : 'bg-white text-black-2 border-gray-300',
+         isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 hover:border-gray-400'
+       ]"
+             :disabled="isProcessing">
           <img src="/public/images/icon/portrait.svg" alt="Portrait Button"
-            class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5 xmd:w-4 xmd:h-5">
+               class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5 xmd:w-4 xmd:h-5">
           <span class="text-xs sm:text-sm xmd:text-xsm">Portrait</span>
         </div>
 
         <!-- Landscape Button -->
-        <div @click="handleSelection('landscape_16_9')" :class="[
-          'py-1 px-6 sm:py-2 sm:px-8 md:py-2 xmd:px-10 rounded-xl font-semibold cursor-pointer bg-white hover:bg-tertiary flex items-center border transition-all',
-          selectedRatio === 'landscape_16_9' ? 'text-silver' : 'text-ravenBlack',
-          isProcessing ? 'opacity-50 cursor-not-allowed' : ''
-        ]" :disabled="isProcessing">
+        <div @click="handleSelection('landscape_16_9')"
+             :class="[
+         'py-2 px-6 sm:py-2 sm:px-8 xmd:px-10 rounded-xl font-semibold cursor-pointer flex items-center border transition-all',
+         selectedRatio === 'landscape_16_9' ? 'bg-tertiary text-black-2 border-tertiary' : 'bg-white text-black-2 border-gray-300',
+         isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 hover:border-gray-400'
+       ]"
+             :disabled="isProcessing">
           <img src="/public/images/icon/landscape.svg" alt="Landscape Button"
-            class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5 xmd:w-4 xmd:h-5">
+               class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5 xmd:w-4 xmd:h-5">
           <span class="text-xs sm:text-sm xmd:text-xsm">Landscape</span>
         </div>
       </div>
+
 
 
 

@@ -175,6 +175,37 @@ class GenAIService {
     })
   }
 
+  //get all boards name and images
+  getBoardsInfo() {
+    return axios.get(this.url + '/user/getBoards', {
+      headers: this.getAuthHeaders(),
+    })
+  }
+  getCollaborateBoardsInfo(boardName) {
+    const uri = boardName != null ? '/user/getCollaborateBoards?boardName=' + boardName: '/user/getCollaborateBoards';
+    return axios.get(this.url + uri,  {
+      headers: this.getAuthHeaders(),
+    })
+  }
+
+getBoardImagesByName(boardName) {
+  return axios.get(this.url + '/user/getBoards?boardName=' + boardName, {
+    headers: this.getAuthHeaders(),
+  })
 }
 
+searchCollabarator(searchData) {
+  return axios.get(this.url + '/user/searchCollaborator?collaborator=' + searchData, {
+    headers: this.getAuthHeaders(),
+  })
+}
+createBoard(data) {
+  return axios.post(this.url + '/user/assignBoard', data, {
+    headers: this.getAuthHeaders(),
+  })
+}
+
+
+
+}
 export default new GenAIService()

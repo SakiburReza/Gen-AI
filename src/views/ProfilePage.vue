@@ -392,6 +392,7 @@ const deleteAccount = () => {
 
 // Navigate back to previous page
 const goBack = () => {
+  localStorage.setItem('selectedMenu', 'home')
   router.push('/operativepage')
 }
 

@@ -42,6 +42,11 @@ function initializePricies(){
   fetchCurrentPrice()
 }
 
+const goBack = () => {
+  localStorage.setItem('selectedMenu', 'home')
+  router.push('/operativepage')
+}
+
 const plans = ref([]) // Create a ref for the plans list
 const isButtonDisabled = ref(false) // Track button state (whether it is disabled)
 
@@ -186,14 +191,14 @@ onMounted(async () => {
     <!-- Mobile-Specific Button -->
     <div v-if="!showBillingSection"
       class="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex items-center justify-center">
-      <button @click="() => $router.push('/operativepage')"
+      <button @click="goBack"
         class="w-full sm:w-auto bg-blue-600 text-white text-sm sm:text-md py-3 sm:py-3 px-6 rounded-md hover:bg-gray-800 mx-auto">
         TAKE ME BACK I WANT TO CREATE
       </button>
     </div>
 
     <div v-else class="md:hidden w-full md:w-1/3 mx-auto pb-10 px-4 sm:px-6 pt-6">
-      <button @click="() => $router.push('/operativepage')"
+      <button @click="goBack"
         class="w-3/4 sm:w-1/2 bg-blue-600 text-white text-xs sm:text-sm py-2 sm:py-3 rounded-md hover:bg-gray-800 mx-auto block">
         TAKE ME BACK I WANT TO CREATE
       </button>

@@ -4,6 +4,7 @@ import genAiService from '@/services/gen-ai'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import BuyMoreCreditsModal from './BuyMoreCreditsModal.vue'
 import { useToastStore } from '@/stores/toast'
+import router from '@/router'
 const toastStore = useToastStore()
 
 const emit = defineEmits(['subscription-change'])
@@ -15,6 +16,11 @@ const billinInformation = ref({
   last_billing_amount: '',
   last_purchased_credit: '',
 })
+
+const goBack = () => {
+  localStorage.setItem('selectedMenu', 'home')
+  router.push('/operativepage')
+}
 
 const billingInfo = async () => {
   try {
@@ -120,7 +126,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim())
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-bold mb-4">Billing</h1>
       <!-- Button Hidden on Mobile and Shown on Medium Screens and Above -->
-      <button @click="() => $router.push('/operativepage')"
+      <button @click="goBack"
         class="hidden md:relative md:w-auto md:inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm sm:mb-10">
         TAKE ME BACK I WANT TO CREATE
       </button>
