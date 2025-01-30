@@ -1,12 +1,18 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, defineProps } from "vue";
 import { Plus, X, Search } from "lucide-vue-next";
 import genAiService from '@/services/gen-ai';
 import { imageUrl } from "@/utils/utils";
 import { useToastStore } from '@/stores/toast'
 
+const props= defineProps({
+  image: {
+    type: String, 
+    default: null,
+  },
+});
+console.log('props', props.image)
 
-defineProps({});
 const emit = defineEmits(["close"]);
 
 const search = ref("");
@@ -45,28 +51,26 @@ const boardSavedData = ref({
 
 const saveBoardImages = async (board) => {
     try {
-        // Define the payload using board data
         const payload = {
             boardName: board.boardName,
-            // collaboratorEmails: board.collaborators || [], // Ensure it's an array
-            imageKey: board.images.length > 0 ? board.images[0].content : "" // Use first image if available
+            imageKey: props.image
         };
 
-        // Call API and pass the data
         const response = await genAiService.saveBoardImages(payload);
 
         if (response.data && response.data.status) {
             toastStore.success(response?.data.message)
-            // Update boardSavedData with response data
             boardSavedData.value.boardName = response.data.boardName;
-            // boardSavedData.value.collaboratorEmails = response.data.collaboratorEmails;
             boardSavedData.value.content = response.data.content;
+            await fetchBoards();
+            onClose();
         } else {
             console.error('Invalid response structure:', response);
         }
     } catch (error) {
         console.error('Error saving board images:', error);
-    }
+    }    
+
 };
 
 

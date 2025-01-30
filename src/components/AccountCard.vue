@@ -50,7 +50,7 @@
 
         <li>
           <a
-            @click="navigateTo('/profile')"
+            @click="navigateTo('')"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -68,7 +68,7 @@
 
         <li>
           <a
-            @click="navigateTo('/profile')"
+            @click="navigateTo('/help')"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:text-black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
             <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

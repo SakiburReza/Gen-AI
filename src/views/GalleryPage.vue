@@ -117,23 +117,23 @@ onMounted(() => {
       </div>
     </div>
     <!-- boards -->
-    <div class="grid md:grid-cols-5 grid-cols-2 gap-2 p-2">
+    <div class="grid grid-cols-5 grid-cols-2 gap-2 p-2">
       <!-- cards album -->
       <div v-for="(board, index) in boards" :key="index">
         <div class="w-full pointer-events-auto" @click="openBoardImage(board.name)">
           <img
-            class="rounded border cursor-pointer w-100 h-50"
+            class="rounded border cursor-pointer w-100 h-50 object-cover"
             :src="board.images[0] ? imageUrl() + board.images[0] : '/src/assets/icon/NoImageBox.svg'"
             alt=""
           />
           <div class="grid grid-cols-2 mt-1 gap-1">
             <img
-              class="rounded border cursor-pointer w-50 h-50"
+              class="rounded border cursor-pointer w-50 h-50  object-cover"
               :src="board.images[1] ? imageUrl() + board.images[1] : '/src/assets/icon/NoImageBox.svg'"
               alt=""
             />
             <img
-              class="rounded border cursor-pointer w-50 h-50"
+              class="rounded border cursor-pointer w-50 h-50 object-cover"
               :src="board.images[2] ? imageUrl() + board.images[2] : '/src/assets/icon/NoImageBox.svg'"
               alt=""
             />

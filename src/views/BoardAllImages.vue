@@ -99,7 +99,7 @@ const openPreviewModal = (mediaItem) => {
             <img src="/src/assets/icon/shareThreeDot.svg" alt="" />
           </div>
         </div>
-        <p class="text-gray-500 text-sm">{{ board.length }} Photos</p>
+        <p class="text-gray-500 text-sm">{{ media.length }} Photos</p>
         <div class="flex items-center gap-3 mt-2">
           <img
             src="https://via.placeholder.com/40"
