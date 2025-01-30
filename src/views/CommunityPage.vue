@@ -144,7 +144,7 @@ onMounted(async () => {
 
 <template>
   <DefaultLayout>
-    <div class="flex flex-col h-screen">
+    <div class="flex flex-col h-full">
       <div class="flex items-center justify-between p-8 py-2 sticky top-0 z-10 w-full">
         <!-- Left Section -->
         <div class="flex items-center space-x-10 text-sm sm:text-base md:text-lg">
