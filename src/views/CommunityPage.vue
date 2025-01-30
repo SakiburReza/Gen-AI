@@ -19,7 +19,8 @@ const media = ref<
     orientation: 'P' | 'L'
     isLiked: 'Y' | 'N'
     isShared: 'Y' | 'N'
-    prompt: string
+    prompt: string,
+    owner:string
   }[]
 >([])
 // Computed property to filter media based on the search query
@@ -118,6 +119,7 @@ const fetchMedia = async () => {
         prompt: item.prompt,
         isLiked: item.like,
         isShared: item.share,
+        owner: item.shareOwner
       }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
@@ -219,7 +221,7 @@ onMounted(async () => {
             class="absolute top-2 right-1.5 flex flex-row gap-2 items-center opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-100"
           >
             <span class="absolute top-0 right-40 text-[14px] font-semibold bg-red-500 text-white px-1 rounded">
-              Sakib
+              {{ media[index].owner}}
             </span>
 
             <!-- Copy -->
