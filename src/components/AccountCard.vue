@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center bg-white z-20">
+  <div class="flex items-center justify-center bg-white z-20 rounded-full">
     <!-- Sidebar container adjusted for responsiveness -->
     <div class="w-64 bg-white shadow rounded-lg" >
       <ul class="divide-y divide-white">
