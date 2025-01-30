@@ -31,6 +31,37 @@ const fetchBoards = async () => {
     }
 };
 
+const boardSavedData = ref({
+    boardName: '',
+    collaboratorEmails: [],
+    imageKey: ''
+})
+
+
+const saveBoardImages = async () => {
+    try {
+        // Define the payload with the data to be saved
+        const payload = {
+            boardName: boardSavedData.value.boardName,
+            collaboratorEmails: boardSavedData.value.collaboratorEmails,
+            imageKey: boardSavedData.value.imageKey
+        };
+
+        // Call API and pass the data
+        const response = await genAiService.saveBoardImages(payload);
+        if (response.data && response.data.status) {
+            console.log("Board images saved successfully!");
+            // Update boardSavedData with the response data
+            boardSavedData.value.boardName = response.data.boardName;
+            boardSavedData.value.collaboratorEmails = response.data.collaboratorEmails;
+            boardSavedData.value.imageKey = response.data.imageKey;
+        } else {
+            console.error('Invalid response structure:', response);
+        }
+    } catch (error) {
+        console.error('Error saving board images:', error);
+    }
+};
 
 
 
@@ -52,25 +83,6 @@ const handleOutsideClick = (event) => {
     }
 }
 
-// const createBoard = async () => {
-//     console.log("Creating new board");
-//     try {
-//         const response = await genAiService.createBoard({
-//             boardName: "New Board",
-//             images: null,
-//             collaborators: [],
-//             lastModified: new Date().toISOString(),
-//         });
-
-//         if (response.data.status) {
-//             boards.value.push(response.data.data);
-//         } else {
-//             console.error("Failed to create board:", response);
-//         }
-//     } catch (error) {
-//         console.error("Error creating board:", error);
-//     }
-// };
 </script>
 
 <template>
@@ -94,15 +106,15 @@ const handleOutsideClick = (event) => {
             <div class="h-72 overflow-y-auto">
                 <div v-for="(board, index) in filteredBoards" :key="index"
                     class="flex items-center gap-4 p-3 hover:bg-gray-100 rounded-md cursor-pointer">
-                    <img v-if="board.images && board.images.length" :src="imageUrl() + board.images[0].imageKey" :alt="board.boardName"
-                        class="w-12 h-12 rounded-md object-cover" />
+                    <img v-if="board.images && board.images.length" :src="imageUrl() + board.images[0].imageKey"
+                        :alt="board.boardName" class="w-12 h-12 rounded-md object-cover" />
                     <div v-else class="w-12 h-12 rounded-md bg-gray-300" />
-                    <span class="text-base font-medium">{{ board.boardName }}</span>
+                    <span class="text-base font-medium" @click="saveBoardImages(board)">{{ board.boardName }}</span>
                 </div>
             </div>
 
             <!-- Create Board Button -->
-            <div class="mt-6 flex items-center gap-3 text-blue-600 font-bold cursor-pointer" @click="createBoard">
+            <div class="mt-6 flex items-center gap-3 text-blue-600 font-bold cursor-pointer">
                 <div class="bg-blue-600 bg-opacity-15 p-2 rounded flex items-center justify-center">
                     <Plus size="24" class="text-blue-600" />
                 </div>
