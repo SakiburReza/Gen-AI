@@ -52,7 +52,7 @@ const collaborateBoardImagesByName = async () => {
         v-for="(img, index) in images"
         :key="index"
         class="rounded-lg border cursor-pointer w-50 h-50"
-        :src="imageUrl() + img.imageKey"
+        :src="imageUrl() + img.content"
         alt="Board Image"
       />
     </div>
