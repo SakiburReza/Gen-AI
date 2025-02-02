@@ -506,20 +506,6 @@ const filteredMedia = computed(() => {
     return prompt.includes(searchQuery.value.toLowerCase())
   })
 })
-const progress = ref(0);
-const mediaLoaded = ref(false);
-const updateProgress = () => {
-  if (!mediaLoaded.value) {
-    if (progress.value >= 100) {
-      mediaLoaded.value = true;
-      return;
-    } else {
-      progress.value++;
-    }
-    setTimeout(updateProgress, 50);
-  }
-};
-
 const router = useRouter()
 
 const goToExplore = () => {
@@ -622,32 +608,14 @@ const openSaveBoard = (mediaUrl) => {
 const closeSaveBoard = () => {
   isSaveBoardOpen.value = false
 }
-
-
-
-onMounted(async () => {
-  updateProgress();
-})
-
 </script>
 
 <template>
   <DefaultLayout>
-    <div class="w-full bg-ravenBlack rounded-3xl dark:bg-gray-700 overflow-hidden">
-      <div v-if="!mediaLoaded"
-        class="bg-gradient-to-b from-transparent to-blue-600 text-xs font-medium text-blue-100 text-center p-2 leading-none rounded-1xl transition-all duration-500 ease-in-out"
-        :class="{ 'h-0': !mediaLoaded, 'h-5': mediaLoaded }" :style="{ width: progress + '%' }">
-        {{ progress }}%
-      </div>
-    </div>
-
     <div class="flex flex-col md:flex-row flex-1">
-
-
       <!-- Left Section: Facility Card and Dynamic Content -->
 
-      <div class="w-full sm:w-[30%] p-2 flex-shrink-0"
-        :class="{ 'bg-gray-200': !mediaLoaded, 'bg-white': mediaLoaded }">
+      <div class="w-full sm:w-[30%] p-2 flex-shrink-0">
         <!-- Floating Buttons Section -->
         <div class="flex flex-row items-center justify-center mb-5">
           <!-- Image Button -->
@@ -682,9 +650,6 @@ onMounted(async () => {
           </fwb-button>
         </div>
       </div>
-
-      <div :class="{ 'bg-gray-200': !mediaLoaded, 'bg-white': mediaLoaded }" class="flex flex-col h-screen">
-
         <!-- Right Section: Enhanced Image Grid -->
         <div
           class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
@@ -699,12 +664,12 @@ onMounted(async () => {
                 :alt="'Media ' + index" class="h-full max-w-full w-full" :class="[
                   item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]',
                   'object-cover',
-                ]" @click="onImageClick(filteredMedia[index])" @load="mediaLoaded = true" />
+                ]" @click="onImageClick(filteredMedia[index])"/>
 
               <!-- Render Video -->
               <video v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
                 :src="imageUrl() + filteredMedia[index].url" controls class="w-full h-full object-contain max-w-full"
-                @click="openPreviewModal(item)" @loadeddata="mediaLoaded = true"></video>
+                @click="openPreviewModal(item)"></video>
 
               <!-- Floating Social Buttons -->
               <div v-if="filteredMedia[index]"
@@ -799,9 +764,6 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-    </div>
-
-
     <!-- Modal Component -->
     <ShowModalForImage :isOpen="showImageModal" @close="closeImageModal" :image="selectedImage" />
     <PreviewImageModal :isOpen="showPreviewModal" @close="closePreviewModal" :image="selectedImage" />
