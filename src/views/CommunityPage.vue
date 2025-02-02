@@ -224,19 +224,19 @@ onMounted(async () => {
               class="absolute top-0 w-full h-20 bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-100"
             ></div>
             <div
-              class="absolute top-1 left-1 right-1 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-100"
+              class="absolute top-1.5 left-1 right-1 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-100"
             >
 
-              <span class="text-[14px] font-semibold text-white px-1 rounded">
+              <span class="text-[12px] font-semibold text-white px-1 rounded">
                 {{ media[index]?.owner?.split(' ')[0] || '' }}
               </span>
 
-              <div class="flex space-x-2">
+              <div class="flex space-x-1">
               <!-- Icon -->
               <button class="flex justify-center items-center w-5 h-5">
                 <svg
-                  width="18"
-                  height="18"
+                  width="12"
+                  height="12"
                   viewBox="0 0 18 18"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -264,8 +264,8 @@ onMounted(async () => {
 
               <button class="flex justify-center items-center w-5 h-5">
                 <svg
-                  width="19"
-                  height="17"
+                  width="12"
+                  height="12"
                   viewBox="0 0 19 17"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -299,8 +299,8 @@ onMounted(async () => {
                 class="flex justify-center items-center w-5 h-5"
               >
                 <svg
-                  width="19"
-                  height="16"
+                  width="12"
+                  height="12"
                   viewBox="0 0 19 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -331,8 +331,8 @@ onMounted(async () => {
 
               <button class="flex justify-center items-center w-5 h-5">
                 <svg
-                  width="14"
-                  height="17"
+                  width="12"
+                  height="12"
                   viewBox="0 0 14 17"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
