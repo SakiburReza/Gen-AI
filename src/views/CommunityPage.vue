@@ -221,16 +221,18 @@ onMounted(async () => {
             <!-- Floating Buttons (Visible on Hover) -->
             <!-- Black Gradient Overlay -->
             <div
-              class="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-100"
+              class="absolute top-0 w-full h-20 bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-100"
             ></div>
             <div
-              class="absolute top-2 left-1/2 transform -translate-x-1/2 flex flex-row gap-2 items-center opacity-0 group-hover:opacity-100 transition-opacity duration-100"
+              class="absolute top-1 left-1 right-1 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-100"
             >
-              <span class="text-[14px] font-semibold bg-red-500 text-white px-1 rounded">
+
+              <span class="text-[14px] font-semibold text-white px-1 rounded">
                 {{ media[index]?.owner?.split(' ')[0] || '' }}
               </span>
 
-              <!-- Copy -->
+              <div class="flex space-x-2">
+              <!-- Icon -->
               <button class="flex justify-center items-center w-5 h-5">
                 <svg
                   width="18"
@@ -358,6 +360,7 @@ onMounted(async () => {
                   </defs>
                 </svg>
               </button>
+              </div>
             </div>
           </div>
         </div>
