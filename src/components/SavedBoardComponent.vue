@@ -151,7 +151,7 @@ const handleOutsideClick = (event) => {
         <span>Create Board</span>
       </div>
 
-      <CreateBoardModal :isOpen="isModalOpen" @boardCreated="handleBoardCreated"></CreateBoardModal>
+      <CreateBoardModal :isOpen="isModalOpen" @update:isOpen="isOpen = false" @boardCreated="handleBoardCreated"></CreateBoardModal>
     </div>
   </div>
 </template>
