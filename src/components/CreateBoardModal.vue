@@ -9,7 +9,7 @@ const props = defineProps({
   isOpen: {
     type: Boolean,
     required: true,
-  }
+  },
 })
 const emit = defineEmits(['update:isOpen', 'boardCreated'])
 
@@ -27,8 +27,8 @@ const boardCreate = async () => {
   try {
     const response = await genAiService.createBoard(boardCreateData.value)
     toastStore.success(response.data.message)
-    emit('boardCreated') 
-    emit('update:isOpen', false) 
+    emit('boardCreated')
+    emit('update:isOpen', false)
     if (response.data) {
     }
   } catch (error) {
@@ -69,7 +69,6 @@ watch(SearchTerm, (newVal) => {
 const removeCollaborator = (index) => {
   boardCreateData.value.collaboratorEmails.splice(index, 1)
 }
-
 </script>
 
 <template>
@@ -81,7 +80,9 @@ const removeCollaborator = (index) => {
     <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
       <div class="flex items-center justify-between border-b pb-4">
         <h2 class="text-xl font-medium">Create Board</h2>
-        <button @click="emit('update:isOpen', false)" class="text-gray-400 hover:text-gray-600">✕</button>
+        <button @click="emit('update:isOpen', false)" class="text-gray-400 hover:text-gray-600">
+          ✕
+        </button>
       </div>
       <form class="space-y-4 mt-4">
         <div>
