@@ -19,7 +19,6 @@ const openBoardImage = (board) => {
 const getuserInfo = async () => {
   try {
     const response = await genAiService.fetchUserProfile()
-    console.log('dataaaaaaaaa', response.data.data)
      unserData.value = response.data.data
   } catch (error) {
     console.error('Error fetching user info:', error)
@@ -65,7 +64,7 @@ const handleBoardCreated = () => {
 
 onMounted(() => {
   getAllBoards()
-  getCollaborateBoards()
+  // getCollaborateBoards()
   getuserInfo()
 })
 </script>
@@ -117,7 +116,7 @@ onMounted(() => {
       </div>
     </div>
     <!-- boards -->
-    <div class="grid grid-cols-5 grid-cols-2 gap-2 p-2">
+    <div class="grid md:grid-cols-5 grid-cols-2 gap-2 p-2">
       <!-- cards album -->
       <div v-for="(board, index) in boards" :key="index">
         <div class="w-full pointer-events-auto" @click="openBoardImage(board.name)">

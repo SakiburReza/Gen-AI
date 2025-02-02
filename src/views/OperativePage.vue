@@ -2,13 +2,11 @@
 import CustomizationCard from '@/components/CustomizationCard.vue'
 import DescriptionCard from '@/components/DescriptionCard.vue'
 import ImageInputCard from '@/components/ImageInputCard.vue'
-import Navbar from '@/components/NavBar.vue'
 import ShowModalForImage from '@/components/FaceSwapToVideoModal.vue'
-import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted, computed, onUnmounted, nextTick } from 'vue'
-import { FwbButton, FwbTooltip, FwbSpinner } from 'flowbite-vue'
+import { FwbButton} from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
@@ -37,7 +35,7 @@ const actionText = computed(() => {
 
 // Function to open the modal and set action + image URL
 const openModal = (imageUrl, selectedAction) => {
-  console.log('Image URL:', imageUrl)
+  selectedImageUrl.value = imageUrl
   selectedImage.value = imageUrl
   action.value = selectedAction
   isModalOpen.value = true
@@ -141,13 +139,10 @@ function convertToTitleCase(input) {
 }
 
 function initializeFromQueryParams() {
-  // console.log('intitial functionality', activeFunctionality.value);
   const queryMode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode // Default to 'image'
   let functionality = Array.isArray(route.query.functionality)
     ? route.query.functionality[0]
     : route.query.functionality
-  // console.log('query param', route.query.functionality);
-  // console.log('query param', route.query.mode);
 
   // Fallback to default functionality
   const mode = queryMode || localStorage.getItem('mode') || 'image'
@@ -162,14 +157,8 @@ function initializeFromQueryParams() {
   localStorage.setItem('functionality', functionality)
   // Convert functionality to title case for matching options
   const normalizedFunctionality = convertToTitleCase(functionality).toLowerCase()
-
-  // console.log('normalized F:', normalizedFunctionality)
-  // console.log('current Mode:', mode)
-  // console.log('current Functionality:', functionality)
-
   // Set mode and ensure active mode is valid
   if (mode === 'video' || mode === 'image') {
-    // console.log('mode to set', mode);
     activeMode.value = mode
     setActive(mode) // Ensure mode-dependent logic runs
   }
@@ -177,10 +166,6 @@ function initializeFromQueryParams() {
   // Find and set the matching functionality
   const options = mode === 'video' ? videoModeOptions : imageModeOptions
   const option = options.find((opt) => opt.text.toLowerCase() === normalizedFunctionality)
-
-  // console.log('option: ', options);
-  // console.log('option: ', option);
-
   if (option) {
     nextTick(() => {
       mode === 'video' ? selectVideoOption(option) : selectImageOption(option)
@@ -188,8 +173,6 @@ function initializeFromQueryParams() {
   } else {
     console.warn('Functionality not found in available options')
   }
-  // console.log('stored Mode:', localStorage.getItem('mode'))
-  // console.log('stored Functionality:', localStorage.getItem('functionality'))
   activeFunctionality.value = functionality
   router.replace({ path: route.path })
 }
@@ -210,8 +193,6 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
 
   // Fetch media only when necessary
   const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality
-  // console.log('functionality change w:', functionalityKey)
-  // console.log('functionality change w:', newMode)
   searchQuery.value = ''
   activeFunctionality.value = newFunctionality
   if (functionalityKey) {
@@ -220,8 +201,6 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
     localStorage.setItem('mode', newMode)
     localStorage.setItem('functionality', newFunctionality)
   }
-  // console.log('stored Mode w:', localStorage.getItem('mode'))
-  // console.log('stored Functionality w:', localStorage.getItem('functionality'))
 })
 
 const selectedRatio = ref('Landscape')
@@ -406,7 +385,6 @@ const confirmAction = async () => {
   if (!selectedImageUrl.value || !action.value) return
 
   try {
-    console.log(`Action: ${action.value}, Image URL: ${selectedImageUrl.value}`)
     let response
 
     if (action.value === 'delete') {
@@ -417,7 +395,6 @@ const confirmAction = async () => {
       closeModal() // Close the modal after successful action
     }
 
-    console.log('Response:', response.data.message)
     toastStore.success(response.data.message)
 
     closeModal() // Close the modal after successful action
@@ -435,7 +412,6 @@ const shareAction = async (imageId: string, action: 'Y' | 'N') => {
         media.value = [...media.value]
       }
 
-      console.log('Image shared successfully:', response.data)
       toastStore.success(response.data.message)
     }
   } catch (error) {
@@ -449,14 +425,11 @@ const likeAction = async (imageId: string, action: 'Y' | 'N') => {
       const itemIndex = media.value.findIndex((item) => item.url === imageId)
       if (itemIndex !== -1) {
         media.value[itemIndex].isLiked = action
-        // media.value = [...media.value]
-        // console.log(media.value.length)
         if (isLikedState.value) {
           media.value.splice(itemIndex, 1)
           media.value = [...media.value]
         }
       }
-      console.log('Image Liked successfully:', response.data)
       toastStore.success(response.data.message)
     }
   } catch (error) {
@@ -469,9 +442,7 @@ const copyAction = async (prompt: string) => {
     try {
       await navigator.clipboard.writeText(prompt)
       toastStore.success('Prompt copied to clipboard')
-      console.log('Prompt copied to clipboard:', prompt)
     } catch (error) {
-      console.error('Failed to copy prompt using Clipboard API:', error)
     }
   } else {
     console.warn('Clipboard API not supported, using fallback method')
@@ -485,7 +456,6 @@ const copyAction = async (prompt: string) => {
     toastStore.success('Prompt copied to clipboard')
     try {
       document.execCommand('copy')
-      console.log('Prompt copied to clipboard using fallback')
     } catch (err) {
       console.error('Fallback: Unable to copy prompt:', err)
     }
@@ -756,7 +726,9 @@ const closeSaveBoard = () => {
                   class="fixed bottom-4 right-4 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
                   Save
                 </div>
-                <div v-else class="fixed bottom-4 right-4 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
+                <div v-else
+                  class="fixed bottom-4 right-4 bg-black text-white px-1.5 py-1.5 rounded-lg text-xs"
+                >
                   Saved
                 </div>
               </div>
@@ -769,7 +741,7 @@ const closeSaveBoard = () => {
     <PreviewImageModal :isOpen="showPreviewModal" @close="closePreviewModal" :image="selectedImage" />
 
     <!-- Show SaveBoardComponent when isSaveBoardOpen is true -->
-    <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData" />
+    <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"  @updateAfterSave="fetchMedia"/>
 
     <!--
     <ShowModalWithDownloadButton :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->

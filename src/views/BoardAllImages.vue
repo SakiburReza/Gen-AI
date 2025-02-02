@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
 
 const images = ref([])
+const profileImage = ref('')
 const searchQuery = ref('')
 const route = useRoute()
 const board = route.query.board
@@ -25,7 +26,7 @@ const media = ref<
 
 onMounted(() => {
   boardImagesByName()
-  collaborateBoardImagesByName()
+  // collaborateBoardImagesByName()
 })
 
 const boardImagesByName = async () => {
@@ -33,6 +34,7 @@ const boardImagesByName = async () => {
     const response = await genAiService.getBoardImagesByName(board)
     if (response.status && Array.isArray(response.data.data[0].images)) {
       // Map data with type detection (image/video) for initial load
+      profileImage.value = response.data.data[0].profilePicture
       media.value = response.data.data[0].images.map((item) => ({
         url: item.content,
         type: item.type || 'image',
@@ -53,6 +55,7 @@ const boardImagesByName = async () => {
 const collaborateBoardImagesByName = async () => {
   try {
     const response = await genAiService.getCollaborateBoardsInfo(board)
+    console.log('response', response.data)
     if (response.data.data?.length) {
       images.value = response.data.data[0].images || []
     }
@@ -102,7 +105,7 @@ const openPreviewModal = (mediaItem) => {
         <p class="text-gray-500 text-sm">{{ media.length }} Photos</p>
         <div class="flex items-center gap-3 mt-2">
           <img
-            src="https://via.placeholder.com/40"
+            :src="profileImage"
             alt="Profile"
             class="w-10 h-10 border-2 border-gray-300"
           />
