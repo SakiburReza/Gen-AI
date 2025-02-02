@@ -2,13 +2,11 @@
 import CustomizationCard from '@/components/CustomizationCard.vue'
 import DescriptionCard from '@/components/DescriptionCard.vue'
 import ImageInputCard from '@/components/ImageInputCard.vue'
-import Navbar from '@/components/NavBar.vue'
 import ShowModalForImage from '@/components/FaceSwapToVideoModal.vue'
-import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted, computed, onUnmounted, nextTick } from 'vue'
-import { FwbButton, FwbTooltip, FwbSpinner } from 'flowbite-vue'
+import { FwbButton} from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
@@ -818,7 +816,7 @@ const closeSaveBoard = () => {
                   Save
                 </div>
                 <div v-else
-                  class="fixed bottom-4 right-4 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs"
+                  class="fixed bottom-4 right-4 bg-black text-white px-1.5 py-1.5 rounded-lg text-xs"
                 >
                   Saved
                 </div>
@@ -838,7 +836,7 @@ const closeSaveBoard = () => {
     />
 
     <!-- Show SaveBoardComponent when isSaveBoardOpen is true -->
-    <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"/>
+    <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"  @updateAfterSave="fetchMedia"/>
 
     <!--
     <ShowModalWithDownloadButton :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->

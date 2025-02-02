@@ -13,7 +13,7 @@ const props= defineProps({
 });
 console.log('props', props.image)
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "updateAfterSave"]);
 
 const search = ref("");
 const boards = ref([]); // Store multiple boards
@@ -57,12 +57,11 @@ const saveBoardImages = async (board) => {
         };
 
         const response = await genAiService.saveBoardImages(payload);
-
         if (response.data && response.data.status) {
             toastStore.success(response?.data.message)
             boardSavedData.value.boardName = response.data.boardName;
             boardSavedData.value.content = response.data.content;
-            await fetchBoards();
+            emit("updateAfterSave");
             onClose();
         } else {
             console.error('Invalid response structure:', response);
