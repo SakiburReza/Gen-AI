@@ -328,7 +328,7 @@ const generateAiContent = async () => {
 
   let progressInterval = setInterval(() => {
     if (progress.value < 90) progress.value += 10; // Increase progress gradually
-  }, 500);
+  }, 1000);
 
   try {
     let response;
