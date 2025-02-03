@@ -6,8 +6,11 @@ import { useRouter } from 'vue-router'
 import AccountCard from '@/components/AccountCard.vue'
 import { useCredits } from '@/utils/utils';
 import { isAuthenticated } from '@/router'
-const { credits, fetchCredits } = useCredits();
 
+
+
+
+const { credits, fetchCredits } = useCredits();
 const router = useRouter()
 const showAccountCard = ref(false)
 const selectedMenu = ref('communitypage')
@@ -82,8 +85,7 @@ watch(
 onMounted(() => {
 
   isUserAuthenticated()
-  
-  if(!isAuthenticatedUser){
+  if(props.showBadge && isAuthenticatedUser){
     fetchCredits();
   } // Fetch credits on component mount
   const savedMenu = localStorage.getItem('selectedMenu')
