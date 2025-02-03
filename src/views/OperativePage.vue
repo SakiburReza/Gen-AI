@@ -356,7 +356,6 @@ const generateAiContent = async () => {
       if (referenceImage.value === null) {
         response = await genAiService.textToVideo({
         text: description.value,
-        num_images: selectedOutput.value,
       });
       } else response = await genAiService.imageToVideo(formData);
     } else if (activeMode.value === 'image') {
