@@ -4,7 +4,7 @@ import DefaultLayout from '@/layout/DefaultLayout.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { imageUrl } from '@/utils/utils'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 
 const searchQuery = ref('')
@@ -106,6 +106,7 @@ const copyAction = async (prompt: string) => {
 // Fetch Images / Videos from API
 const fetchMedia = async () => {
   loading.value = true
+  media.value = null;
   try {
     const { data: response } = await genAiService.getCommunityMedia()
 
@@ -142,6 +143,68 @@ onMounted(async () => {
 
 // Tabs State
 const activeTab = ref('for-you')
+
+
+// Function to fetch liked media
+const fetchLikedMedia = async (label) => {
+  loading.value = true
+  media.value = null;
+  if (label === 'Text to Image') label = 'text-to-image'
+  else if (label === 'Image to Image') label = 'image-to-image'
+  else if (label === 'Text to Video') label = 'text-to-video'
+  else if (label === 'Image to Video') label = 'image-to-video'
+  else if (label === 'Face Swap') label = 'face-swap'
+  else if (label === 'Templates (Beta)') label = 'templates'
+
+  try {
+    const { data: response } = await genAiService.getLikedMedia(label)
+
+    if (response.status && Array.isArray(response.data)) {
+      media.value = response.data.map((item) => ({
+        url: item.content,
+        type:
+          item.type ||
+          (label === 'text-to-video' ||
+            label === 'image-to-video' ||
+            label === 'templates' ||
+            (label === 'face-swap' && item.orientation == null)
+            ? 'video'
+            : 'image'),
+        orientation: item.orientation,
+        prompt: item.prompt,
+        isLiked: item.like,
+        isShared: item.share,
+        board: item.boardName || 'Board'
+      }))
+    } else {
+      console.error('Failed to fetch images: Invalid response format')
+    }
+  } catch (error) {
+    console.error('Error fetching images:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+// Watch for activeTab changes and fetch liked media when switching to 'favourites'
+watch(activeTab, (newTab) => {
+  if (newTab === 'favourites') {
+    fetchLikedMedia('Text to Image')
+    // Change the label if needed
+  }
+  else if (newTab === 'for-you') {
+    fetchMedia()
+    // Change the label if needed
+  }
+})
+
+// // Alternatively, call it on mount if the default tab is 'favourites'
+// onMounted(() => {
+//   if (activeTab.value === 'favourites') {
+//     fetchLikedMedia('Text to Image') // Change label as needed
+//   }
+// })
+
 </script>
 
 <template>
@@ -173,8 +236,7 @@ const activeTab = ref('for-you')
       </div>
 
       <!-- Content Section   (For You)-->
-      <div
-        class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8 relative">
+      <div>
         <div v-if="activeTab === 'for-you'" class="opacity-0 animate-spin">
           <div
             class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 rounded-t-2xl overflow-y-auto">
@@ -265,9 +327,9 @@ const activeTab = ref('for-you')
       <div v-if="activeTab === 'following'" class="opacity-0 animate-spin">
         <h1>Whom you want to follow???????</h1>
       </div>
-      <div v-if="activeTab === 'favourites'" class="opacity-0 animate-spin">
-        <div
-          class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8 relative">
+      <div>
+        <div v-if="activeTab === 'favourites'" class="opacity-0 animate-spin">
+          <!-- Loading Spinner -->
           <div
             class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 rounded-t-2xl overflow-y-auto">
             <div v-for="(item, index) in filteredMedia" :key="index" class="relative overflow-hidden group"
