@@ -6,7 +6,7 @@ import { defineEmits, ref } from 'vue'
 const emit = defineEmits(['selectRatio', 'selectOutput'])
 
 // Default selections
-const selectedRatio = ref('')
+const selectedRatio = ref('portrait_16_9')
 
 // Handle button click instantly
 const handleSelection = (ratio) => {
