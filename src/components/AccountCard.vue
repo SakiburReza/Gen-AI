@@ -1,20 +1,37 @@
 <template>
   <div class="flex items-center justify-center bg-white z-20 rounded-full">
     <!-- Sidebar container adjusted for responsiveness -->
-    <div class="w-64 bg-white shadow rounded-lg" >
-      <ul class="divide-y divide-white">
+    <div class="w-64 bg-white shadow rounded-lg">
+      <ul class="divide-y divide-white" v-if="isAuthenticatedUser">
         <li>
           <a
             @click="navigateTo('/profile')"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:text-black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
-            <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-              <rect width="19" height="19" fill="url(#pattern0_778_2125)"/>
+            <svg
+              width="19"
+              height="19"
+              viewBox="0 0 19 19"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="19" height="19" fill="url(#pattern0_778_2125)" />
               <defs>
-                <pattern id="pattern0_778_2125" patternContentUnits="objectBoundingBox" width="1" height="1">
-                  <use xlink:href="#image0_778_2125" transform="scale(0.02)"/>
+                <pattern
+                  id="pattern0_778_2125"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use xlink:href="#image0_778_2125" transform="scale(0.02)" />
                 </pattern>
-                <image id="image0_778_2125" width="50" height="50" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAADKgAwAEAAAAAQAAADIAAAAARkSbnAAAAAlwSFlzAAALEwAACxMBAJqcGAAAA5dJREFUaAXtmDlvU0EUhWMECBI2RRAJCUHSkJIgIUpMDR378gcgFIgeGkD8BCpIgpBAQA9tLPY1iCIsBQkFASJQ2CoQy3eiOLHH4/fuPI+NkXylI/vOnLvNmzczb9raWtIagdYIJI1ALqkzQ98qbPKgD/QC6UuA5DuYBK/ACCiAj6BpZAWZHAH3wG/wxwhx74J+sBz8M1EBZ8AXYE2+Gu8zPk6Dhhd0kKDvIxTgFvYOn/tB3UXz/SJwE4itXyBGR72q6cSx5nTspKv5e0isrtjFaPV53sAiisWNElOxo4imk0an6LzRv/eJ3R6jEs3XRifvxhuotRCtTq5Tq659QnvL2RloZEP2GTfOPuwzifaJrEvsC2w3eaJupu0lcJO06BPYZdpntNlZAricMeySXlCtRG8y+tamGSR6Gtpt3SQt+k5DpN0ZfSunoKeis5MlaZej48oCkCYLIXwFrr1FP5zmvLRfL6nFqct5Vuok5b+4rr1Fv5Pid7Zb8zvr6vJ61kv6nzEolsRdzi/sVrru57kN6HmQ87RbmrohrTMQe+CIm0WUs3IsE18hfWWMMEUDcNxgcsLASaKYcryGB/dxhupHE7I4FsH/lQT/s12FCIFU+HWwDayewXZ+b4DQQfHxh/GTKk9g+Iybqe2xW4XvHXE5/4XuK0S3Hc0u2kzLxFeIDorNLh/cBOe7Deg6nYbISciXwY8QoxKujisHQMiSrLuxVNkFw/pia4WLJTdxZI27ww3qm1rDkHREsci4hWTkWI83yq1iAH2F6BrzgTH4GiPPQltrIcHRgfaTkTt9jWl5zHovuq1OE3g99P0ElpiHEvxUdOnjxfphdQvuogoP9obFUHU0txQxBS/ow0pp6LPS4lycR2A9CJVeDLRLW+NohQwWVa67WGsQTY0BkAe+d4/maVHfVjAErNNJObwFy4BXct7WuUZdKF+aU83/vsF8CsaBPn8lGhi9CxvAUhAqezG4GmpUyh9CsT6VevHOlSaU9X8HhlqO65Vkml8tt+1Zk3ft9B0/CtKCxu5XzIrvcze5UL0Tg9sgdrLV/GkWJF30heZfxtcjHgTVgsdqP0+MaNOprAJH0YXyBIiVeNGPltg9Tqy6q1pOTwHrCaCYrO93Cj/a7KruE/TVXVRQP9AxQ5dnvkR9beLqndMVqHzUJGkbYqhzrTBbwEagI0sXKG5+2iQngT6KRkABmE+xcFvSGoHWCNQwAn8BhXRuQA0vHUAAAAAASUVORK5CYII="/>
+                <image
+                  id="image0_778_2125"
+                  width="50"
+                  height="50"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAADKgAwAEAAAAAQAAADIAAAAARkSbnAAAAAlwSFlzAAALEwAACxMBAJqcGAAAA5dJREFUaAXtmDlvU0EUhWMECBI2RRAJCUHSkJIgIUpMDR378gcgFIgeGkD8BCpIgpBAQA9tLPY1iCIsBQkFASJQ2CoQy3eiOLHH4/fuPI+NkXylI/vOnLvNmzczb9raWtIagdYIJI1ALqkzQ98qbPKgD/QC6UuA5DuYBK/ACCiAj6BpZAWZHAH3wG/wxwhx74J+sBz8M1EBZ8AXYE2+Gu8zPk6Dhhd0kKDvIxTgFvYOn/tB3UXz/SJwE4itXyBGR72q6cSx5nTspKv5e0isrtjFaPV53sAiisWNElOxo4imk0an6LzRv/eJ3R6jEs3XRifvxhuotRCtTq5Tq659QnvL2RloZEP2GTfOPuwzifaJrEvsC2w3eaJupu0lcJO06BPYZdpntNlZAricMeySXlCtRG8y+tamGSR6Gtpt3SQt+k5DpN0ZfSunoKeis5MlaZej48oCkCYLIXwFrr1FP5zmvLRfL6nFqct5Vuok5b+4rr1Fv5Pid7Zb8zvr6vJ61kv6nzEolsRdzi/sVrru57kN6HmQ87RbmrohrTMQe+CIm0WUs3IsE18hfWWMMEUDcNxgcsLASaKYcryGB/dxhupHE7I4FsH/lQT/s12FCIFU+HWwDayewXZ+b4DQQfHxh/GTKk9g+Iybqe2xW4XvHXE5/4XuK0S3Hc0u2kzLxFeIDorNLh/cBOe7Deg6nYbISciXwY8QoxKujisHQMiSrLuxVNkFw/pia4WLJTdxZI27ww3qm1rDkHREsci4hWTkWI83yq1iAH2F6BrzgTH4GiPPQltrIcHRgfaTkTt9jWl5zHovuq1OE3g99P0ElpiHEvxUdOnjxfphdQvuogoP9obFUHU0txQxBS/ow0pp6LPS4lycR2A9CJVeDLRLW+NohQwWVa67WGsQTY0BkAe+d4/maVHfVjAErNNJObwFy4BXct7WuUZdKF+aU83/vsF8CsaBPn8lGhi9CxvAUhAqezG4GmpUyh9CsT6VevHOlSaU9X8HhlqO65Vkml8tt+1Zk3ft9B0/CtKCxu5XzIrvcze5UL0Tg9sgdrLV/GkWJF30heZfxtcjHgTVgsdqP0+MaNOprAJH0YXyBIiVeNGPltg9Tqy6q1pOTwHrCaCYrO93Cj/a7KruE/TVXVRQP9AxQ5dnvkR9beLqndMVqHzUJGkbYqhzrTBbwEagI0sXKG5+2iQngT6KRkABmE+xcFvSGoHWCNQwAn8BhXRuQA0vHUAAAAAASUVORK5CYII="
+                />
               </defs>
             </svg>
             <span>Manage Profile</span>
@@ -40,7 +57,7 @@
               </g>
               <defs>
                 <clipPath id="clip0_2242_871">
-                  <rect width="18.6186" height="21" fill="white"/>
+                  <rect width="18.6186" height="21" fill="white" />
                 </clipPath>
               </defs>
             </svg>
@@ -53,13 +70,30 @@
             @click="navigateTo('')"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-              <rect width="24" height="24" fill="url(#pattern0_778_2060)"/>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="24" height="24" fill="url(#pattern0_778_2060)" />
               <defs>
-                <pattern id="pattern0_778_2060" patternContentUnits="objectBoundingBox" width="1" height="1">
-                  <use xlink:href="#image0_778_2060" transform="scale(0.0208333)"/>
+                <pattern
+                  id="pattern0_778_2060"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use xlink:href="#image0_778_2060" transform="scale(0.0208333)" />
                 </pattern>
-                <image id="image0_778_2060" width="48" height="48" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAADCgAwAEAAAAAQAAADAAAAAA6LhYOwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAtZJREFUaAXtWE1LVVEUVQnKRoFhWjgohSKkUCEaxCsaRBHVWJ3UIKc2Kei3FE7Fn+BAHBSN0qAgTMGekz4nNbAM+1pL74alvPtx7rnv+ISzYXH222fvtffZ975zz71tbVFiB2IHYgdiBzw60O4RmxfaD4dridMsxtW8gFaaH0MxG8C/BNRHgX0h51DlT8CKt/EHbJxrSTmEqiaBt4AVzHEBWNxlo88DgDEtIZdRRR3Qwk2/BfvtlLk12K8Aeyp3kf03YAVzXAfmgUcANwniMUAb59SXsfeAPZGbyKrFf8Dv+0BnRjWHMTcBfARsIeQgV1A5gmws2Ip4Dv2oQwX0ZYzFk4ucweQhMlly7u9lkjOGscZDzmDyDpks8bhHVsYaz5IHj1NolyTlA+qgU/ROZ8bqM8PlNtxi6tjJV+jXefHiHv9LfruqjH0lQc4PujIL6JWEVZxv6sJ3TPRCapkF6GX+UihLtpNy8PZ0Et8FfHXK1thZObQ5jb13Wcss4KRwaPfE7KQqh3IXIimzgFPCvCZ6WbUugXyHaLp8Rgbbu7sryMY/rvHxiNFUOQF2S8bHf1XyCUTGyxyFxfUWuirMb0T3VV8LQU30XNV1AaPCOCe6r6pcfB1tirAzfwFeah6BnXcMxKQJ/7x/AHIzxyWgUuFb1TfA7tPpStm3yWaEn7nuVJXjIog2hZy7kNMfrWAhffDjM8GaxJwXCsZmur0Q0lXoQ5nefpPDCH8P2CL40uMlg4g2Mh57q7zv0wrjg1KP2GfTHGk/kDWJOe02P4PwCoQW1sBPMQ0lbxvtaRgV1qjHd+fMA4hYAew2Cj0uI3eQ8xE7w6v5HbBFXqcxkRsYzc4tMu/KW1zwcUoK5UesJwn0g9bT4FU5JDwOXz2YWddt5AHQ6552qKW06xlE8mXfirbxJWynS7OmBLan2H3N5K0BIwAXwK/UzxIdQ5TYgdiB2IHYgRbpwH9cC9s7DoW/4AAAAABJRU5ErkJggg=="/>
+                <image
+                  id="image0_778_2060"
+                  width="48"
+                  height="48"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAADCgAwAEAAAAAQAAADAAAAAA6LhYOwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAtZJREFUaAXtWE1LVVEUVQnKRoFhWjgohSKkUCEaxCsaRBHVWJ3UIKc2Kei3FE7Fn+BAHBSN0qAgTMGekz4nNbAM+1pL74alvPtx7rnv+ISzYXH222fvtffZ975zz71tbVFiB2IHYgdiBzw60O4RmxfaD4dridMsxtW8gFaaH0MxG8C/BNRHgX0h51DlT8CKt/EHbJxrSTmEqiaBt4AVzHEBWNxlo88DgDEtIZdRRR3Qwk2/BfvtlLk12K8Aeyp3kf03YAVzXAfmgUcANwniMUAb59SXsfeAPZGbyKrFf8Dv+0BnRjWHMTcBfARsIeQgV1A5gmws2Ip4Dv2oQwX0ZYzFk4ucweQhMlly7u9lkjOGscZDzmDyDpks8bhHVsYaz5IHj1NolyTlA+qgU/ROZ8bqM8PlNtxi6tjJV+jXefHiHv9LfruqjH0lQc4PujIL6JWEVZxv6sJ3TPRCapkF6GX+UihLtpNy8PZ0Et8FfHXK1thZObQ5jb13Wcss4KRwaPfE7KQqh3IXIimzgFPCvCZ6WbUugXyHaLp8Rgbbu7sryMY/rvHxiNFUOQF2S8bHf1XyCUTGyxyFxfUWuirMb0T3VV8LQU30XNV1AaPCOCe6r6pcfB1tirAzfwFeah6BnXcMxKQJ/7x/AHIzxyWgUuFb1TfA7tPpStm3yWaEn7nuVJXjIog2hZy7kNMfrWAhffDjM8GaxJwXCsZmur0Q0lXoQ5nefpPDCH8P2CL40uMlg4g2Mh57q7zv0wrjg1KP2GfTHGk/kDWJOe02P4PwCoQW1sBPMQ0lbxvtaRgV1qjHd+fMA4hYAew2Cj0uI3eQ8xE7w6v5HbBFXqcxkRsYzc4tMu/KW1zwcUoK5UesJwn0g9bT4FU5JDwOXz2YWddt5AHQ6552qKW06xlE8mXfirbxJWynS7OmBLan2H3N5K0BIwAXwK/UzxIdQ5TYgdiB2IHYgRbpwH9cC9s7DoW/4AAAAABJRU5ErkJggg=="
+                />
               </defs>
             </svg>
             <span>Updates</span>
@@ -71,13 +105,30 @@
             @click="navigateTo('/help')"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:text-black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
-            <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-              <rect width="19" height="19" fill="url(#pattern0_778_2061)"/>
+            <svg
+              width="19"
+              height="19"
+              viewBox="0 0 19 19"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="19" height="19" fill="url(#pattern0_778_2061)" />
               <defs>
-                <pattern id="pattern0_778_2061" patternContentUnits="objectBoundingBox" width="1" height="1">
-                  <use xlink:href="#image0_778_2061" transform="scale(0.0416667)"/>
+                <pattern
+                  id="pattern0_778_2061"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use xlink:href="#image0_778_2061" transform="scale(0.0416667)" />
                 </pattern>
-                <image id="image0_778_2061" width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAABigAwAEAAAAAQAAABgAAAAA0bpBmgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAdpJREFUSA3dlMkuREEUhjvGBd4AWwn9DtrCVhCxZClEDC8hIjyFYSESiYSlrQUbTWjTEwiJYcEG/3fVkUqpO7DsP/n7VJ+x7qlTVSrVO1r0gePillgTXx1Zb4rY8PkXRhV1J37m8Fb2EbEwGuS5IlriU63nxF6xzbFPcl6siua3rDWxubDkb/KcErOCsE2L+FKIIpmgLTgS0O95dmm9Iz477kr2iIaKFlZk2JSh5LCs5+zcQPIH0Vph8lE6bIYZLbDdiM2m9CUTgQM999vCztHvi52OB063LWlo1OJMxHfMlL5kFDFyoD5oC3qSG9g5uidTOLng9BuBPvl75YxMSx665UCB+8CR6UJfC/TJX9tpR8zo6Vq1pl0kWvX0LIlFT65fKFKgSVF7IkkOxfAWZxYo0qI1l/xIMvalZWf/aZE/LScygsFvEf2ddNoJyZeIh8UeR2zJw8WnV0W/cMw3pmNMz0VyRMeUfvJw4cD1jwEbjGFWSmzXYvSiEcSriBPXviKGSCswIMd38UMcCoPC/zxYVoTrz6enARs7JzkxS2Iu6L8VIYjrzw3lErU7liUXRes5Oyf5n86OV5GHy9qSJul5blvkEwWHxUTwtlyKjCa8ENdFbKkHKlsd4Aug2I8fnrZjlQAAAABJRU5ErkJggg=="/>
+                <image
+                  id="image0_778_2061"
+                  width="24"
+                  height="24"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAABigAwAEAAAAAQAAABgAAAAA0bpBmgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAdpJREFUSA3dlMkuREEUhjvGBd4AWwn9DtrCVhCxZClEDC8hIjyFYSESiYSlrQUbTWjTEwiJYcEG/3fVkUqpO7DsP/n7VJ+x7qlTVSrVO1r0gePillgTXx1Zb4rY8PkXRhV1J37m8Fb2EbEwGuS5IlriU63nxF6xzbFPcl6siua3rDWxubDkb/KcErOCsE2L+FKIIpmgLTgS0O95dmm9Iz477kr2iIaKFlZk2JSh5LCs5+zcQPIH0Vph8lE6bIYZLbDdiM2m9CUTgQM999vCztHvi52OB063LWlo1OJMxHfMlL5kFDFyoD5oC3qSG9g5uidTOLng9BuBPvl75YxMSx665UCB+8CR6UJfC/TJX9tpR8zo6Vq1pl0kWvX0LIlFT65fKFKgSVF7IkkOxfAWZxYo0qI1l/xIMvalZWf/aZE/LScygsFvEf2ddNoJyZeIh8UeR2zJw8WnV0W/cMw3pmNMz0VyRMeUfvJw4cD1jwEbjGFWSmzXYvSiEcSriBPXviKGSCswIMd38UMcCoPC/zxYVoTrz6enARs7JzkxS2Iu6L8VIYjrzw3lErU7liUXRes5Oyf5n86OV5GHy9qSJul5blvkEwWHxUTwtlyKjCa8ENdFbKkHKlsd4Aug2I8fnrZjlQAAAABJRU5ErkJggg=="
+                />
               </defs>
             </svg>
             <span>Get Help</span>
@@ -98,7 +149,8 @@
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-6 h-6 mr-3 fill-current text-[#000000] group-hover:text-black-2 transition-all">
+              class="w-6 h-6 mr-3 fill-current text-[#000000] group-hover:text-black-2 transition-all"
+            >
               >
               <path
                 stroke-linecap="round"
@@ -115,19 +167,71 @@
             @click="logout"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:text-black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-              <rect width="18" height="18" fill="url(#pattern0_778_2128)"/>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="18" height="18" fill="url(#pattern0_778_2128)" />
               <defs>
-                <pattern id="pattern0_778_2128" patternContentUnits="objectBoundingBox" width="1" height="1">
-                  <use xlink:href="#image0_778_2128" transform="scale(0.02)"/>
+                <pattern
+                  id="pattern0_778_2128"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use xlink:href="#image0_778_2128" transform="scale(0.02)" />
                 </pattern>
-                <image id="image0_778_2128" width="50" height="50" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAADKgAwAEAAAAAQAAADIAAAAARkSbnAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAbBJREFUaAXtWctOw0AMLAjxATwlOPMTiEt/jsdv8AtwROLAGQECLj0DR74ACcabDjLZEjXbEWwqW5p4693Oju2kjZLRKCwqEBWICgy1AusQfga8AZ+V4xX6TgHTnJlN1J5AW99JlgUClqUtPJw1KY61BZV+Ns3JVjiANzIzH2si+iP3UjAnvasKpho4IpEauuA1REd8NWoYR0dq6ILXEB3x1ahhXNKRfQi/BS5qSIAa1jiY0+9h3TVwALzP+Z0/X8Ybt9823sXEM2Dr7oANoNS4l8JnGkiaTSCwAzwBtuYe2AQWMe6l8JkOkrYnthF4BGz+AdgCFjXupfCZFpL6CZ8E5/v6S084Hffl6FqfKEt+tWboqivErNuqfFcGe2oxqaW42JnMUvz8Mhn7Q5wAdhpeMVjgeRorfNq+78Vuz7zGgP0xfiSGSg7+iYlVx8zHmoj+yL0UzPEURVFFOUffa0QuQEUYiagqqeKJjqgqqeKJjqgqqeLxHbHbD7Ojxg3i+P2ixydyPpV+A6+4meviUFWJmn/w2YtFeyfHV3BdQv577gU6jwHTHBYViApEBQZYgS/l+Ylj9f61cwAAAABJRU5ErkJggg=="/>
+                <image
+                  id="image0_778_2128"
+                  width="50"
+                  height="50"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAADKgAwAEAAAAAQAAADIAAAAARkSbnAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAbBJREFUaAXtWctOw0AMLAjxATwlOPMTiEt/jsdv8AtwROLAGQECLj0DR74ACcabDjLZEjXbEWwqW5p4693Oju2kjZLRKCwqEBWICgy1AusQfga8AZ+V4xX6TgHTnJlN1J5AW99JlgUClqUtPJw1KY61BZV+Ns3JVjiANzIzH2si+iP3UjAnvasKpho4IpEauuA1REd8NWoYR0dq6ILXEB3x1ahhXNKRfQi/BS5qSIAa1jiY0+9h3TVwALzP+Z0/X8Ybt9823sXEM2Dr7oANoNS4l8JnGkiaTSCwAzwBtuYe2AQWMe6l8JkOkrYnthF4BGz+AdgCFjXupfCZFpL6CZ8E5/v6S084Hffl6FqfKEt+tWboqivErNuqfFcGe2oxqaW42JnMUvz8Mhn7Q5wAdhpeMVjgeRorfNq+78Vuz7zGgP0xfiSGSg7+iYlVx8zHmoj+yL0UzPEURVFFOUffa0QuQEUYiagqqeKJjqgqqeKJjqgqqeLxHbHbD7Ojxg3i+P2ixydyPpV+A6+4meviUFWJmn/w2YtFeyfHV3BdQv577gU6jwHTHBYViApEBQZYgS/l+Ylj9f61cwAAAABJRU5ErkJggg=="
+                />
               </defs>
             </svg>
-            <span  >Log Out</span>
+            <span>Log Out</span>
           </a>
         </li>
-
+      </ul>
+      <ul class="divide-y divide-white" v-else>
+        <li>
+          <a
+            @click="login"
+            class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:text-black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="18" height="18" fill="url(#pattern0_778_2128)" />
+              <defs>
+                <pattern
+                  id="pattern0_778_2128"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use xlink:href="#image0_778_2128" transform="scale(0.02)" />
+                </pattern>
+                <image
+                  id="image0_778_2128"
+                  width="50"
+                  height="50"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAADKgAwAEAAAAAQAAADIAAAAARkSbnAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAbBJREFUaAXtWctOw0AMLAjxATwlOPMTiEt/jsdv8AtwROLAGQECLj0DR74ACcabDjLZEjXbEWwqW5p4693Oju2kjZLRKCwqEBWICgy1AusQfga8AZ+V4xX6TgHTnJlN1J5AW99JlgUClqUtPJw1KY61BZV+Ns3JVjiANzIzH2si+iP3UjAnvasKpho4IpEauuA1REd8NWoYR0dq6ILXEB3x1ahhXNKRfQi/BS5qSIAa1jiY0+9h3TVwALzP+Z0/X8Ybt9823sXEM2Dr7oANoNS4l8JnGkiaTSCwAzwBtuYe2AQWMe6l8JkOkrYnthF4BGz+AdgCFjXupfCZFpL6CZ8E5/v6S084Hffl6FqfKEt+tWboqivErNuqfFcGe2oxqaW42JnMUvz8Mhn7Q5wAdhpeMVjgeRorfNq+78Vuz7zGgP0xfiSGSg7+iYlVx8zHmoj+yL0UzPEURVFFOUffa0QuQEUYiagqqeKJjqgqqeKJjqgqqeLxHbHbD7Ojxg3i+P2ixydyPpV+A6+4meviUFWJmn/w2YtFeyfHV3BdQv577gU6jwHTHBYViApEBQZYgS/l+Ylj9f61cwAAAABJRU5ErkJggg=="
+                />
+              </defs>
+            </svg>
+            <span>Sign In</span>
+          </a>
+        </li>
       </ul>
     </div>
   </div>
@@ -135,22 +239,30 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
 
 const router = useRouter()
+const isAuthenticatedUser = ref('')
 
-const navigateTo = (url) => {
-  console.log(`Navigating to: ${url}`)
-  router.push(url)
+const isUserAuthenticated = () => {
+  isAuthenticatedUser.value = localStorage.getItem('authToken')
+}
+
+const login = () => {
+  router.push('/sign-in')
 }
 
 const logout = () => {
   // Clear user-related data (e.g., authentication token)
   localStorage.removeItem('authToken') // Adjust the key as per your app
+  sessionStorage.removeItem('firstVisit') // Optional: Clear session
   sessionStorage.clear() // Optional: Clear session
   localStorage.clear()
   // Redirect to login page
-  router.push('/')
+  router.push('/sign-in')
 }
 
+onMounted(() => {
+  isUserAuthenticated()
+})
 </script>
-

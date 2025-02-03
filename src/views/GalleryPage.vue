@@ -72,9 +72,9 @@ onMounted(() => {
 <template>
   <DefaultLayout>
     <!-- search input -->
-    <div class="relative group w-full mt-2 p-2">
+    <!-- <div class="relative group w-full mt-2 p-2">
       <img
-        src="/src/assets/icon/SearchIcon.svg"
+        src="/public/images/icon/SearchIcon.svg"
         alt="Search"
         class="h-5 w-5 absolute top-1/2 ml-3 transform -translate-y-1/2 text-gray-500"
       />
@@ -84,7 +84,7 @@ onMounted(() => {
         placeholder="Search"
         class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-0 focus:border-gray-300"
       />
-    </div>
+    </div> -->
     <!-- user information -->
     <div class="flex items-center justify-center mt-2">
     <div class="bg-white p-6 w-80 text-center">
@@ -122,18 +122,18 @@ onMounted(() => {
         <div class="w-full pointer-events-auto" @click="openBoardImage(board.name)">
           <img
             class="rounded border cursor-pointer w-100 h-50 object-cover"
-            :src="board.images[0] ? imageUrl() + board.images[0] : '/src/assets/icon/NoImageBox.svg'"
+            :src="board.images[0] ? imageUrl() + board.images[0] : '/public/images/icon/NoImageBox.svg'"
             alt=""
           />
           <div class="grid grid-cols-2 mt-1 gap-1">
             <img
               class="rounded border cursor-pointer w-50 h-50  object-cover"
-              :src="board.images[1] ? imageUrl() + board.images[1] : '/src/assets/icon/NoImageBox.svg'"
+              :src="board.images[1] ? imageUrl() + board.images[1] : '/public/images/icon/NoImageBox.svg'"
               alt=""
             />
             <img
               class="rounded border cursor-pointer w-50 h-50 object-cover"
-              :src="board.images[2] ? imageUrl() + board.images[2] : '/src/assets/icon/NoImageBox.svg'"
+              :src="board.images[2] ? imageUrl() + board.images[2] : '/public/images/icon/NoImageBox.svg'"
               alt=""
             />
           </div>

@@ -19,13 +19,13 @@ const submitForm = async () => {
 
     // Make the API call to the sign-in endpoint
     const response = await genAiService.logIn(data)
-    console.log(response)
 
     // Assuming the response contains a token or status indicating success
     if (response.data.status) {
       //toastStore.success('Sign-In successful')
       localStorage.setItem('authToken', response.data.data.token)
-      router.push('/communitypage');
+      localStorage.setItem('selectedMenu', 'home')
+      router.push('/');
     } else {
       // Handle the case when the response doesn't indicate success
       //toastStore.error("Sign-In failed, please try again.");
