@@ -658,7 +658,7 @@ const closeSaveBoard = () => {
           class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full transition-all duration-500"
           :style="{ width: progress + '%' }">          
         </div>
-        <span class="float-end font-semibold">{{ progress }}%</span>
+        <!-- <span class="float-end font-semibold">{{ progress }}%</span> -->
       </div>      
       <div
         class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
