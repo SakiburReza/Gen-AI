@@ -105,9 +105,9 @@ const openPreviewModal = (mediaItem) => {
         <p class="text-gray-500 text-sm">{{ media.length }} Photos</p>
         <div class="flex items-center gap-3 mt-2">
           <img
-            :src="profileImage"
+            :src="profileImage? profileImage : '/public/images/icon/NoImageBox.svg'"
             alt="Profile"
-            class="w-10 h-10 border-2 border-gray-300"
+            class="w-10 h-10 border-2 border-gray-300 object-cover"
           />
         </div>
         <div class="flex mt-2">
