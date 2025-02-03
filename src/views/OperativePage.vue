@@ -321,57 +321,48 @@ const fetchLikedMedia = async (label: string) => {
     loading.value = false
   }
 }
-
+const progress = ref(0);
 const generateAiContent = async () => {
   loading.value = true;
+  progress.value = 0; // Reset progress
+
+  let progressInterval = setInterval(() => {
+    if (progress.value < 90) progress.value += 10; // Increase progress gradually
+  }, 500);
 
   try {
     let response;
 
-    // Handling different types of functionalities
-    if (activeMode.value === 'video') {
-      if (description.value === '') {
-        toastStore.error('Describe for your video');
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('image', referenceImage.value!);
-      formData.append('prompt', description.value);
-      formData.append('type', 'image-to-video');
-
-      if (referenceImage.value === null) {
-        response = await genAiService.textToVideo(formData);
-      } else response = await genAiService.imageToVideo(formData);
-    } else if (activeMode.value === 'image') {
-      if (description.value === '') {
+    if (activeMode.value === 'image') {
+      if (!description.value) {
         toastStore.error('Describe for your Image');
+        clearInterval(progressInterval);
+        loading.value = false;
         return;
       }
 
       const formData = new FormData();
-      formData.append('image', referenceImage.value!);
+      formData.append('image', referenceImage.value || '');
       formData.append('text', description.value);
       formData.append('image_size', selectedRatio.value);
       formData.append('num_images', selectedOutput.value.toString());
 
-      if (referenceImage.value === null) {
-        response = await genAiService.textToImage(formData);
-      } else response = await genAiService.imageToImage(formData);
+      response = referenceImage.value
+        ? await genAiService.imageToImage(formData)
+        : await genAiService.textToImage(formData);
     }
 
     if (response?.data?.status) {
-      toastStore.success(response?.data.message);
+      toastStore.success(response.data.message);
 
-      await fetchCredits();
-      resetKey.value++;
       aiGeneratedMedia.value = response.data.data.map((item) => ({
         url: item.content,
         type: item.type,
         orientation: item.orientation,
         prompt: item.prompt,
-        board: item.boardName || 'Board'
+        board: item.boardName || 'Board',
       }));
+
       media.value.unshift(...aiGeneratedMedia.value);
     } else {
       console.error('Failed to generate media:', response);
@@ -379,7 +370,13 @@ const generateAiContent = async () => {
   } catch (error) {
     console.error('Error generating media:', error);
   } finally {
-    loading.value = false;
+    clearInterval(progressInterval);
+    progress.value = 100; // Complete progress
+
+    setTimeout(() => {
+      loading.value = false; // Hide loader
+      progress.value = 0; // Reset progress after hiding
+    }, 1000);
   }
 };
 
@@ -616,22 +613,29 @@ const closeSaveBoard = () => {
           <CustomizationCard v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectOutput="(output) => (selectedOutput = output)" />
           <!-- Loader Spinner -->
-          <div v-if="loading"
-            class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-800 z-50">
+          <!-- <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-800 z-50">
             <svg class="w-16 h-16 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
               <circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="4" fill="none" />
               <circle cx="25" cy="25" r="20" stroke="white" stroke-width="4" fill="none" stroke-dasharray="125.6"
                 stroke-dashoffset="62.8" />
             </svg>
-          </div>
+          </div> -->
 
-          <fwb-button @click="generateAiContent" :disabled="loading" 
+          <fwb-button @click="generateAiContent" :disabled="loading"
             class="float-end bottom-4 right-4 bg-blue-600 px-8 py-1.5 rounded-lg disabled:bg-gray-400 shadow-md sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10">
             Zeuxis
           </fwb-button>
         </div>
       </div>
       <!-- Right Section: Enhanced Image Grid -->
+      <!-- Loader (Visible only when loading is true) -->
+      <div v-if="loading" class="w-full bg-gray-200 rounded-full h-2 mt-2">
+        <div
+          class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition-all duration-500"
+          :style="{ width: progress + '%' }">
+          {{ progress }}%
+        </div>
+      </div>
       <div
         class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 rounded-t-2xl overflow-y-auto">
