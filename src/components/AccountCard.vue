@@ -270,8 +270,9 @@ const logout = () => {
   sessionStorage.removeItem('firstVisit') // Optional: Clear session
   sessionStorage.clear() // Optional: Clear session
   localStorage.clear()
+  window.location.reload()
   // Redirect to login page
-  router.push('/sign-in')
+  router.push('/')
 }
 
 onMounted(() => {
