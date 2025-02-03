@@ -15,6 +15,11 @@ const accountCardRef = ref(null)
 
 const isAuthenticatedUser = ref('')
 
+const props = defineProps({
+  showBadge: {
+    default: true,
+  },
+})
 
 
 const isUserAuthenticated =()=> {
@@ -57,6 +62,10 @@ const goToGallery = () => {
   router.push('/gallerypage')
 }
 
+const goToProfilePage = () => {
+  router.push('/profile')
+}
+
 watch(
   () => router.currentRoute.value.path,
   (newPath) => {
@@ -93,7 +102,7 @@ onUnmounted(() => {
     <!-- Header -->
     <div class="relative flex flex-col items-center justify-center">
       <!-- Logo -->
-      <router-link to="/communitypage">
+      <router-link to="/">
         <img
           src="/images/zeuxis-logo.png"
           alt="Flowbite logo"
@@ -102,7 +111,7 @@ onUnmounted(() => {
       </router-link>
       <!-- Text -->
        
-      <fwb-badge v-if="isAuthenticatedUser"
+      <fwb-badge v-if="props.showBadge && isAuthenticatedUser"
         :class="`flex items-center justify-between border mt-3 rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition-all duration-200`"
         size="xl"
         @click="toggleAccountCard"
@@ -129,7 +138,7 @@ onUnmounted(() => {
     <div
       class="sidebar border fixed left-0 h-screen w-[45px] flex flex-col justify-between items-center py-4 z-10"
     >
-      <div class="flex flex-col items-center gap-4 mt-16">
+      <div class="flex flex-col items-center gap-4 mt-16" @click="goToProfilePage">
         <img src="/public/images/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
       </div>
 

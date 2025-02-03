@@ -5,7 +5,7 @@
       <ul class="divide-y divide-white" v-if="isAuthenticatedUser">
         <li>
           <a
-            @click="navigateTo('/profile')"
+            @click="goToProfilePage"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:text-black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
             <svg
@@ -40,7 +40,7 @@
 
         <li>
           <a
-            @click="navigateTo('/subscription')"
+            @click="goToSubscriptionPage"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:text-black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
             <svg
@@ -67,7 +67,7 @@
 
         <li>
           <a
-            @click="navigateTo('')"
+            @click="goToUpdatesPage"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
             <svg
@@ -102,7 +102,7 @@
 
         <li>
           <a
-            @click="navigateTo('/help')"
+            @click="gotoHelpPage"
             class="flex items-center px-4 py-3 text-black-2 hover:bg-orange hover:text-black-2 cursor-pointer rounded-lg transition-all space-x-2 group"
           >
             <svg
@@ -250,6 +250,18 @@ const isUserAuthenticated = () => {
 
 const login = () => {
   router.push('/sign-in')
+}
+const goToProfilePage = () => {
+  router.push('/profile')
+}
+const goToSubscriptionPage = () => {
+  router.push('/subscription')
+}
+const gotoHelpPage = () => {
+  router.push('/help')
+}
+const goToUpdatesPage = () => {
+  router.push('/updates')
 }
 
 const logout = () => {

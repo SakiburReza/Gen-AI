@@ -393,7 +393,7 @@ const deleteAccount = () => {
 // Navigate back to previous page
 const goBack = () => {
   localStorage.setItem('selectedMenu', 'home')
-  router.push('/operativepage')
+  router.push('/')
 }
 
 // Load profile data when component mounts
