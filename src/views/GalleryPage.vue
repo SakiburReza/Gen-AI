@@ -71,20 +71,6 @@ onMounted(() => {
 
 <template>
   <DefaultLayout>
-    <!-- search input -->
-    <div class="relative group w-full mt-2 p-2">
-      <img
-        src="/src/assets/icon/SearchIcon.svg"
-        alt="Search"
-        class="h-5 w-5 absolute top-1/2 ml-3 transform -translate-y-1/2 text-gray-500"
-      />
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search"
-        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-0 focus:border-gray-300"
-      />
-    </div>
     <!-- user information -->
     <div class="flex items-center justify-center mt-2">
     <div class="bg-white p-6 w-80 text-center">
