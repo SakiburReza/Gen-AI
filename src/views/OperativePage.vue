@@ -333,25 +333,48 @@ const generateAiContent = async () => {
   try {
     let response;
 
-    if (activeMode.value === 'image') {
-      if (!description.value) {
-        toastStore.error('Describe for your Image');
+    // Handling different types of functionalities
+    if (activeMode.value === 'video') {
+      if (description.value === '') {
+        toastStore.error('Describe for your video');
         clearInterval(progressInterval);
         loading.value = false;
         return;
       }
+      // const formData = new FormData();
+      // formData.append('image', referenceImage.value || '');
+      // formData.append('text', description.value);
+      // formData.append('image_size', selectedRatio.value);
+      // formData.append('num_images', selectedOutput.value.toString());
 
       const formData = new FormData();
-      formData.append('image', referenceImage.value || '');
+      formData.append('image', referenceImage.value!);
+      formData.append('prompt', description.value);
+      formData.append('type', 'image-to-video');
+
+
+      if (referenceImage.value === null) {
+        response = await genAiService.textToVideo(formData);
+      } else response = await genAiService.imageToVideo(formData);
+    } else if (activeMode.value === 'image') {
+      if (description.value === '') {
+        toastStore.error('Describe for your Image');
+        return;
+      }
+
+      // response = referenceImage.value
+      //   ? await genAiService.imageToImage(formData)
+      //   : await genAiService.textToImage(formData);
+
+      const formData = new FormData();
+      formData.append('image', referenceImage.value!);
       formData.append('text', description.value);
       formData.append('image_size', selectedRatio.value);
-      formData.append('num_images', selectedOutput.value.toString());
-
-      response = referenceImage.value
-        ? await genAiService.imageToImage(formData)
-        : await genAiService.textToImage(formData);
+      formData.append('num_images', selectedOutput.value.toString());      
+      if (referenceImage.value === null) {
+        response = await genAiService.textToImage(formData);
+      } else response = await genAiService.imageToImage(formData);
     }
-
     if (response?.data?.status) {
       toastStore.success(response.data.message);
 
@@ -627,15 +650,16 @@ const closeSaveBoard = () => {
           </fwb-button>
         </div>
       </div>
+
       <!-- Right Section: Enhanced Image Grid -->
       <!-- Loader (Visible only when loading is true) -->
-      <div v-if="loading" class="w-full bg-gray-200 rounded-full h-2 mt-2">
+      <div v-if="loading" class="w-full bg-black rounded-full h-1 mt-1" >
         <div
-          class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition-all duration-500"
-          :style="{ width: progress + '%' }">
-          {{ progress }}%
+          class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full transition-all duration-500"
+          :style="{ width: progress + '%' }">          
         </div>
-      </div>
+        <span class="float-end font-semibold">{{ progress }}%</span>
+      </div>      
       <div
         class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 rounded-t-2xl overflow-y-auto">
