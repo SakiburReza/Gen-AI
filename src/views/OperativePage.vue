@@ -383,7 +383,7 @@ const generateAiContent = async () => {
     }
     if (response?.data?.status) {
       toastStore.success(response.data.message);
-
+      resetKey.value++
       aiGeneratedMedia.value = response.data.data.map((item) => ({
         url: item.content,
         type: item.type,
