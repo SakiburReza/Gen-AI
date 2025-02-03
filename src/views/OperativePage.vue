@@ -354,7 +354,10 @@ const generateAiContent = async () => {
 
 
       if (referenceImage.value === null) {
-        response = await genAiService.textToVideo(formData);
+        response = await genAiService.textToVideo({
+        text: description.value,
+        num_images: selectedOutput.value,
+      });
       } else response = await genAiService.imageToVideo(formData);
     } else if (activeMode.value === 'image') {
       if (description.value === '') {
@@ -372,7 +375,11 @@ const generateAiContent = async () => {
       formData.append('image_size', selectedRatio.value);
       formData.append('num_images', selectedOutput.value.toString());      
       if (referenceImage.value === null) {
-        response = await genAiService.textToImage(formData);
+        response = await genAiService.textToImage({
+        text: description.value,
+        image_size: selectedRatio.value,
+        num_images: selectedOutput.value,
+      });
       } else response = await genAiService.imageToImage(formData);
     }
     if (response?.data?.status) {
