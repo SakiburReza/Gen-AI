@@ -280,7 +280,9 @@ const fetchMedia = async (label: string) => {
   }
 }
 
-const fetchLikedMedia = async (label: string) => {
+
+// Function to fetch liked media
+const fetchLikedMedia = async (label) => {
   loading.value = true
   if (label === 'Text to Image') label = 'text-to-image'
   else if (label === 'Image to Image') label = 'image-to-image'
@@ -293,11 +295,8 @@ const fetchLikedMedia = async (label: string) => {
     const { data: response } = await genAiService.getLikedMedia(label)
 
     if (response.status && Array.isArray(response.data)) {
-      // Map data with type detection (image/video) for initial load
-
       media.value = response.data.map((item) => ({
         url: item.content,
-
         type:
           item.type ||
           (label === 'text-to-video' ||
@@ -321,6 +320,8 @@ const fetchLikedMedia = async (label: string) => {
     loading.value = false
   }
 }
+
+
 const progress = ref(0);
 const generateAiContent = async () => {
   loading.value = true;
@@ -372,7 +373,7 @@ const generateAiContent = async () => {
       formData.append('image', referenceImage.value!);
       formData.append('text', description.value);
       formData.append('image_size', selectedRatio.value);
-      formData.append('num_images', selectedOutput.value.toString());      
+      formData.append('num_images', selectedOutput.value.toString());
       if (referenceImage.value === null) {
         response = await genAiService.textToImage({
         text: description.value,
@@ -660,13 +661,13 @@ const closeSaveBoard = () => {
 
       <!-- Right Section: Enhanced Image Grid -->
       <!-- Loader (Visible only when loading is true) -->
-      <div v-if="loading" class="w-full bg-black rounded-full h-1 mt-1" >
+      <div v-if="loading" class="w-full bg-black rounded-full h-1 mt-1">
         <div
           class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full transition-all duration-500"
-          :style="{ width: progress + '%' }">          
+          :style="{ width: progress + '%' }">
         </div>
         <!-- <span class="float-end font-semibold">{{ progress }}%</span> -->
-      </div>      
+      </div>
       <div
         class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 rounded-t-2xl overflow-y-auto">
