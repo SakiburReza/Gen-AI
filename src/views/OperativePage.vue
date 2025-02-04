@@ -637,7 +637,7 @@ const closeSaveBoard = () => {
           </button>
         </div>
         <!-- Dynamic Content Based on Selected Functionality -->
-        <div class="bg-white p-6 space-y-6 flex-shrink-0">
+        <div class="bg-white ml-6 mr-6 space-y-6 flex-shrink-0">
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
