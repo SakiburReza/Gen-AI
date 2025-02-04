@@ -5,13 +5,30 @@ import { FwbDropdown, FwbBadge } from 'flowbite-vue'
 import { useRouter } from 'vue-router'
 import AccountCard from '@/components/AccountCard.vue'
 import { useCredits } from '@/utils/utils';
+import { isAuthenticated } from '@/router'
+
+
+
 
 const { credits, fetchCredits } = useCredits();
-
 const router = useRouter()
 const showAccountCard = ref(false)
 const selectedMenu = ref('communitypage')
 const accountCardRef = ref(null)
+
+const isAuthenticatedUser = ref('')
+
+const props = defineProps({
+  showBadge: {
+    default: true,
+  },
+})
+
+
+const isUserAuthenticated =()=> {
+  isAuthenticatedUser.value = localStorage.getItem('authToken')
+
+}
 
 const toggleAccountCard = () => {
   showAccountCard.value = !showAccountCard.value
@@ -41,11 +58,15 @@ const goToOperative = () => {
 }
 
 const goToCommunity = () => {
-  router.push('/communitypage')
+  router.push('/')
 }
 
 const goToGallery = () => {
   router.push('/gallerypage')
+}
+
+const goToProfilePage = () => {
+  router.push('/profile')
 }
 
 watch(
@@ -62,7 +83,11 @@ watch(
 )
 
 onMounted(() => {
-  fetchCredits(); // Fetch credits on component mount
+
+  isUserAuthenticated()
+  if(props.showBadge && isAuthenticatedUser){
+    fetchCredits();
+  } // Fetch credits on component mount
   const savedMenu = localStorage.getItem('selectedMenu')
   if (savedMenu) {
     selectedMenu.value = savedMenu
@@ -79,7 +104,7 @@ onUnmounted(() => {
     <!-- Header -->
     <div class="relative flex flex-col items-center justify-center">
       <!-- Logo -->
-      <router-link to="/communitypage">
+      <router-link to="/">
         <img
           src="/images/zeuxis-logo.png"
           alt="Flowbite logo"
@@ -87,7 +112,8 @@ onUnmounted(() => {
         />
       </router-link>
       <!-- Text -->
-      <fwb-badge
+       
+      <fwb-badge v-if="props.showBadge && isAuthenticatedUser"
         :class="`flex items-center justify-between border mt-3 rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition-all duration-200`"
         size="xl"
         @click="toggleAccountCard"
@@ -114,8 +140,8 @@ onUnmounted(() => {
     <div
       class="sidebar border fixed left-0 h-screen w-[45px] flex flex-col justify-between items-center py-4 z-10"
     >
-      <div class="flex flex-col items-center gap-4 mt-16">
-        <img src="/src/assets/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
+      <div class="flex flex-col items-center gap-4 mt-16" @click="goToProfilePage">
+        <img src="/images/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
       </div>
 
       <div class="flex flex-col items-center gap-4 flex-1 justify-center">
@@ -128,7 +154,7 @@ onUnmounted(() => {
                 selectedMenu === 'home' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/src/assets/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+              <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
             </div>
           </template>
           <template #content> Home </template>
@@ -143,7 +169,7 @@ onUnmounted(() => {
                 selectedMenu === 'create' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/src/assets/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+              <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
             </div>
           </template>
           <template #content> Create </template>
@@ -158,7 +184,7 @@ onUnmounted(() => {
                 selectedMenu === 'boards' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/src/assets/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
+              <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
             </div>
           </template>
           <template #content> Boards </template>
@@ -168,7 +194,7 @@ onUnmounted(() => {
       <div class="flex flex-col items-center gap-4">
         <FwbDropdown placement="right" align-to-end>
           <template #trigger>
-            <img src="/src/assets/icon/burgerIcon.svg" alt="burgerIcon" class="cursor-pointer" />
+            <img src="/images/icon/burgerIcon.svg" alt="burgerIcon" class="cursor-pointer" />
           </template>
           <div class="bg-blue">
             <AccountCard />

@@ -43,7 +43,7 @@ onUnmounted(() => {
 <template>
   <div class="relative flex flex-col items-center justify-center p-4">
     <!-- Logo -->
-    <router-link to="/communitypage">
+    <router-link to="/">
       <img
         src="/images/zeuxis-logo.png"
         alt="Flowbite logo"

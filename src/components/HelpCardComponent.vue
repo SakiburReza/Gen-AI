@@ -9,7 +9,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="max-w-5xl lg:px-4">
+    <div class="w-full lg:px-4">
         <!-- Title Section -->
         <h1 class="text-2xl sm:text-xl font-bold text-center mt-10 mb-1">Need Help?</h1>
         <p class="text-center text-gray-500 mb-10 max-w-sm mx-auto text-md">

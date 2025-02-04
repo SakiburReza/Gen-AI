@@ -144,7 +144,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim())
             <div class="flex items-center justify-between">
               <p class="text-silverChalice mb-4 text-sm"></p>
               <p class="text-md flex items-center font-bold">
-                <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2" />
+                <img src="/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2" />
                 {{ billinInformation.credit }}
               </p>
             </div>
@@ -172,7 +172,7 @@ const dashedLine = computed(() => '- '.repeat(dashLength.value).trim())
             <div class="flex items-center justify-between">
               <p class="mb-4 text-sm">Credits</p>
               <p class="text-md flex items-center font-bold">
-                <img src="/public/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2" />
+                <img src="/images/icon/StartIcon.svg" alt="" class="w-5 h-5 mr-2" />
                 {{ billinInformation.last_purchased_credit }}
               </p>
             </div>

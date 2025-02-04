@@ -204,6 +204,11 @@ createBoard(data) {
     headers: this.getAuthHeaders(),
   })
 }
+saveBoardImages(data) {
+  return axios.post(this.url + '/user/assignBoardImage', data, {
+    headers: this.getAuthHeaders(),
+  })
+}
 
 
 

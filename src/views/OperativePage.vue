@@ -2,18 +2,17 @@
 import CustomizationCard from '@/components/CustomizationCard.vue'
 import DescriptionCard from '@/components/DescriptionCard.vue'
 import ImageInputCard from '@/components/ImageInputCard.vue'
-import Navbar from '@/components/NavBar.vue'
 import ShowModalForImage from '@/components/FaceSwapToVideoModal.vue'
-import VideoCarousel from '@/components/VideoCarousel.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { ref, watch, onMounted, computed, onUnmounted, nextTick } from 'vue'
-import { FwbButton, FwbTooltip, FwbSpinner } from 'flowbite-vue'
+import { FwbButton } from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
 import DefaultLayout from '@/layout/DefaultLayout.vue'
+import SaveBoardComponent from '@/components/SavedBoardComponent.vue'
 
 const { fetchCredits } = useCredits()
 
@@ -37,6 +36,7 @@ const actionText = computed(() => {
 // Function to open the modal and set action + image URL
 const openModal = (imageUrl, selectedAction) => {
   selectedImageUrl.value = imageUrl
+  selectedImage.value = imageUrl
   action.value = selectedAction
   isModalOpen.value = true
 }
@@ -60,9 +60,8 @@ const showPreviewModal = ref(false) // Controls PreviewImageModal
 
 // Functions to open/close modal
 
-const openImageModal = (mediaItem) => {
+const openImageModal = async (mediaItem) => {
   selectedImage.value = mediaItem
-
   showModal.value = true
   showImageModal.value = true
 }
@@ -98,6 +97,7 @@ const media = ref<
     isLiked: 'Y' | 'N'
     isShared: 'Y' | 'N'
     prompt: string
+    board: string
   }[]
 >([])
 
@@ -139,13 +139,10 @@ function convertToTitleCase(input) {
 }
 
 function initializeFromQueryParams() {
-  // console.log('intitial functionality', activeFunctionality.value);
   const queryMode = Array.isArray(route.query.mode) ? route.query.mode[0] : route.query.mode // Default to 'image'
   let functionality = Array.isArray(route.query.functionality)
     ? route.query.functionality[0]
     : route.query.functionality
-  // console.log('query param', route.query.functionality);
-  // console.log('query param', route.query.mode);
 
   // Fallback to default functionality
   const mode = queryMode || localStorage.getItem('mode') || 'image'
@@ -160,14 +157,8 @@ function initializeFromQueryParams() {
   localStorage.setItem('functionality', functionality)
   // Convert functionality to title case for matching options
   const normalizedFunctionality = convertToTitleCase(functionality).toLowerCase()
-
-  // console.log('normalized F:', normalizedFunctionality)
-  // console.log('current Mode:', mode)
-  // console.log('current Functionality:', functionality)
-
   // Set mode and ensure active mode is valid
   if (mode === 'video' || mode === 'image') {
-    // console.log('mode to set', mode);
     activeMode.value = mode
     setActive(mode) // Ensure mode-dependent logic runs
   }
@@ -175,10 +166,6 @@ function initializeFromQueryParams() {
   // Find and set the matching functionality
   const options = mode === 'video' ? videoModeOptions : imageModeOptions
   const option = options.find((opt) => opt.text.toLowerCase() === normalizedFunctionality)
-
-  // console.log('option: ', options);
-  // console.log('option: ', option);
-
   if (option) {
     nextTick(() => {
       mode === 'video' ? selectVideoOption(option) : selectImageOption(option)
@@ -186,8 +173,6 @@ function initializeFromQueryParams() {
   } else {
     console.warn('Functionality not found in available options')
   }
-  // console.log('stored Mode:', localStorage.getItem('mode'))
-  // console.log('stored Functionality:', localStorage.getItem('functionality'))
   activeFunctionality.value = functionality
   router.replace({ path: route.path })
 }
@@ -208,8 +193,6 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
 
   // Fetch media only when necessary
   const functionalityKey = functionalityMap[newFunctionality] || defaultFunctionality
-  // console.log('functionality change w:', functionalityKey)
-  // console.log('functionality change w:', newMode)
   searchQuery.value = ''
   activeFunctionality.value = newFunctionality
   if (functionalityKey) {
@@ -218,8 +201,6 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
     localStorage.setItem('mode', newMode)
     localStorage.setItem('functionality', newFunctionality)
   }
-  // console.log('stored Mode w:', localStorage.getItem('mode'))
-  // console.log('stored Functionality w:', localStorage.getItem('functionality'))
 })
 
 const selectedRatio = ref('Landscape')
@@ -278,15 +259,16 @@ const fetchMedia = async (label: string) => {
         type:
           item.type ||
           (label === 'text-to-video' ||
-          label === 'image-to-video' ||
-          label === 'templates' ||
-          (label === 'face-swap' && item.orientation == null)
+            label === 'image-to-video' ||
+            label === 'templates' ||
+            (label === 'face-swap' && item.orientation == null)
             ? 'video'
             : 'image'),
         orientation: item.orientation,
         prompt: item.prompt,
         isLiked: item.like,
         isShared: item.share,
+        board: item.boardName || 'Board'
       }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
@@ -298,7 +280,9 @@ const fetchMedia = async (label: string) => {
   }
 }
 
-const fetchLikedMedia = async (label: string) => {
+
+// Function to fetch liked media
+const fetchLikedMedia = async (label) => {
   loading.value = true
   if (label === 'Text to Image') label = 'text-to-image'
   else if (label === 'Image to Image') label = 'image-to-image'
@@ -311,23 +295,21 @@ const fetchLikedMedia = async (label: string) => {
     const { data: response } = await genAiService.getLikedMedia(label)
 
     if (response.status && Array.isArray(response.data)) {
-      // Map data with type detection (image/video) for initial load
-
       media.value = response.data.map((item) => ({
         url: item.content,
-
         type:
           item.type ||
           (label === 'text-to-video' ||
-          label === 'image-to-video' ||
-          label === 'templates' ||
-          (label === 'face-swap' && item.orientation == null)
+            label === 'image-to-video' ||
+            label === 'templates' ||
+            (label === 'face-swap' && item.orientation == null)
             ? 'video'
             : 'image'),
         orientation: item.orientation,
         prompt: item.prompt,
         isLiked: item.like,
         isShared: item.share,
+        board: item.boardName || 'Board'
       }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
@@ -339,69 +321,100 @@ const fetchLikedMedia = async (label: string) => {
   }
 }
 
+
+const progress = ref(0);
 const generateAiContent = async () => {
-  loading.value = true
+  loading.value = true;
+  progress.value = 0; // Reset progress
+
+  let progressInterval = setInterval(() => {
+    if (progress.value < 90) progress.value += 10; // Increase progress gradually
+  }, 1000);
 
   try {
-    let response
+    let response;
 
     // Handling different types of functionalities
-
     if (activeMode.value === 'video') {
       if (description.value === '') {
-        toastStore.error('Describe for your video')
-        return
+        toastStore.error('Describe for your video');
+        clearInterval(progressInterval);
+        loading.value = false;
+        return;
       }
+      // const formData = new FormData();
+      // formData.append('image', referenceImage.value || '');
+      // formData.append('text', description.value);
+      // formData.append('image_size', selectedRatio.value);
+      // formData.append('num_images', selectedOutput.value.toString());
 
-      const formData = new FormData()
-      formData.append('image', referenceImage.value!)
-      formData.append('prompt', description.value)
-      formData.append('type', 'image-to-video')
+      const formData = new FormData();
+      formData.append('image', referenceImage.value!);
+      formData.append('prompt', description.value);
+      formData.append('type', 'image-to-video');
+
 
       if (referenceImage.value === null) {
-        response = await genAiService.textToVideo(formData)
-      } else response = await genAiService.imageToVideo(formData)
+        response = await genAiService.textToVideo({
+        text: description.value,
+      });
+      } else response = await genAiService.imageToVideo(formData);
     } else if (activeMode.value === 'image') {
       if (description.value === '') {
-        toastStore.error('Describe for your Image')
-        return
+        toastStore.error('Describe for your Image');
+        return;
       }
-      const formData = new FormData()
-      formData.append('image', referenceImage.value!)
-      formData.append('text', description.value)
-      formData.append('image_size', selectedRatio.value)
-      formData.append('num_images', selectedOutput.value.toString())
 
+      // response = referenceImage.value
+      //   ? await genAiService.imageToImage(formData)
+      //   : await genAiService.textToImage(formData);
+
+      const formData = new FormData();
+      formData.append('image', referenceImage.value!);
+      formData.append('text', description.value);
+      formData.append('image_size', selectedRatio.value);
+      formData.append('num_images', selectedOutput.value.toString());
       if (referenceImage.value === null) {
-        response = await genAiService.textToImage(formData)
-      } else response = await genAiService.imageToImage(formData)
+        response = await genAiService.textToImage({
+        text: description.value,
+        image_size: selectedRatio.value,
+        num_images: selectedOutput.value,
+      });
+      } else response = await genAiService.imageToImage(formData);
     }
     if (response?.data?.status) {
-      toastStore.success(response?.data.message)
-
-      await fetchCredits()
+      toastStore.success(response.data.message);
       resetKey.value++
+      await fetchCredits()
       aiGeneratedMedia.value = response.data.data.map((item) => ({
         url: item.content,
         type: item.type,
         orientation: item.orientation,
         prompt: item.prompt,
-      }))
-      media.value.unshift(...aiGeneratedMedia.value)
+        board: item.boardName || 'Board',
+      }));
+
+      media.value.unshift(...aiGeneratedMedia.value);
     } else {
-      console.error('Failed to generate media:', response)
+      console.error('Failed to generate media:', response);
     }
   } catch (error) {
-    console.error('Error generating media:', error)
+    console.error('Error generating media:', error);
   } finally {
-    loading.value = false
+    clearInterval(progressInterval);
+    progress.value = 100; // Complete progress
+
+    setTimeout(() => {
+      loading.value = false; // Hide loader
+      progress.value = 0; // Reset progress after hiding
+    }, 1000);
   }
-}
+};
+
 const confirmAction = async () => {
   if (!selectedImageUrl.value || !action.value) return
 
   try {
-    console.log(`Action: ${action.value}, Image URL: ${selectedImageUrl.value}`)
     let response
 
     if (action.value === 'delete') {
@@ -412,7 +425,6 @@ const confirmAction = async () => {
       closeModal() // Close the modal after successful action
     }
 
-    console.log('Response:', response.data.message)
     toastStore.success(response.data.message)
 
     closeModal() // Close the modal after successful action
@@ -430,7 +442,6 @@ const shareAction = async (imageId: string, action: 'Y' | 'N') => {
         media.value = [...media.value]
       }
 
-      console.log('Image shared successfully:', response.data)
       toastStore.success(response.data.message)
     }
   } catch (error) {
@@ -444,14 +455,11 @@ const likeAction = async (imageId: string, action: 'Y' | 'N') => {
       const itemIndex = media.value.findIndex((item) => item.url === imageId)
       if (itemIndex !== -1) {
         media.value[itemIndex].isLiked = action
-        // media.value = [...media.value]
-        // console.log(media.value.length)
         if (isLikedState.value) {
           media.value.splice(itemIndex, 1)
           media.value = [...media.value]
         }
       }
-      console.log('Image Liked successfully:', response.data)
       toastStore.success(response.data.message)
     }
   } catch (error) {
@@ -464,9 +472,7 @@ const copyAction = async (prompt: string) => {
     try {
       await navigator.clipboard.writeText(prompt)
       toastStore.success('Prompt copied to clipboard')
-      console.log('Prompt copied to clipboard:', prompt)
     } catch (error) {
-      console.error('Failed to copy prompt using Clipboard API:', error)
     }
   } else {
     console.warn('Clipboard API not supported, using fallback method')
@@ -480,7 +486,6 @@ const copyAction = async (prompt: string) => {
     toastStore.success('Prompt copied to clipboard')
     try {
       document.execCommand('copy')
-      console.log('Prompt copied to clipboard using fallback')
     } catch (err) {
       console.error('Fallback: Unable to copy prompt:', err)
     }
@@ -501,7 +506,6 @@ const filteredMedia = computed(() => {
     return prompt.includes(searchQuery.value.toLowerCase())
   })
 })
-
 const router = useRouter()
 
 const goToExplore = () => {
@@ -593,266 +597,207 @@ const imageModeOptions = [
     text: 'Image to Image',
   },
 ]
+
+const isSaveBoardOpen = ref(false)
+const imageUrlData = ref('')
+const openSaveBoard = (mediaUrl) => {
+  imageUrlData.value = mediaUrl;
+  isSaveBoardOpen.value = true;
+};
+
+const closeSaveBoard = () => {
+  isSaveBoardOpen.value = false
+}
 </script>
 
 <template>
   <DefaultLayout>
-    <div class="flex flex-col md:flex-row flex-1">
+    <div class="flex flex-col md:flex-row flex-1 h-screen">
       <!-- Left Section: Facility Card and Dynamic Content -->
 
       <div class="w-full sm:w-[30%] p-2 flex-shrink-0">
         <!-- Floating Buttons Section -->
         <div class="flex flex-row items-center justify-center mb-5">
           <!-- Image Button -->
-          <button
-            @click="setActive('image')"
-            :class="[
-              'flex items-center px-4 py-2 rounded-lg font-medium transition',
+          <button @click="setActive('image')" :class="[
+            'flex items-center px-4 py-2 rounded-lg font-medium transition',
 
-              activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-            ]"
-          >
+            activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+          ]">
             <span class="material-icons">image</span>
           </button>
 
           <!-- Video Button -->
 
-          <button
-            @click="setActive('video')"
-            :class="[
-              'flex items-center px-4 py-2 rounded-lg font-medium transition',
-              activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
-            ]"
-          >
+          <button @click="setActive('video')" :class="[
+            'flex items-center px-4 py-2 rounded-lg font-medium transition',
+            activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+          ]">
             <span class="material-icons">videocam</span>
           </button>
         </div>
         <!-- Dynamic Content Based on Selected Functionality -->
         <div class="bg-white p-6 space-y-6 flex-shrink-0">
           <!-- Modify ImageInputCard to bind the selected images -->
-          <ImageInputCard
-            title="Insert Image"
-            @input="(file) => (referenceImage = file)"
-            :resetKey="resetKey"
-          />
+          <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
-          <CustomizationCard
-            v-if="activeMode === 'image'"
-            @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)"
-          />
+          <CustomizationCard v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectOutput="(output) => (selectedOutput = output)" />
+          <!-- Loader Spinner -->
+          <!-- <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-800 z-50">
+            <svg class="w-16 h-16 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+              <circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="4" fill="none" />
+              <circle cx="25" cy="25" r="20" stroke="white" stroke-width="4" fill="none" stroke-dasharray="125.6"
+                stroke-dashoffset="62.8" />
+            </svg>
+          </div> -->
 
-          <fwb-button
-            @click="generateAiContent"
-            class="float-end bottom-4 right-4 bg-blue-600 px-8 py-1.5 rounded-lg shadow-md sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10"
-          >
+          <fwb-button @click="generateAiContent" :disabled="loading"
+            class="float-end bottom-4 right-4 bg-blue-600 px-8 py-1.5 rounded-lg disabled:bg-gray-400 shadow-md sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10">
             Zeuxis
           </fwb-button>
         </div>
       </div>
 
-      <div class="flex flex-col h-screen">
       <!-- Right Section: Enhanced Image Grid -->
-      <div
-        class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8"
-      >
+      <!-- Loader (Visible only when loading is true) -->
+      <div v-if="loading" class="w-full bg-black rounded-full h-1 mt-1">
         <div
-          class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 rounded-t-2xl overflow-y-auto"
-        >
-          <div
-            v-for="(item, index) in filteredMedia"
-            :key="index"
-            class="relative overflow-hidden group"
-            :class="[
-              item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
-              'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-100',
-            ]"
-          >
-            <!-- Render Image -->
-            <img
-              v-if="filteredMedia[index] && filteredMedia[index].type === 'image'"
-              :src="imageUrl() + item.url"
-              :alt="'Media ' + index"
-              class="h-full max-w-full w-full"
-              :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]', 'object-cover']"
-              @click="onImageClick(filteredMedia[index])"
-            />
+          class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full transition-all duration-500"
+          :style="{ width: progress + '%' }">
+        </div>
+        <!-- <span class="float-end font-semibold">{{ progress }}%</span> -->
+      </div>
+      <div
+        class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 rounded-t-2xl overflow-y-auto">
+          <div v-for="(item, index) in filteredMedia" :key="index" class="relative overflow-hidden group" :class="[
+            item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
+            'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-100',
+          ]"><!-- Render Image -->
+
+            <img v-if="filteredMedia[index] && filteredMedia[index].type === 'image'" :src="imageUrl() + item.url"
+              :alt="'Media ' + index" class="h-full max-w-full w-full" :class="[
+                item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]',
+                'object-cover',
+              ]" @click="onImageClick(filteredMedia[index])" />
 
             <!-- Render Video -->
-            <video
-              v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
-              :src="imageUrl() + filteredMedia[index].url"
-              controls
-              class="w-full h-full object-contain max-w-full"
-              @click="openPreviewModal(item)"
-            ></video>
+            <video v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
+              :src="imageUrl() + filteredMedia[index].url" controls class="w-full h-full object-contain max-w-full"
+              @click="openPreviewModal(item)"></video>
 
             <!-- Floating Social Buttons -->
-            <div
-              v-if="filteredMedia[index]"
-              class="absolute top-2 right-2 flex flex-row gap-2 items-center opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-100"
-            >
+            <div v-if="filteredMedia[index]"
+              class="absolute top-2 right-2 flex flex-row gap-2 items-center opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-100">
               <!-- Share Button -->
-              <button
-                v-if="activeFunctionality !== 'Face Swap'"
-                @click="
-                  openModal(
-                    filteredMedia[index].url,
-                    filteredMedia[index].isShared === 'N' ? 'Y' : 'N',
-                  )
-                "
-                :class="[
+              <button v-if="activeFunctionality !== 'Face Swap'" @click="
+                openModal(
+                  filteredMedia[index].url,
+                  filteredMedia[index].isShared === 'N' ? 'Y' : 'N',
+                )
+                " :class="[
                   'flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
                   filteredMedia[index].isShared === 'Y'
                     ? 'bg-white text-black'
                     : 'bg-gray-600 text-white',
-                ]"
-              >
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                ]">
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M12.4583 10.375C11.5115 10.375 10.6771 10.8307 10.153 11.5236L5.6219 9.25387C5.69713 9.00303 5.75 8.74306 5.75 8.46875C5.75 8.09669 5.67202 7.74297 5.53731 7.41762L10.2793 4.62612C10.807 5.232 11.5827 5.625 12.4583 5.625C14.0437 5.625 15.3333 4.36341 15.3333 2.8125C15.3333 1.26159 14.0437 0 12.4583 0C10.873 0 9.58333 1.26159 9.58333 2.8125C9.58333 3.16991 9.65856 3.50894 9.78337 3.82369L5.02726 6.62337C4.49998 6.0355 3.73549 5.65625 2.875 5.65625C1.28963 5.65625 0 6.91784 0 8.46875C0 10.0197 1.28963 11.2812 2.875 11.2812C3.83749 11.2812 4.68596 10.8122 5.20806 10.0998L9.72424 12.3622C9.64106 12.6248 9.58333 12.8984 9.58333 13.1875C9.58333 14.7384 10.873 16 12.4583 16C14.0437 16 15.3333 14.7384 15.3333 13.1875C15.3333 11.6366 14.0437 10.375 12.4583 10.375Z"
-                    :fill="filteredMedia[index].isShared === 'Y' ? 'blue' : 'white'"
-                  />
+                    :fill="filteredMedia[index].isShared === 'Y' ? 'blue' : 'white'" />
                 </svg>
               </button>
 
               <!-- Text Button -->
 
               <!-- Copy -->
-              <button
-                v-if="activeFunctionality !== 'Face Swap'"
-                @click="copyAction(filteredMedia[index].prompt)"
-                class="flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300"
-              >
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 16 15"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+              <button v-if="activeFunctionality !== 'Face Swap'" @click="copyAction(filteredMedia[index].prompt)"
+                class="flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg hover:bg-gray-600 bg-gray-600 text-white border border-gray-300 transition duration-300">
+                <svg width="10" height="10" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M15.1111 0H0.888889C0.4 0 0 0.395294 0 0.878431V3.51373C0 3.99686 0.4 4.39216 0.888889 4.39216C1.37778 4.39216 1.77778 3.99686 1.77778 3.51373V1.75686H7.11111V13.1765H5.33333C4.84444 13.1765 4.44444 13.5718 4.44444 14.0549C4.44444 14.538 4.84444 14.9333 5.33333 14.9333H10.6667C11.1556 14.9333 11.5556 14.538 11.5556 14.0549C11.5556 13.5718 11.1556 13.1765 10.6667 13.1765H8.88889V1.75686H14.2222V3.51373C14.2222 3.99686 14.6222 4.39216 15.1111 4.39216C15.6 4.39216 16 3.99686 16 3.51373V0.878431C16 0.395294 15.6 0 15.1111 0Z"
-                    fill="white"
-                  />
+                    fill="white" />
                 </svg>
               </button>
 
               <!-- Like Button -->
 
-              <button
-                @click="
-                  likeAction(
-                    filteredMedia[index].url,
-                    filteredMedia[index].isLiked === 'N' || filteredMedia[index].isLiked === null
-                      ? 'Y'
-                      : 'N',
-                  )
-                "
-                :class="[
+              <button @click="
+                likeAction(
+                  filteredMedia[index].url,
+                  filteredMedia[index].isLiked === 'N' || filteredMedia[index].isLiked === null
+                    ? 'Y'
+                    : 'N',
+                )
+                " :class="[
                   'flex justify-center items-center w-5 h-5 rounded-full shadow-md hover:shadow-lg border border-gray-300 transition duration-300',
                   filteredMedia[index].isLiked === 'Y'
                     ? 'bg-white text-red'
                     : 'bg-gray-600 text-white',
-                ]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-3 w-3"
-                  :class="filteredMedia[index].isLiked === 'Y' ? 'fill-red' : 'fill-white'"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z"
-                  />
+                ]">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"
+                  :class="filteredMedia[index].isLiked === 'Y' ? 'fill-red' : 'fill-white'" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.485 8.485a.75.75 0 001.06 0l8.485-8.485a5.5 5.5 0 000-7.78z" />
                 </svg>
               </button>
 
               <!-- Delete Button -->
-              <button
-                @click="openModal(filteredMedia[index].url, 'delete')"
-                class="flex justify-center items-center w-5 h-5 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300"
-              >
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 15 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+              <button @click="openModal(filteredMedia[index].url, 'delete')"
+                class="flex justify-center items-center w-5 h-5 bg-gray-600 text-white border border-gray-300 rounded-full shadow-md hover:shadow-lg hover:bg-black transition duration-300">
+                <svg width="10" height="10" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M0.975098 4.6875L1.80538 14.7105C1.86488 15.4333 2.48057 16 3.20613 16H10.8563C11.5818 16 12.1975 15.4333 12.257 14.7105L13.0873 4.6875H0.975098ZM4.687 14.125C4.44163 14.125 4.23519 13.9341 4.21963 13.6855L3.75088 6.12303C3.73485 5.86441 3.93122 5.64194 4.18941 5.62591C4.45719 5.60713 4.67007 5.80581 4.68653 6.06444L5.15528 13.6269C5.17188 13.8948 4.95997 14.125 4.687 14.125ZM7.49994 13.6562C7.49994 13.9153 7.29029 14.125 7.03119 14.125C6.7721 14.125 6.56244 13.9153 6.56244 13.6562V6.09375C6.56244 5.83466 6.7721 5.625 7.03119 5.625C7.29029 5.625 7.49994 5.83466 7.49994 6.09375V13.6562ZM10.3115 6.12306L9.84275 13.6856C9.82735 13.9316 9.62225 14.1367 9.34563 14.1241C9.08744 14.1081 8.89107 13.8856 8.9071 13.627L9.37585 6.06447C9.39188 5.80584 9.61847 5.61769 9.87297 5.62594C10.1312 5.64197 10.3275 5.86444 10.3115 6.12306Z"
-                    fill="white"
-                  />
+                    fill="white" />
                   <path
                     d="M13.125 1.875H10.3125V1.40625C10.3125 0.630813 9.68169 0 8.90625 0H5.15625C4.38081 0 3.75 0.630813 3.75 1.40625V1.875H0.9375C0.419719 1.875 0 2.29472 0 2.8125C0 3.33022 0.419719 3.75 0.9375 3.75C5.24894 3.75 8.81372 3.75 13.125 3.75C13.6428 3.75 14.0625 3.33022 14.0625 2.8125C14.0625 2.29472 13.6428 1.875 13.125 1.875ZM9.375 1.875H4.6875V1.40625C4.6875 1.14762 4.89762 0.9375 5.15625 0.9375H8.90625C9.16488 0.9375 9.375 1.14762 9.375 1.40625V1.875Z"
-                    fill="white"
-                  />
+                    fill="white" />
                 </svg>
               </button>
 
-              <!-- Board Button (Bottom Left) -->
-              <button
-                @click=""
-                class="flex items-center fixed bottom-4 left-4 space-x-1"
-              >
-                <span class="text-white text-sm">Board</span>
+              <button @click="openSaveBoard(filteredMedia[index].url)" v-if="media[index].type === 'image'"
+                class="flex items-center fixed bottom-4 left-4 space-x-1">
+                <span class="text-white text-sm">{{ media[index].board }}</span>
                 <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6.42828 6.81419L11.8229 1.09697C12.059 0.846099 12.059 0.439652 11.8229 0.188151C11.5867 -0.0627165 11.203 -0.0627165 10.9668 0.188151L6.0003 5.45189L1.03376 0.188785C0.797568 -0.0620828 0.413932 -0.0620828 0.177143 0.188785C-0.0590478 0.439653 -0.0590478 0.846732 0.177143 1.0976L5.57167 6.81482C5.80542 7.06183 6.19508 7.06183 6.42828 6.81419Z" fill="white"/>
+                  <path
+                    d="M6.42828 6.81419L11.8229 1.09697C12.059 0.846099 12.059 0.439652 11.8229 0.188151C11.5867 -0.0627165 11.203 -0.0627165 10.9668 0.188151L6.0003 5.45189L1.03376 0.188785C0.797568 -0.0620828 0.413932 -0.0620828 0.177143 0.188785C-0.0590478 0.439653 -0.0590478 0.846732 0.177143 1.0976L5.57167 6.81482C5.80542 7.06183 6.19508 7.06183 6.42828 6.81419Z"
+                    fill="white" />
                 </svg>
               </button>
 
               <!-- Save Button (Bottom Right) -->
-              <div class="fixed bottom-4 right-4 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
+              <div v-if="media[index].board === 'Board' && media[index].type === 'image'"
+                class="fixed bottom-4 right-4 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
                 Save
               </div>
-
-
+              <div v-if="media[index].board !== 'Board' && media[index].type === 'image'" class="fixed bottom-4 right-4 bg-black text-white px-1.5 py-1.5 rounded-lg text-xs">
+                Saved
+              </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
-    </div>
-
     <!-- Modal Component -->
     <ShowModalForImage :isOpen="showImageModal" @close="closeImageModal" :image="selectedImage" />
-    <PreviewImageModal
-      :isOpen="showPreviewModal"
-      @close="closePreviewModal"
-      :image="selectedImage"
-    />
+    <PreviewImageModal :isOpen="showPreviewModal" @close="closePreviewModal" :image="selectedImage" />
+
+    <!-- Show SaveBoardComponent when isSaveBoardOpen is true -->
+    <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"
+      @updateAfterSave="fetchMedia" />
 
     <!--
     <ShowModalWithDownloadButton :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->
   </DefaultLayout>
   <!-- Modal -->
-  <div
-    v-if="isModalOpen"
-    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-  >
+  <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white rounded-lg shadow-xl w-96 p-6 relative">
       <!-- Close Button -->
       <button @click="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          class="w-5 h-5"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+          class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
@@ -863,13 +808,10 @@ const imageModeOptions = [
       <!-- Modal Content -->
       <p class="mt-2 text-gray-600">
         Are you sure you want to
-        <span
-          class="font-bold"
-          :class="{
-            'text-blue-600': action === 'Y',
-            'text-red': action === 'N' || action === 'delete',
-          }"
-        >
+        <span class="font-bold" :class="{
+          'text-blue-600': action === 'Y',
+          'text-red': action === 'N' || action === 'delete',
+        }">
           {{ actionText }}
         </span>
         this item?
@@ -877,20 +819,14 @@ const imageModeOptions = [
 
       <!-- Buttons -->
       <div class="mt-6 flex justify-end gap-3">
-        <button
-          @click="closeModal"
-          class="px-4 py-2 text-sm text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition"
-        >
+        <button @click="closeModal"
+          class="px-4 py-2 text-sm text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition">
           Cancel
         </button>
-        <button
-          @click="confirmAction"
-          class="px-4 py-2 text-sm text-white rounded-md transition"
-          :class="{
-            'bg-blue-700 hover:bg-blue-700': action === 'Y',
-            'bg-red hover:bg-red': action === 'N' || action === 'delete',
-          }"
-        >
+        <button @click="confirmAction" class="px-4 py-2 text-sm text-white rounded-md transition" :class="{
+          'bg-blue-700 hover:bg-blue-700': action === 'Y',
+          'bg-red hover:bg-red': action === 'N' || action === 'delete',
+        }">
           Confirm
         </button>
       </div>

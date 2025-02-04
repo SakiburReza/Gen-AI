@@ -91,22 +91,20 @@ const toggleMenu = () => {
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
       </svg>
     </button>
-  <div class="justify-center items-center flex flex-col md:flex-row gap-10">
 
     <!-- Main Content -->
-    <div class="flex-1 px-4 max-h-screen flex justify-center items-center">
+    <div class="px-4 max-h-screen w-full ">
       <HelpCardComponent :data="helpData" />
     </div>
 
     <!-- Sidebar Section -->
-    <div
+    <!-- <div
       class="md:w-64 md:ml-5 mt-5 md:mt-0 fixed md:relative top-12 right-7 w-60 h-full rounded-3xl overflow-hidden z-50 md:block"
       :class="{ 'hidden': !showMenu, 'block': showMenu }">
       <div class="w-80 rounded-3xl overflow-hidden">
         <CommunitySidebar class="w-full" />
       </div>
-    </div>
-  </div>
+    </div> -->
 
 </template>
 

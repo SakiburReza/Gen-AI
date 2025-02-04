@@ -88,7 +88,7 @@ onMounted(fetchprops)
         <div class="flex flex-row items-start md:items-center justify-between space-y-4 md:space-y-0">
             <div class="flex items-center space-x-4">
               <h2 class="text-xl md:text-2xl text-black font-bold">My Credits:</h2>
-              <img src="/public/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5">
+              <img src="/images/icon/StartIcon.svg" alt="Start Icon" class="w-4 h-5">
               <h2 class="text-xl md:text-2xl text-black font-bold">{{ credits }}</h2>
             </div>
             <img src="/images/zeuxis-logo.png" alt="Logo" class="md:w-35 w-25 object-contain">
