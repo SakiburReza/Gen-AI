@@ -507,7 +507,7 @@ const filteredMedia = computed(() => {
 const router = useRouter()
 
 const goToExplore = () => {
-  router.push('/communitypage')
+  router.push('/')
 }
 
 const goToGallery = () => {

@@ -127,18 +127,18 @@ onMounted(() => {
           <img
             class="rounded border cursor-pointer w-100 h-50 object-cover"
             :src="board.images[0] ? imageUrl() + board.images[0] : '/images/icon/NoImageBox.svg'"
-            alt=""
+            alt="" loading="lazy"
           />
           <div class="grid grid-cols-2 mt-1 gap-1">
             <img
               class="rounded border cursor-pointer w-50 h-50  object-cover"
               :src="board.images[1] ? imageUrl() + board.images[1] : '/images/icon/NoImageBox.svg'"
-              alt=""
+              alt="" loading="lazy"
             />
             <img
               class="rounded border cursor-pointer w-50 h-50 object-cover"
               :src="board.images[2] ? imageUrl() + board.images[2] : '/images/icon/NoImageBox.svg'"
-              alt=""
+              alt="" loading="lazy"
             />
           </div>
         </div>

@@ -265,13 +265,13 @@ const goToUpdatesPage = () => {
 }
 
 const logout = () => {
-  // Clear user-related data (e.g., authentication token)
-  localStorage.removeItem('authToken') // Adjust the key as per your app
-  sessionStorage.removeItem('firstVisit') // Optional: Clear session
-  sessionStorage.clear() // Optional: Clear session
+  localStorage.removeItem('authToken') 
+  sessionStorage.setItem('lastVisit', '/')
+  // sessionStorage.removeItem('lastVisit') 
+  // sessionStorage.clear() 
   localStorage.clear()
-  // Redirect to login page
-  router.push('/sign-in')
+  router.push('/')
+
 }
 
 onMounted(() => {

@@ -24,8 +24,9 @@ const submitForm = async () => {
     if (response.data.status) {
       //toastStore.success('Sign-In successful')
       localStorage.setItem('authToken', response.data.data.token)
-      localStorage.setItem('selectedMenu', 'home')
-      router.push('/');
+      localStorage.setItem('selectedMenu', '/')
+      const lastVisitedPage = sessionStorage.getItem('lastVisit')
+      router.push(lastVisitedPage);
     } else {
       // Handle the case when the response doesn't indicate success
       //toastStore.error("Sign-In failed, please try again.");
