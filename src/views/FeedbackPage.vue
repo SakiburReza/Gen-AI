@@ -203,6 +203,6 @@ const submitForm = async () => {
 
 const goBack = () => {
   localStorage.setItem('selectedMenu', 'home')
-  router.push('/operativepage')
+  router.push('/')
 }
 </script>

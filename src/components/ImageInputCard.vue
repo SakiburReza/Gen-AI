@@ -84,7 +84,7 @@ const handleDragOver = (event) => {
         <div v-else
           class="text-ravenBlack font-bold text-lg flex flex-col items-center justify-center text-center gap-4">
           <!-- Drop Image Icon -->
-          <img src="/public/images/icon/dropandimage.svg" alt="Drop an Image icon" class="w-5 sm:w-10">
+          <img src="/images/icon/dropandimage.svg" alt="Drop an Image icon" class="w-5 sm:w-10">
 
           <!-- Text -->
           <p class="text-base sm:text-lg">Drop an Image</p>

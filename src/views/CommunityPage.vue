@@ -6,11 +6,18 @@ import { useToastStore } from '@/stores/toast'
 import { imageUrl } from '@/utils/utils'
 import { computed, onMounted, ref, watch } from 'vue'
 
+import { useRoute } from 'vue-router'
+
 
 const searchQuery = ref('')
 
 
 const toastStore = useToastStore()
+const route = useRoute()
+
+
+const showBadge = computed(() => route.path !== '/')
+
 const media = ref<
   {
     url: string
@@ -22,38 +29,31 @@ const media = ref<
     owner: string
   }[]
 >([])
-// Computed property to filter media based on the search query
+
 const filteredMedia = computed(() => {
-  // If searchQuery is null or empty, return the entire media array
   if (!searchQuery.value || searchQuery.value.trim() === '') {
     return media.value
   }
   return media.value.filter((item) => {
-    const prompt = item.prompt ? item.prompt.toLowerCase() : '' // Safely handle null prompts
+    const prompt = item.prompt ? item.prompt.toLowerCase() : '' 
     return prompt.includes(searchQuery.value.toLowerCase())
   })
 })
 
-const selectedImage = ref(null) // Selected image or video
+const selectedImage = ref(null) 
 
-//Functions to open/close modal
 const showPreviewModal = ref(false)
 const closePreviewModal = () => {
   showPreviewModal.value = false
   selectedImage.value = null
 }
 const openPreviewModal = (mediaItem) => {
-  console.log('Image clicked', media)
-  console.log('mediaItem', mediaItem)
-
   selectedImage.value = mediaItem
   showPreviewModal.value = true
 }
-//States to store images from the ImageInputCard components
 const referenceImage = ref<File | null>(null)
 const faceImage = ref<File | null>(null)
 
-//States
 const description = ref('')
 
 // const selectedImage = ref(null) // Selected image or video
@@ -136,6 +136,7 @@ const toggleMenu = () => {
   showMenu.value = !showMenu.value
 }
 
+
 // Fetch images when the component is mounted
 onMounted(async () => {
   fetchMedia()
@@ -208,7 +209,7 @@ watch(activeTab, (newTab) => {
 </script>
 
 <template>
-  <DefaultLayout>
+  <DefaultLayout :showBadge="showBadge">
     <div class="flex flex-col h-full">
       <div class="flex items-center justify-between p-8 py-2 sticky top-0 z-10 w-full">
         <!-- Left Section -->

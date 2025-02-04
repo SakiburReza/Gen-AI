@@ -44,7 +44,7 @@ function initializePricies(){
 
 const goBack = () => {
   localStorage.setItem('selectedMenu', 'home')
-  router.push('/operativepage')
+  router.push('/')
 }
 
 const plans = ref([]) // Create a ref for the plans list

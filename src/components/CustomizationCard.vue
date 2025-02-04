@@ -19,7 +19,7 @@ const handleSelection = (ratio) => {
   <fwb-card class="max-w-sm mx-auto sm:max-w-md md:max-w-lg">
     <div class="p-5">
       <span>
-        <img src="/public/images/icon/showView.svg" alt="Show View Button" />
+        <img src="/images/icon/showView.svg" alt="Show View Button" />
       </span>
       <!-- Image Ratio -->
       <p class="mt-3 text-xs sm:text-sm text-ravenBlack font-bold">Aspect Ratio</p>
@@ -36,7 +36,7 @@ const handleSelection = (ratio) => {
           ]"
         >
           <img
-            src="/public/images/icon/portrait.svg"
+            src="/images/icon/portrait.svg"
             alt="Portrait Button"
             class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
           />
@@ -54,7 +54,7 @@ const handleSelection = (ratio) => {
           ]"
         >
           <img
-            src="/public/images/icon/landscape.svg"
+            src="/images/icon/landscape.svg"
             alt="Landscape Button"
             class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
           />

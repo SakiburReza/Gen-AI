@@ -18,7 +18,7 @@ import GalleryPage from '@/views/GalleryPage.vue'
 import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 
-const isAuthenticated = () => {
+export const  isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
   if (!token) {
     return false; // No token found
@@ -32,7 +32,6 @@ const isAuthenticated = () => {
     }
     return false; // Token is expired
   } catch (error) {
-    console.error('Invalid token:', error);
     return false; // Invalid token format
   }
 };
@@ -48,7 +47,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/',
+      path: '/sign-in',
       name: 'signin',
       component: SignInPage,
       meta: { requiresAuth: false },
@@ -114,10 +113,10 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/communitypage',
+      path: '/',
       name: 'communitypage',
       component: CommunityPage,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: '/feedbackpage',
@@ -152,17 +151,43 @@ const router = createRouter({
 
   ],
 });
+// router.beforeEach((to, from, next) => {
+//   const loggedIn = isAuthenticated();
+
+//   if (to.meta.requiresAuth && !loggedIn) {
+//     console.log("log?", loggedIn);
+//     next('/'); // Redirect to login page
+//   } else if ((to.path === '/' || to.path === '/sign-up') && loggedIn) {
+//     next('/operativepage'); // Redirect logged-in users to dashboard/home
+//   } else {
+//     next(); // Proceed to the requested route
+//   }
+// });
+
 router.beforeEach((to, from, next) => {
   const loggedIn = isAuthenticated();
+  const firstVisit = sessionStorage.getItem("firstVisit") === null;
 
-  if (to.meta.requiresAuth && !loggedIn) {
-    console.log("log?", loggedIn);
-    next('/'); // Redirect to login page
-  } else if ((to.path === '/' || to.path === '/sign-up') && loggedIn) {
-    next('/operativepage'); // Redirect logged-in users to dashboard/home
+  if (!loggedIn) {
+    if (firstVisit && to.path === "/") {
+      sessionStorage.setItem("firstVisit", "false");
+      localStorage.setItem('selectedMenu', 'home')
+      next("/");
+    } else if (to.meta.requiresAuth) {
+      next("/sign-in");
+    } else {
+      next();
+    }
   } else {
-    next(); // Proceed to the requested route
+    if (to.path === "/sign-in" || to.path === "/sign-up") {
+      next("/operativepage");
+    } else {
+      next();
+    }
   }
 });
+
+
+
 
 export default router

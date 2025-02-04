@@ -355,7 +355,9 @@ const generateAiContent = async () => {
 
 
       if (referenceImage.value === null) {
-        response = await genAiService.textToVideo(formData);
+        response = await genAiService.textToVideo({
+        text: description.value,
+      });
       } else response = await genAiService.imageToVideo(formData);
     } else if (activeMode.value === 'image') {
       if (description.value === '') {
@@ -373,12 +375,16 @@ const generateAiContent = async () => {
       formData.append('image_size', selectedRatio.value);
       formData.append('num_images', selectedOutput.value.toString());
       if (referenceImage.value === null) {
-        response = await genAiService.textToImage(formData);
+        response = await genAiService.textToImage({
+        text: description.value,
+        image_size: selectedRatio.value,
+        num_images: selectedOutput.value,
+      });
       } else response = await genAiService.imageToImage(formData);
     }
     if (response?.data?.status) {
       toastStore.success(response.data.message);
-
+      resetKey.value++
       aiGeneratedMedia.value = response.data.data.map((item) => ({
         url: item.content,
         type: item.type,
@@ -750,7 +756,7 @@ const closeSaveBoard = () => {
                 </svg>
               </button>
 
-              <button @click="openSaveBoard(filteredMedia[index].url)"
+              <button @click="openSaveBoard(filteredMedia[index].url)" v-if="media[index].type === 'image'"
                 class="flex items-center fixed bottom-4 left-4 space-x-1">
                 <span class="text-white text-sm">{{ media[index].board }}</span>
                 <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -761,11 +767,11 @@ const closeSaveBoard = () => {
               </button>
 
               <!-- Save Button (Bottom Right) -->
-              <div v-if="media[index].board === 'Board'"
+              <div v-if="media[index].board === 'Board' && media[index].type === 'image'"
                 class="fixed bottom-4 right-4 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
                 Save
               </div>
-              <div v-else class="fixed bottom-4 right-4 bg-black text-white px-1.5 py-1.5 rounded-lg text-xs">
+              <div v-if="media[index].board !== 'Board' && media[index].type === 'image'" class="fixed bottom-4 right-4 bg-black text-white px-1.5 py-1.5 rounded-lg text-xs">
                 Saved
               </div>
             </div>
