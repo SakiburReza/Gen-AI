@@ -16,7 +16,7 @@
       <ul class="space-y-2 px-4">
         <!-- Explore Link -->
         <li>
-          <router-link to="/communitypage">
+          <router-link to="/">
             <div
               class="flex items-center px-4 py-3 rounded-lg text-black-2 hover:bg-blue-600 hover:text-white group transition-all">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"

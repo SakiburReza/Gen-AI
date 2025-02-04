@@ -18,8 +18,9 @@ const billinInformation = ref({
 })
 
 const goBack = () => {
-  localStorage.setItem('selectedMenu', 'home')
-  router.push('/operativepage')
+  localStorage.setItem('selectedMenu', '/')
+  sessionStorage.setItem('lastVisit', '')
+  router.push('/')
 }
 
 const billingInfo = async () => {

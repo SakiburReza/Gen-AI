@@ -13,7 +13,7 @@ import { isAuthenticated } from '@/router'
 const { credits, fetchCredits } = useCredits();
 const router = useRouter()
 const showAccountCard = ref(false)
-const selectedMenu = ref('communitypage')
+const selectedMenu = ref('/')
 const accountCardRef = ref(null)
 
 const isAuthenticatedUser = ref('')
@@ -50,6 +50,7 @@ watch(showAccountCard, (newVal) => {
 const selectMenuAndNavigate = (menu, goToFunction) => {
   selectedMenu.value = selectedMenu.value === menu ? '' : menu
   localStorage.setItem('selectedMenu', menu)
+  sessionStorage.setItem('lastVisit', menu)
   goToFunction()
 }
 
@@ -73,11 +74,11 @@ watch(
   () => router.currentRoute.value.path,
   (newPath) => {
     if (newPath.includes('gallerypage')) {
-      selectedMenu.value = 'boards'
+      selectedMenu.value = 'gallerypage'
     } else if (newPath.includes('communitypage')) {
-      selectedMenu.value = 'home'
+      selectedMenu.value = '/'
     } else if (newPath.includes('operativepage')) {
-      selectedMenu.value = 'create'
+      selectedMenu.value = 'operativepage'
     }
   },
 )
@@ -88,7 +89,8 @@ onMounted(() => {
   if(props.showBadge && isAuthenticatedUser){
     fetchCredits();
   } // Fetch credits on component mount
-  const savedMenu = localStorage.getItem('selectedMenu')
+  // const savedMenu = localStorage.getItem('selectedMenu')
+  const savedMenu = sessionStorage.getItem('lastVisit')
   if (savedMenu) {
     selectedMenu.value = savedMenu
   }
@@ -148,10 +150,10 @@ onUnmounted(() => {
         <fwb-tooltip placement="right">
           <template #trigger>
             <div
-              @click="selectMenuAndNavigate('home', goToCommunity)"
+              @click="selectMenuAndNavigate('/', goToCommunity)"
               :class="[
                 'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
-                selectedMenu === 'home' ? 'bg-[#D9D9D9]' : '',
+                selectedMenu === '/' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
               <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
@@ -163,10 +165,10 @@ onUnmounted(() => {
         <fwb-tooltip placement="right">
           <template #trigger>
             <div
-              @click="selectMenuAndNavigate('create', goToOperative)"
+              @click="selectMenuAndNavigate('operativepage', goToOperative)"
               :class="[
                 'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
-                selectedMenu === 'create' ? 'bg-[#D9D9D9]' : '',
+                selectedMenu === 'operativepage' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
               <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
@@ -178,10 +180,10 @@ onUnmounted(() => {
         <fwb-tooltip placement="right">
           <template #trigger>
             <div
-              @click="selectMenuAndNavigate('boards', goToGallery)"
+              @click="selectMenuAndNavigate('gallerypage', goToGallery)"
               :class="[
                 'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
-                selectedMenu === 'boards' ? 'bg-[#D9D9D9]' : '',
+                selectedMenu === 'gallerypage' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
               <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
