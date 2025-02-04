@@ -612,7 +612,7 @@ const closeSaveBoard = () => {
 
 <template>
   <DefaultLayout>
-    <div class="flex flex-col md:flex-row flex-1">
+    <div class="flex flex-col md:flex-row flex-1 h-screen">
       <!-- Left Section: Facility Card and Dynamic Content -->
 
       <div class="w-full sm:w-[30%] p-2 flex-shrink-0">
