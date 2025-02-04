@@ -216,9 +216,9 @@ watch(activeTab, (newTab) => {
 <!--        <div class="flex space-x-6 p-4 sticky top-0 z-10 w-full ">-->
         <div class="flex items-center space-x-10 text-sm sm:text-base md:text-lg">
           <span v-for="tab in ['for-you', 'following', 'favourites']" :key="tab" @click="activeTab = tab"
-                class="cursor-pointer font-semibold text-sm sm:text-base md:text-lg pb-2" :class="{
-              'text-black border-b-2 border-black': activeTab === tab,
-              'text-gray-400 hover:text-black': activeTab !== tab
+                class="cursor-pointer font-semibold font-inter text-greysilver text-sm sm:text-base md:text-lg pb-2" :class="{
+              'text-raisinblack border-b-2 border-raisinblack': activeTab === tab,
+              'text-gray-400 hover:text-raisinblack': activeTab !== tab
             }">
             {{ tab.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) }}
           </span>
@@ -534,19 +534,4 @@ watch(activeTab, (newTab) => {
   </DefaultLayout>
 </template>
 
-<style scoped>
-/* Tailwind Custom Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.animate-spin {
-  animation: fadeIn 0.9s ease-in-out forwards;
-}
-</style>
+<style scoped></style>

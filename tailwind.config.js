@@ -10,7 +10,7 @@ export default {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      satoshi: ['Satoshi', 'Inter', 'sans-serif'],
+      satoshi: ['Satoshi','sans-serif'],
       montserrat: ['Montserrat', 'sans-serif'],
       gordita: ['Gordita', 'sans-serif'],
       inter: ['Inter', 'sans-serif'],
@@ -46,8 +46,10 @@ export default {
         ravenBlack: '#3D3D3D',
         dimGray: '#6D6D6D',
         darkGray: '#474747',
+        greysilver: '#CBCBCB',
         silver: '#C5C5C5 ',
         orange: '#FF6923',
+        raisinblack: '#212121',
 
         // Color Code added by Abeer 22/12/2024
 
