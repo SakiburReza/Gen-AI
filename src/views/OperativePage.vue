@@ -111,6 +111,7 @@ const aiGeneratedMedia = ref<
     isLiked: 'Y' | 'N'
     isShared: 'Y' | 'N'
     prompt: string
+    board: string
   }[]
 >([])
 const loading = ref(false) // Track loading state
