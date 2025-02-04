@@ -78,7 +78,7 @@ onMounted(() => {
     <!-- search input -->
     <!-- <div class="relative group w-full mt-2 p-2">
       <img
-        src="/public/images/icon/SearchIcon.svg"
+        src="/images/icon/SearchIcon.svg"
         alt="Search"
         class="h-5 w-5 absolute top-1/2 ml-3 transform -translate-y-1/2 text-gray-500"
       />
@@ -93,7 +93,7 @@ onMounted(() => {
     <div class="flex items-center justify-center mt-2">
     <div class="bg-white p-6 w-80 text-center">
       <img 
-        :src="unserData?.profilePicture? unserData?.profilePicture : '/public/images/icon/NoImageBox.svg'"
+        :src="unserData?.profilePicture? unserData?.profilePicture : '/images/icon/NoImageBox.svg'"
         alt="Profile" 
         class="w-24 h-24 mx-auto border-4 object-cover" 
       />
@@ -114,9 +114,9 @@ onMounted(() => {
 
     <!-- filter and create board -->
     <div class="flex justify-between p-2">
-      <div><img class="h-12 w-12" src="/public/images/icon/filterIcon.svg" alt="" /></div>
+      <div><img class="h-12 w-12" src="/images/icon/filterIcon.svg" alt="" /></div>
       <div @click="isOpen = true">
-        <img class="h-12 w-12" src="/public/images/icon/CreateIcon.svg" alt="" />
+        <img class="h-12 w-12" src="/images/icon/CreateIcon.svg" alt="" />
       </div>
     </div>
     <!-- boards -->
@@ -126,18 +126,18 @@ onMounted(() => {
         <div class="w-full pointer-events-auto" @click="openBoardImage(board.name)">
           <img
             class="rounded border cursor-pointer w-100 h-50 object-cover"
-            :src="board.images[0] ? imageUrl() + board.images[0] : '/public/images/icon/NoImageBox.svg'"
+            :src="board.images[0] ? imageUrl() + board.images[0] : '/images/icon/NoImageBox.svg'"
             alt=""
           />
           <div class="grid grid-cols-2 mt-1 gap-1">
             <img
               class="rounded border cursor-pointer w-50 h-50  object-cover"
-              :src="board.images[1] ? imageUrl() + board.images[1] : '/public/images/icon/NoImageBox.svg'"
+              :src="board.images[1] ? imageUrl() + board.images[1] : '/images/icon/NoImageBox.svg'"
               alt=""
             />
             <img
               class="rounded border cursor-pointer w-50 h-50 object-cover"
-              :src="board.images[2] ? imageUrl() + board.images[2] : '/public/images/icon/NoImageBox.svg'"
+              :src="board.images[2] ? imageUrl() + board.images[2] : '/images/icon/NoImageBox.svg'"
               alt=""
             />
           </div>

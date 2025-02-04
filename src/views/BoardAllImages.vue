@@ -82,7 +82,7 @@ const openPreviewModal = (mediaItem) => {
     <!-- search input -->
     <!-- <div class="relative group w-full mt-2 p-2">
       <img
-        src="/public/images/icon/SearchIcon.svg"
+        src="/images/icon/SearchIcon.svg"
         alt="Search"
         class="h-5 w-5 absolute top-1/2 ml-3 transform -translate-y-1/2 text-gray-500"
       />
@@ -99,24 +99,24 @@ const openPreviewModal = (mediaItem) => {
         <div class="flex justify-between items-center">
           <h2 class="text-xl font-semibold">{{ board }}</h2>
           <div class="flex items-center gap-3">
-            <img src="/public/images/icon/shareThreeDot.svg" alt="" />
+            <img src="/images/icon/shareThreeDot.svg" alt="" />
           </div>
         </div>
         <p class="text-gray-500 text-sm">{{ media.length }} Photos</p>
         <div class="flex items-center gap-3 mt-2">
           <img
-            :src="profileImage? profileImage : '/public/images/icon/NoImageBox.svg'"
+            :src="profileImage? profileImage : '/images/icon/NoImageBox.svg'"
             alt="Profile"
             class="w-10 h-10 border-2 border-gray-300 object-cover"
           />
         </div>
         <div class="flex mt-2">
           <button class="flex flex-col items-center">
-            <img src="/public/images/icon/organize.svg" alt="" />
+            <img src="/images/icon/organize.svg" alt="" />
             <span class="text-sm text-gray-700">Organize</span>
           </button>
           <button class="flex flex-col items-center w-24">
-            <img src="/public/images/icon/moreIdeas.svg" alt="" />
+            <img src="/images/icon/moreIdeas.svg" alt="" />
             <span class="text-sm text-gray-700">More Ideas</span>
           </button>
         </div>
@@ -126,7 +126,7 @@ const openPreviewModal = (mediaItem) => {
     <!-- filter and create board -->
     <div class="flex justify-between p-2">
       <div></div>
-      <div><img class="h-12 w-12" src="/public/images/icon/filterIconWhite.svg" alt="" /></div>
+      <div><img class="h-12 w-12" src="/images/icon/filterIconWhite.svg" alt="" /></div>
     </div>
 
     <div

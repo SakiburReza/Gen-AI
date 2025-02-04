@@ -207,7 +207,7 @@ const handleOutsideClick = (event) => {
             <div class="mt-5 text-center">
               <a v-if="image?.url" :href="fileUrl" :download="getFilename(image.url)"
                 class="flex items-start justify-start text-black text-xs px-1 font-semibold py-3">
-                <img src="/public/images/icon/downloadButton.svg" alt="Download Icon" class="w-5 h-5 mr-1.5" />
+                <img src="/images/icon/downloadButton.svg" alt="Download Icon" class="w-5 h-5 mr-1.5" />
                 DOWNLOAD
               </a>
             </div>

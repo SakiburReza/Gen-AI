@@ -141,7 +141,7 @@ onUnmounted(() => {
       class="sidebar border fixed left-0 h-screen w-[45px] flex flex-col justify-between items-center py-4 z-10"
     >
       <div class="flex flex-col items-center gap-4 mt-16" @click="goToProfilePage">
-        <img src="/public/images/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
+        <img src="/images/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
       </div>
 
       <div class="flex flex-col items-center gap-4 flex-1 justify-center">
@@ -154,7 +154,7 @@ onUnmounted(() => {
                 selectedMenu === 'home' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/public/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+              <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
             </div>
           </template>
           <template #content> Home </template>
@@ -169,7 +169,7 @@ onUnmounted(() => {
                 selectedMenu === 'create' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/public/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+              <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
             </div>
           </template>
           <template #content> Create </template>
@@ -184,7 +184,7 @@ onUnmounted(() => {
                 selectedMenu === 'boards' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/public/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
+              <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
             </div>
           </template>
           <template #content> Boards </template>
@@ -194,7 +194,7 @@ onUnmounted(() => {
       <div class="flex flex-col items-center gap-4">
         <FwbDropdown placement="right" align-to-end>
           <template #trigger>
-            <img src="/public/images/icon/burgerIcon.svg" alt="burgerIcon" class="cursor-pointer" />
+            <img src="/images/icon/burgerIcon.svg" alt="burgerIcon" class="cursor-pointer" />
           </template>
           <div class="bg-blue">
             <AccountCard />
