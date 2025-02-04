@@ -329,7 +329,7 @@ const generateAiContent = async () => {
 
   let progressInterval = setInterval(() => {
     if (progress.value < 90) progress.value += 10; // Increase progress gradually
-  }, 500);
+  }, 1000);
 
   try {
     let response;
@@ -385,6 +385,7 @@ const generateAiContent = async () => {
     if (response?.data?.status) {
       toastStore.success(response.data.message);
       resetKey.value++
+      await fetchCredits()
       aiGeneratedMedia.value = response.data.data.map((item) => ({
         url: item.content,
         type: item.type,

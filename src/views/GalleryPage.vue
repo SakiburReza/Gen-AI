@@ -74,7 +74,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <DefaultLayout>
+  <DefaultLayout :showBadge="false">
     <!-- search input -->
     <!-- <div class="relative group w-full mt-2 p-2">
       <img
