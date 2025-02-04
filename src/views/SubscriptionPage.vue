@@ -43,7 +43,8 @@ function initializePricies(){
 }
 
 const goBack = () => {
-  localStorage.setItem('selectedMenu', 'home')
+  localStorage.setItem('selectedMenu', '/')
+  sessionStorage.setItem('lastVisit', '/')
   router.push('/')
 }
 

@@ -166,12 +166,12 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const loggedIn = isAuthenticated();
-  const firstVisit = sessionStorage.getItem("firstVisit") === null;
+  const firstVisit = sessionStorage.getItem("lastVisit") === null;
 
   if (!loggedIn) {
     if (firstVisit && to.path === "/") {
-      sessionStorage.setItem("firstVisit", "false");
-      localStorage.setItem('selectedMenu', 'home')
+      sessionStorage.setItem("lastVisit", "/");
+      localStorage.setItem('selectedMenu', '/')
       next("/");
     } else if (to.meta.requiresAuth) {
       next("/sign-in");
@@ -180,7 +180,7 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     if (to.path === "/sign-in" || to.path === "/sign-up") {
-      next("/operativepage");
+      next("/");
     } else {
       next();
     }
