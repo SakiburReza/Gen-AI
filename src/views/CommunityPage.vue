@@ -4,6 +4,7 @@ import DefaultLayout from '@/layout/DefaultLayout.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { imageUrl } from '@/utils/utils'
+import { videoUrl } from '@/utils/utils'
 import { computed, onMounted, ref, watch } from 'vue'
 
 import { useRoute } from 'vue-router'
@@ -273,13 +274,18 @@ watch(activeTab, (newTab) => {
             />
 
             <!-- Render Video -->
-            <video
+            <img
               v-else-if="item.type === 'video'"
-              v-lazy="imageUrl() + item.url"
-              controls
-              class="w-full h-full object-contain max-w-full"
+              v-lazy="videoUrl() + item.url"
+              class="w-full h-full object-cover max-w-full aspect-[16/9]"
               @click="openPreviewModal(item)"
-            ></video>
+            ></img>
+            <div v-if="item.type ==='video'"
+                class="absolute inset-0 flex items-center justify-center bg-black/40"
+                @click="openPreviewModal(item)"
+              >
+                <img src="/images/icon/videoPlayButton.svg" alt="">
+              </div>
 
             <!-- Floating Buttons (Visible on Hover) -->
             <!-- Black Gradient Overlay -->
