@@ -265,7 +265,7 @@ watch(activeTab, (newTab) => {
             <!-- Render Image -->
             <img
               v-if="item.type === 'image'"
-              :src="imageUrl() + item.url"
+              v-lazy="imageUrl() + item.url"
               :alt="'Media ' + index"
               class="h-full max-w-full w-full object-cover"
               :class="[item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]']"
@@ -275,7 +275,7 @@ watch(activeTab, (newTab) => {
             <!-- Render Video -->
             <video
               v-else-if="item.type === 'video'"
-              :src="imageUrl() + item.url"
+              v-lazy="imageUrl() + item.url"
               controls
               class="w-full h-full object-contain max-w-full"
               @click="openPreviewModal(item)"
