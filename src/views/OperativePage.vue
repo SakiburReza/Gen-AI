@@ -13,6 +13,8 @@ import { imageUrl } from '@/utils/utils'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
 import DefaultLayout from '@/layout/DefaultLayout.vue'
 import SaveBoardComponent from '@/components/SavedBoardComponent.vue'
+import VueLazyLoad from 'vue3-lazyload'
+
 
 const { fetchCredits } = useCredits()
 
@@ -637,7 +639,7 @@ const closeSaveBoard = () => {
           </button>
         </div>
         <!-- Dynamic Content Based on Selected Functionality -->
-        <div class="bg-white p-6 space-y-6 flex-shrink-0">
+        <div class="bg-white ml-6 mr-6 space-y-6 flex-shrink-0">
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
@@ -677,7 +679,7 @@ const closeSaveBoard = () => {
             'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-100',
           ]"><!-- Render Image -->
 
-            <img v-if="filteredMedia[index] && filteredMedia[index].type === 'image'" :src="imageUrl() + item.url"
+            <img v-if="filteredMedia[index] && filteredMedia[index].type === 'image'" v-lazy="imageUrl() + item.url"
               :alt="'Media ' + index" class="h-full max-w-full w-full" :class="[
                 item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]',
                 'object-cover',
@@ -685,7 +687,7 @@ const closeSaveBoard = () => {
 
             <!-- Render Video -->
             <video v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
-              :src="imageUrl() + filteredMedia[index].url" controls class="w-full h-full object-contain max-w-full"
+            v-lazy="imageUrl() + filteredMedia[index].url" controls class="w-full h-full object-contain max-w-full"
               @click="openPreviewModal(item)"></video>
 
             <!-- Floating Social Buttons -->
