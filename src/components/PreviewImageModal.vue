@@ -122,7 +122,7 @@ const handleOutsideClick = (event) => {
 
           <!-- Video Display -->
           <div v-else-if="image?.type === 'video'" class="w-full">
-            <video v-if="fileUrl" :src="fileUrl" controls
+            <video v-if="fileUrl" :src="fileUrl" controls autoplay 
               class="rounded-lg w-full max-h-[calc(80vh-12rem)] object-contain"></video>
           </div>
 
