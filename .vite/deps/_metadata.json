@@ -1,0 +1,91 @@
+{
+  "hash": "8641ed85",
+  "configHash": "04cd280e",
+  "lockfileHash": "6d31d93a",
+  "browserHash": "aaddec3b",
+  "optimized": {
+    "@mdi/js": {
+      "src": "../../node_modules/@mdi/js/mdi.js",
+      "file": "@mdi_js.js",
+      "fileHash": "5772291b",
+      "needsInterop": false
+    },
+    "@splidejs/vue-splide": {
+      "src": "../../node_modules/@splidejs/vue-splide/dist/js/vue-splide.esm.js",
+      "file": "@splidejs_vue-splide.js",
+      "fileHash": "c26c6d08",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "6b0e73e8",
+      "needsInterop": false
+    },
+    "date-fns": {
+      "src": "../../node_modules/date-fns/index.js",
+      "file": "date-fns.js",
+      "fileHash": "98277fdd",
+      "needsInterop": false
+    },
+    "flowbite-vue": {
+      "src": "../../node_modules/flowbite-vue/dist/flowbite-vue.mjs",
+      "file": "flowbite-vue.js",
+      "fileHash": "011248b3",
+      "needsInterop": false
+    },
+    "jwt-decode": {
+      "src": "../../node_modules/jwt-decode/build/esm/index.js",
+      "file": "jwt-decode.js",
+      "fileHash": "df8b9455",
+      "needsInterop": false
+    },
+    "lucide-vue-next": {
+      "src": "../../node_modules/lucide-vue-next/dist/esm/lucide-vue-next.js",
+      "file": "lucide-vue-next.js",
+      "fileHash": "688c6e6b",
+      "needsInterop": false
+    },
+    "pinia": {
+      "src": "../../node_modules/pinia/dist/pinia.mjs",
+      "file": "pinia.js",
+      "fileHash": "b111c473",
+      "needsInterop": false
+    },
+    "vue": {
+      "src": "../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
+      "file": "vue.js",
+      "fileHash": "26c08ee6",
+      "needsInterop": false
+    },
+    "vue-router": {
+      "src": "../../node_modules/vue-router/dist/vue-router.mjs",
+      "file": "vue-router.js",
+      "fileHash": "7fab0e29",
+      "needsInterop": false
+    },
+    "vue3-lazyload": {
+      "src": "../../node_modules/vue3-lazyload/dist/index.mjs",
+      "file": "vue3-lazyload.js",
+      "fileHash": "993683f2",
+      "needsInterop": false
+    },
+    "vue3-toastify": {
+      "src": "../../node_modules/vue3-toastify/dist/index.mjs",
+      "file": "vue3-toastify.js",
+      "fileHash": "5e779453",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-AYVSL3LM": {
+      "file": "chunk-AYVSL3LM.js"
+    },
+    "chunk-IJV5NOMV": {
+      "file": "chunk-IJV5NOMV.js"
+    },
+    "chunk-UVKRO5ER": {
+      "file": "chunk-UVKRO5ER.js"
+    }
+  }
+}
