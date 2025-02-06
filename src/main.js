@@ -11,13 +11,14 @@ import App from './App.vue'
 import router from './router'
 import VueKonva from 'vue-konva';
 
+
 const app = createApp(App)
 app.use(VueLazyload, {
   loading: 'loading-placeholder.png',  
   error: 'error-placeholder.png'    
 });
-
-app.use(createPinia())
+const pinia = createPinia();
+app.use(pinia);  // Only use pinia once here.
 app.use(VueKonva)
 app.use(router)
 
