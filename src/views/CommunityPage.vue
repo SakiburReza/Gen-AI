@@ -30,6 +30,7 @@ const media = ref<
     isShared: 'Y' | 'N'
     prompt: string
     owner: string
+    board:string
   }[]
 >([])
 
@@ -123,6 +124,7 @@ const fetchMedia = async () => {
         isLiked: item.like,
         isShared: item.share,
         owner: item.shareOwner,
+        board: item.board
       }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
@@ -291,7 +293,7 @@ watch(activeTab, (newTab) => {
 
             <!-- Floating Buttons (Visible on Hover) -->
             <!-- Black Gradient Overlay -->
-            <div
+            <div v-if="media[index].board!==null"
               class="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             ></div>
 
@@ -299,14 +301,14 @@ watch(activeTab, (newTab) => {
               class="absolute bottom-1.5 left-1 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-100"
             >
             <span class="text-[12px] font-semibold text-white px-1 rounded">
-                Board
+             {{ media[index].board }}
               </span>
-
+<!-- 
               <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M6.42828 6.81419L11.8229 1.09697C12.059 0.846099 12.059 0.439652 11.8229 0.188151C11.5867 -0.0627165 11.203 -0.0627165 10.9668 0.188151L6.0003 5.45189L1.03376 0.188785C0.797568 -0.0620828 0.413932 -0.0620828 0.177143 0.188785C-0.0590478 0.439653 -0.0590478 0.846732 0.177143 1.0976L5.57167 6.81482C5.80542 7.06183 6.19508 7.06183 6.42828 6.81419Z"
                   fill="white" />
-              </svg>
+              </svg> -->
             </div>
 
 
