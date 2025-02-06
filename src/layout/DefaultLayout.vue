@@ -6,7 +6,6 @@ import { useRouter } from 'vue-router'
 import AccountCard from '@/components/AccountCard.vue'
 import { useCredits } from '@/utils/utils';
 import { isAuthenticated } from '@/router'
-import { milliseconds } from 'date-fns'
 
 
 
@@ -54,7 +53,7 @@ watch(showAccountCard, (newVal) => {
 })
 
 const handleOutsideExpandClick = (event) => {
-  if (sidebarRef.value.contains(event.target)) {
+  if (sidebarRef.value && sidebarRef.value.contains(event.target)) {
     expandSidebar.value = !expandSidebar.value;
   }
 };
@@ -165,14 +164,16 @@ onUnmounted(() => {
       !expandSidebar ? 'w-[45px]' : 'w-[150px]',
       ]"
     >
-      <div class="flex items-center gap-2 mt-16 group p-2 rounded-lg 
+      <div class="flex flex-col items-center gap-1 mt-14 group p-2 rounded-lg 
       transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" @click="goToProfilePage">
+        <div class="flex items-center">
         <img src="/images/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
-        <span v-if="expandSidebar">My Profile</span>
+        <span v-if="expandSidebar" class="ml-2">My Profile</span>
+        </div>
       </div>
 
-      <div class="flex flex-col items-center gap-4 flex-1 justify-center">
-        <fwb-tooltip placement="right">
+      <div class="flex flex-col items-center gap-1 flex-1 justify-center">
+        <fwb-tooltip v-if="!expandSidebar" placement="right">
           <template #trigger>
             <div
               @click="selectMenuAndNavigate('/', goToCommunity)"
@@ -189,8 +190,22 @@ onUnmounted(() => {
           </template>
           <template #content> Home </template>
         </fwb-tooltip>
+        <template v-else>
+          <div
+            @click="selectMenuAndNavigate('/', goToCommunity)"
+            :class="[
+              'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
+              selectedMenu === '/' ? 'bg-[#D9D9D9]' : '',
+            ]"
+          >
+            <div class="flex items-center">
+              <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+            <span v-if="expandSidebar" class="ml-2">Home</span>
+            </div>
+          </div>
+        </template>
 
-        <fwb-tooltip placement="right">
+        <fwb-tooltip v-if="!expandSidebar" placement="right">
           <template #trigger>
             <div
               @click="selectMenuAndNavigate('operativepage', goToOperative)"
@@ -207,8 +222,23 @@ onUnmounted(() => {
           </template>
           <template #content> Create </template>
         </fwb-tooltip>
+        <template v-else>
+          <div
+            @click="selectMenuAndNavigate('operativepage', goToOperative)"
+            :class="[
+              'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
+              selectedMenu === 'operativepage' ? 'bg-[#D9D9D9]' : '',
+            ]"
+          >
+            <div class="flex items
+            -center">
+              <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+            <span v-if="expandSidebar" class="ml-2">Create</span>
+            </div>
+          </div>
+        </template>
 
-        <fwb-tooltip placement="right">
+        <fwb-tooltip v-if="!expandSidebar" placement="right">
           <template #trigger>
             <div
               @click="selectMenuAndNavigate('gallerypage', goToGallery)"
@@ -225,9 +255,24 @@ onUnmounted(() => {
           </template>
           <template #content> Boards </template>
         </fwb-tooltip>
+        <template v-else>
+          <div
+            @click="selectMenuAndNavigate('gallerypage', goToGallery)"
+            :class="[
+              'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
+              selectedMenu === 'gallerypage' ? 'bg-[#D9D9D9]' : '',
+            ]"
+          >
+            <div class="flex items
+            -center">
+              <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
+            <span v-if="expandSidebar" class="ml-2">Boards</span>
+            </div>
+          </div>
+        </template>
       </div>
 
-      <div class="flex flex-col items-center gap-4">
+      <div class="flex flex-col items-center gap-1">
         <div>
             <div v-if="!expandSidebar" @click="handleExpandSidebar ">
               <img src="/public/images/icon/expandRightArrow.svg" alt="dataIcon" class="cursor-pointer
