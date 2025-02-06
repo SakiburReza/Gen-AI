@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center bg-white z-20 rounded-full">
+  <div v-if="isOpen" class="flex items-center justify-center bg-white z-20 rounded-full">
     <!-- Sidebar container adjusted for responsiveness -->
     <div class="w-64 bg-white shadow rounded-lg">
       <ul class="divide-y divide-white" v-if="isAuthenticatedUser">
@@ -243,6 +243,7 @@ import { onMounted, ref } from 'vue'
 
 const router = useRouter()
 const isAuthenticatedUser = ref('')
+const isOpen = ref(true)
 
 const isUserAuthenticated = () => {
   isAuthenticatedUser.value = localStorage.getItem('authToken')
@@ -271,6 +272,8 @@ const logout = () => {
   // sessionStorage.clear() 
   localStorage.clear()
   router.push('/')
+  isOpen.value = false
+
 
 }
 
