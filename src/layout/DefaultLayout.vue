@@ -136,7 +136,7 @@ onUnmounted(() => {
       <!-- Text -->
        
       <fwb-badge v-if="props.showBadge && isAuthenticatedUser"
-        :class="`flex items-center justify-between border mt-3 rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition-all duration-200`"
+        :class="`flex items-center justify-between border mt-3 rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition duration-200`"
         size="xl"
         @click="toggleAccountCard"
       >
@@ -303,7 +303,7 @@ onUnmounted(() => {
 
     <!-- Main Content -->
     <div @click= "handleOutsideExpandClick(1)" ref="sidebarRef"
-    :class="['flex-1 overflow-auto transition-all duration-300', expandSidebar ? 'pl-[140px]' : 'pl-[45px]']">
+    :class="['flex-1 overflow-auto transition duration-200', expandSidebar ? 'pl-[140px]' : 'pl-[45px]']">
       <slot />
     </div>
   </div>
