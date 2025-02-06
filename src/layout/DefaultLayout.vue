@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import AccountCard from '@/components/AccountCard.vue'
 import { useCredits } from '@/utils/utils';
 import { isAuthenticated } from '@/router'
+import { milliseconds } from 'date-fns'
 
 
 
@@ -15,8 +16,10 @@ const router = useRouter()
 const showAccountCard = ref(false)
 const selectedMenu = ref('/')
 const accountCardRef = ref(null)
-
+const sidebarRef = ref(null);
 const isAuthenticatedUser = ref('')
+const expandSidebar = ref(false)
+
 
 const props = defineProps({
   showBadge: {
@@ -24,6 +27,9 @@ const props = defineProps({
   },
 })
 
+const handleExpandSidebar = () => {
+  expandSidebar.value = !expandSidebar.value
+}
 
 const isUserAuthenticated =()=> {
   isAuthenticatedUser.value = localStorage.getItem('authToken')
@@ -44,6 +50,20 @@ watch(showAccountCard, (newVal) => {
     document.addEventListener('click', handleOutsideClick)
   } else {
     document.removeEventListener('click', handleOutsideClick)
+  }
+})
+
+const handleOutsideExpandClick = (event) => {
+  if (sidebarRef.value.contains(event.target)) {
+    expandSidebar.value = !expandSidebar.value;
+  }
+};
+
+watch(expandSidebar, (newVal) => {
+  if (newVal) {
+    document.addEventListener('click', handleOutsideExpandClick)
+  } else {
+    document.removeEventListener('click', handleOutsideExpandClick)
   }
 })
 
@@ -98,11 +118,12 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('click', handleOutsideClick)
+  document.removeEventListener('click', handleOutsideExpandClick)
 })
 </script>
 
 <template>
-  <div class="flex flex-col h-screen">
+      <div class="flex flex-col h-screen">
     <!-- Header -->
     <div class="relative flex flex-col items-center justify-center">
       <!-- Logo -->
@@ -140,10 +161,14 @@ onUnmounted(() => {
 
     <!-- Sidebar -->
     <div
-      class="sidebar border fixed left-0 h-screen w-[45px] flex flex-col justify-between items-center py-4 z-10"
+      :class="['sidebar border fixed left-0 h-screen flex flex-col justify-between items-center py-2 z-10',
+      !expandSidebar ? 'w-[45px]' : 'w-[150px]',
+      ]"
     >
-      <div class="flex flex-col items-center gap-4 mt-16" @click="goToProfilePage">
+      <div class="flex items-center gap-2 mt-16 group p-2 rounded-lg 
+      transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" @click="goToProfilePage">
         <img src="/images/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
+        <span v-if="expandSidebar">My Profile</span>
       </div>
 
       <div class="flex flex-col items-center gap-4 flex-1 justify-center">
@@ -156,7 +181,10 @@ onUnmounted(() => {
                 selectedMenu === '/' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+              <div class="flex items-center">
+                <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+              <span v-if="expandSidebar" class="ml-2">Home</span>
+              </div>
             </div>
           </template>
           <template #content> Home </template>
@@ -171,7 +199,10 @@ onUnmounted(() => {
                 selectedMenu === 'operativepage' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
-              <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+              <div class="flex items-center">
+                <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+              <span v-if="expandSidebar" class="ml-2">Create</span>
+              </div>
             </div>
           </template>
           <template #content> Create </template>
@@ -186,7 +217,10 @@ onUnmounted(() => {
                 selectedMenu === 'gallerypage' ? 'bg-[#D9D9D9]' : '',
               ]"
             >
+            <div class="flex items-center">
               <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
+            <span v-if="expandSidebar" class="ml-2">Boards</span>
+            </div>
             </div>
           </template>
           <template #content> Boards </template>
@@ -194,9 +228,26 @@ onUnmounted(() => {
       </div>
 
       <div class="flex flex-col items-center gap-4">
+        <div>
+            <div v-if="!expandSidebar" @click="handleExpandSidebar ">
+              <img src="/public/images/icon/expandRightArrow.svg" alt="dataIcon" class="cursor-pointer
+              'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" />
+              <span></span>
+            </div>
+
+         <div v-if="expandSidebar" @click="handleExpandSidebar">
+              <img src="/public/images/icon/expandLeftArrow.svg" alt="dataIcon" class="cursor-pointer
+              'group p-2 mr-14 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" />
+              <span></span>
+            </div>
+        </div>
+
         <FwbDropdown placement="right" align-to-end>
           <template #trigger>
+            <div class="flex items-center group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md">
             <img src="/images/icon/burgerIcon.svg" alt="burgerIcon" class="cursor-pointer" />
+            <span v-if="expandSidebar" class="ml-2">Menu</span>
+            </div>
           </template>
           <div class="bg-blue">
             <AccountCard />
@@ -206,8 +257,10 @@ onUnmounted(() => {
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 overflow-auto pl-[45px]">
+    <div @click= "handleOutsideExpandClick(1)" ref="sidebarRef"
+    :class="['flex-1 overflow-auto transition-all duration-300', expandSidebar ? 'pl-[140px]' : 'pl-[45px]']">
       <slot />
     </div>
   </div>
+ 
 </template>
