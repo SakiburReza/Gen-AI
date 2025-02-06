@@ -183,7 +183,7 @@ onUnmounted(() => {
               ]"
             >
               <div class="flex items-center">
-                <img src="/public/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+                <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Home</span>
               </div>
             </div>
@@ -199,7 +199,7 @@ onUnmounted(() => {
             ]"
           >
             <div class="flex items-center">
-              <img src="/public/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+              <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
             <span v-if="expandSidebar" class="ml-2">Home</span>
             </div>
           </div>
@@ -215,7 +215,7 @@ onUnmounted(() => {
               ]"
             >
               <div class="flex items-center">
-                <img src="/public/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+                <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Create</span>
               </div>
             </div>
@@ -232,7 +232,7 @@ onUnmounted(() => {
           >
             <div class="flex items
             -center">
-              <img src="/public/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+              <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
             <span v-if="expandSidebar" class="ml-2">Create</span>
             </div>
           </div>
@@ -275,13 +275,13 @@ onUnmounted(() => {
       <div class="flex flex-col items-center gap-1">
         <div>
             <div v-if="!expandSidebar" @click="handleExpandSidebar ">
-              <img src="/public/images/icon/expandRightArrow.svg" alt="dataIcon" class="cursor-pointer
+              <img src="/images/icon/expandRightArrow.svg" alt="dataIcon" class="cursor-pointer
               'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" />
               <span></span>
             </div>
 
          <div v-if="expandSidebar" @click="handleExpandSidebar">
-              <img src="/public/images/icon/expandLeftArrow.svg" alt="dataIcon" class="cursor-pointer
+              <img src="/images/icon/expandLeftArrow.svg" alt="dataIcon" class="cursor-pointer
               'group p-2 mr-14 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" />
               <span></span>
             </div>
