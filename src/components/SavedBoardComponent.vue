@@ -97,10 +97,10 @@ const handleOutsideClick = (event) => {
 
 <template>
   <div
-    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+    class="fixed inset-0 flex items-center justify-center"
     @click="handleOutsideClick"
   >
-    <div class="bg-white p-5 rounded-lg w-[500px] shadow-lg relative">
+    <div class="bg-white p-5 rounded-lg w-[500px] shadow-lg relative border-2 mt-30">
       <h2 class="text-xl font-bold mb-4 text-center">Save Board</h2>
       <button class="absolute top-2 right-2" @click="onClose">
         <X size="24" />

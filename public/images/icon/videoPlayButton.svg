@@ -5,7 +5,8 @@
 <!--    <g filter="url(#filter1_d_9_35)">-->
 <!--        <circle cx="42" cy="42" r="24.5" stroke="white" shape-rendering="crispEdges"/>-->
 <!--    </g>-->
-    <path d="M35 33.7484C35 32.975 35.8404 32.4943 36.507 32.8865L50.5347 41.1381C51.192 41.5247 51.192 42.4753 50.5347 42.8619L36.507 51.1135C35.8404 51.5057 35 51.025 35 50.2516V33.7484Z" fill="#3526E1"/>
+    <path d="M35 33.7484C35 32.975 35.8404 32.4943 36.507 32.8865L50.5347 41.1381C51.192 41.5247 51.192 42.4753 50.5347
+    42.8619L36.507 51.1135C35.8404 51.5057 35 51.025 35 50.2516V33.7484Z" fill="#fffff"/>
     <defs>
         <filter id="filter0_d_9_35" x="5" y="5" width="82" height="82" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
             <feFlood flood-opacity="0" result="BackgroundImageFix"/>

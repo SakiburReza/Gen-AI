@@ -240,10 +240,13 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
+import { useToastStore } from '@/stores/toast'
+
 
 const router = useRouter()
 const isAuthenticatedUser = ref('')
 const isOpen = ref(true)
+const toastStore = useToastStore()
 
 const isUserAuthenticated = () => {
   isAuthenticatedUser.value = localStorage.getItem('authToken')
@@ -273,6 +276,7 @@ const logout = () => {
   localStorage.clear()
   router.push('/')
   isOpen.value = !isOpen.value
+  toastStore.success('Logged out successfully')
 }
 
 onMounted(() => {
