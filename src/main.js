@@ -6,11 +6,15 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import Vue3Toastify, { toast } from 'vue3-toastify'
 import axios from 'axios'
-
+import VueLazyload from 'vue3-lazyload';
 import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
+app.use(VueLazyload, {
+  loading: 'loading-placeholder.png',  
+  error: 'error-placeholder.png'    
+});
 
 app.use(createPinia())
 app.use(router)

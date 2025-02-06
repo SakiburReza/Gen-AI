@@ -10,9 +10,12 @@ import { FwbButton } from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
+import { videoUrl } from '@/utils/utils'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
 import DefaultLayout from '@/layout/DefaultLayout.vue'
 import SaveBoardComponent from '@/components/SavedBoardComponent.vue'
+import VueLazyLoad from 'vue3-lazyload'
+
 
 const { fetchCredits } = useCredits()
 
@@ -109,6 +112,7 @@ const aiGeneratedMedia = ref<
     isLiked: 'Y' | 'N'
     isShared: 'Y' | 'N'
     prompt: string
+    board: string
   }[]
 >([])
 const loading = ref(false) // Track loading state
@@ -637,7 +641,7 @@ const closeSaveBoard = () => {
           </button>
         </div>
         <!-- Dynamic Content Based on Selected Functionality -->
-        <div class="bg-white p-6 space-y-6 flex-shrink-0">
+        <div class="bg-white ml-6 mr-6 space-y-6 flex-shrink-0">
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
@@ -676,16 +680,22 @@ const closeSaveBoard = () => {
             'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-100',
           ]"><!-- Render Image -->
 
-            <img v-if="filteredMedia[index] && filteredMedia[index].type === 'image'" :src="imageUrl() + item.url"
+            <img v-if="filteredMedia[index] && filteredMedia[index].type === 'image'" v-lazy="imageUrl() + item.url"
               :alt="'Media ' + index" class="h-full max-w-full w-full" :class="[
                 item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]',
                 'object-cover',
               ]" @click="onImageClick(filteredMedia[index])" />
 
             <!-- Render Video -->
-            <video v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
-              :src="imageUrl() + filteredMedia[index].url" controls class="w-full h-full object-contain max-w-full"
-              @click="openPreviewModal(item)"></video>
+            <img v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
+            v-lazy="videoUrl() + filteredMedia[index].url" class="w-full h-full object-cover max-w-full aspect-[16/9]"
+              @click="openPreviewModal(item)"></img>
+              <div v-if="filteredMedia[index].type === 'video'"
+                class="absolute inset-0 flex items-center justify-center bg-black/40 "
+                @click="openPreviewModal(item)"
+              ><img src="/images/icon/videoPlayButton.svg" alt="">
+
+              </div>
 
             <!-- Floating Social Buttons -->
             <div v-if="filteredMedia[index]"

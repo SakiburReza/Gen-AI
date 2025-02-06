@@ -48,7 +48,7 @@ watch(showAccountCard, (newVal) => {
 })
 
 const selectMenuAndNavigate = (menu, goToFunction) => {
-  selectedMenu.value = selectedMenu.value === menu ? '' : menu
+  selectedMenu.value = selectedMenu.value === menu ? menu: '/'
   localStorage.setItem('selectedMenu', menu)
   sessionStorage.setItem('lastVisit', menu)
   goToFunction()
