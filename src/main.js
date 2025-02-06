@@ -9,6 +9,7 @@ import axios from 'axios'
 import VueLazyload from 'vue3-lazyload';
 import App from './App.vue'
 import router from './router'
+import VueKonva from 'vue-konva';
 
 const app = createApp(App)
 app.use(VueLazyload, {
@@ -17,6 +18,7 @@ app.use(VueLazyload, {
 });
 
 app.use(createPinia())
+app.use(VueKonva)
 app.use(router)
 
 
