@@ -4,7 +4,10 @@ import DefaultLayout from '@/layout/DefaultLayout.vue'
 import genAiService from '@/services/gen-ai'
 import { useToastStore } from '@/stores/toast'
 import { imageUrl } from '@/utils/utils'
+import { videoUrl } from '@/utils/utils'
 import { computed, onMounted, ref, watch } from 'vue'
+import TurnIntoVideoModal from '@/components/FaceSwapToVideoModal.vue'
+import SaveBoardComponent from '@/components/SavedBoardComponent.vue'
 
 import { useRoute } from 'vue-router'
 
@@ -51,26 +54,26 @@ const openPreviewModal = (mediaItem) => {
   selectedImage.value = mediaItem
   showPreviewModal.value = true
 }
-const referenceImage = ref<File | null>(null)
-const faceImage = ref<File | null>(null)
 
-const description = ref('')
+const showTurnIntoVideoModal = ref(false)
+const closeTurnIntoVideoModal = () => {
+  showTurnIntoVideoModal.value = false
+  selectedImage.value = null
+}
+const openTurnIntoVideoModal = (mediaItem) => {
+  selectedImage.value = mediaItem
+  showTurnIntoVideoModal.value = true
+}
+const isSaveBoardOpen = ref(false)
+const imageUrlData = ref('')
+const openSaveBoard = (mediaUrl) => {
+  imageUrlData.value = mediaUrl;
+  isSaveBoardOpen.value = true;
+};
 
-// const selectedImage = ref(null) // Selected image or video
-
-// const showImageModal = ref(false)
-// const showModal = ref(false) // Modal visibility
-
-// const openImageModal = (mediaItem) => {
-//   selectedImage.value = mediaItem
-
-//   showModal.value = true
-//   showImageModal.value = true
-// }
-// const closeImageModal = () => {
-//   showImageModal.value = false
-//   selectedImage.value = null
-// }
+const closeSaveBoard = () => {
+  isSaveBoardOpen.value = false
+}
 
 const loading = ref(false) // Track loading state
 
@@ -273,13 +276,18 @@ watch(activeTab, (newTab) => {
             />
 
             <!-- Render Video -->
-            <video
+            <img
               v-else-if="item.type === 'video'"
-              v-lazy="imageUrl() + item.url"
-              controls
-              class="w-full h-full object-contain max-w-full"
+              v-lazy="videoUrl() + item.url"
+              class="w-full h-full object-cover max-w-full aspect-[16/9]"
               @click="openPreviewModal(item)"
-            ></video>
+            ></img>
+            <div v-if="item.type ==='video'"
+                class="absolute inset-0 flex items-center justify-center bg-black/40"
+                @click="openPreviewModal(item)"
+              >
+                <img src="/images/icon/videoPlayButton.svg" alt="">
+              </div>
 
             <!-- Floating Buttons (Visible on Hover) -->
             <!-- Black Gradient Overlay -->
@@ -291,7 +299,7 @@ watch(activeTab, (newTab) => {
             >
 
               <span class="text-[12px] font-semibold text-white px-1 rounded">
-                {{ media[index]?.owner?.split(' ')[0] || '' }}
+                {{ filteredMedia[index]?.owner?.split(' ')[0] || '' }}
               </span>
 
               <div class="flex space-x-1">
@@ -325,7 +333,7 @@ watch(activeTab, (newTab) => {
                   </svg>
                 </button>
 
-                <button class="flex justify-center items-center w-5 h-5">
+                <button class="flex justify-center items-center w-5 h-5" @click="openTurnIntoVideoModal(item)">
                   <svg
                     width="12"
                     height="12"
@@ -392,7 +400,7 @@ watch(activeTab, (newTab) => {
                   </svg>
                 </button>
 
-                <button class="flex justify-center items-center w-5 h-5">
+                <button class="flex justify-center items-center w-5 h-5" @click="openSaveBoard(filteredMedia[index].url)">
                   <svg
                     width="12"
                     height="12"
@@ -530,6 +538,10 @@ watch(activeTab, (newTab) => {
 
       <!-- Modal Component -->
       <PreviewImageModal :isOpen="showPreviewModal" @close="closePreviewModal" :image="selectedImage" />
+      <TurnIntoVideoModal :isOpen="showTurnIntoVideoModal" @close="closeTurnIntoVideoModal" :image="selectedImage" />
+       <!-- Show SaveBoardComponent when isSaveBoardOpen is true -->
+    <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"
+      @updateAfterSave="fetchMedia" />
 
   </DefaultLayout>
 </template>

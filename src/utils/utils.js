@@ -41,5 +41,9 @@ export function imageUrl() {
   return import.meta.env.VITE_API_URL + '/raw/';
 }
 
+export function videoUrl() {
+  return import.meta.env.VITE_API_URL + '/thumbnail/';
+}
+
 
   

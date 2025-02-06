@@ -10,6 +10,7 @@ import { FwbButton } from 'flowbite-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
+import { videoUrl } from '@/utils/utils'
 import PreviewImageModal from '@/components/PreviewImageModal.vue'
 import DefaultLayout from '@/layout/DefaultLayout.vue'
 import SaveBoardComponent from '@/components/SavedBoardComponent.vue'
@@ -687,9 +688,15 @@ const closeSaveBoard = () => {
               ]" @click="onImageClick(filteredMedia[index])" />
 
             <!-- Render Video -->
-            <video v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
-            v-lazy="imageUrl() + filteredMedia[index].url" controls class="w-full h-full object-contain max-w-full"
-              @click="openPreviewModal(item)"></video>
+            <img v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
+            v-lazy="videoUrl() + filteredMedia[index].url" class="w-full h-full object-cover max-w-full aspect-[16/9]"
+              @click="openPreviewModal(item)"></img>
+              <div v-if="filteredMedia[index].type === 'video'"
+                class="absolute inset-0 flex items-center justify-center bg-black/40 "
+                @click="openPreviewModal(item)"
+              ><img src="/images/icon/videoPlayButton.svg" alt="">
+
+              </div>
 
             <!-- Floating Social Buttons -->
             <div v-if="filteredMedia[index]"
