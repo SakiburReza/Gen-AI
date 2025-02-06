@@ -71,7 +71,7 @@ const props = defineProps({
       <!-- Left Side - Image and Text -->
       <div class="relative lg:w-1/4 hidden sm:flex justify-center h-full items-center">
         <!-- Background Image with Overlay -->
-        <img src="/public/images/Rectangle.png" alt="Background Image" class="w-full h-full object-cover" />
+        <img src="/images/Rectangle.png" alt="Background Image" class="w-full h-full object-cover" />
 
         <!-- Overlay Content -->
         <div class="absolute inset-0 flex flex-col p-6 bg-lightGray">
@@ -82,7 +82,7 @@ const props = defineProps({
         </div>
 
         <!-- Secondary Display Image -->
-        <img src="/public/images/slides.png" alt="Secondary Display Image" class="absolute bottom-0 left-0 w-full" />
+        <img src="/images/slides.png" alt="Secondary Display Image" class="absolute bottom-0 left-0 w-full" />
       </div>
 
       <!-- Right Side - Sign-In Form -->
