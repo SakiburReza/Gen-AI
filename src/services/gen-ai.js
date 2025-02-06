@@ -6,7 +6,8 @@ class GenAIService {
   }
 
   getAuthHeaders() {
-    const token = localStorage.getItem('authToken') // Fetch the token from localStorage
+    const token = localStorage.getItem('authToken')
+    if(token === null) return // Fetch the token from localStorage
     return {
       Authorization: `Bearer ${token}`,
     }
@@ -141,7 +142,9 @@ class GenAIService {
     })
   }
   getCommunityMedia() {
-    return axios.get(this.url + '/share/communityImage')
+    return axios.get(this.url + '/share/communityImage', {
+      headers: this.getAuthHeaders(),
+    })
   }
 
   shareImage(data) {

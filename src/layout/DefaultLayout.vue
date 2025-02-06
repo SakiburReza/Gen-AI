@@ -272,17 +272,15 @@ onUnmounted(() => {
         </template>
       </div>
 
-      <div class="flex flex-col items-center gap-1">
-        <div>
+      <div class="flex flex-col items-center gap-1 ">
+        <div class="rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md cursor-pointer">
             <div v-if="!expandSidebar" @click="handleExpandSidebar ">
-              <img src="/public/images/icon/expandRightArrow.svg" alt="dataIcon" class="cursor-pointer
-              'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" />
+              <img src="/images/icon/expandRightArrow.svg" alt="dataIcon" class="group p-2" />
               <span></span>
             </div>
 
-         <div v-if="expandSidebar" @click="handleExpandSidebar">
-              <img src="/public/images/icon/expandLeftArrow.svg" alt="dataIcon" class="cursor-pointer
-              'group p-2 mr-14 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" />
+            <div v-if="expandSidebar" @click="handleExpandSidebar">
+              <img src="/images/icon/expandLeftArrow.svg" alt="dataIcon" class="group p-2 mr-14" />
               <span></span>
             </div>
         </div>
@@ -303,7 +301,7 @@ onUnmounted(() => {
 
     <!-- Main Content -->
     <div @click= "handleOutsideExpandClick(1)" ref="sidebarRef"
-    :class="['flex-1 overflow-auto transition duration-200', expandSidebar ? 'pl-[140px]' : 'pl-[45px]']">
+    :class="['flex-1 overflow-auto transition duration-200', expandSidebar ? 'pl-[150px]' : 'pl-[45px]']">
       <slot />
     </div>
   </div>
