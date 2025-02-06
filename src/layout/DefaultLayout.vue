@@ -183,7 +183,7 @@ onUnmounted(() => {
               ]"
             >
               <div class="flex items-center">
-                <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+                <img src="/public/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Home</span>
               </div>
             </div>
@@ -199,7 +199,7 @@ onUnmounted(() => {
             ]"
           >
             <div class="flex items-center">
-              <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
+              <img src="/public/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
             <span v-if="expandSidebar" class="ml-2">Home</span>
             </div>
           </div>
@@ -215,7 +215,7 @@ onUnmounted(() => {
               ]"
             >
               <div class="flex items-center">
-                <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+                <img src="/public/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Create</span>
               </div>
             </div>
@@ -232,7 +232,7 @@ onUnmounted(() => {
           >
             <div class="flex items
             -center">
-              <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
+              <img src="/public/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
             <span v-if="expandSidebar" class="ml-2">Create</span>
             </div>
           </div>

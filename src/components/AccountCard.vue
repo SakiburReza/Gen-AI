@@ -272,9 +272,7 @@ const logout = () => {
   // sessionStorage.clear() 
   localStorage.clear()
   router.push('/')
-  isOpen.value = false
-
-
+  isOpen.value = !isOpen.value
 }
 
 onMounted(() => {
