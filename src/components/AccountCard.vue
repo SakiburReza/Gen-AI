@@ -34,7 +34,7 @@
                 />
               </defs>
             </svg>
-            <span>Manage Profile</span>
+            <span>Profile Settings</span>
           </a>
         </li>
 
