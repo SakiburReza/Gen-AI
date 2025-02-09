@@ -160,7 +160,7 @@ onUnmounted(() => {
 
     <!-- Sidebar -->
     <div
-      :class="['sidebar border fixed left-0 h-screen flex flex-col justify-between items-center py-2 z-10',
+      :class="['sidebar border fixed left-0 h-screen flex flex-col justify-between items-center py-2 z-10 bg-[#FAFAFA]',
       !expandSidebar ? 'w-[45px]' : 'w-[150px]',
       ]"
     >
@@ -301,7 +301,7 @@ onUnmounted(() => {
 
     <!-- Main Content -->
     <div @click= "handleOutsideExpandClick(1)" ref="sidebarRef"
-    :class="['flex-1 overflow-auto transition duration-200', expandSidebar ? 'pl-[150px]' : 'pl-[45px]']">
+    :class="['flex-1 overflow-auto transition duration-200 bg-[#FCFDFD]', expandSidebar ? 'pl-[150px]' : 'pl-[45px]']">
       <slot />
     </div>
   </div>

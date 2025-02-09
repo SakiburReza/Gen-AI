@@ -13,13 +13,30 @@ import { useRoute } from 'vue-router'
 
 
 const searchQuery = ref('')
-
-
+const authTokenInfo = ref('')
+const isSaveBoardOpen = ref(false)
+const imageUrlData = ref('')
 const toastStore = useToastStore()
 const route = useRoute()
-
-
 const showBadge = computed(() => route.path !== '/')
+const selectedImage = ref(null)
+const showPreviewModal = ref(false)
+const loading = ref(false)
+const showMenu = ref(false)
+
+
+
+const checkAuthentication = ()=> {
+  authTokenInfo.value = localStorage.getItem('authToken')
+  if(authTokenInfo.value){
+    return true
+  }
+  else{
+    toastStore.error('Please login to continue')
+    return false
+  }
+}
+
 
 const media = ref<
   {
@@ -44,14 +61,13 @@ const filteredMedia = computed(() => {
   })
 })
 
-const selectedImage = ref(null)
 
-const showPreviewModal = ref(false)
 const closePreviewModal = () => {
   showPreviewModal.value = false
   selectedImage.value = null
 }
 const openPreviewModal = (mediaItem) => {
+  if(!checkAuthentication()) return;
   selectedImage.value = mediaItem
   showPreviewModal.value = true
 }
@@ -62,23 +78,28 @@ const closeTurnIntoVideoModal = () => {
   selectedImage.value = null
 }
 const openTurnIntoVideoModal = (mediaItem) => {
+  if(!checkAuthentication()) return;
   selectedImage.value = mediaItem
   showTurnIntoVideoModal.value = true
+
 }
-const isSaveBoardOpen = ref(false)
-const imageUrlData = ref('')
 const openSaveBoard = (mediaUrl) => {
+  if(!checkAuthentication()) return;
   imageUrlData.value = mediaUrl;
-  isSaveBoardOpen.value = true;
+  isSaveBoardOpen.value = true;  
 };
+
+const openAddFriendModal = () => {
+  if(!checkAuthentication()) return;
+}
 
 const closeSaveBoard = () => {
   isSaveBoardOpen.value = false
 }
 
-const loading = ref(false) // Track loading state
 
 const copyAction = async (prompt: string) => {
+  if(!checkAuthentication()) return;
   if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
     try {
       await navigator.clipboard.writeText(prompt)
@@ -136,7 +157,6 @@ const fetchMedia = async () => {
   }
 }
 
-const showMenu = ref(false)
 const toggleMenu = () => {
   showMenu.value = !showMenu.value
 }
@@ -149,6 +169,8 @@ onMounted(async () => {
 
 // Tabs State
 const activeTab = ref('for-you')
+
+
 
 
 // Function to fetch liked media
@@ -326,7 +348,7 @@ watch(activeTab, (newTab) => {
 
               <div class="flex space-x-1">
                 <!-- Icon -->
-                <button class="flex justify-center items-center w-5 h-5">
+                <button class="flex justify-center items-center w-5 h-5" @click="openAddFriendModal">
                   <svg
                     width="12"
                     height="12"
