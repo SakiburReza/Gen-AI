@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center bg-white z-20 rounded-full">
+  <div v-if="isOpen" class="flex items-center justify-center bg-white z-20 rounded-full">
     <!-- Sidebar container adjusted for responsiveness -->
     <div class="w-64 bg-white shadow rounded-lg">
       <ul class="divide-y divide-white" v-if="isAuthenticatedUser">
@@ -34,7 +34,7 @@
                 />
               </defs>
             </svg>
-            <span>Manage Profile</span>
+            <span>Profile Settings</span>
           </a>
         </li>
 
@@ -240,9 +240,13 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
+import { useToastStore } from '@/stores/toast'
+
 
 const router = useRouter()
 const isAuthenticatedUser = ref('')
+const isOpen = ref(true)
+const toastStore = useToastStore()
 
 const isUserAuthenticated = () => {
   isAuthenticatedUser.value = localStorage.getItem('authToken')
@@ -271,7 +275,8 @@ const logout = () => {
   // sessionStorage.clear() 
   localStorage.clear()
   router.push('/')
-
+  isOpen.value = !isOpen.value
+  toastStore.success('Logged out successfully')
 }
 
 onMounted(() => {
