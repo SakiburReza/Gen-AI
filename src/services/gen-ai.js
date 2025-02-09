@@ -184,6 +184,13 @@ class GenAIService {
       headers: this.getAuthHeaders(),
     })
   }
+
+  getBoardList(imageUrl) {
+    return axios.get(this.url + '/user/getBoardList?imageUrl=' + imageUrl, {
+      headers: this.getAuthHeaders(),
+    })
+  }
+  
   getCollaborateBoardsInfo(boardName) {
     const uri = boardName != null ? '/user/getCollaborateBoards?boardName=' + boardName: '/user/getCollaborateBoards';
     return axios.get(this.url + uri,  {

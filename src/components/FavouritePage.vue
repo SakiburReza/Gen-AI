@@ -71,7 +71,13 @@ const closeSaveBoard = () => {
     isSaveBoardOpen.value = false
 }
 
-
+const updateBoardName = ({ imageKey, boardName }) => {
+  console.log('updateBoardName', imageKey, boardName);
+  
+  media.value = media.value.map(item =>
+    item.url === imageKey ? { ...item, board: boardName } : item
+  );
+};
 
 // Function to fetch liked media
 const fetchLikedMedia = async (label) => {
@@ -283,6 +289,6 @@ const copyAction = async (prompt: string) => {
         <TurnIntoVideoModal :isOpen="showTurnIntoVideoModal" @close="closeTurnIntoVideoModal" :image="selectedImage" />
         <!-- Show SaveBoardComponent when isSaveBoardOpen is true -->
         <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"
-            @updateAfterSave="fetchLikedMedia" />
+            @updateAfterSave="updateBoardName" />
     </div>
 </template>

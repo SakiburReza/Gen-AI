@@ -33,7 +33,13 @@ const media = ref<
         owner: string
     }[]
 >([])
-
+const updateBoardName = ({ imageKey, boardName }) => {
+  console.log('updateBoardName', imageKey, boardName);
+  
+  media.value = media.value.map(item =>
+    item.url === imageKey ? { ...item, board: boardName } : item
+  );
+};
 
 const closePreviewModal = () => {
     showPreviewModal.value = false
@@ -273,6 +279,6 @@ const copyAction = async (prompt: string) => {
         <TurnIntoVideoModal :isOpen="showTurnIntoVideoModal" @close="closeTurnIntoVideoModal" :image="selectedImage" />
         <!-- Show SaveBoardComponent when isSaveBoardOpen is true -->
         <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"
-            @updateAfterSave="fetchMedia" />
+            @updateAfterSave="updateBoardName"/>
     </div>
 </template>
