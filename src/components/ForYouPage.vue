@@ -198,7 +198,7 @@ const copyAction = async (prompt: string) => {
                 class="absolute top-1.5 left-1 right-1 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-100">
 
                 <span class="text-[12px] font-semibold text-white px-1 rounded">
-                    {{ filteredMedia[index]?.prompt?.split(' ')[0] || '' }}
+                    {{ filteredMedia[index]?.owner?.split(' ')[0] || '' }}
                 </span>
 
                 <div class="flex space-x-1">
