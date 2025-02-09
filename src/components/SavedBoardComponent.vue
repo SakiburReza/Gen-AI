@@ -19,6 +19,7 @@ const search = ref('')
 const toastStore = useToastStore()
 const isModalOpen = ref(false)
 const boardLists = ref([])
+const searchQuery = ref('')
 
 const openModal = () => {
   isModalOpen.value = true
@@ -34,9 +35,9 @@ const handleBoardCreated = () => {
 }
 
 
-const  getBoardLists = async () => {
+const  getBoardLists = async() => {
   try {
-    const response = await genAiService.getBoardList()
+    const response = await genAiService.getBoardList(props.image)
     boardLists.value = response.data.data
     }
    catch (error) {}
@@ -66,13 +67,6 @@ onMounted(() => {
   getBoardLists()
 })
 
-
-// const filteredBoards = computed(() =>
-// boardLists.value.filter((board) =>
-//     board.boardName?.toLowerCase().includes(search.value.toLowerCase()),
-//   ),
-// )
-const searchQuery = ref('')
 
 const filteredBoards = computed(() => {
   if (!searchQuery.value || searchQuery.value.trim() === '') {
@@ -125,8 +119,9 @@ const handleOutsideClick = (event) => {
         <div
           v-for="(board, index) in filteredBoards"
           :key="index"
-          class="flex items-center gap-4 p-3 hover:bg-gray-100 rounded-md cursor-pointer"
-          @click="saveBoardImages(board)"
+          class="flex items-center gap-4 p-3 hover:bg-gray-100 rounded-md"
+          :class="{ 'opacity-30 cursor-not-allowed': board.exists, 'cursor-pointer': !board.exists }"
+          @click="!board.exists && saveBoardImages(board)"
         >
           <img
             v-if="board.images && board.images.length"

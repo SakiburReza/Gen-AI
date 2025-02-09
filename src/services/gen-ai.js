@@ -185,8 +185,8 @@ class GenAIService {
     })
   }
 
-  getBoardList() {
-    return axios.get(this.url + '/user/getBoardList', {
+  getBoardList(imageUrl) {
+    return axios.get(this.url + '/user/getBoardList?imageUrl=' + imageUrl, {
       headers: this.getAuthHeaders(),
     })
   }
