@@ -145,7 +145,7 @@ const fetchMedia = async () => {
         isLiked: item.like,
         isShared: item.share,
         owner: item.shareOwner,
-        board: item.board
+        board: item.boardName
       }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
