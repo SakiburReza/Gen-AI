@@ -30,6 +30,7 @@ const getAllBoards = async () => {
     const response = await genAiService.getBoardsInfo()
     boards.value = response.data.data.map((item) => ({
       name: item.boardName,
+      imageCount: item.imageCount,
       images: item.images.map((img) => img.content),
       lastModified: item.lastModified,
     }))
@@ -147,7 +148,7 @@ onMounted(() => {
             {{ board.name }}
           </h5>
           <p class="font-bold">
-            {{ board.images.length }} photos
+            {{ board.imageCount}} photos
             <span class="ml-2 opacity-50">{{ timeAgo(board.lastModified) }}</span>
           </p>
         </div>

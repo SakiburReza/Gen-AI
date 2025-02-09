@@ -16,9 +16,9 @@ const props = defineProps({
 const emit = defineEmits(['close', 'updateAfterSave'])
 
 const search = ref('')
-const boards = ref([]) // Store multiple boards
 const toastStore = useToastStore()
 const isModalOpen = ref(false)
+const boardLists = ref([])
 
 const openModal = () => {
   isModalOpen.value = true
@@ -33,29 +33,14 @@ const handleBoardCreated = () => {
   closeModal()
 }
 
-const fetchBoards = async () => {
+
+const  getBoardLists = async () => {
   try {
-    const response = await genAiService.getBoardsInfo()
-
-    if (response?.data?.status && Array.isArray(response?.data?.data)) {
-      boards.value = response.data.data.map((item) => ({
-        url: item?.content || '', // Ensure a default value
-        images: Array.isArray(item?.images) ? item.images : [], // Ensure images is an array
-        collaborators: Array.isArray(item?.collaborators) ? item.collaborators : [],
-        lastModified: item?.lastModified || 'Unknown',
-        boardName: item?.boardName || 'Untitled',
-      }))
-    } else {
-      boards.value = [] // Ensure boards is always an array
+    const response = await genAiService.getBoardList()
+    boardLists.value = response.data.data
     }
-  } catch (error) {}
+   catch (error) {}
 }
-
-const boardSavedData = ref({
-  boardName: '',
-  // collaboratorEmails: [],
-  imageKey: '',
-})
 
 const saveBoardImages = async (board) => {
   try {
@@ -67,29 +52,43 @@ const saveBoardImages = async (board) => {
     const response = await genAiService.saveBoardImages(payload)
     if (response.data && response.data.status) {
       toastStore.success(response?.data.message)
-      boardSavedData.value.boardName = response.data.boardName
-      boardSavedData.value.content = response.data.content
-      emit('updateAfterSave')
+      emit('updateAfterSave', {
+        imageKey: response.data.data.content,
+        boardName: response.data.data.boardName,
+      });
       onClose()
     } else {
     }
   } catch (error) {}
 }
 
-onMounted(fetchBoards)
+onMounted(() => {
+  getBoardLists()
+})
 
-const filteredBoards = computed(() =>
-  boards.value.filter((board) =>
-    board.boardName?.toLowerCase().includes(search.value.toLowerCase()),
-  ),
-)
+
+// const filteredBoards = computed(() =>
+// boardLists.value.filter((board) =>
+//     board.boardName?.toLowerCase().includes(search.value.toLowerCase()),
+//   ),
+// )
+const searchQuery = ref('')
+
+const filteredBoards = computed(() => {
+  if (!searchQuery.value || searchQuery.value.trim() === '') {
+    return boardLists.value
+  }
+  return boardLists.value.filter((item) => {
+    const boardName = item.boardName ? item.boardName.toLowerCase() : ''
+    return boardName.includes(searchQuery.value.toLowerCase())
+  })
+})
 
 const onClose = () => {
   emit('close')
 }
 const handleOutsideClick = (event) => {
   if (event.target === event.currentTarget) {
-    // close();
     emit('close')
   }
 }

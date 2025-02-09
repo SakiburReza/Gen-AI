@@ -104,6 +104,15 @@ const media = ref<
   }[]
 >([])
 
+const updateBoardName = ({ imageKey, boardName }) => {
+  console.log('updateBoardName', imageKey, boardName);
+  
+  media.value = media.value.map(item =>
+    item.url === imageKey ? { ...item, board: boardName } : item
+  );
+};
+
+
 const aiGeneratedMedia = ref<
   {
     url: string
@@ -298,7 +307,7 @@ const fetchLikedMedia = async (label) => {
   try {
     const { data: response } = await genAiService.getLikedMedia(label)
 
-    if (response.status && Array.isArray(response.data)) {
+    if (response.status && Array.isArray(response.data)) {      
       media.value = response.data.map((item) => ({
         url: item.content,
         type:
@@ -313,7 +322,7 @@ const fetchLikedMedia = async (label) => {
         prompt: item.prompt,
         isLiked: item.like,
         isShared: item.share,
-        board: item.boardName || 'Board'
+        boardName: item.boardName || 'Board'
       }))
     } else {
       console.error('Failed to fetch images: Invalid response format')
@@ -796,7 +805,7 @@ const closeSaveBoard = () => {
 
     <!-- Show SaveBoardComponent when isSaveBoardOpen is true -->
     <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"
-      @updateAfterSave="fetchMedia" />
+      @updateAfterSave="updateBoardName" />
 
     <!--
     <ShowModalWithDownloadButton :isOpen="showModal" @close="closeModal" :image="selectedImage" /> -->
