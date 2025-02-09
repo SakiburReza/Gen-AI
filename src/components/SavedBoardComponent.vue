@@ -30,7 +30,7 @@ const closeModal = () => {
 }
 
 const handleBoardCreated = () => {
-  fetchBoards()
+  getBoardLists()
   closeModal()
 }
 
@@ -106,8 +106,8 @@ const handleOutsideClick = (event) => {
           size="18"
         />
         <input
-          v-model="search"
-          placeholder="Search"
+          v-model="searchQuery"
+          placeholder="Search board name"
           class="p-4 pl-10 border border-gray-300 bg-tertiary rounded w-full"
         />
       </div>
