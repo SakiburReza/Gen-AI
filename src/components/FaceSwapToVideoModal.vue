@@ -6,7 +6,7 @@ import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
 
 const { fetchCredits } = useCredits()
-let interval = null;
+// let interval = null;
 const toastStore = useToastStore()
 const prompt = ref<string | null>(null);
 const isLoading = ref(false);
@@ -14,7 +14,7 @@ const promptError = ref<string | null>(null);
 const loading = ref<boolean>(false);
 const error = ref<string | null>(null);
 const fileUrl = ref<string | null>(null);
-const counter = ref(240);
+// const counter = ref(240);
 
 
 
@@ -42,31 +42,31 @@ const props = defineProps({
   },
 })
 
-//Timer
 const getFilename = (url: string): string =>
   `${url.split('/').pop() || 'download'}${props.image?.type === 'image' ? '.png' : '.mp4'}`
 
+//Timer
 
-  const formatTime = () => {
-  const minutes = String(Math.floor(counter.value / 60)).padStart(2, '0');
-  const seconds = String(counter.value % 60).padStart(2, '0');
-  return `${minutes}:${seconds}`;
-};
+//   const formatTime = () => {
+//   const minutes = String(Math.floor(counter.value / 60)).padStart(2, '0');
+//   const seconds = String(counter.value % 60).padStart(2, '0');
+//   return `${minutes}:${seconds}`;
+// };
 
-onMounted(() => {
-  interval = setInterval(() => {
-    if (counter.value > 0) {
-      counter.value--;
-    } else {
-      clearInterval(interval);
-      isLoading.value = false; 
-    }
-  }, 1000);
-});
+// onMounted(() => {
+//   interval = setInterval(() => {
+//     if (counter.value > 0) {
+//       counter.value--;
+//     } else {
+//       clearInterval(interval);
+//       isLoading.value = false; 
+//     }
+//   }, 1000);
+// });
 
-onUnmounted(() => {
-  if (interval) clearInterval(interval);
-});
+// onUnmounted(() => {
+//   if (interval) clearInterval(interval);
+// });
 
 
 // Fetch file when image.url is available
@@ -223,7 +223,7 @@ const handleOutsideClick = (event) => {
                 Image Reference
               </button>
             </div>
-            <p v-if="isLoading" class="text-red mt-2"> * It will usually take 3–4 minutes to generate video ({{ formatTime() }})</p>
+            <!-- <p v-if="isLoading" class="text-red mt-2"> * It will usually take 3–4 minutes to generate video ({{ formatTime() }})</p> -->
 
             <!-- Download Link -->
             <div class="mt-5 text-center">
