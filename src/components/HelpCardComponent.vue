@@ -1,4 +1,8 @@
 <script setup>
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const props = defineProps({
     data: {
         type: Object,
@@ -6,15 +10,28 @@ const props = defineProps({
         }),
     },
 });
+
+const goBack = () => {
+  router.go(-1);
+};
+
 </script>
 
 <template>
     <div class="w-full lg:px-4">
         <!-- Title Section -->
-        <h1 class="text-2xl sm:text-xl font-bold text-center mt-10 mb-1">Need Help?</h1>
-        <p class="text-center text-gray-500 mb-10 max-w-sm mx-auto text-md">
-            Access helpful resources, detailed documentation, and the latest system updates.
-        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 items-center mt-2">
+            <button @click="goBack"
+                class="col-span-1 bg-blue-600 text-white text-sm sm:text-md py-3 px-6 rounded-md hover:bg-gray-800">
+                TAKE ME BACK I WANT TO CREATE
+            </button>
+            <div class="sm:col-span-1 md:col-span-3 sm:px-22 md:px-44">
+                <h1 class="text-2xl sm:text-xl font-bold mt-10 mb-1">Need Help?</h1>
+                <p class="text-gray-500 mb-10 max-w-sm text-md">
+                    Access helpful resources, detailed documentation, and the latest system updates.
+                </p>
+            </div>
+        </div>
 
         <!-- Scrollable Card Grid Container max-h-[calc(100vh-150px)] sm:w-[250px] md:w-[280px] lg:w-[300px] h-[250px]-->
         <div class="overflow-auto max-h-[calc(100vh-150px)]">
