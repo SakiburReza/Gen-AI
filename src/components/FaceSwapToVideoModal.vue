@@ -1,13 +1,28 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onUnmounted, ref, watch } from 'vue';
+import { onBeforeUnmount, onMounted, onUnmounted, ref, watch } from 'vue';
 import genAiService from '@/services/gen-ai';
 import { useToastStore } from '@/stores/toast'
 import { useCredits } from '@/utils/utils'
 import { imageUrl } from '@/utils/utils'
 
 const { fetchCredits } = useCredits()
-
+let interval = null;
 const toastStore = useToastStore()
+const prompt = ref<string | null>(null);
+const isLoading = ref(false);
+const promptError = ref<string | null>(null); 
+const loading = ref<boolean>(false);
+const error = ref<string | null>(null);
+const fileUrl = ref<string | null>(null);
+const counter = ref(240);
+
+
+
+
+// Emits
+const emit = defineEmits(['close'])
+
+
 
 // Props
 const props = defineProps({
@@ -26,27 +41,32 @@ const props = defineProps({
     }),
   },
 })
-// Emits
-const emit = defineEmits(['close'])
 
-// State
-const prompt = ref<string | null>(null);
-
-
-const isLoading = ref(false);
-
-const promptError = ref<string | null>(null); // Track prompt validation errors
-
-const loading = ref<boolean>(false);
-const error = ref<string | null>(null);
-const fileUrl = ref<string | null>(null);
-
-
-// Helper to extract filename from URL
+//Timer
 const getFilename = (url: string): string =>
   `${url.split('/').pop() || 'download'}${props.image?.type === 'image' ? '.png' : '.mp4'}`
 
 
+  const formatTime = () => {
+  const minutes = String(Math.floor(counter.value / 60)).padStart(2, '0');
+  const seconds = String(counter.value % 60).padStart(2, '0');
+  return `${minutes}:${seconds}`;
+};
+
+onMounted(() => {
+  interval = setInterval(() => {
+    if (counter.value > 0) {
+      counter.value--;
+    } else {
+      clearInterval(interval);
+      isLoading.value = false; 
+    }
+  }, 1000);
+});
+
+onUnmounted(() => {
+  if (interval) clearInterval(interval);
+});
 
 
 // Fetch file when image.url is available
@@ -105,7 +125,7 @@ const turnIntoVideoAction = async () => {
       toastStore.error(response.data.message || 'Failed to generate video. Please try again.');
     }
   } catch (error) {
-    toastStore.error(error || 'Failed to generate video. Please try again.');
+    // toastStore.error(error || 'Failed to generate video. Please try again.');
   } finally {
     isLoading.value = false;
   }
@@ -203,6 +223,8 @@ const handleOutsideClick = (event) => {
                 Image Reference
               </button>
             </div>
+            <p v-if="isLoading" class="text-red mt-2"> * It will usually take 3–4 minutes to generate video ({{ formatTime() }})</p>
+
             <!-- Download Link -->
             <div class="mt-5 text-center">
               <a v-if="image?.url" :href="fileUrl" :download="getFilename(image.url)"

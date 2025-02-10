@@ -18,6 +18,7 @@ const accountCardRef = ref(null)
 const sidebarRef = ref(null);
 const isAuthenticatedUser = ref('')
 const expandSidebar = ref(false)
+const isClicked = ref(false)
 
 
 const props = defineProps({

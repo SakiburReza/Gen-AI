@@ -80,7 +80,6 @@ class GenAIService {
   }
 
   subscribePackages(subscribePackage, recurringConfirmation, recurringCadence) {
-    console.log('no package found');
     
     return axios.post(
       this.url +
@@ -93,7 +92,6 @@ class GenAIService {
   }
   
   changesubscribePackages(subscribePackage) {
-    console.log('package change');
     
     return axios.get(
       this.url +

@@ -23,7 +23,7 @@ app.use(VueKonva)
 app.use(router)
 
 
-app.use(createPinia());
+// app.use(createPinia());
 app.use(Vue3Toastify, {
   autoClose: 3000,
   hideProgressBar: true,
@@ -86,7 +86,6 @@ axios.interceptors.response.use(
     return config
   },
   (error) => {
-    console.log(error)
     if (error.code == 'ERR_NETWORK') {
       setTimeout(() => {
         toast.error('Connection refused. Please check your network and try again.', {
@@ -97,7 +96,6 @@ axios.interceptors.response.use(
 
       // Redirect to the login page
     } else if (error.message) {
-      console.log(error)
       toast.error(
         error.response.data.message != null ? error.response.data.message : error.response.data,
         {
