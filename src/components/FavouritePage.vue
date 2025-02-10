@@ -34,7 +34,6 @@ const media = ref<
         isShared: 'Y' | 'N'
         prompt: string
         board: string
-        boardName: string
         owner: string
     }[]
 >([])
@@ -100,19 +99,12 @@ const fetchLikedMedia = async (label) => {
         if (response.status && Array.isArray(response.data)) {
             media.value = response.data.map((item) => ({
                 url: item.content,
-                type:
-                    item.type ||
-                    (label === 'text-to-video' ||
-                        label === 'image-to-video' ||
-                        label === 'templates' ||
-                        (label === 'face-swap' && item.orientation == null)
-                        ? 'video'
-                        : 'image'),
+                type: item.type,
                 orientation: item.orientation,
                 prompt: item.prompt,
                 isLiked: item.like,
                 isShared: item.share,
-                board: item.boardName || 'Board',
+                board: item.boardName,
                 owner: item.shareOwner,
             }))
         } else {

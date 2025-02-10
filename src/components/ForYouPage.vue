@@ -32,7 +32,7 @@ const media = ref<
         isLiked: 'Y' | 'N'
         isShared: 'Y' | 'N'
         prompt: string
-        boardName: string
+        board: string
         owner: string
     }[]
 >([])
@@ -180,19 +180,19 @@ const copyAction = async (prompt: string) => {
 
             <!-- Floating Buttons (Visible on Hover) -->
             <!-- Black Gradient Overlay -->
-            <div v-if="media[index].owner !== null"
+            <div v-if="media[index].board !== null"
                 class="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             </div>
 
             <div
                 class="absolute bottom-1.5 left-1 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-100">
                 <span class="text-[12px] font-semibold text-white px-1 rounded">
-                    {{ media[index].boardName }}
+                    {{ media[index].board }}
                 </span>
             </div>
 
 
-            <div
+            <div v-if="media[index].owner !== null"
                 class="absolute top-0 w-full h-10 bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-100">
             </div>
 
