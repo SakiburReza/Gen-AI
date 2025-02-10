@@ -9,7 +9,7 @@ const props = defineProps({
   isOpen: {
     type: Boolean,
     required: true,
-  },
+  }
 })
 const emit = defineEmits(['update:isOpen', 'boardCreated'])
 
