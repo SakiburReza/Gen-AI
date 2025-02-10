@@ -69,7 +69,7 @@ const goToProfilePage = () => {
 
 onMounted(() => {
   getAllBoards()
-  // getCollaborateBoards()
+  getCollaborateBoards()
   getuserInfo()
 })
 </script>

@@ -170,7 +170,7 @@ const copyAction = async (prompt: string) => {
 
 </script>
 <template>
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 rounded-t-2xl overflow-y-auto">
+    <div class="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 rounded-t-2xl overflow-y-auto">
         <div v-for="(item, index) in filteredMedia" :key="item.url" class="relative overflow-hidden group"
             :class="[item.orientation === 'P' ? 'row-span-2' : 'row-span-1']">
             <!-- Render Image -->
