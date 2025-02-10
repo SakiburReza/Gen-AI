@@ -18,8 +18,9 @@ import GalleryPage from '@/views/GalleryPage.vue'
 import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
+import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
 
-export const  isAuthenticated = () => {
+export const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
   if (!token) {
     return false; // No token found
@@ -153,6 +154,12 @@ const router = createRouter({
       path: '/konva',
       name: 'MainDemo',
       component: MainDemo,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/editor',
+      name: 'KonvaEditor',
+      component: KonvaEditor,
       meta: { requiresAuth: true },
     }
 
