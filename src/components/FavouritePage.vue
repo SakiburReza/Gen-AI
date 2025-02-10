@@ -7,6 +7,10 @@ import { imageUrl, videoUrl } from '@/utils/utils'
 import { computed, onMounted, ref } from 'vue'
 import { useToastStore } from '@/stores/toast'
 
+
+const props = defineProps<{ searchQuery: string }>();
+
+
 onMounted(() => {
     fetchLikedMedia('text-to-image')
 })
@@ -72,53 +76,53 @@ const closeSaveBoard = () => {
 }
 
 const updateBoardName = ({ imageKey, boardName }) => {
-  console.log('updateBoardName', imageKey, boardName);
-  
-  media.value = media.value.map(item =>
-    item.url === imageKey ? { ...item, board: boardName } : item
-  );
+    console.log('updateBoardName', imageKey, boardName);
+
+    media.value = media.value.map(item =>
+        item.url === imageKey ? { ...item, board: boardName } : item
+    );
 };
 
 // Function to fetch liked media
 const fetchLikedMedia = async (label) => {
-  loading.value = true
-  media.value = null;
-  if (label === 'Text to Image') label = 'text-to-image'
-  else if (label === 'Image to Image') label = 'image-to-image'
-  else if (label === 'Text to Video') label = 'text-to-video'
-  else if (label === 'Image to Video') label = 'image-to-video'
-  else if (label === 'Face Swap') label = 'face-swap'
-  else if (label === 'Templates (Beta)') label = 'templates'
+    loading.value = true
+    media.value = null;
+    if (label === 'Text to Image') label = 'text-to-image'
+    else if (label === 'Image to Image') label = 'image-to-image'
+    else if (label === 'Text to Video') label = 'text-to-video'
+    else if (label === 'Image to Video') label = 'image-to-video'
+    else if (label === 'Face Swap') label = 'face-swap'
+    else if (label === 'Templates (Beta)') label = 'templates'
 
-  try {
-    const { data: response } = await genAiService.getLikedMedia(label)
+    try {
+        const { data: response } = await genAiService.getLikedMedia(label)
 
-    if (response.status && Array.isArray(response.data)) {
-      media.value = response.data.map((item) => ({
-        url: item.content,
-        type:
-          item.type ||
-          (label === 'text-to-video' ||
-            label === 'image-to-video' ||
-            label === 'templates' ||
-            (label === 'face-swap' && item.orientation == null)
-            ? 'video'
-            : 'image'),
-        orientation: item.orientation,
-        prompt: item.prompt,
-        isLiked: item.like,
-        isShared: item.share,
-        board: item.boardName || 'Board',
-        owner: item.shareOwner,
-      }))
-    } else {
-      console.error('Failed to fetch images: Invalid response format')
+        if (response.status && Array.isArray(response.data)) {
+            media.value = response.data.map((item) => ({
+                url: item.content,
+                type:
+                    item.type ||
+                    (label === 'text-to-video' ||
+                        label === 'image-to-video' ||
+                        label === 'templates' ||
+                        (label === 'face-swap' && item.orientation == null)
+                        ? 'video'
+                        : 'image'),
+                orientation: item.orientation,
+                prompt: item.prompt,
+                isLiked: item.like,
+                isShared: item.share,
+                board: item.boardName || 'Board',
+                owner: item.shareOwner,
+            }))
+        } else {
+            console.error('Failed to fetch images: Invalid response format')
+        }
+    } catch (error) {
+        console.error('Error fetching images:', error)
+    } finally {
+        loading.value = false
     }
-  } catch (error) {
-    console.error('Error fetching images:', error)
-  } finally {
-    loading.value = false
-  }
 }
 
 
@@ -134,12 +138,12 @@ const checkAuthentication = () => {
 }
 
 const filteredMedia = computed(() => {
-    if (!searchQuery.value || searchQuery.value.trim() === '') {
+    if (!props.searchQuery || props.searchQuery.trim() === '') {
         return media.value
     }
     return media.value.filter((item) => {
         const prompt = item.prompt ? item.prompt.toLowerCase() : ''
-        return prompt.includes(searchQuery.value.toLowerCase())
+        return prompt.includes(props.searchQuery.toLowerCase())
     })
 })
 const copyAction = async (prompt: string) => {
@@ -173,10 +177,9 @@ const copyAction = async (prompt: string) => {
 }
 
 </script>
-
 <template>
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 rounded-t-2xl overflow-y-auto">
-        <div v-for="(item, index) in filteredMedia" :key="index" class="relative overflow-hidden group"
+        <div v-for="(item, index) in filteredMedia" :key="item.url" class="relative overflow-hidden group"
             :class="[item.orientation === 'P' ? 'row-span-2' : 'row-span-1']">
             <!-- Render Image -->
             <img v-if="item.type === 'image'" v-lazy="imageUrl() + item.url" :alt="'Media ' + index"
@@ -202,7 +205,7 @@ const copyAction = async (prompt: string) => {
                 class="absolute bottom-1.5 left-1 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-100">
                 <span class="text-[12px] font-semibold text-white px-1 rounded">
                     {{ media[index].board }}
-                </span>                
+                </span>
             </div>
 
 

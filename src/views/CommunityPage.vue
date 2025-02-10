@@ -109,7 +109,7 @@ const activeTab = ref('for-you')
             {{ tab.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) }}
           </span>
         </div>
-
+        
         <!-- Search Bar (Right Aligned) -->
         <div class="relative group w-full max-w-xs md:max-w-sm">
           <svg xmlns="http://www.w3.org/2000/svg"
@@ -130,15 +130,15 @@ const activeTab = ref('for-you')
       <!-- Content Section   (For You)-->
       <div v-if="activeTab === 'for-you'"
         class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
-        <ForYouPage />
+        <ForYouPage :searchQuery="searchQuery" />
       </div>
       <div v-if="activeTab === 'favourites'"
         class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
-        <FavouritePage />
+        <FavouritePage :searchQuery="searchQuery"/>
       </div>
       <div v-if="activeTab === 'following'"
         class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
-        <FollowingPage />
+        <FollowingPage :searchQuery="searchQuery"/>
       </div>
   </div>
   </DefaultLayout>

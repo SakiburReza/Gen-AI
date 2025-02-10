@@ -7,6 +7,9 @@ import { imageUrl, videoUrl } from '@/utils/utils'
 import { computed, onMounted, ref } from 'vue'
 import { useToastStore } from '@/stores/toast'
 
+const props = defineProps<{ searchQuery: string }>();
+
+
 onMounted(() => {
     fetchMedia()
 })
@@ -34,11 +37,11 @@ const media = ref<
     }[]
 >([])
 const updateBoardName = ({ imageKey, boardName }) => {
-  console.log('updateBoardName', imageKey, boardName);
-  
-  media.value = media.value.map(item =>
-    item.url === imageKey ? { ...item, board: boardName } : item
-  );
+    console.log('updateBoardName', imageKey, boardName);
+
+    media.value = media.value.map(item =>
+        item.url === imageKey ? { ...item, board: boardName } : item
+    );
 };
 
 const closePreviewModal = () => {
@@ -75,7 +78,6 @@ const openAddFriendModal = () => {
 const closeSaveBoard = () => {
     isSaveBoardOpen.value = false
 }
-
 
 
 // Fetch Images / Videos from API
@@ -118,12 +120,12 @@ const checkAuthentication = () => {
 }
 
 const filteredMedia = computed(() => {
-    if (!searchQuery.value || searchQuery.value.trim() === '') {
+    if (!props.searchQuery || props.searchQuery.trim() === '') {
         return media.value
     }
     return media.value.filter((item) => {
         const prompt = item.prompt ? item.prompt.toLowerCase() : ''
-        return prompt.includes(searchQuery.value.toLowerCase())
+        return prompt.includes(props.searchQuery.toLowerCase())
     })
 })
 const copyAction = async (prompt: string) => {
@@ -160,7 +162,7 @@ const copyAction = async (prompt: string) => {
 
 <template>
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 rounded-t-2xl overflow-y-auto">
-        <div v-for="(item, index) in filteredMedia" :key="index" class="relative overflow-hidden group"
+        <div v-for="(item, index) in filteredMedia" :key="item.url" class="relative overflow-hidden group"
             :class="[item.orientation === 'P' ? 'row-span-2' : 'row-span-1']">
             <!-- Render Image -->
             <img v-if="item.type === 'image'" v-lazy="imageUrl() + item.url" :alt="'Media ' + index"
@@ -279,6 +281,6 @@ const copyAction = async (prompt: string) => {
         <TurnIntoVideoModal :isOpen="showTurnIntoVideoModal" @close="closeTurnIntoVideoModal" :image="selectedImage" />
         <!-- Show SaveBoardComponent when isSaveBoardOpen is true -->
         <SaveBoardComponent v-if="isSaveBoardOpen" @close="closeSaveBoard" :image="imageUrlData"
-            @updateAfterSave="updateBoardName"/>
+            @updateAfterSave="updateBoardName" />
     </div>
 </template>
