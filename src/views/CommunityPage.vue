@@ -1,99 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch} from 'vue'
-import PreviewImageModal from '@/components/PreviewImageModal.vue'
-import DefaultLayout from '@/layout/DefaultLayout.vue'
-import { useToastStore } from '@/stores/toast'
-import genAiService from '@/services/gen-ai'
-import SaveBoardComponent from '@/components/SavedBoardComponent.vue'
 import ForYouPage from '@/components/ForYouPage.vue'
+import DefaultLayout from '@/layout/DefaultLayout.vue'
+import { computed, ref } from 'vue'
 
 
-import { useRoute } from 'vue-router'
-import { Divide } from 'lucide-vue-next'
 import FavouritePage from '@/components/FavouritePage.vue'
 import FollowingPage from '@/components/FollowingPage.vue'
+import { useRoute } from 'vue-router'
 const searchQuery = ref('')
-const authTokenInfo = ref('')
-const isSaveBoardOpen = ref(false)
-const imageUrlData = ref('')
-const toastStore = useToastStore()
 const route = useRoute()
 const showBadge = computed(() => route.path !== '/')
-const selectedImage = ref(null)
-const showPreviewModal = ref(false)
-const loading = ref(false)
-const showMenu = ref(false)
-const media = ref<
-  {
-    url: string
-    type: 'image' | 'video'
-    orientation: 'P' | 'L'
-    isLiked: 'Y' | 'N'
-    isShared: 'Y' | 'N'
-    prompt: string
-    owner: string
-    board: string
-  }[]
->([])
-
-
-
-
-const filteredMedia = computed(() => {
-  if (!searchQuery.value || searchQuery.value.trim() === '') {
-    return media.value
-  }
-  return media.value.filter((item) => {
-    const prompt = item.prompt ? item.prompt.toLowerCase() : ''
-    return prompt.includes(searchQuery.value.toLowerCase())
-  })
-})
-
-
-
-
-
-// Fetch Images / Videos from API
-const fetchMedia = async () => {
-  loading.value = true
-  media.value = null;
-  try {
-    const { data: response } = await genAiService.getCommunityMedia()
-
-    if (response.status && Array.isArray(response.data)) {
-      // Map data with type detection (image/video) for initial load
-      media.value = response.data.map((item) => ({
-        url: item.content,
-        type: item.type,
-        orientation: item.orientation,
-        prompt: item.prompt,
-        isLiked: item.like,
-        isShared: item.share,
-        owner: item.shareOwner,
-        board: item.boardName
-      }))
-    } else {
-      console.error('Failed to fetch images: Invalid response format')
-    }
-  } catch (error) {
-    console.error('Error fetching images:', error)
-  } finally {
-    loading.value = false
-  }
-}
-
-const toggleMenu = () => {
-  showMenu.value = !showMenu.value
-}
-
-
-
-// Fetch images when the component is mounted
-onMounted(async () => {
-  fetchMedia()
-})
-
-// Tabs State
 const activeTab = ref('for-you')
 </script>
 <template>
@@ -127,7 +43,7 @@ const activeTab = ref('for-you')
         </div>
       </div>
 
-      <!-- Content Section   (For You)-->
+      <!-- Content Section-->
       <div v-if="activeTab === 'for-you'"
         class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
         <ForYouPage :searchQuery="searchQuery" />
