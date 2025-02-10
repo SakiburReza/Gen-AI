@@ -369,8 +369,8 @@ const generateAiContent = async () => {
 
       if (referenceImage.value === null) {
         response = await genAiService.textToVideo({
-        text: description.value,
-      });
+          text: description.value,
+        });
       } else response = await genAiService.imageToVideo(formData);
     } else if (activeMode.value === 'image') {
       if (description.value === '') {
@@ -389,10 +389,10 @@ const generateAiContent = async () => {
       formData.append('num_images', selectedOutput.value.toString());
       if (referenceImage.value === null) {
         response = await genAiService.textToImage({
-        text: description.value,
-        image_size: selectedRatio.value,
-        num_images: selectedOutput.value,
-      });
+          text: description.value,
+          image_size: selectedRatio.value,
+          num_images: selectedOutput.value,
+        });
       } else response = await genAiService.imageToImage(formData);
     }
     if (response?.data?.status) {
@@ -674,15 +674,16 @@ const closeSaveBoard = () => {
 
       <!-- Right Section: Enhanced Image Grid -->
       <!-- Loader (Visible only when loading is true) -->
-      <div v-if="loading" class="w-full bg-black rounded-full h-1 mt-1">
-        <div
-          class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full transition-all duration-500"
-          :style="{ width: progress + '%' }">
-        </div>
-        <!-- <span class="float-end font-semibold">{{ progress }}%</span> -->
-      </div>
-      <div
+
+      <div :class="{ 'pointer-events-none bg-gray-200 border-opacity-45': loading }"
         class="flex-1 mt-1 mb-5 overflow-y-auto p-4 sm:mt-2 sm:mb-6 sm:p-5 md:mt-3 md:mb-7 md:p-6 lg:mt-4 lg:mb-8 lg:p-7 xl:mt-5 xl:mb-9 xl:p-8">
+        <div v-if="loading" class="w-full bg-black rounded-full h-1 mt-1 bg-opacity-50">
+          <div
+            class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 mb-1 leading-none rounded-full transition-all duration-500"
+            :style="{ width: progress + '%' }">
+          </div>
+          <!-- <span class="float-end font-semibold">{{ progress }}%</span> -->
+        </div> &nbsp;
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 rounded-t-2xl overflow-y-auto">
           <div v-for="(item, index) in filteredMedia" :key="index" class="relative overflow-hidden group" :class="[
             item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
@@ -791,7 +792,8 @@ const closeSaveBoard = () => {
                 class="fixed bottom-4 right-4 bg-blue-600 text-white px-1.5 py-1.5 rounded-lg text-xs">
                 Save
               </div>
-              <div v-if="media[index].board !== 'Board' && media[index].type === 'image'" class="fixed bottom-4 right-4 bg-black text-white px-1.5 py-1.5 rounded-lg text-xs">
+              <div v-if="media[index].board !== 'Board' && media[index].type === 'image'"
+                class="fixed bottom-4 right-4 bg-black text-white px-1.5 py-1.5 rounded-lg text-xs">
                 Saved
               </div>
             </div>
