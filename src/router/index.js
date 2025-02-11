@@ -162,7 +162,6 @@ const router = createRouter({
 //   const loggedIn = isAuthenticated();
 
 //   if (to.meta.requiresAuth && !loggedIn) {
-//     console.log("log?", loggedIn);
 //     next('/'); // Redirect to login page
 //   } else if ((to.path === '/' || to.path === '/sign-up') && loggedIn) {
 //     next('/operativepage'); // Redirect logged-in users to dashboard/home
