@@ -17,6 +17,7 @@ import HelpPage from '@/views/HelpPage.vue'
 import GalleryPage from '@/views/GalleryPage.vue'
 import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
+import MainDemo from '@/konvaJsDemo/mainDemo.vue'
 
 export const  isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -146,6 +147,12 @@ const router = createRouter({
       path: '/savedboardcomponent',
       name: 'savedboardcomponent',
       component: SavedBoardComponent,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/konva',
+      name: 'MainDemo',
+      component: MainDemo,
       meta: { requiresAuth: true },
     }
 
