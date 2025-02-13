@@ -45,7 +45,6 @@ app.config.globalProperties.$axios = axiosInstance;
 // Request interceptor for API calls
 // axiosInstance.interceptors.request.use(
 //   (config) => {
-//     console.log("11111111"); // This should print now
 
 //     // Retrieve the token inside the interceptor to ensure the latest value
 //     const token = localStorage.getItem('authToken');
@@ -53,7 +52,6 @@ app.config.globalProperties.$axios = axiosInstance;
 //     if (token) {
 //       config.headers.Authorization = Bearer ${token}; // Add token to request headers
 //     } else {
-//       console.log('Token not found in localStorage');
 //       // Optionally, redirect to login page if needed:
 //       // router.push('/login');
 //     }
@@ -77,7 +75,6 @@ axios.interceptors.response.use(
       })
     }
     // else {
-    //   console.log('true', config.data)
     //   toast.success(config.data.message, {
     //     autoClose: 2500,
     //     theme: 'dark'
@@ -96,13 +93,17 @@ axios.interceptors.response.use(
 
       // Redirect to the login page
     } else if (error.message) {
+      console.log('error.message',error.message)
+      localStorage.removeItem("authToken"),
+      localStorage.getItem("selectedMenu") =='/'? window.location.href('/') : router.push('/sign-in')
       toast.error(
-        error.response.data.message != null ? error.response.data.message : error.response.data,
+        error.response.data.message != null ? error.response.data.message : error.message,
         {
           autoClose: 2500,
           theme: 'dark'
         }
       )
+        
     } else {
       toast.error('Something went wrong!', {
         autoClose: 2500,

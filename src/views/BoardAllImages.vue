@@ -55,7 +55,6 @@ const boardImagesByName = async () => {
 const collaborateBoardImagesByName = async () => {
   try {
     const response = await genAiService.getCollaborateBoardsInfo(board)
-    console.log('response', response.data)
     if (response.data.data?.length) {
       images.value = response.data.data[0].images || []
     }
@@ -71,7 +70,6 @@ const closePreviewModal = () => {
   selectedImage.value = null
 }
 const openPreviewModal = (mediaItem) => {
-  console.log('mediaItem', mediaItem)
   selectedImage.value = mediaItem
   showPreviewModal.value = true
 }

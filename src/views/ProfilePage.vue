@@ -281,7 +281,6 @@ const isSaveDisabled = computed(() => {
 
 // Watcher: Automatically disable Save button when no changes are made
 watch([profile, () => profile.value.logoPreview], () => {
-  console.log('Changes detected: Save button state updated')
 })
 
 // Toggle password visibility
@@ -310,7 +309,6 @@ const uploadLogo = (event) => {
     if (img.width >= 200 && img.height >= 200) {
       profile.value.logo = file
       profile.value.logoPreview = img.src
-      console.log('Logo uploaded:', file.name)
     } else {
       toastStore.error('Image must be at least 200x200 pixels.')
     }
@@ -323,12 +321,10 @@ const uploadLogo = (event) => {
 // Save profile
 const saveProfile = async () => {
   if (isSaveDisabled.value) {
-    console.log('No changes detected, skipping save.')
     return
   }
 
   try {
-    console.log('Saving profile:', profile.value.name)
 
     const formData = new FormData()
     formData.append(
@@ -343,17 +339,13 @@ const saveProfile = async () => {
     // Handle the case where the profile picture is cleared
     if (profile.value.logo) {
       // If a new logo is uploaded
-      console.log('Uploading logo:', profile.value.logo.name)
       formData.append('profilePicture', profile.value.logo, profile.value.logo.name)
     } else if (profile.value.logoPreview === '') {
       // If logo was cleared, send an empty string to the backend
-      console.log('Clearing logo, sending empty value.')
       formData.append('profilePicture', '')
     }
 
-    console.log('FormData contents:')
     for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value)
     }
 
     const response = await genAiService.saveProfile(formData)

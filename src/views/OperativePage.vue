@@ -104,9 +104,7 @@ const media = ref<
   }[]
 >([])
 
-const updateBoardName = ({ imageKey, boardName }) => {
-  console.log('updateBoardName', imageKey, boardName);
-  
+const updateBoardName = ({ imageKey, boardName }) => {  
   media.value = media.value.map(item =>
     item.url === imageKey ? { ...item, board: boardName } : item
   );

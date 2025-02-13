@@ -34,13 +34,14 @@ const handleBoardCreated = () => {
   closeModal()
 }
 
-
-const  getBoardLists = async() => {
+const getBoardLists = async () => {
   try {
-    const response = await genAiService.getBoardList(props.image)
-    boardLists.value = response.data.data
+    const payload = {
+      imageUrl: props.image,
     }
-   catch (error) {}
+    const response = await genAiService.getBoardList(payload)
+    boardLists.value = response.data.data
+  } catch (error) {}
 }
 
 const saveBoardImages = async (board) => {
@@ -56,7 +57,7 @@ const saveBoardImages = async (board) => {
       emit('updateAfterSave', {
         imageKey: response.data.data.content,
         boardName: response.data.data.boardName,
-      });
+      })
       onClose()
     } else {
     }
@@ -66,7 +67,6 @@ const saveBoardImages = async (board) => {
 onMounted(() => {
   getBoardLists()
 })
-
 
 const filteredBoards = computed(() => {
   if (!searchQuery.value || searchQuery.value.trim() === '') {
@@ -89,10 +89,7 @@ const handleOutsideClick = (event) => {
 </script>
 
 <template>
-  <div
-    class="fixed inset-0 flex items-center justify-center"
-    @click="handleOutsideClick"
-  >
+  <div class="fixed inset-0 flex items-center justify-center" @click="handleOutsideClick">
     <div class="bg-white p-5 rounded-lg w-[500px] shadow-lg relative border-2 mt-30">
       <h2 class="text-xl font-bold mb-4 text-center">Save Board</h2>
       <button class="absolute top-2 right-2" @click="onClose">
@@ -120,7 +117,10 @@ const handleOutsideClick = (event) => {
           v-for="(board, index) in filteredBoards"
           :key="index"
           class="flex items-center gap-4 p-3 hover:bg-gray-100 rounded-md"
-          :class="{ 'opacity-30 cursor-not-allowed': board.exists, 'cursor-pointer': !board.exists }"
+          :class="{
+            'opacity-30 cursor-not-allowed': board.exists,
+            'cursor-pointer': !board.exists,
+          }"
           @click="!board.exists && saveBoardImages(board)"
         >
           <img
@@ -145,7 +145,11 @@ const handleOutsideClick = (event) => {
         <span>Create Board</span>
       </div>
 
-      <CreateBoardModal :isOpen="isModalOpen" @update:isOpen="isModalOpen  = false" @boardCreated="handleBoardCreated"></CreateBoardModal>
+      <CreateBoardModal
+        :isOpen="isModalOpen"
+        @update:isOpen="isModalOpen = false"
+        @boardCreated="handleBoardCreated"
+      ></CreateBoardModal>
     </div>
   </div>
 </template>

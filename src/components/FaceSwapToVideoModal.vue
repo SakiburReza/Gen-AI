@@ -75,7 +75,6 @@ const fetchFile = async () => {
     console.error('Invalid or incomplete image data');
     return;
   }
-  console.log('fetchFile called');
   if (props.image?.url) {
     loading.value = true;
     error.value = null;
@@ -87,7 +86,6 @@ const fetchFile = async () => {
       const fileBlob = await response.blob();
       fileUrl.value = URL.createObjectURL(fileBlob);
       loading.value = false;
-      console.log('File URL:', fileUrl.value);
     } catch (err) {
       error.value = `Failed to fetch the file: ${err.message}`;
       console.error('Error fetching file:', err);
