@@ -56,7 +56,6 @@ const wrapperClass = computed(() => {
       base.push('md:grid-cols-2')
     }
   }
-  // console.log(props.label, slotsLength)
 
   return base
 })

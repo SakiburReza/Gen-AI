@@ -37,7 +37,6 @@ const media = ref<
     }[]
 >([])
 const updateBoardName = ({ imageKey, boardName }) => {
-    console.log('updateBoardName', imageKey, boardName);
 
     media.value = media.value.map(item =>
         item.url === imageKey ? { ...item, board: boardName } : item
@@ -134,7 +133,6 @@ const copyAction = async (prompt: string) => {
         try {
             await navigator.clipboard.writeText(prompt)
             toastStore.success('Prompt copied to clipboard')
-            console.log('Prompt copied to clipboard:', prompt)
         } catch (error) {
             console.error('Failed to copy prompt using Clipboard API:', error)
         }
@@ -150,7 +148,6 @@ const copyAction = async (prompt: string) => {
         toastStore.success('Prompt copied to clipboard')
         try {
             document.execCommand('copy')
-            console.log('Prompt copied to clipboard using fallback')
         } catch (err) {
             console.error('Fallback: Unable to copy prompt:', err)
         }

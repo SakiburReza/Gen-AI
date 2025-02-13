@@ -29,7 +29,6 @@ watch(
 const emit = defineEmits(['video-selected'])
 const selectVideo = (video) => {
   currentVideo.value = video // Update the selected video
-  console.log('Selected Video:', video)
   // Emit an object containing only id and prompt
   emit('video-selected', { id: video.id, prompt: video.prompt })
 }

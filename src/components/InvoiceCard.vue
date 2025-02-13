@@ -70,7 +70,6 @@ const fetchInvoices = async () => {
   try {
     const response = await genAiService.fetchPaymentInfo() // Replace with your API endpoint
     invoices.value = response.data
-    console.log('Invoices fetched successfully:', invoices.value)
   } catch (error) {
     console.error('Error fetching invoices:', error)
   }
