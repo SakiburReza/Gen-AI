@@ -19,6 +19,7 @@ import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
 import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
+import EditorApp from '@/views/EditorApp.vue'
 
 export const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -106,7 +107,7 @@ const router = createRouter({
     {
       path: '/verification',
       name: 'verification',
-      component: VerificationPage
+      component: VerificationPage,
     },
     {
       path: '/communitysidebar',
@@ -161,10 +162,15 @@ const router = createRouter({
       name: 'KonvaEditor',
       component: KonvaEditor,
       meta: { requiresAuth: true },
-    }
-
+    },
+    {
+      path: '/app',
+      name: 'EditorApp',
+      component: EditorApp,
+      meta: { requiresAuth: true },
+    },
   ],
-});
+})
 // router.beforeEach((to, from, next) => {
 //   const loggedIn = isAuthenticated();
 
