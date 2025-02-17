@@ -96,47 +96,7 @@ const handleStageMouseDown = (e) => {
     } else {
         selectedShapeName.value = '';
     }
-
-    const rect = this.rectangles.find((r) => r.name === name);
-    if (rect) {
-        this.selectedShapeName = name;
-    } else {
-        this.selectedShapeName = '';
-    }
-    this.updateTransformer();
-    updateTransformer();
 }
-
-const updateTransformer = () => {
-    const transformerNode = transformer.value;
-    const stage = transformerNode.getStage();
-    const selectedNode = stage.findOne('.' + selectedShapeName.value);
-
-    if (!selectedNode) {
-        transformerNode.nodes([]);
-        return;
-    } else {
-
-        transformerNode.nodes([selectedNode]);
-    }
-};
-
-
-// const updateTransformer = () => {
-//     const transformerNode = transformer.value.getNode();
-//     const stage = transformerNode.getStage();
-//     const selectedNode = stage.findOne('.' + selectedShapeName.value);
-
-//     if (selectedNode === transformerNode.node()) {
-//         return;
-//     }
-
-//     if (selectedNode) {
-//         transformerNode.nodes([selectedNode]);
-//     } else {
-//         transformerNode.nodes([]);
-//     };
-// }
 
 const rectangles = () => [
     shapes.value.push(
