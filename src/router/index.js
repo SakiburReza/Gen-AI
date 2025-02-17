@@ -19,6 +19,8 @@ import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
 import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
+import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
+import DemoForKonva from '@/konvaJsDemo/DemoForKonva.vue'
 
 export const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -161,7 +163,19 @@ const router = createRouter({
       name: 'KonvaEditor',
       component: KonvaEditor,
       meta: { requiresAuth: true },
-    }
+    },
+    {
+      path: '/konva2',
+      name: 'KonvaDocs',
+      component: KonvaDocs,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/konva3',
+      name: 'DemoForKonva',
+      component: DemoForKonva,
+      meta: { requiresAuth: true },
+    },
 
   ],
 });
