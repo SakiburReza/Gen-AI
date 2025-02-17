@@ -18,8 +18,10 @@ import GalleryPage from '@/views/GalleryPage.vue'
 import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
+import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
+import EditorApp from '@/views/EditorApp.vue'
 
-export const  isAuthenticated = () => {
+export const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
   if (!token) {
     return false; // No token found
@@ -105,7 +107,7 @@ const router = createRouter({
     {
       path: '/verification',
       name: 'verification',
-      component: VerificationPage
+      component: VerificationPage,
     },
     {
       path: '/communitysidebar',
@@ -154,15 +156,25 @@ const router = createRouter({
       name: 'MainDemo',
       component: MainDemo,
       meta: { requiresAuth: true },
-    }
-
+    },
+    {
+      path: '/editor',
+      name: 'KonvaEditor',
+      component: KonvaEditor,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/app',
+      name: 'EditorApp',
+      component: EditorApp,
+      meta: { requiresAuth: true },
+    },
   ],
-});
+})
 // router.beforeEach((to, from, next) => {
 //   const loggedIn = isAuthenticated();
 
 //   if (to.meta.requiresAuth && !loggedIn) {
-//     console.log("log?", loggedIn);
 //     next('/'); // Redirect to login page
 //   } else if ((to.path === '/' || to.path === '/sign-up') && loggedIn) {
 //     next('/operativepage'); // Redirect logged-in users to dashboard/home

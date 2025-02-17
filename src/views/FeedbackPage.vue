@@ -177,7 +177,6 @@ const resetForm = () => {
 }
 
 const submitForm = async () => {
-  console.log('Form Submitted:', form)
   const FeedbackEmail = {
     name: form.name,
     question: form.question,
@@ -186,8 +185,6 @@ const submitForm = async () => {
   }
   try {
     const response = await genAiService.saveFeedback(FeedbackEmail)
-
-    console.log(response)
     if (response?.data.status) {
       toastStore.success(response?.data.message)
       //

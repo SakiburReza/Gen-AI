@@ -26,7 +26,6 @@ const goBack = () => {
 const billingInfo = async () => {
   try {
     const response = await genAiService.billingInformation()
-    // console.log('bill', response.data.data)
     if (response.data.status) {
       if (response.data.data.subscription) {
         billinInformation.value.plan_name =
@@ -64,7 +63,6 @@ const billingInfo = async () => {
           response.data.data.lastPurchaseCredit === 'null'
           ? 0
           : response.data.data.lastPurchaseCredit
-      // console.log(billinInformation.value);
     } else {
       console.error('Invalid response structure:', response)
     }
@@ -75,7 +73,6 @@ const billingInfo = async () => {
 
 const showBuyMoreCreditsModal = ref(false) // Modal visibility
 const BuyMoreCredits = async () => {
-  console.log('Executing More Credits')
   showBuyMoreCreditsModal.value = true
 }
 const closeBuyMoreCreditsModal = () => {

@@ -200,7 +200,6 @@ function toastMessage(message, type) {
   } else if (type === "warn") {
     console.warn(piniaMessage);
   } else {
-    console.log(piniaMessage);
   }
 }
 function isPinia(o) {
@@ -897,7 +896,6 @@ function acceptHMRUpdate(initialUseStore, hot) {
         }
         const existingStore = pinia._s.get(id);
         if (!existingStore) {
-          console.log(`[Pinia]: skipping hmr because store doesn't exist yet`);
           return;
         }
         useStore(pinia, existingStore);
