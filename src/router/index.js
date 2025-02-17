@@ -18,6 +18,8 @@ import GalleryPage from '@/views/GalleryPage.vue'
 import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
+import ImageEditor from '@/views/ImageEditor.vue'
+// import CustomImageEditor from '@/components/CustomImageEditor.vue'
 
 export const  isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -150,11 +152,23 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/toasteditor',
+      name: 'editor',
+      component: ImageEditor,
+      meta: { requiresAuth: false },
+    },
+    {
       path: '/konva',
       name: 'MainDemo',
       component: MainDemo,
-      meta: { requiresAuth: true },
-    }
+      meta: { requiresAuth: false },
+    },
+    // {
+    //   path: '/customimageeditor',
+    //   name: 'CustomImageEditor',
+    //   component: CustomImageEditor,
+    //   meta: { requiresAuth: false },
+    // },
 
   ],
 });
