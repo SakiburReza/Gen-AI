@@ -156,7 +156,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/toasteditor',
+      path: '/toast',
       name: 'editor',
       component: ImageEditor,
       meta: { requiresAuth: false },
@@ -185,6 +185,12 @@ const router = createRouter({
       component: DemoForKonva,
       meta: { requiresAuth: true },
     },
+    {
+      path: '/polotno',
+      name: 'EditorApp',
+      component: EditorApp,
+      meta: { requiresAuth: true },
+    }
 
   ],
 })
