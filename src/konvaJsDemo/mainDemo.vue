@@ -1,23 +1,27 @@
 <template>
   <div class="relative w-screen h-screen bg-gray-100 flex flex-col items-center justify-start pt-4 space-y-2">
-    <!-- Control Buttons -->
-    <button @click="toggleImage"
-      class="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition">
-      {{ isImageVisible ? 'Hide Image' : 'Show Image' }}
-    </button>
+    <div class="left-4 top-4 flex">
+      <button @click="toggleImage"
+        class="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition">
+        {{ isImageVisible ? 'Hide Image' : 'Show Image' }}
+      </button>
+      <button @click="toggleText"
+        class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
+        {{ isTextVisible ? 'Hide Text' : 'Show Text' }}
+      </button>
+      <button @click="toggleShape"
+        class="px-4 py-2 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-600 transition">
+        {{ isShapeVisible ? 'Hide Shape' : 'Show Shape' }}
+      </button>
+    </div>
 
-    <button @click="toggleText"
-      class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
-      {{ isTextVisible ? 'Hide Text' : 'Show Text' }}
-    </button>
-
-    <!-- Konva Stage -->
     <div class="relative w-full h-full">
       <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown">
         <v-layer ref="layer">
-          <!-- Draggable Text Outside Image -->
+          <!-- Updated v-text elements (add name property) -->
           <v-text v-if="isTextVisible" @dragstart="handleDragStart" @dragend="handleDragEnd"
             @dblclick="enableEditing('outside', $event)" :config="{
+              name: 'editableText',  // Add this
               text: textValue,
               x: textPosition.x,
               y: textPosition.y,
@@ -27,7 +31,20 @@
               fontFamily: 'Arial',
             }" />
 
-          <!-- Draggable & Resizable Image -->
+          <v-text v-if="isImageVisible" @dragstart="handleDragStart" @dragend="handleDragEnd"
+            @dblclick="enableEditing('inside', $event)" :config="{
+              name: 'editableImageText',  // Add this
+              text: imageText,
+              x: imagePosition.x + 50,
+              y: imagePosition.y + 50,
+              draggable: true,
+              fill: '',
+              fontSize: 22,
+              fontFamily: 'Arial',
+            }" />
+
+
+
           <v-image v-if="isImageVisible" ref="image" :config="{
             image: image,
             x: imagePosition.x,
@@ -38,7 +55,6 @@
             name: 'editableImage'
           }" />
 
-          <!-- Draggable Text Inside Image -->
           <v-text v-if="isImageVisible" @dragstart="handleDragStart" @dragend="handleDragEnd"
             @dblclick="enableEditing('inside', $event)" :config="{
               text: imageText,
@@ -50,12 +66,20 @@
               fontFamily: 'Arial',
             }" />
 
-          <!-- Transformer for Image -->
+          <v-rect v-if="isShapeVisible" :config="{
+            x: shapePosition.x,
+            y: shapePosition.y,
+            width: shapeSize.width,
+            height: shapeSize.height,
+            fill: 'blue',
+            draggable: true,
+            name: 'editableShape'
+          }" ref="shape" />
+
           <v-transformer ref="transformer" />
         </v-layer>
       </v-stage>
 
-      <!-- Editable Input (Appears when double-clicking the text) -->
       <input v-if="isEditing" ref="inputRef" v-model="editableText" @blur="disableEditing"
         @keydown.enter="disableEditing"
         class="absolute z-50 border border-gray-400 bg-white shadow-md px-2 py-1 text-lg rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -81,17 +105,20 @@ export default {
       editingTarget: 'outside',
       isTextVisible: false,
       isImageVisible: false,
+      isShapeVisible: false,
       image: null,
       imagePosition: { x: 150, y: 150 },
       imageSize: { width: 200, height: 200 },
-      imageText: 'Edit Me!',
+      imageText: 'Edit here',
+      shapePosition: { x: 300, y: 300 },
+      shapeSize: { width: 100, height: 100 },
       inputStyle: {},
       selectedShapeName: ''
     };
   },
   created() {
     const img = new window.Image();
-    img.src = "https://konvajs.org/assets/yoda.jpg";
+    img.src = "/images/hill.png";
     img.onload = () => {
       this.image = img;
     };
@@ -110,7 +137,6 @@ export default {
       }
     }
   },
-
   methods: {
     toggleText() {
       this.isTextVisible = !this.isTextVisible;
@@ -119,18 +145,15 @@ export default {
       this.isImageVisible = !this.isImageVisible;
       this.updateTransformer();
     },
+    toggleShape() {
+      this.isShapeVisible = !this.isShapeVisible;
+      this.updateTransformer();
+    },
     handleDragStart() {
       this.isDragging = true;
     },
     handleDragEnd(e) {
       this.isDragging = false;
-      if (e.target.text() === this.textValue) {
-        this.textPosition.x = e.target.x();
-        this.textPosition.y = e.target.y();
-      } else {
-        this.imagePosition.x = e.target.x();
-        this.imagePosition.y = e.target.y();
-      }
     },
     enableEditing(target, e) {
       this.isEditing = true;
@@ -146,41 +169,45 @@ export default {
     disableEditing() {
       this.isEditing = false;
     },
-    handleStageMouseDown(e) {
-      if (e.target === e.target.getStage()) {
-        this.selectedShapeName = '';
+
+
+    methods: {
+      handleStageMouseDown(e) {
+        console.log("Stage clicked!sdfasdfsd", e);
+        if (e.target === e.target.getStage()) {
+          this.selectedShapeName = '';
+          this.updateTransformer();
+          return;
+        }
+
+        const name = e.target.name();
+        const editableElements = [
+          'editableImage',
+          'editableShape',
+          'editableText',
+          'editableImageText'
+        ];
+
+        if (editableElements.includes(name)) {
+          this.selectedShapeName = name;
+        } else {
+          this.selectedShapeName = '';
+        }
         this.updateTransformer();
-        return;
-      }
-
-      const clickedOnTransformer = e.target.getParent().className === 'Transformer';
-      if (clickedOnTransformer) {
-        return;
-      }
-
-      const name = e.target.name();
-      if (name === 'editableImage') {
-        this.selectedShapeName = name;
-      } else {
-        this.selectedShapeName = '';
-      }
-      this.updateTransformer();
+      },
     },
+
     updateTransformer() {
       const transformerNode = this.$refs.transformer.getNode();
       const stage = transformerNode.getStage();
-      const { selectedShapeName } = this;
-
-      const selectedNode = stage.findOne('.' + selectedShapeName);
-      if (selectedNode === transformerNode.node()) {
-        return;
-      }
+      const selectedNode = stage.findOne('.' + this.selectedShapeName);
 
       if (selectedNode) {
         transformerNode.nodes([selectedNode]);
       } else {
         transformerNode.nodes([]);
       }
+      stage.batchDraw();
     }
   }
 };
