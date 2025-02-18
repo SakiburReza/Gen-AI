@@ -5,7 +5,7 @@ import DefaultLayout from '@/layout/DefaultLayout.vue';
 import genAiService from '@/services/gen-ai'
 import { imageUrl } from '@/utils/utils'
 
-const media = ref([])   
+const media = ref([])
 
 
 
@@ -15,7 +15,7 @@ const fetchMedia = async () => {
       media.value = response.data.data
       console.log('media', media.value)
 }
-  
+
 
 onMounted(() => {
   fetchMedia()
@@ -25,7 +25,7 @@ onMounted(() => {
 
 <template>
     <DefaultLayout :showBadge="showBadge">
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-2 gap-3 flex-1 h-full">
         <div>
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 rounded-t-2xl overflow-y-auto">
           <div v-for="(item, index) in media" :key="index" class="relative overflow-hidden group" :class="[
@@ -42,12 +42,12 @@ onMounted(() => {
 
             </div>
           </div>
-        <div> 
-            <DemoForKonva />    
+        <div>
+            <DemoForKonva />
         </div>
     </div>
-    
+
     </DefaultLayout>
-   
+
 
 </template>
