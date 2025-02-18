@@ -20,9 +20,9 @@ import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
 import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
 import EditorApp from '@/views/EditorApp.vue'
-import ImageEditor from '@/views/ImageEditor.vue'
+// import ImageEditor from '@/views/ImageEditor.vue'
 // import CustomImageEditor from '@/components/CustomImageEditor.vue'
-import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
+// import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
 import DemoForKonva from '@/konvaJsDemo/DemoForKonva.vue'
 import EditorPage from '@/views/EditorPage.vue'
 
@@ -168,13 +168,13 @@ const router = createRouter({
       component: KonvaEditor,
       meta: { requiresAuth: true },
     },
-    {
-      path: '/app',
-      path: '/konva2',
-      name: 'KonvaDocs',
-      component: KonvaDocs,
-      meta: { requiresAuth: true },
-    },
+    // {
+    //   path: '/app',
+    //   path: '/konva2',
+    //   name: 'KonvaDocs',
+    //   component: KonvaDocs,
+    //   meta: { requiresAuth: true },
+    // },
     {
       path: '/konva3',
       name: 'DemoForKonva',
