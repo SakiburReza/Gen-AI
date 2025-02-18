@@ -18,10 +18,14 @@ import GalleryPage from '@/views/GalleryPage.vue'
 import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
+import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
+import EditorApp from '@/views/EditorApp.vue'
 import ImageEditor from '@/views/ImageEditor.vue'
 // import CustomImageEditor from '@/components/CustomImageEditor.vue'
+import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
+import DemoForKonva from '@/konvaJsDemo/DemoForKonva.vue'
 
-export const  isAuthenticated = () => {
+export const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
   if (!token) {
     return false; // No token found
@@ -107,7 +111,7 @@ const router = createRouter({
     {
       path: '/verification',
       name: 'verification',
-      component: VerificationPage
+      component: VerificationPage,
     },
     {
       path: '/communitysidebar',
@@ -152,7 +156,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/toasteditor',
+      path: '/toast',
       name: 'editor',
       component: ImageEditor,
       meta: { requiresAuth: false },
@@ -161,17 +165,35 @@ const router = createRouter({
       path: '/konva',
       name: 'MainDemo',
       component: MainDemo,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
     },
-    // {
-    //   path: '/customimageeditor',
-    //   name: 'CustomImageEditor',
-    //   component: CustomImageEditor,
-    //   meta: { requiresAuth: false },
-    // },
+    {
+      path: '/editor',
+      name: 'KonvaEditor',
+      component: KonvaEditor,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/konva2',
+      name: 'KonvaDocs',
+      component: KonvaDocs,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/konva3',
+      name: 'DemoForKonva',
+      component: DemoForKonva,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/polotno',
+      name: 'EditorApp',
+      component: EditorApp,
+      meta: { requiresAuth: true },
+    }
 
   ],
-});
+})
 // router.beforeEach((to, from, next) => {
 //   const loggedIn = isAuthenticated();
 
