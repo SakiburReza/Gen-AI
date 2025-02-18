@@ -214,9 +214,10 @@ watch([activeFunctionality, activeMode], async ([newFunctionality, newMode]) => 
   }
 })
 
-const selectedRatio = ref('Landscape')
-
+const selectedRatio = ref('portrait_16_9')
+const selectedEffectId = ref('')
 const selectedOutput = ref(1)
+
 
 const deleteAction = async (imageId) => {
   const { data: response } = await genAiService.deleteMedia(imageId)
@@ -385,11 +386,13 @@ const generateAiContent = async () => {
       formData.append('text', description.value);
       formData.append('image_size', selectedRatio.value);
       formData.append('num_images', selectedOutput.value.toString());
+      formData.append('event', selectedEffectId.value);
       if (referenceImage.value === null) {
         response = await genAiService.textToImage({
           text: description.value,
           image_size: selectedRatio.value,
           num_images: selectedOutput.value,
+          event: selectedEffectId.value
         });
       } else response = await genAiService.imageToImage(formData);
     }
@@ -652,8 +655,8 @@ const closeSaveBoard = () => {
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
-          <CustomizationCard v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectOutput="(output) => (selectedOutput = output)" />
+          <CustomizationCard  v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)" 
+            @selectedEffectId="(id) => (selectedEffectId = id)" />
           <!-- Loader Spinner -->
           <!-- <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-800 z-50">
             <svg class="w-16 h-16 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
