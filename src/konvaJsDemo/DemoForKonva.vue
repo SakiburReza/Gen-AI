@@ -179,7 +179,6 @@ const addShape = () => {
 </script>
 
 <template>
-    <DefaultLayout :showBadge="showBadge">
         <div class="flex h-screen">
             <div class="flex flex-col space-y-5 font-bold bg-gray-200 p-6 w-64">
                 <button class="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600" @click="loadImages">Add
@@ -209,5 +208,4 @@ const addShape = () => {
                 </v-layer>
             </v-stage>
         </div>
-    </DefaultLayout>
 </template>
