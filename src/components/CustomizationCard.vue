@@ -18,11 +18,17 @@ const handleSelection = (ratio) => {
 <template>
   <fwb-card class="max-w-sm mx-auto sm:max-w-md md:max-w-lg">
     <div class="p-5">
-      <span>
+      <!-- <span>
         <img src="/images/icon/showView.svg" alt="Show View Button" />
-      </span>
+      </span> -->
       <!-- Image Ratio -->
-      <p class="mt-3 text-xs sm:text-sm text-ravenBlack font-bold">Aspect Ratio</p>
+      <span class= "flex justify-between">
+        <p class="text-xs sm:text-sm text-ravenBlack font-bold">Preset</p>
+        <div class = "flex gap-2">
+          <img src="/images/icon/down-arrow.svg" alt="Show View Button" />
+          <img src="/images/icon/reset.svg" alt="Show View Button" />
+        </div>
+      </span>
 
       <div class="mt-3 flex flex-wrap gap-2">
         <!-- Portrait Button -->
