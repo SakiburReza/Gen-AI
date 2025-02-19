@@ -92,10 +92,20 @@ axios.interceptors.response.use(
       }, 100)
 
       // Redirect to the login page
+    } if(error.response.data.message === 'YOUR TOKEN HAS EXPIRED, PLEASE LOGIN AGAIN'){
+      toast.error(
+      error.response.data.message != null ? error.response.data.message : error.message,
+        {
+          autoClose: 2500,
+          theme: 'dark'
+        }
+      )
+        setTimeout(() => {
+          localStorage.removeItem('authToken');
+          router.push('/sign-in');
+      }, 1500);
+
     } else if (error.message) {
-      console.log('error.message',error.message)
-      localStorage.removeItem("authToken"),
-      localStorage.getItem("selectedMenu") =='/'? window.location.href('/') : router.push('/sign-in')
       toast.error(
         error.response.data.message != null ? error.response.data.message : error.message,
         {

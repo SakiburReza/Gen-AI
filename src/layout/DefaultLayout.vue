@@ -90,6 +90,10 @@ const goToProfilePage = () => {
   router.push('/profile')
 }
 
+const goToEditorPage = () => {
+  router.push('/editorPage')
+}
+
 watch(
   () => router.currentRoute.value.path,
   (newPath) => {
@@ -135,7 +139,7 @@ onUnmounted(() => {
         />
       </router-link>
       <!-- Text -->
-       
+
       <fwb-badge v-if="props.showBadge && isAuthenticatedUser"
         :class="`flex items-center justify-between border mt-3 rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition duration-200`"
         size="xl"
@@ -165,7 +169,7 @@ onUnmounted(() => {
       !expandSidebar ? 'w-[45px]' : 'w-[150px]',
       ]"
     >
-      <div class="flex flex-col items-center gap-1 mt-14 group p-2 rounded-lg 
+      <div class="flex flex-col items-center gap-1 mt-14 group p-2 rounded-lg
       transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" @click="goToProfilePage">
         <div class="flex items-center">
         <img src="/images/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
@@ -174,7 +178,7 @@ onUnmounted(() => {
       </div>
 
       <div class="flex flex-col items-center gap-1 flex-1 justify-center">
-        <fwb-tooltip v-if="!expandSidebar" placement="right">
+        <fwb-tooltip v-if="!expandSidebar"  placement="right">
           <template #trigger>
             <div
               @click="selectMenuAndNavigate('/', goToCommunity)"
@@ -238,7 +242,6 @@ onUnmounted(() => {
             </div>
           </div>
         </template>
-
         <fwb-tooltip v-if="!expandSidebar" placement="right">
           <template #trigger>
             <div
@@ -271,6 +274,43 @@ onUnmounted(() => {
             </div>
           </div>
         </template>
+
+         <!-- //testcode for editor -->
+         <fwb-tooltip v-if="!expandSidebar" placement="right">
+          <template #trigger>
+            <div
+            @click="selectMenuAndNavigate('editorPage', goToEditorPage)"
+              :class="[
+                'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
+                selectedMenu === 'editorPage' ? 'bg-[#D9D9D9]' : '',
+              ]"
+            >
+            <div class="flex items-center"  @click="goToEditorPage">
+              <img src="/images/icon/star.svg" alt="dataIcon" class="cursor-pointer" />
+            <span v-if="expandSidebar" class="ml-2">Editor</span>
+            </div>
+            </div>
+          </template>
+          <template #content> Editor </template>
+        </fwb-tooltip>
+
+        <template v-else>
+          <div
+            :class="[
+              'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
+              selectedMenu === 'gallerypage' ? 'bg-[#D9D9D9]' : '',
+            ]"
+          >
+            <div class="flex items
+            -center">
+              <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
+            <span v-if="expandSidebar" class="ml-2">Editor</span>
+            </div>
+          </div>
+        </template>
+
+
+        <!-- //testcode for editor -->
       </div>
 
       <div class="flex flex-col items-center gap-1 ">
@@ -306,5 +346,4 @@ onUnmounted(() => {
       <slot />
     </div>
   </div>
- 
 </template>
