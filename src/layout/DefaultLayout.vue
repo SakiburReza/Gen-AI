@@ -178,7 +178,7 @@ onUnmounted(() => {
       </div>
 
       <div class="flex flex-col items-center gap-1 flex-1 justify-center">
-        <fwb-tooltip v-if="!expandSidebar" placement="right">
+        <fwb-tooltip v-if="!expandSidebar"  placement="right">
           <template #trigger>
             <div
               @click="selectMenuAndNavigate('/', goToCommunity)"

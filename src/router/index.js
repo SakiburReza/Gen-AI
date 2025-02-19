@@ -19,14 +19,9 @@ import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
 import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
-import EditorApp from '@/views/EditorApp.vue'
-// import ImageEditor from '@/views/ImageEditor.vue'
-// import CustomImageEditor from '@/components/CustomImageEditor.vue'
-// import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
 import DemoForKonva from '@/konvaJsDemo/DemoForKonva.vue'
 import EditorPage from '@/views/EditorPage.vue'
 import ImageEditor from '@/views/ImageEditor.vue'
-// import CustomImageEditor from '@/components/CustomImageEditor.vue'
 import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
 
 export const isAuthenticated = () => {
@@ -203,12 +198,6 @@ const router = createRouter({
       meta: { requiresAuth: false },
 
     },
-    {
-      path: '/polotno',
-      name: 'EditorApp',
-      component: EditorApp,
-      meta: { requiresAuth: true },
-    }
 
   ],
 })
