@@ -21,7 +21,6 @@ import MainDemo from '@/konvaJsDemo/mainDemo.vue'
 import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
 import DemoForKonva from '@/konvaJsDemo/DemoForKonva.vue'
 import EditorPage from '@/views/EditorPage.vue'
-import ImageEditor from '@/views/ImageEditor.vue'
 import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
 
 export const isAuthenticated = () => {
