@@ -3,23 +3,30 @@ import { ref, reactive, onMounted, watch, computed } from 'vue';
 import Konva from 'konva';
 import DefaultLayout from '@/layout/DefaultLayout.vue';
 import { useRoute } from 'vue-router';
+import { Circle } from 'lucide-vue-next';
 
 const route = useRoute();
 const showBadge = computed(() => route.path !== '/konva3');
 
 const stageSize = reactive({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: window.innerWidth * 0.4,
+    height: window.innerHeight * 0.6,
+    backgroundColor: 'lightblue',
 });
 
 const shapes = ref([]);
-const selectedShapeName = ref('');
-const selectedImageName = ref('');
-const transformer = ref(null);
-const transformerForImage = ref(null);
-
 const images = ref([]);
 const circles = ref([]);
+
+const selectedShapeName = ref('');
+const selectedImageName = ref('');
+const selectedCircleName = ref('');
+
+const transformer = ref(null);
+const transformerForImage = ref(null);
+const transformerForCircle = ref(null);
+
+
 const textNodes = ref([]);
 const textValue = ref('Edit Text');
 
@@ -36,6 +43,22 @@ const handleTransformEnd = (e) => {
             rotation: e.target.rotation(),
             scaleX: e.target.scaleX(),
             scaleY: e.target.scaleY(),
+        };
+    }
+};
+const handleTransformEndForCircle = (c) => {
+    const circleIndex = circles.value.findIndex(
+        (circle) => circle.name === selectedCircleName.value
+    );
+
+    if (circleIndex !== -1) {
+        circles.value[circleIndex] = {
+            ...circles.value[circleIndex],
+            x: c.target.x(),
+            y: c.target.y(),
+            rotation: c.target.rotation(),
+            scaleX: c.target.scaleX(),
+            scaleY: c.target.scaleY(),
         };
     }
 };
@@ -61,8 +84,10 @@ const handleStageMouseDown = (e) => {
     if (e.target === e.target.getStage()) {
         selectedShapeName.value = '';
         selectedImageName.value = '';
+        selectedCircleName.value = '';
         updateTransformer();
         updateTransformerForImage();
+        updateTransformerForCircle();
         return;
     }
 
@@ -74,16 +99,25 @@ const handleStageMouseDown = (e) => {
     if (shapes.value.some((r) => r.name === name)) {
         selectedShapeName.value = name;
         selectedImageName.value = '';
+        selectedCircleName.value = '';
     } else if (images.value.some((img) => img.name === name)) {
         selectedImageName.value = name;
         selectedShapeName.value = '';
-    } else {
+        selectedCircleName.value = '';
+    } else if (circles.value.some((c) => c.name === name)) {
+        selectedCircleName.value = name;
+        selectedImageName.value = '';
+        selectedShapeName.value = '';
+    }
+    else {
         selectedShapeName.value = '';
         selectedImageName.value = '';
+        selectedCircleName.value = '';
     }
 
     updateTransformer();
     updateTransformerForImage();
+    updateTransformerForCircle();
 };
 
 const updateTransformer = () => {
@@ -113,9 +147,23 @@ const updateTransformerForImage = () => {
         transformerNode.nodes([]);
     }
 };
+const updateTransformerForCircle = () => {
+    if (!transformerForCircle.value) return;
+
+    const transformerNode = transformerForCircle.value.getNode();
+    const stage = transformerNode.getStage();
+    const selectedNode = stage.findOne(`.${selectedCircleName.value}`);
+
+    if (selectedNode) {
+        transformerNode.nodes([selectedNode]);
+    } else {
+        transformerNode.nodes([]);
+    }
+};
 
 watch(selectedShapeName, updateTransformer);
 watch(selectedImageName, updateTransformerForImage);
+watch(selectedCircleName, updateTransformerForCircle);
 
 const addCircle = () => {
     circles.value.push({
@@ -180,34 +228,53 @@ const addShape = () => {
 
 <template>
     <DefaultLayout :showBadge="showBadge">
-        <div class="flex h-screen">
-            <div class="flex flex-col space-y-5 font-bold bg-gray-200 p-6 w-64">
-                <button class="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600" @click="loadImages">Add
-                    Picture</button>
-                <button class="bg-green-500 text-white py-2 px-6 rounded-md hover:bg-green-600" @click="addShape">Add
-                    Shape</button>
-                <button class="bg-yellow-200 text-black py-2 px-6 rounded-md hover:bg-green-600" @click="addCircle">Add
-                    Circle</button>
-                <input v-model="textValue" class="border p-2 rounded-md" placeholder="Enter text" />
-                <button class="bg-yellow-500 text-white py-2 px-6 rounded-md hover:bg-yellow-600"
-                    @click="addTextNode">Add Text</button>
+        <div class="flex h-screen bg-gray-100 p-5">
+            <!-- Left Sidebar -->
+            <div class="flex flex-col space-y-5 font-bold bg-white p-6 w-64 rounded-lg shadow-md max-h-screen">
+                <button class="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600" @click="loadImages">
+                    Add Picture
+                </button>
+                <button class="bg-green-500 text-white py-2 px-6 rounded-md hover:bg-green-600" @click="addShape">
+                    Add Shape
+                </button>
+                <button class="bg-yellow-200 text-black py-2 px-6 rounded-md hover:bg-yellow-500" @click="addCircle">
+                    Add Circle
+                </button>
+                <input v-model="textValue" class="border p-2 rounded-md shadow-sm" placeholder="Enter text" />
+                <button class="bg-yellow-500 text-white py-2 px-6 rounded-md hover:bg-yellow-600" @click="addTextNode">
+                    Add Text
+                </button>
             </div>
-            <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown">
-                <v-layer ref="layer">
-                    <!-- Rectangles -->
-                    <v-rect v-for="item in shapes" :key="item.id" :config="item" @transformend="handleTransformEnd" />
-                    <!-- Circles -->
-                    <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" draggable />
-                    <!-- Text Nodes -->
-                    <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable />
-                    <!-- Images -->
-                    <v-image v-for="(image, index) in images" :key="index" :config="{ ...image, image: image.image }"
-                        draggable @transformend="handleTransformEndForImage" />
-                    <!-- Transformer -->
-                    <v-transformer ref="transformer" />
-                    <v-transformer ref="transformerForImage" />
-                </v-layer>
-            </v-stage>
+            <!-- Canvas Container -->
+            <div class="flex flex-1 items-center justify-center p-6 w-screen">
+                <div class="relative bg-white shadow-md rounded-sm border-gray-600"
+                    :style="{ width: stageSize.width + 'px', height: stageSize.height + 'px' }">
+                    <!-- Canvas Background -->
+                    <div class="absolute inset-0 bg-white border-gray-300 rounded-lg"></div>
+
+                    <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown">
+                        <v-layer ref="layer">
+                            <!-- Rectangles -->
+                            <v-rect v-for="item in shapes" :key="item.id" :config="item"
+                                @transformend="handleTransformEnd" />
+                            <!-- Circles -->
+                            <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" draggable
+                                @transformend="handleTransformEndForCircle" />
+                            <!-- Text Nodes -->
+                            <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable />
+                            <!-- Images -->
+                            <v-image v-for="(image, index) in images" :key="index"
+                                :config="{ ...image, image: image.image }" draggable
+                                @transformend="handleTransformEndForImage" />
+                            <!-- Transformer -->
+                            <v-transformer ref="transformer" />
+                            <v-transformer ref="transformerForImage" />
+                            <v-transformer ref="transformerForCircle" />
+                        </v-layer>
+                    </v-stage>
+                </div>
+            </div>
         </div>
     </DefaultLayout>
+
 </template>
