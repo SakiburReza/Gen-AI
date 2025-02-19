@@ -20,6 +20,8 @@ import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
 import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
 import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
+import DemoForKonva from '@/konvaJsDemo/DemoForKonva.vue'
+import EditorPage from '@/views/EditorPage.vue'
 
 export const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key

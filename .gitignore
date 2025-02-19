@@ -31,3 +31,4 @@ coverage
 
 dist.zip
 .env
+package-lock.json
