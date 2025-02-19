@@ -24,30 +24,47 @@ onMounted(() => {
 </script>
 
 <template>
-    <DefaultLayout :showBadge="showBadge">
-    <div class="grid grid-cols-2 gap-3 flex-1 h-full">
-        <div>
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 rounded-t-2xl overflow-y-auto">
-          <div v-for="(item, index) in media" :key="index" class="relative overflow-hidden group" :class="[
+    <DefaultLayout>
+      <div class="grid grid-cols-2 gap-3 h-screen overflow-hidden">
+        <!-- Left Section (Image Grid) -->
+        <div class="flex flex-col h-full pt-4">
+          <div class="bg-white p-3  shadow-md h-[500px] overflow-y-auto">
+            <div
+              class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-3 rounded-t-2xl"
+            >
+              <div
+                v-for="(item, index) in media"
+                :key="index"
+                class="relative overflow-hidden group"
+                :class="[
             item.orientation === 'P' ? 'row-span-2' : 'row-span-1',
             'shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 min-h-40 max-h-100',
-          ]"><!-- Render Image -->
-
-            <img v-if="item.type === 'image'" v-lazy="imageUrl() + item.content"
-              :alt="'Media ' + index" class="h-full max-w-full w-full" :class="[
-                item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]',
-                'object-cover',
-              ]" @click="onImageClick(media[index])" />
+          ]"
+              >
+                <!-- Render Image -->
+                <img
+                  v-if="item.type === 'image'"
+                  v-lazy="imageUrl() + item.content"
+                  :alt="'Media ' + index"
+                  class="h-full max-w-full w-full"
+                  :class="[
+              item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]',
+              'object-cover',
+            ]"
+                  @click="onImageClick(media[index])"
+                />
               </div>
-
             </div>
           </div>
-        <div>
-            <DemoForKonva />
         </div>
-    </div>
+
+        <!-- Right Section (DemoForKonva) -->
+        <div class="pt-4 h-full">
+          <DemoForKonva />
+        </div>
+      </div>
+
 
     </DefaultLayout>
-
 
 </template>
