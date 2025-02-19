@@ -156,6 +156,7 @@ function initializeFromQueryParams() {
     : route.query.functionality
 
   // Fallback to default functionality
+  
   const mode = queryMode || localStorage.getItem('mode') || 'image'
   functionality =
     functionality ||
@@ -580,7 +581,7 @@ function onImageClick(filteredSingleMedia) {
 onMounted(async () => {
   initializeFromQueryParams()
   document.addEventListener('click', handleOutsideClick)
-  selectImageOption(imageModeOptions[0])
+  // selectImageOption(imageModeOptions[0])
 })
 onUnmounted(() => {
   document.removeEventListener('click', handleOutsideClick)
