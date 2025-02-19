@@ -155,12 +155,6 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/toast',
-      name: 'editor',
-      component: ImageEditor,
-      meta: { requiresAuth: false },
-    },
-    {
       path: '/konva',
       name: 'MainDemo',
       component: MainDemo,
