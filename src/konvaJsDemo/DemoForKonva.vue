@@ -1,5 +1,6 @@
 <script setup>
-import { ref, reactive, onMounted, watch, computed } from 'vue';
+import { add } from 'date-fns';
+import { reactive, ref, watch } from 'vue';
 const stageSize = reactive({
     width: window.innerWidth * 0.4,
     height: window.innerHeight * 0.6,
@@ -9,14 +10,17 @@ const stageSize = reactive({
 const shapes = ref([]);
 const images = ref([]);
 const circles = ref([]);
+const ovals = ref([]);
 
 const selectedShapeName = ref('');
 const selectedImageName = ref('');
 const selectedCircleName = ref('');
+const selectedOvalName = ref('');
 
 const transformer = ref(null);
 const transformerForImage = ref(null);
 const transformerForCircle = ref(null);
+const transformerForOval = ref(null);
 
 
 const textNodes = ref([]);
@@ -54,6 +58,24 @@ const handleTransformEndForCircle = (c) => {
         };
     }
 };
+const handleTransformEndForOval = (o) => {
+    console.log("oooo", o);
+    const ovalIndex = ovals.value.findIndex(
+        (oval) => oval.name === selectedOvalName.value
+    );
+
+    if (ovalIndex !== -1) {
+        ovals.value[ovalIndex] = {
+            ...ovals.value[ovalIndex],
+            x: o.target.x(),
+            y: o.target.y(),
+            rotationX: o.target.rotation(),
+            rotationY: o.target.rotation(),
+            scaleX: o.target.scaleX(),
+            scaleY: o.target.scaleY(),
+        };
+    }
+};
 
 const handleTransformEndForImage = (i) => {
     const imgIndex = images.value.findIndex(
@@ -77,9 +99,11 @@ const handleStageMouseDown = (e) => {
         selectedShapeName.value = '';
         selectedImageName.value = '';
         selectedCircleName.value = '';
+        selectedOvalName.value = '';
         updateTransformer();
         updateTransformerForImage();
         updateTransformerForCircle();
+        updateTransformerForOval();
         return;
     }
 
@@ -100,16 +124,23 @@ const handleStageMouseDown = (e) => {
         selectedCircleName.value = name;
         selectedImageName.value = '';
         selectedShapeName.value = '';
+    } else if (ovals.value.some((o) => o.name === name)) {
+        selectedOvalName.value = name;
+        selectedCircleName.value = '';
+        selectedImageName.value = '';
+        selectedShapeName.value = '';
     }
     else {
         selectedShapeName.value = '';
         selectedImageName.value = '';
         selectedCircleName.value = '';
+        selectedOvalName.value = '';
     }
 
     updateTransformer();
     updateTransformerForImage();
     updateTransformerForCircle();
+    updateTransformerForOval();
 };
 
 const updateTransformer = () => {
@@ -152,11 +183,25 @@ const updateTransformerForCircle = () => {
         transformerNode.nodes([]);
     }
 };
+const updateTransformerForOval = () => {
+    if (!transformerForOval.value) return;
+
+    const transformerNode = transformerForOval.value.getNode();
+    const stage = transformerNode.getStage();
+    const selectedNode = stage.findOne(`.${selectedOvalName.value}`);
+
+    if (selectedNode) {
+        transformerNode.nodes([selectedNode]);
+    } else {
+        transformerNode.nodes([]);
+    }
+};
 
 watch(selectedShapeName, updateTransformer);
 watch(selectedImageName, updateTransformerForImage);
 watch(selectedCircleName, updateTransformerForCircle);
 watch(selectedCircleName, updateTransformerForCircle);
+watch(selectedOvalName, updateTransformerForOval);
 
 const addCircle = () => {
     circles.value.push({
@@ -166,6 +211,18 @@ const addCircle = () => {
         fill: 'blue',
         draggable: true,
         name: `circle-${circles.value.length}`,
+    });
+};
+const addOval = () => {
+    // console.log("Oval Clicked");
+    ovals.value.push({
+        x: 100,
+        y: 100,
+        radiusX: 70,
+        radiusY: 50,
+        fill: 'Orange',
+        draggable: true,
+        name: `circle-${ovals.value.length}`,
     });
 };
 
@@ -249,6 +306,10 @@ const addShape = () => {
                 <img src="/images/icon/explore.svg" alt="Add Circle" class="w-5 h-5">
                 <span>Add Circle</span>
             </button>
+            <button class="flex items-center space-x-2" @click="addOval">
+                <img src="/images/icon/explore.svg" alt="Add Oval" class="w-5 h-5">
+                <span>Add Oval</span>
+            </button>
 
             <button class="flex items-center space-x-2" @click="uploadFile">
                 <img src="/images/icon/upload.svg" alt="Upload" class="w-5 h-5">
@@ -286,6 +347,9 @@ const addShape = () => {
                         <!-- Circles -->
                         <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" draggable
                             @transformend="handleTransformEndForCircle" />
+                        <!-- Oval -->
+                        <v-ellipse v-for="(oval, index) in ovals" :key="index" :config="oval" draggable
+                            @transformend="handleTransformEndForOval" />
                         <!-- Text Nodes -->
                         <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable />
                         <!-- Images -->
@@ -296,6 +360,7 @@ const addShape = () => {
                         <v-transformer ref="transformer" />
                         <v-transformer ref="transformerForImage" />
                         <v-transformer ref="transformerForCircle" />
+                        <v-transformer ref="transformerForOval" />
                     </v-layer>
                 </v-stage>
             </div>
