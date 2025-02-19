@@ -19,9 +19,6 @@ import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
 import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
-import DemoForKonva from '@/konvaJsDemo/DemoForKonva.vue'
-import EditorPage from '@/views/EditorPage.vue'
-import ImageEditor from '@/views/ImageEditor.vue'
 import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
 
 export const isAuthenticated = () => {
@@ -153,12 +150,6 @@ const router = createRouter({
       name: 'savedboardcomponent',
       component: SavedBoardComponent,
       meta: { requiresAuth: true },
-    },
-    {
-      path: '/toast',
-      name: 'editor',
-      component: ImageEditor,
-      meta: { requiresAuth: false },
     },
     {
       path: '/konva',
