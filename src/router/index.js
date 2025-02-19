@@ -19,7 +19,10 @@ import BoardAllImages from '@/views/BoardAllImages.vue'
 import SavedBoardComponent from '@/components/SavedBoardComponent.vue'
 import MainDemo from '@/konvaJsDemo/mainDemo.vue'
 import KonvaEditor from '@/konvaJsDemo/KonvaEditor.vue'
-import EditorApp from '@/views/EditorApp.vue'
+import DemoForKonva from '@/konvaJsDemo/DemoForKonva.vue'
+import EditorPage from '@/views/EditorPage.vue'
+import ImageEditor from '@/views/ImageEditor.vue'
+import KonvaDocs from '@/konvaJsDemo/KonvaDocs.vue'
 
 export const isAuthenticated = () => {
   const token = localStorage.getItem('authToken'); // Replace with your token key
@@ -152,6 +155,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/toast',
+      name: 'editor',
+      component: ImageEditor,
+      meta: { requiresAuth: false },
+    },
+    {
       path: '/konva',
       name: 'MainDemo',
       component: MainDemo,
@@ -163,12 +172,33 @@ const router = createRouter({
       component: KonvaEditor,
       meta: { requiresAuth: true },
     },
+    // {
+    //   path: '/app',
+    //   path: '/konva2',
+    //   name: 'KonvaDocs',
+    //   component: KonvaDocs,
+    //   meta: { requiresAuth: true },
+    // },
     {
-      path: '/app',
-      name: 'EditorApp',
-      component: EditorApp,
+      path: '/konva2',
+      name: 'KonvaDocs',
+      component: KonvaDocs,
       meta: { requiresAuth: true },
     },
+    {
+      path: '/konva3',
+      name: 'DemoForKonva',
+      component: DemoForKonva,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/editorPage',
+      name: 'editorPage',
+      component: EditorPage,
+      meta: { requiresAuth: false },
+
+    },
+
   ],
 })
 // router.beforeEach((to, from, next) => {
