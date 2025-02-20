@@ -16,6 +16,10 @@ const fetchMedia = async () => {
       console.log('media', media.value)
 }
 
+const onDragStart = (event, item) => {
+  event.dataTransfer.setData("imageUrl", imageUrl() + item.content);
+};
+
 
 onMounted(() => {
   fetchMedia()
@@ -25,12 +29,12 @@ onMounted(() => {
 
 <template>
     <DefaultLayout>
-      <div class="grid grid-cols-2 gap-3 h-screen overflow-hidden">
+      <div class="grid grid-cols-12 gap-3 h-screen overflow-hidden">
         <!-- Left Section (Image Grid) -->
-        <div class="flex flex-col h-full pt-4">
-          <div class="bg-white p-3  shadow-md h-[500px] overflow-y-auto">
+        <div class="col-span-2 h-full pt-4">
+          <div class="bg-white p-1 shadow-md h-[600px] overflow-y-auto">
             <div
-              class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-3 rounded-t-2xl"
+              class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-1 rounded-t-2xl"
             >
               <div
                 v-for="(item, index) in media"
@@ -43,6 +47,8 @@ onMounted(() => {
               >
                 <!-- Render Image -->
                 <img
+                  @dragstart="onDragStart($event, item)"
+                  draggable="true"
                   v-if="item.type === 'image'"
                   v-lazy="imageUrl() + item.content"
                   :alt="'Media ' + index"
@@ -59,7 +65,7 @@ onMounted(() => {
         </div>
 
         <!-- Right Section (DemoForKonva) -->
-        <div class="pt-4 h-full">
+        <div class="pt-4 h-full col-span-10">
           <DemoForKonva />
         </div>
       </div>

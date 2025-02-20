@@ -226,10 +226,13 @@ const addOval = () => {
     });
 };
 
-const loadImages = () => {
+const loadImages = (event) => {
+    const imgSrc = event.dataTransfer.getData("imageUrl");
+    if (!imgSrc) return;
+
     console.log("Image Clicked");
     const imgObj = new Image();
-    imgObj.src = '/images/nature.png';
+    imgObj.src = imgSrc;
     imgObj.onload = () => {
         images.value.push({
             id: `img-${images.value.length}`,
@@ -333,7 +336,7 @@ const addShape = () => {
         </div>
 
         <!-- Canvas Container -->
-        <div class="flex flex-1 items-center justify-center p-6 w-screen">
+        <div class="flex flex-1 items-center justify-center p-6 w-screen" @drop="loadImages" @dragover.prevent>
             <div class="relative bg-white shadow-md rounded-sm border-gray-600"
                 :style="{ width: stageSize.width + 'px', height: stageSize.height + 'px' }">
                 <!-- Canvas Background -->
