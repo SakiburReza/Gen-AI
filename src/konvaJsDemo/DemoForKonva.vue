@@ -195,6 +195,33 @@ const loadImages = () => {
   };
 };
 
+// Upload an image from the device
+const uploadFile = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imgObj = new Image();
+      imgObj.src = e.target.result;
+      imgObj.onload = () => {
+        images.value.push({
+          id: `img-${images.value.length}`,
+          image: imgObj,
+          x: 50,
+          y: 50,
+          width: 200,
+          height: 200,
+          scaleX: 1,
+          scaleY: 1,
+          draggable: true,
+          name: `image-${images.value.length}`,
+        });
+      };
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
 const addTextNode = () => {
   textNodes.value.push({
     text: textValue.value,
@@ -255,10 +282,13 @@ const addShape = () => {
           <span>Add Circle</span>
         </button>
 
-        <button class="flex items-center space-x-2" @click="uploadFile">
+
+        <input type="file" @change="uploadFile" class="hidden" id="fileInput" />
+        <label for="fileInput" class="flex items-center space-x-2 cursor-pointer">
           <img src="/images/icon/upload.svg" alt="Upload" class="w-5 h-5">
-          <span>Upload</span>
-        </button>
+          <span>Upload Image</span>
+        </label>
+
 
         <button class="flex items-center space-x-2" @click="changeBackground">
           <img src="/images/icon/square.svg" alt="Background" class="w-5 h-5">
