@@ -28,7 +28,7 @@ onMounted(() => {
       <div class="grid grid-cols-2 gap-3 h-screen overflow-hidden">
         <!-- Left Section (Image Grid) -->
         <div class="flex flex-col h-full pt-4">
-          <div class="bg-white p-3  shadow-md h-[500px] overflow-y-auto">
+          <div class="bg-white p-3  shadow-md h-screen overflow-y-auto">
             <div
               class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-3 rounded-t-2xl"
             >
