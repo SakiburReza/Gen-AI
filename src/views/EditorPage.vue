@@ -51,7 +51,6 @@ onMounted(() => {
               item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]',
               'object-cover',
             ]"
-                  @click="onImageClick(media[index])"
                 />
               </div>
             </div>
