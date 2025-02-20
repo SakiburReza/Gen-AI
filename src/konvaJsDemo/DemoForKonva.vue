@@ -1,5 +1,4 @@
 <script setup>
-import { add } from 'date-fns';
 import { reactive, ref, watch } from 'vue';
 const stageSize = reactive({
     width: window.innerWidth * 0.4,
@@ -11,20 +10,26 @@ const shapes = ref([]);
 const images = ref([]);
 const circles = ref([]);
 const ovals = ref([]);
+const textNodes = ref([]);
 
 const selectedShapeName = ref('');
 const selectedImageName = ref('');
 const selectedCircleName = ref('');
 const selectedOvalName = ref('');
+const selectedTextName = ref('');
 
 const transformer = ref(null);
 const transformerForImage = ref(null);
 const transformerForCircle = ref(null);
 const transformerForOval = ref(null);
+const transformerForText = ref(null);
 
 
-const textNodes = ref([]);
+// Text editing state
+const isEditingText = ref(false);
+const isAddingText = ref(false); // Track if adding new text
 const textValue = ref('Edit Text');
+const editingTextPosition = reactive({ x: 0, y: 0 }); // Position of the text being edited
 
 const handleTransformEnd = (e) => {
     const rectIndex = shapes.value.findIndex(
@@ -94,67 +99,75 @@ const handleTransformEndForImage = (i) => {
     }
 };
 
+// Handle stage mouse down events
 const handleStageMouseDown = (e) => {
-    if (e.target === e.target.getStage()) {
-        selectedShapeName.value = '';
-        selectedImageName.value = '';
-        selectedCircleName.value = '';
-        selectedOvalName.value = '';
-        updateTransformer();
-        updateTransformerForImage();
-        updateTransformerForCircle();
-        updateTransformerForOval();
-        return;
-    }
+  if (e.target === e.target.getStage()) {
+    // Deselect all if clicking on the stage
+    selectedShapeName.value = '';
+    selectedImageName.value = '';
+    selectedCircleName.value = '';
+    selectedTextName.value = '';
+    isEditingText.value = false;
+    updateTransformers();
+    return;
+  }
 
-    if (e.target.getParent()?.className === 'Transformer') {
-        return;
-    }
+  // Ignore clicks on transformers
+  if (e.target.getParent()?.className === 'Transformer') return;
 
-    const name = e.target.name();
-    if (shapes.value.some((r) => r.name === name)) {
-        selectedShapeName.value = name;
-        selectedImageName.value = '';
-        selectedCircleName.value = '';
-    } else if (images.value.some((img) => img.name === name)) {
-        selectedImageName.value = name;
-        selectedShapeName.value = '';
-        selectedCircleName.value = '';
-    } else if (circles.value.some((c) => c.name === name)) {
-        selectedCircleName.value = name;
-        selectedImageName.value = '';
-        selectedShapeName.value = '';
-    } else if (ovals.value.some((o) => o.name === name)) {
-        selectedOvalName.value = name;
-        selectedCircleName.value = '';
-        selectedImageName.value = '';
-        selectedShapeName.value = '';
-    }
-    else {
-        selectedShapeName.value = '';
-        selectedImageName.value = '';
-        selectedCircleName.value = '';
-        selectedOvalName.value = '';
-    }
+  const name = e.target.name();
 
-    updateTransformer();
-    updateTransformerForImage();
-    updateTransformerForCircle();
-    updateTransformerForOval();
+  // Select the clicked item
+  if (shapes.value.some((r) => r.name === name)) {
+    selectedShapeName.value = name;
+    selectedImageName.value = '';
+    selectedCircleName.value = '';
+    selectedOvalName.value = '';
+    selectedTextName.value = '';
+  } else if (images.value.some((img) => img.name === name)) {
+    selectedImageName.value = name;
+    selectedShapeName.value = '';
+    selectedCircleName.value = '';
+    selectedOvalName.value = '';
+    selectedTextName.value = '';
+  } else if (circles.value.some((c) => c.name === name)) {
+    selectedCircleName.value = name;
+    selectedImageName.value = '';
+    selectedShapeName.value = '';
+    selectedOvalName.value = '';
+    selectedTextName.value = '';
+  } else if (textNodes.value.some((t) => t.name === name)) {
+    selectedTextName.value = name;
+    selectedShapeName.value = '';
+    selectedImageName.value = '';
+    selectedCircleName.value = '';
+    selectedOvalName.value = '';
+    isEditingText.value = true; // Open text editor
+    textValue.value = textNodes.value.find((t) => t.name === name).text; // Load current text
+    // Set the position of the text being edited
+    const textNode = textNodes.value.find((t) => t.name === name);
+    editingTextPosition.x = textNode.x;
+    editingTextPosition.y = textNode.y;
+  }
+
+  updateTransformers();
 };
 
-const updateTransformer = () => {
-    if (!transformer.value) return;
-
-    const transformerNode = transformer.value.getNode();
+// Update transformers based on selected items
+const updateTransformers = () => {
+  const updateTransformer = (transformerRef, selectedName) => {
+    if (!transformerRef.value) return;
+    const transformerNode = transformerRef.value.getNode();
     const stage = transformerNode.getStage();
-    const selectedNode = stage.findOne(`.${selectedShapeName.value}`);
+    const selectedNode = stage.findOne(`.${selectedName}`);
+    transformerNode.nodes(selectedNode ? [selectedNode] : []);
+  };
 
-    if (selectedNode) {
-        transformerNode.nodes([selectedNode]);
-    } else {
-        transformerNode.nodes([]);
-    }
+  updateTransformer(transformer, selectedShapeName.value);
+  updateTransformer(transformerForImage, selectedImageName.value);
+  updateTransformer(transformerForCircle, selectedCircleName.value);
+  updateTransformer(transformerForText, selectedTextName.value);
+  updateTransformer(transformerForOval, selectedOvalName.value);
 };
 
 const updateTransformerForImage = () => {
@@ -197,7 +210,7 @@ const updateTransformerForOval = () => {
     }
 };
 
-watch(selectedShapeName, updateTransformer);
+
 watch(selectedImageName, updateTransformerForImage);
 watch(selectedCircleName, updateTransformerForCircle);
 watch(selectedCircleName, updateTransformerForCircle);
@@ -250,17 +263,77 @@ const loadImages = (event) => {
     };
 };
 
+// Function to add a new text node
 const addTextNode = () => {
+  isAddingText.value = true;
+  textValue.value = '';
+};
+
+// Function to confirm and add the text node
+const confirmAddTextNode = () => {
+  if (textValue.value.trim()) {
     textNodes.value.push({
-        text: textValue.value,
-        x: 100,
-        y: 100,
-        fontSize: 30,
-        fontFamily: 'Calibri',
-        fill: 'green',
-        draggable: true,
-        name: `text-${textNodes.value.length}`,
+      text: textValue.value,
+      x: 100, // Default position
+      y: 100,
+      fontSize: 30,
+      fontFamily: 'Calibri',
+      fill: 'green',
+      draggable: true,
+      name: `text-${textNodes.value.length}`,
     });
+    isAddingText.value = false;
+  }
+};
+
+// Function to enter edit mode when clicking on a text node
+// const editTextNode = (node) => {
+//   selectedTextName.value = node.name;
+//   textValue.value = node.text;
+//   isEditingText.value = true;
+//   editingTextPosition.value = { x: node.x, y: node.y };
+// };
+
+// Function to update the selected text node
+const updateTextNode = () => {
+  const index = textNodes.value.findIndex((t) => t.name === selectedTextName.value);
+  if (index !== -1) {
+    textNodes.value[index].text = textValue.value;
+    isEditingText.value = false;
+  }
+};
+
+// Function to delete the selected text node
+const deleteTextNode = () => {
+  textNodes.value = textNodes.value.filter((t) => t.name !== selectedTextName.value);
+  isEditingText.value = false;
+};
+
+// Upload an image from the device
+const uploadFile = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imgObj = new Image();
+      imgObj.src = e.target.result;
+      imgObj.onload = () => {
+        images.value.push({
+          id: `img-${images.value.length}`,
+          image: imgObj,
+          x: 50,
+          y: 50,
+          width: 200,
+          height: 200,
+          scaleX: 1,
+          scaleY: 1,
+          draggable: true,
+          name: `image-${images.value.length}`,
+        });
+      };
+    };
+    reader.readAsDataURL(file);
+  }
 };
 
 const addShape = () => {
@@ -283,22 +356,21 @@ const addShape = () => {
     <div class="flex h-screen bg-gray-100 p-5">
         <!-- Left Sidebar -->
         <div class="flex flex-col space-y-5 font-bold bg-white p-6 w-64 rounded-lg shadow-md max-h-screen">
-            <button class="flex items-center space-x-2" @click="addTemplate">
-                <img src="/images/icon/templates.svg" alt="Templates" class="w-5 h-5">
-                <span>Templates</span>
-            </button>
+<!--            <button class="flex items-center space-x-2" @click="addTemplate">-->
+<!--                <img src="/images/icon/templates.svg" alt="Templates" class="w-5 h-5">-->
+<!--                <span>Templates</span>-->
+<!--            </button>-->
 
-            <input v-model="textValue" class="border p-2 rounded-md shadow-sm" placeholder="Enter text" />
 
             <button class="flex items-center space-x-2" @click="addTextNode">
                 <img src="/images/icon/copyIcon.svg" alt="Text" class="w-5 h-5">
                 <span>Text</span>
             </button>
 
-            <button class="flex items-center space-x-2" @click="loadImages">
-                <img src="/images/icon/image-to-image.svg" alt="Photos" class="w-5 h-5">
-                <span>Photos</span>
-            </button>
+<!--            <button class="flex items-center space-x-2" @click="loadImages">-->
+<!--                <img src="/images/icon/image-to-image.svg" alt="Photos" class="w-5 h-5">-->
+<!--                <span>Photos</span>-->
+<!--            </button>-->
 
             <button class="flex items-center space-x-2" @click="addShape">
                 <img src="/images/icon/explore.svg" alt="Add Shape" class="w-5 h-5">
@@ -314,25 +386,26 @@ const addShape = () => {
                 <span>Add Oval</span>
             </button>
 
-            <button class="flex items-center space-x-2" @click="uploadFile">
-                <img src="/images/icon/upload.svg" alt="Upload" class="w-5 h-5">
-                <span>Upload</span>
-            </button>
+          <input type="file" @change="uploadFile" class="hidden" id="fileInput" />
+          <label for="fileInput" class="flex items-center space-x-2 cursor-pointer">
+            <img src="/images/icon/upload.svg" alt="Upload" class="w-5 h-5">
+            <span>Upload Image</span>
+          </label>
 
-            <button class="flex items-center space-x-2" @click="changeBackground">
-                <img src="/images/icon/square.svg" alt="Background" class="w-5 h-5">
-                <span>Background</span>
-            </button>
+<!--            <button class="flex items-center space-x-2" @click="changeBackground">-->
+<!--                <img src="/images/icon/square.svg" alt="Background" class="w-5 h-5">-->
+<!--                <span>Background</span>-->
+<!--            </button>-->
 
-            <button class="flex items-center space-x-2" @click="manageLayers">
-                <img src="/images/icon/dataIcon.svg" alt="Layers" class="w-5 h-5">
-                <span>Layers</span>
-            </button>
+<!--            <button class="flex items-center space-x-2" @click="manageLayers">-->
+<!--                <img src="/images/icon/dataIcon.svg" alt="Layers" class="w-5 h-5">-->
+<!--                <span>Layers</span>-->
+<!--            </button>-->
 
-            <button class="flex items-center space-x-2" @click="resizeCanvas">
-                <img src="/images/icon/resize.svg" alt="Resize" class="w-5 h-5">
-                <span>Resize</span>
-            </button>
+<!--            <button class="flex items-center space-x-2" @click="resizeCanvas">-->
+<!--                <img src="/images/icon/resize.svg" alt="Resize" class="w-5 h-5">-->
+<!--                <span>Resize</span>-->
+<!--            </button>-->
         </div>
 
         <!-- Canvas Container -->
@@ -364,8 +437,74 @@ const addShape = () => {
                         <v-transformer ref="transformerForImage" />
                         <v-transformer ref="transformerForCircle" />
                         <v-transformer ref="transformerForOval" />
+                        <v-transformer ref="transformerForText" />
                     </v-layer>
                 </v-stage>
+
+              <!-- Text Input on Canvas -->
+              <div
+                v-if="isAddingText"
+                class="absolute bg-white p-4 rounded-lg shadow-lg flex flex-col space-y-2"
+                :style="{ left: '100px', top: '100px' }"
+              >
+                <div class="relative">
+                  <input
+                    v-model="textValue"
+                    class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none p-2 pr-8 rounded-md w-full"
+                    placeholder="Enter text"
+                  />
+                  <button
+                    v-if="textValue"
+                    @click="textValue = ''"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <button
+                  @click="confirmAddTextNode"
+                  class="bg-blue-500 text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                >
+                  Add
+                </button>
+              </div>
+
+              <!-- Text Editor on Canvas -->
+              <div
+                v-if="isEditingText"
+                class="absolute bg-white p-4 rounded-lg shadow-lg flex flex-col space-y-2"
+                :style="{ left: `${editingTextPosition.x}px`, top: `${editingTextPosition.y}px` }"
+              >
+                <!-- Close (X) Button in Top Right -->
+                <button
+                  @click="deleteTextNode"
+                  class="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition"
+                >
+                  ✕
+                </button>
+
+                <div class="relative">
+                  <input
+                    v-model="textValue"
+                    class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none p-2 pr-8 rounded-md w-full"
+                    placeholder="Enter text"
+                  />
+                  <button
+                    v-if="textValue"
+                    @click="textValue = ''"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <button
+                  @click="updateTextNode"
+                  class="bg-blue-500 text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                >
+                  Update
+                </button>
+              </div>
+
             </div>
         </div>
     </div>
