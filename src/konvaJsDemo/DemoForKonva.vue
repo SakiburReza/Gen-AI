@@ -222,7 +222,7 @@ const addOval = () => {
         radiusY: 50,
         fill: 'Orange',
         draggable: true,
-        name: `circle-${ovals.value.length}`,
+        name: `oval-${ovals.value.length}`,
     });
 };
 
