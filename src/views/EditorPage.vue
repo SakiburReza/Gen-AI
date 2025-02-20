@@ -43,7 +43,7 @@ onMounted(() => {
                 v-lazy="imageUrl() + item.content" :alt="'Media ' + index" class="h-full max-w-full w-full" :class="[
                   item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]',
                   'object-cover',
-                ]" @click="onImageClick(media[index])" />
+                ]"/>
             </div>
           </div>
         </div>
