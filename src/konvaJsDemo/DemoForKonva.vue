@@ -1,6 +1,6 @@
 <script setup>
 import { add } from 'date-fns';
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, onMounted, onUnmounted } from 'vue';
 const stageSize = reactive({
     width: window.innerWidth * 0.4,
     height: window.innerHeight * 0.6,
@@ -93,6 +93,22 @@ const handleTransformEndForImage = (i) => {
         };
     }
 };
+
+const handleKeyDown = (event) => {
+    if (event.key === 'Delete' && selectedImageName.value) {
+        images.value = images.value.filter(img => img.name !== selectedImageName.value);
+        selectedImageName.value = '';
+    }
+};
+
+onMounted(() => {
+    window.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeyDown);
+});
+
 
 const handleStageMouseDown = (e) => {
     if (e.target === e.target.getStage()) {
@@ -230,15 +246,15 @@ const loadImages = (event) => {
     const imgSrc = event.dataTransfer.getData("imageUrl");
     if (!imgSrc) return;
 
-    console.log("Image Clicked");
-    const imgObj = new Image();
+    const imgObj = new window.Image();
     imgObj.src = imgSrc;
     imgObj.onload = () => {
+        const offset = images.value.length * 30;
         images.value.push({
             id: `img-${images.value.length}`,
             image: imgObj,
-            x: 50,
-            y: 50,
+            x: 50 + offset,
+            y: 50 + offset,
             width: 200,
             height: 200,
             scaleX: 1,
@@ -295,11 +311,6 @@ const addShape = () => {
                 <span>Text</span>
             </button>
 
-            <button class="flex items-center space-x-2" @click="loadImages">
-                <img src="/images/icon/image-to-image.svg" alt="Photos" class="w-5 h-5">
-                <span>Photos</span>
-            </button>
-
             <button class="flex items-center space-x-2" @click="addShape">
                 <img src="/images/icon/explore.svg" alt="Add Shape" class="w-5 h-5">
                 <span>Add Shape</span>
@@ -336,7 +347,7 @@ const addShape = () => {
         </div>
 
         <!-- Canvas Container -->
-        <div class="flex flex-1 items-center justify-center p-6 w-screen" @drop="loadImages" @dragover.prevent>
+        <div class="flex justify-center p-6 w-screen" @drop="loadImages" @dragover.prevent>
             <div class="relative bg-white shadow-md rounded-sm border-gray-600"
                 :style="{ width: stageSize.width + 'px', height: stageSize.height + 'px' }">
                 <!-- Canvas Background -->
@@ -358,7 +369,7 @@ const addShape = () => {
                         <!-- Images -->
                         <v-image v-for="(image, index) in images" :key="index"
                             :config="{ ...image, image: image.image }" draggable
-                            @transformend="handleTransformEndForImage" />
+                            @transformend="handleTransformEndForImage(event, index)" />
                         <!-- Transformer -->
                         <v-transformer ref="transformer" />
                         <v-transformer ref="transformerForImage" />
