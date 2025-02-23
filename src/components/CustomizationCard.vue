@@ -1,13 +1,25 @@
 <script setup>
 import { FwbCard } from 'flowbite-vue'
-import { defineEmits, ref } from 'vue'
+import { defineEmits, ref, watch } from 'vue'
 import ColorEffectModal from './ColorEffectModal.vue'
 
 // Define emitted events
 const emit = defineEmits(['selectRatio', 'selectedEffectId'])
 
+const props = defineProps({
+  resetKey: {
+    default: 0,
+  }
+});
+
+watch(
+  () => props.resetKey,
+  () => {
+    resetSelection()
+  }
+);
+
 // Default selections
-const selectedRatio = ref('portrait_16_9')
 const selectedImageEffectTitle = ref('')
 const selectedImageEffectPrompt = ref('')
 const effectInfoModalOpen = ref(false)
@@ -15,11 +27,33 @@ const selectedImageId = ref('')
 const selectedEffectimage = ref('')
 const effectShow = ref(true)
 const effectImagesShow = ref(false)
+const isDropdownOpen = ref(false)
+const selectedRatio = ref('portrait_16_9')
+const selectedRatioIcon = ref('/images/icon/portrait.svg')
+const selectedRatioText = ref('Portrait')
 
 // Handle button click instantly
 const handleSelection = (ratio) => {
   selectedRatio.value = ratio
   emit('selectRatio', ratio)
+  isDropdownOpen.value = false
+  if (ratio === 'portrait_16_9') {
+    selectedRatioIcon.value = '/images/icon/portrait.svg'
+    selectedRatioText.value = 'Portrait'
+  } else {
+    selectedRatioIcon.value = '/images/icon/landscape.svg'
+    selectedRatioText.value = 'Landscape'
+  }
+}
+
+// handle dropdownShow
+const ratios = [
+  { id: 'portrait_16_9', name: 'Portrait', icon: '/images/icon/portrait.svg' },
+  { id: 'landscape_16_9', name: 'Landscape', icon: '/images/icon/landscape.svg' },
+]
+
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value
 }
 
 const handleEffectSelection = (name, prompt, id, image) => {
@@ -98,104 +132,107 @@ const ratioImages = [
       <!-- Image Ratio -->
       <div v-if="effectImagesShow">
         <span class="flex justify-between items-center">
-        <div class="flex gap-1">
-          <img src="/images/icon/brush.svg" class="w-4 h-4" alt="brush" />
-          <p class="text-xs sm:text-sm text-ravenBlack font-bold">Preset</p>
-        </div>
-        <div class="flex gap-1 cursor-pointer">
-          <div
-            v-if="selectedImageEffectTitle"
-            @click="resetSelection"
-            class="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
-          >
-            <img src="/images/icon/reset.svg" alt="reset" />
+          <div class="flex gap-1">
+            <img src="/images/icon/brush.svg" class="w-4 h-4" alt="brush" />
+            <p class="text-xs sm:text-sm text-ravenBlack font-bold">Preset</p>
           </div>
-
-          <div
-            @click="arrowUp"
-            class="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
-          >
-            <img src="/images/icon/down-arrow.svg" alt="arrow down" />
-          </div>          
-        </div>
-      </span>
-
-      <!-- Images Ratio show start-->
-
-      <div v-if="effectShow" class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 mt-3 overflow-y-auto max-h-60 cursor-pointer">
-        <div
-          v-for="(ratio, index) in ratioImages"
-          :key="index"
-          @click="handleEffectSelection(ratio.name, ratio.prompt, ratio.id, ratio.image)"
-          class="relative w-14 h-14 sm:w-16 sm:h-14 rounded-sm overflow-hidden"
-          :class="{
-            'opacity-100 shadow-lg': selectedImageId === ratio.id,
-            'border-transparent': selectedImageId !== ratio.id,
-          }"
-        >
-          <img
-            :src="ratio.image"
-            alt="Portrait Button"
-            class="w-full h-full object-cover rounded-sm opacity-80"
-          />
-          <p
-            class="absolute bottom-0 left-0 w-full ml-1 text-white font-inter font-semibold text-[10px] leading-[12.1px] tracking-[2%]"
-          >
-            {{ ratio.name }}
-          </p>
-
-          <div
-              v-if="selectedImageId === ratio.id"
-              class="absolute top-1 right-1 p-1"
+          <div class="flex gap-1 cursor-pointer">
+            <div
+              v-if="selectedImageEffectTitle"
+              @click="resetSelection"
+              class="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
             >
-              <img src="/public/images/icon/presetSelection.svg" alt="">
+              <img src="/images/icon/reset.svg" alt="reset" />
             </div>
+
+            <div
+              @click="arrowUp"
+              class="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
+            >
+              <img src="/images/icon/down-arrow.svg" alt="arrow down" />
+            </div>
+          </div>
+        </span>
+
+        <!-- Images Ratio show start-->
+
+        <div
+          v-if="effectShow"
+          class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 mt-3 overflow-y-auto max-h-60 cursor-pointer"
+        >
+          <div
+            v-for="(ratio, index) in ratioImages"
+            :key="index"
+            @click="handleEffectSelection(ratio.name, ratio.prompt, ratio.id, ratio.image)"
+            class="relative w-14 h-14 sm:w-16 sm:h-14 rounded-sm overflow-hidden"
+            :class="{
+              'opacity-100 shadow-lg': selectedImageId === ratio.id,
+              'border-transparent': selectedImageId !== ratio.id,
+            }"
+          >
+            <img
+              :src="ratio.image"
+              alt="Portrait Button"
+              class="w-full h-full object-cover rounded-sm opacity-80"
+            />
+            <p
+              class="absolute bottom-0 left-0 w-full ml-1 text-white font-inter font-semibold text-[10px] leading-[12.1px] tracking-[2%]"
+            >
+              {{ ratio.name }}
+            </p>
+
+            <div v-if="selectedImageId === ratio.id" class="absolute top-1 right-1 p-1">
+              <img src="/public/images/icon/presetSelection.svg" alt="" />
+            </div>
+          </div>
         </div>
-      </div>
       </div>
 
       <div class="mt-3 flex flex-wrap gap-2">
-        <!-- Portrait Button -->
-        <button
-          @click="handleSelection('portrait_16_9')"
-          :class="[
-            'py-2 px-6 rounded-xl font-semibold flex items-center border transition-colors duration-200',
-            selectedRatio === 'portrait_16_9'
-              ? 'bg-tertiary text-black-2 border-tertiary'
-              : 'bg-white text-black-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400',
-          ]"
-        >
-          <img
-            src="/images/icon/portrait.svg"
-            alt="Portrait Button"
-            class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
-          />
-          <span class="text-xs sm:text-sm">Portrait</span>
-        </button>
+        <div class="relative">
+          <!-- Portrait Button -->
+          <button
+            @click="toggleDropdown"
+            class="py-2 px-6 rounded-xl font-semibold flex items-center border transition-colors duration-200 bg-white text-black-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+          >
+            <img
+              :src="selectedRatioIcon"
+              alt="Selected Ratio"
+              class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
+            />
+            <span class="text-xs sm:text-sm">{{ selectedRatioText }}</span>
+          </button>
 
-        <!-- brush icon -->
-
+          <!-- Dropdown Menu -->
+          <div
+            v-if="isDropdownOpen"
+            class="absolute bottom-full mb-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-10"
+          >
+            <div
+              v-for="ratio in ratios"
+              :key="ratio.id"
+              @click="handleSelection(ratio.id)"
+              class="flex justify-between w-full px-4 py-2 text-sm text-black-2 hover:bg-gray-100"
+              :class="{ 'bg-gray-200': selectedRatio === ratio.id }"
+            >
+              <div class="flex items-center">
+                <img :src="ratio.icon" alt="" class="mr-2 w-4 h-4" />
+                {{ ratio.name }}
+              </div>
+              <img
+                v-if="selectedRatio === ratio.id"
+                src="/images/icon/Check.svg"
+                alt="Selected"
+                class="w-4 h-4"
+              />
+            </div>
+          </div>
+        </div>
         <button
-         
-          @click="handleSelection('landscape_16_9')"
-          :class="[
-            ' p-2 rounded-xl font-semibold flex items-center border transition-colors duration-200',
-            selectedRatio === 'landscape_16_9'
-              ? 'bg-tertiary text-black-2 border-tertiary'
-              : 'bg-white text-black-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400',
-          ]"
-        >
-        <img
-            src="/images/icon/landscape.svg"
-            alt="landscape Button"
-            class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
-          />
-          <span class="text-xs sm:text-sm">Landscape</span>
-        </button>
-        <button @click="openEffects"
+          @click="openEffects"
           v-if="!selectedEffectimage"
           :class="[
-            ' p-2 rounded-xl font-semibold flex items-center border transition-colors duration-200'
+            ' p-2 rounded-xl font-semibold flex items-center border transition-colors duration-200',
           ]"
         >
           <img src="/images/icon/brush.svg" alt="brush icon" class="w-4 h-4 sm:w-5 sm:h-5" />
@@ -206,7 +243,7 @@ const ratioImages = [
           v-if="selectedEffectimage"
           @click="arrowUp()"
           :class="[
-            'py-2 px-6 rounded-xl font-semibold flex items-center border transition-colors duration-200'
+            'py-2 px-6 rounded-xl font-semibold flex items-center border transition-colors duration-200',
           ]"
         >
           <img
