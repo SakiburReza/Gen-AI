@@ -327,24 +327,24 @@ const loadImages = (event) => {
   const imgSrc = event.dataTransfer.getData("imageUrl");
   if (!imgSrc) return;
 
-  const imgObj = new window.Image();
-  imgObj.src = imgSrc;
-  imgObj.onload = () => {
-    const offset = images.value.length * 30;
-    images.value.push({
-      id: `img-${images.value.length}`,
-      image: imgObj,
-      x: 50 + offset,
-      y: 50 + offset,
-      width: 200,
-      height: 200,
-      scaleX: 1,
-      scaleY: 1,
-      draggable: true,
-      name: `image-${images.value.length}`,
-    });
-    images.value = [...images.value];
-  };
+    const imgObj = new window.Image();
+    imgObj.src = imgSrc;
+    imgObj.onload = () => {
+        const offset = images.value.length * 100;
+        images.value.push({
+            id: `img-${images.value.length}`,
+            image: imgObj,
+            x: 50 + offset,
+            y: 50 + offset,
+            width: 200,
+            height: 200,
+            scaleX: 1,
+            scaleY: 1,
+            draggable: true,
+            name: `image-${images.value.length}`,
+        });
+        images.value = [...images.value];
+    };
 };
 
 // Add a text node

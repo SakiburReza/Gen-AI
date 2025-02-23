@@ -102,45 +102,54 @@ const ratioImages = [
           <img src="/images/icon/brush.svg" class="w-4 h-4" alt="brush" />
           <p class="text-xs sm:text-sm text-ravenBlack font-bold">Preset</p>
         </div>
-        <div class="flex gap-2 cursor-pointer">
-          <img  @click="arrowUp"  src="/images/icon/down-arrow.svg" alt="arrow down" />
-          <img
+        <div class="flex gap-1 cursor-pointer">
+          <div
             v-if="selectedImageEffectTitle"
             @click="resetSelection"
-            src="/images/icon/reset.svg"
-            alt="reset"
-          />
+            class="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
+          >
+            <img src="/images/icon/reset.svg" alt="reset" />
+          </div>
+
+          <div
+            @click="arrowUp"
+            class="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
+          >
+            <img src="/images/icon/down-arrow.svg" alt="arrow down" />
+          </div>          
         </div>
       </span>
 
       <!-- Images Ratio show start-->
 
-      <div v-if="effectShow" class="flex flex-wrap gap-2 mt-3 overflow-y-auto max-h-40 cursor-pointer">
+      <div v-if="effectShow" class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 mt-3 overflow-y-auto max-h-60 cursor-pointer">
         <div
           v-for="(ratio, index) in ratioImages"
           :key="index"
           @click="handleEffectSelection(ratio.name, ratio.prompt, ratio.id, ratio.image)"
-          class="relative w-14 h-14 sm:w-20 sm:h-18 rounded-lg overflow-hidden border-2"
+          class="relative w-14 h-14 sm:w-16 sm:h-14 rounded-sm overflow-hidden"
           :class="{
-            'border-blue-500 shadow-lg scale-105': selectedImageId === ratio.id,
+            'opacity-100 shadow-lg': selectedImageId === ratio.id,
             'border-transparent': selectedImageId !== ratio.id,
           }"
         >
           <img
             :src="ratio.image"
             alt="Portrait Button"
-            class="w-full h-full object-cover rounded-lg"
+            class="w-full h-full object-cover rounded-sm opacity-80"
           />
-          <div
-            v-if="selectedImageId === ratio.id"
-            class="absolute inset-0 bg-blue-500/30 rounded-lg"
-          ></div>
-
           <p
-            class="absolute bottom-0 left-0 w-full bg-black/50 text-white text-sm font-semibold px-2 py-1 rounded-b-lg"
+            class="absolute bottom-0 left-0 w-full ml-1 text-white font-inter font-semibold text-[10px] leading-[12.1px] tracking-[2%]"
           >
             {{ ratio.name }}
           </p>
+
+          <div
+              v-if="selectedImageId === ratio.id"
+              class="absolute top-1 right-1 p-1"
+            >
+              <img src="/public/images/icon/presetSelection.svg" alt="">
+            </div>
         </div>
       </div>
       </div>
@@ -189,13 +198,13 @@ const ratioImages = [
             ' p-2 rounded-xl font-semibold flex items-center border transition-colors duration-200'
           ]"
         >
-          <img src="/images/icon/brush.svg" alt="Landscape Button" class="w-4 h-4 sm:w-5 sm:h-5" />
+          <img src="/images/icon/brush.svg" alt="brush icon" class="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
         <!-- Landscape Button -->
         <button
           v-if="selectedEffectimage"
-          @click="handleSelection()"
+          @click="arrowUp()"
           :class="[
             'py-2 px-6 rounded-xl font-semibold flex items-center border transition-colors duration-200'
           ]"
