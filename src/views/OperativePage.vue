@@ -629,7 +629,7 @@ const showBadge = computed(() => route.path !== '/operativepage')
 
 <template>
   <DefaultLayout :showBadge="showBadge">
-    <div class="flex flex-col md:flex-row flex-1 h-screen">
+    <div class="flex flex-col md:flex-row flex-1 h-full">
       <!-- Left Section: Facility Card and Dynamic Content -->
 
       <div class="w-full sm:w-[30%] pt-0.5 flex-shrink-0 border ">
@@ -658,7 +658,7 @@ const showBadge = computed(() => route.path !== '/operativepage')
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
-          
+
           <CustomizationCard v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectedEffectId="(id) => (selectedEffectId = id)" :resetKey="resetKey" />
           <!-- Loader Spinner -->
