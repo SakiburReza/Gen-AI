@@ -1,5 +1,6 @@
 <script setup>
-import { reactive, ref, watch } from 'vue';
+import { add } from 'date-fns';
+import { reactive, ref, watch, onMounted, onUnmounted } from 'vue';
 const stageSize = reactive({
     width: window.innerWidth * 0.4,
     height: window.innerHeight * 0.6,
@@ -10,26 +11,20 @@ const shapes = ref([]);
 const images = ref([]);
 const circles = ref([]);
 const ovals = ref([]);
-const textNodes = ref([]);
 
 const selectedShapeName = ref('');
 const selectedImageName = ref('');
 const selectedCircleName = ref('');
 const selectedOvalName = ref('');
-const selectedTextName = ref('');
 
 const transformer = ref(null);
 const transformerForImage = ref(null);
 const transformerForCircle = ref(null);
 const transformerForOval = ref(null);
-const transformerForText = ref(null);
 
 
-// Text editing state
-const isEditingText = ref(false);
-const isAddingText = ref(false); // Track if adding new text
+const textNodes = ref([]);
 const textValue = ref('Edit Text');
-const editingTextPosition = reactive({ x: 0, y: 0 }); // Position of the text being edited
 
 const handleTransformEnd = (e) => {
     const rectIndex = shapes.value.findIndex(
@@ -99,75 +94,83 @@ const handleTransformEndForImage = (i) => {
     }
 };
 
-// Handle stage mouse down events
-const handleStageMouseDown = (e) => {
-  if (e.target === e.target.getStage()) {
-    // Deselect all if clicking on the stage
-    selectedShapeName.value = '';
-    selectedImageName.value = '';
-    selectedCircleName.value = '';
-    selectedTextName.value = '';
-    isEditingText.value = false;
-    updateTransformers();
-    return;
-  }
-
-  // Ignore clicks on transformers
-  if (e.target.getParent()?.className === 'Transformer') return;
-
-  const name = e.target.name();
-
-  // Select the clicked item
-  if (shapes.value.some((r) => r.name === name)) {
-    selectedShapeName.value = name;
-    selectedImageName.value = '';
-    selectedCircleName.value = '';
-    selectedOvalName.value = '';
-    selectedTextName.value = '';
-  } else if (images.value.some((img) => img.name === name)) {
-    selectedImageName.value = name;
-    selectedShapeName.value = '';
-    selectedCircleName.value = '';
-    selectedOvalName.value = '';
-    selectedTextName.value = '';
-  } else if (circles.value.some((c) => c.name === name)) {
-    selectedCircleName.value = name;
-    selectedImageName.value = '';
-    selectedShapeName.value = '';
-    selectedOvalName.value = '';
-    selectedTextName.value = '';
-  } else if (textNodes.value.some((t) => t.name === name)) {
-    selectedTextName.value = name;
-    selectedShapeName.value = '';
-    selectedImageName.value = '';
-    selectedCircleName.value = '';
-    selectedOvalName.value = '';
-    isEditingText.value = true; // Open text editor
-    textValue.value = textNodes.value.find((t) => t.name === name).text; // Load current text
-    // Set the position of the text being edited
-    const textNode = textNodes.value.find((t) => t.name === name);
-    editingTextPosition.x = textNode.x;
-    editingTextPosition.y = textNode.y;
-  }
-
-  updateTransformers();
+const handleKeyDown = (event) => {
+    if (event.key === 'Delete' && selectedImageName.value) {
+        images.value = images.value.filter(img => img.name !== selectedImageName.value);
+        selectedImageName.value = '';
+    }
 };
 
-// Update transformers based on selected items
-const updateTransformers = () => {
-  const updateTransformer = (transformerRef, selectedName) => {
-    if (!transformerRef.value) return;
-    const transformerNode = transformerRef.value.getNode();
-    const stage = transformerNode.getStage();
-    const selectedNode = stage.findOne(`.${selectedName}`);
-    transformerNode.nodes(selectedNode ? [selectedNode] : []);
-  };
+onMounted(() => {
+    window.addEventListener('keydown', handleKeyDown);
+});
 
-  updateTransformer(transformer, selectedShapeName.value);
-  updateTransformer(transformerForImage, selectedImageName.value);
-  updateTransformer(transformerForCircle, selectedCircleName.value);
-  updateTransformer(transformerForText, selectedTextName.value);
-  updateTransformer(transformerForOval, selectedOvalName.value);
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeyDown);
+});
+
+
+const handleStageMouseDown = (e) => {
+    if (e.target === e.target.getStage()) {
+        selectedShapeName.value = '';
+        selectedImageName.value = '';
+        selectedCircleName.value = '';
+        selectedOvalName.value = '';
+        updateTransformer();
+        updateTransformerForImage();
+        updateTransformerForCircle();
+        updateTransformerForOval();
+        return;
+    }
+
+    if (e.target.getParent()?.className === 'Transformer') {
+        return;
+    }
+
+    const name = e.target.name();
+    if (shapes.value.some((r) => r.name === name)) {
+        selectedShapeName.value = name;
+        selectedImageName.value = '';
+        selectedCircleName.value = '';
+    } else if (images.value.some((img) => img.name === name)) {
+        selectedImageName.value = name;
+        selectedShapeName.value = '';
+        selectedCircleName.value = '';
+    } else if (circles.value.some((c) => c.name === name)) {
+        selectedCircleName.value = name;
+        selectedImageName.value = '';
+        selectedShapeName.value = '';
+    } else if (ovals.value.some((o) => o.name === name)) {
+        selectedOvalName.value = name;
+        selectedCircleName.value = '';
+        selectedImageName.value = '';
+        selectedShapeName.value = '';
+    }
+    else {
+        selectedShapeName.value = '';
+        selectedImageName.value = '';
+        selectedCircleName.value = '';
+        selectedOvalName.value = '';
+    }
+
+    updateTransformer();
+    updateTransformerForImage();
+    updateTransformerForCircle();
+    updateTransformerForOval();
+};
+
+const updateTransformer = () => {
+    if (!transformer.value) return;
+
+    const transformerNode = transformer.value.getNode();
+    const stage = transformerNode.getStage();
+    const selectedNode = stage.findOne(`.${selectedShapeName.value}`);
+
+    if (selectedNode) {
+        transformerNode.nodes([selectedNode]);
+    } else {
+        transformerNode.nodes([]);
+    }
 };
 
 const updateTransformerForImage = () => {
@@ -210,7 +213,7 @@ const updateTransformerForOval = () => {
     }
 };
 
-
+watch(selectedShapeName, updateTransformer);
 watch(selectedImageName, updateTransformerForImage);
 watch(selectedCircleName, updateTransformerForCircle);
 watch(selectedCircleName, updateTransformerForCircle);
@@ -243,15 +246,15 @@ const loadImages = (event) => {
     const imgSrc = event.dataTransfer.getData("imageUrl");
     if (!imgSrc) return;
 
-    console.log("Image Clicked");
-    const imgObj = new Image();
+    const imgObj = new window.Image();
     imgObj.src = imgSrc;
     imgObj.onload = () => {
+        const offset = images.value.length * 30;
         images.value.push({
             id: `img-${images.value.length}`,
             image: imgObj,
-            x: 50,
-            y: 50,
+            x: 50 + offset,
+            y: 50 + offset,
             width: 200,
             height: 200,
             scaleX: 1,
@@ -263,77 +266,17 @@ const loadImages = (event) => {
     };
 };
 
-// Function to add a new text node
 const addTextNode = () => {
-  isAddingText.value = true;
-  textValue.value = '';
-};
-
-// Function to confirm and add the text node
-const confirmAddTextNode = () => {
-  if (textValue.value.trim()) {
     textNodes.value.push({
-      text: textValue.value,
-      x: 100, // Default position
-      y: 100,
-      fontSize: 30,
-      fontFamily: 'Calibri',
-      fill: 'green',
-      draggable: true,
-      name: `text-${textNodes.value.length}`,
+        text: textValue.value,
+        x: 100,
+        y: 100,
+        fontSize: 30,
+        fontFamily: 'Calibri',
+        fill: 'green',
+        draggable: true,
+        name: `text-${textNodes.value.length}`,
     });
-    isAddingText.value = false;
-  }
-};
-
-// Function to enter edit mode when clicking on a text node
-// const editTextNode = (node) => {
-//   selectedTextName.value = node.name;
-//   textValue.value = node.text;
-//   isEditingText.value = true;
-//   editingTextPosition.value = { x: node.x, y: node.y };
-// };
-
-// Function to update the selected text node
-const updateTextNode = () => {
-  const index = textNodes.value.findIndex((t) => t.name === selectedTextName.value);
-  if (index !== -1) {
-    textNodes.value[index].text = textValue.value;
-    isEditingText.value = false;
-  }
-};
-
-// Function to delete the selected text node
-const deleteTextNode = () => {
-  textNodes.value = textNodes.value.filter((t) => t.name !== selectedTextName.value);
-  isEditingText.value = false;
-};
-
-// Upload an image from the device
-const uploadFile = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const imgObj = new Image();
-      imgObj.src = e.target.result;
-      imgObj.onload = () => {
-        images.value.push({
-          id: `img-${images.value.length}`,
-          image: imgObj,
-          x: 50,
-          y: 50,
-          width: 200,
-          height: 200,
-          scaleX: 1,
-          scaleY: 1,
-          draggable: true,
-          name: `image-${images.value.length}`,
-        });
-      };
-    };
-    reader.readAsDataURL(file);
-  }
 };
 
 const addShape = () => {
@@ -409,7 +352,7 @@ const addShape = () => {
         </div>
 
         <!-- Canvas Container -->
-        <div class="flex flex-1 items-center justify-center p-6 w-screen" @drop="loadImages" @dragover.prevent>
+        <div class="flex justify-center p-6 w-screen" @drop="loadImages" @dragover.prevent>
             <div class="relative bg-white shadow-md rounded-sm border-gray-600"
                 :style="{ width: stageSize.width + 'px', height: stageSize.height + 'px' }">
                 <!-- Canvas Background -->
@@ -431,7 +374,7 @@ const addShape = () => {
                         <!-- Images -->
                         <v-image v-for="(image, index) in images" :key="index"
                             :config="{ ...image, image: image.image }" draggable
-                            @transformend="handleTransformEndForImage" />
+                            @transformend="handleTransformEndForImage(event, index)" />
                         <!-- Transformer -->
                         <v-transformer ref="transformer" />
                         <v-transformer ref="transformerForImage" />
