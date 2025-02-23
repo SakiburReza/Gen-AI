@@ -33,7 +33,7 @@ onMounted(() => {
 
 <template>
   <DefaultLayout :showBadge="showBadge">
-    <div class="grid grid-cols-12 gap-3 h-screen overflow-hidden">
+    <div class="grid grid-cols-12 gap-3 h-full overflow-hidden">
       <!-- Left Section (Image Grid) -->
       <div class="col-span-2 h-full pt-4">
         <div class="bg-white p-1 shadow-md h-screen overflow-y-auto">
