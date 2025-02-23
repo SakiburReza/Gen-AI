@@ -129,11 +129,11 @@ onUnmounted(() => {
 <template>
   <div class="flex flex-col h-screen">
     <!-- Header -->
-    <div class="items-start justify-start border pl-2 z-10">
+    <div class="flex items-center justify-start border">
       <!-- Logo -->
       <router-link to="/">
-        <img src="/images/zeuxis-logo.png" alt="Flowbite logo"
-          class="cursor-pointer items-center justify-center hover:opacity transition-opacity mt-5 mb-5" />
+        <img src="/images/zeuxis-logo.png" alt="zeuxis logo"
+          class="cursor-pointer items-center justify-center hover:opacity transition-opacity p-4" />
       </router-link>
       <!-- Text -->
 
@@ -158,7 +158,7 @@ onUnmounted(() => {
     </div>
 
     <!-- Sidebar -->
-    <div :class="['sidebar border mt-16 fixed left-0 h-screen  flex flex-col justify-between items-center py-2 bg-white',
+    <div :class="['sidebar border mt-14 fixed left-0 h-screen  flex flex-col justify-between items-center py-2 bg-white',
       !expandSidebar ? 'w-[45px]' : 'w-[150px]',
     ]">
       <div class="flex flex-col items-center gap-1  group p-2 rounded-lg
@@ -282,7 +282,7 @@ onUnmounted(() => {
         <!-- //testcode for editor -->
       </div>
 
-      <div class="flex flex-col items-center gap-1 ">
+      <div class="flex flex-col items-center gap-1 mb-12">
         <div class="rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md cursor-pointer">
           <div v-if="!expandSidebar" @click="handleExpandSidebar">
             <img src="/images/icon/expandRightArrow.svg" alt="dataIcon" class="group p-2" />
