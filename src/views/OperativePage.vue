@@ -660,7 +660,7 @@ const showBadge = computed(() => route.path !== '/operativepage')
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
           
           <CustomizationCard v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectedEffectId="(id) => (selectedEffectId = id)" />
+            @selectedEffectId="(id) => (selectedEffectId = id)" :resetKey="resetKey" />
           <!-- Loader Spinner -->
           <!-- <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-800 z-50">
             <svg class="w-16 h-16 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
