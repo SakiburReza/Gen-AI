@@ -173,7 +173,7 @@ const ratioImages = [
             <img
               :src="ratio.image"
               alt="Portrait Button"
-              class="w-full h-full object-cover rounded-sm opacity-80"
+              class="w-full h-full object-cover rounded-sm opacity-80 hover:opacity-100"
             />
             <p
               class="absolute bottom-0 left-0 w-full ml-1 text-white font-inter font-semibold text-[10px] leading-[12.1px] tracking-[2%]"
