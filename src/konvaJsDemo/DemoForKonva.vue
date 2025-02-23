@@ -330,14 +330,16 @@ const loadImages = (event) => {
   const imgObj = new window.Image();
   imgObj.src = imgSrc;
   imgObj.onload = () => {
+    const actualHeight = imgObj.naturalHeight;
+    const actualWidth = imgObj.naturalWidth;
     const offset = images.value.length * 30;
     images.value.push({
       id: `img-${images.value.length}`,
       image: imgObj,
       x: 50 + offset,
       y: 50 + offset,
-      width: 200,
-      height: 200,
+      width: actualWidth,
+      height: actualHeight,
       scaleX: 1,
       scaleY: 1,
       draggable: true,
@@ -489,29 +491,27 @@ const addShape = () => {
     <!-- Canvas Container -->
     <div class="flex justify-center p-6 w-screen" @drop="loadImages" @dragover.prevent>
       <div class="relative bg-white shadow-md rounded-sm border-gray-600"
-           :style="{ width: stageSize.width + 'px', height: stageSize.height + 'px' }">
+        :style="{ width: stageSize.width + 'px', height: stageSize.height + 'px' }">
         <!-- Canvas Background -->
         <div class="absolute inset-0 bg-white border-gray-300 rounded-lg"></div>
 
         <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown">
           <v-layer ref="layer">
             <!-- Rectangles -->
-            <v-rect v-for="item in shapes" :key="item.id" :config="item"
-                    @transformend="handleTransformEnd" />
+            <v-rect v-for="item in shapes" :key="item.id" :config="item" @transformend="handleTransformEnd" />
             <!-- Circles -->
             <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" draggable
-                      @transformend="handleTransformEndForCircle" />
+              @transformend="handleTransformEndForCircle" />
             <!-- Oval -->
             <v-ellipse v-for="(oval, index) in ovals" :key="index" :config="oval" draggable
-                       @transformend="handleTransformEndForOval" />
+              @transformend="handleTransformEndForOval" />
             <!-- Text Nodes -->
             <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable
-                    @transformend="handleTransformEndForText"/>
+              @transformend="handleTransformEndForText" />
 
             <!-- Images -->
-            <v-image v-for="(image, index) in images" :key="index"
-                     :config="{ ...image, image: image.image }" draggable
-                     @transformend="handleTransformEndForImage(event, index)" />
+            <v-image v-for="(image, index) in images" :key="index" :config="{ ...image, image: image.image }" draggable
+              @transformend="handleTransformEndForImage(event, index)" />
             <!-- Transformer -->
             <v-transformer ref="transformer" />
             <v-transformer ref="transformerForImage" />
@@ -522,65 +522,43 @@ const addShape = () => {
         </v-stage>
 
         <!-- Text Input on Canvas -->
-        <div
-          v-if="isAddingText"
-          class="absolute bg-white p-4 rounded-lg shadow-lg flex flex-col space-y-2"
-          :style="{ left: '100px', top: '100px' }"
-        >
+        <div v-if="isAddingText" class="absolute bg-white p-4 rounded-lg shadow-lg flex flex-col space-y-2"
+          :style="{ left: '100px', top: '100px' }">
           <div class="relative">
-            <input
-              v-model="textValue"
+            <input v-model="textValue"
               class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none p-2 pr-8 rounded-md w-full"
-              placeholder="Enter text"
-            />
-            <button
-              v-if="textValue"
-              @click="textValue = ''"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
-            >
+              placeholder="Enter text" />
+            <button v-if="textValue" @click="textValue = ''"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500">
               ✕
             </button>
           </div>
-          <button
-            @click="confirmAddTextNode"
-            class="bg-blue-500 text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition"
-          >
+          <button @click="confirmAddTextNode"
+            class="bg-blue-500 text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition">
             Add
           </button>
         </div>
 
         <!-- Text Editor on Canvas -->
-        <div
-          v-if="isEditingText"
-          class="absolute bg-white p-4 rounded-lg shadow-lg flex flex-col space-y-4"
-          :style="{ left: `${editingTextPosition.x}px`, top: `${editingTextPosition.y}px` }"
-        >
+        <div v-if="isEditingText" class="absolute bg-white p-4 rounded-lg shadow-lg flex flex-col space-y-4"
+          :style="{ left: `${editingTextPosition.x}px`, top: `${editingTextPosition.y}px` }">
           <!-- Close (X) Button in Top Right -->
-          <button
-            @click="deleteTextNode"
-            class="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition"
-          >
+          <button @click="deleteTextNode"
+            class="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition">
             ✕
           </button>
 
           <div class="relative">
-            <input
-              v-model="textValue"
+            <input v-model="textValue"
               class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none p-2 pr-8 rounded-md w-full"
-              placeholder="Enter text"
-            />
-            <button
-              v-if="textValue"
-              @click="textValue = ''"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
-            >
+              placeholder="Enter text" />
+            <button v-if="textValue" @click="textValue = ''"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500">
               ✕
             </button>
           </div>
-          <button
-            @click="updateTextNode"
-            class="bg-blue-500 text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition"
-          >
+          <button @click="updateTextNode"
+            class="bg-blue-500 text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition">
             Update
           </button>
         </div>
