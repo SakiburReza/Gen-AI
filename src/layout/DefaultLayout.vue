@@ -252,27 +252,24 @@ onUnmounted(() => {
         <!-- //testcode for editor -->
         <fwb-tooltip v-if="!expandSidebar" placement="right">
           <template #trigger>
-            <div
-            @click="selectMenuAndNavigate('editorPage', goToEditorPage)"
-              :class="[
-                'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
-                selectedMenu === 'editorPage' ? 'bg-[#D9D9D9]' : '',
-              ]"
-            >
-              <img src="/images/icon/star.svg" alt="dataIcon" class="cursor-pointer" />
-            <span v-if="expandSidebar" class="ml-2">Editor</span>
+            <div @click="selectMenuAndNavigate('editorPage', goToEditorPage)" :class="[
+              'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
+              selectedMenu === 'editorPage' ? 'bg-[#D9D9D9]' : '',
+            ]">
+              <div class="flex items-center" @click="goToEditorPage">
+                <img src="/images/icon/star.svg" alt="dataIcon" class="cursor-pointer" />
+                <span v-if="expandSidebar" class="ml-2">Editor</span>
+              </div>
             </div>
           </template>
           <template #content> Editor </template>
         </fwb-tooltip>
+
         <template v-else>
-          <div
-            @click="selectMenuAndNavigate('editorPage', goToEditorPage)"
-            :class="[
-              'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
-              selectedMenu === 'editorPage' ? 'bg-[#D9D9D9]' : '',
-            ]"
-          >
+          <div :class="[
+            'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
+            selectedMenu === 'gallerypage' ? 'bg-[#D9D9D9]' : '',
+          ]">
             <div class="flex items
             -center">
               <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
