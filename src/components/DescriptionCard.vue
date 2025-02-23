@@ -26,17 +26,19 @@ watch(
 </script>
 
 <template>
-  <fwb-card class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl bg-white">
-    <div class="p-4">
-      <!-- Title -->
-      <!-- <h6 class="mb-2 text-lg sm:text-xl font-bold tracking-tight text-black dark:text-white sm:text-md">
+  <!-- <fwb-card class="max-w-md mx-auto sm:max-w-lg md:max-w-2xl"> -->
+
+  <!-- Title -->
+  <!-- <h6 class="mb-2 text-lg sm:text-xl font-bold tracking-tight text-black dark:text-white sm:text-md">
         Describe
       </h6> -->
-      <!-- Textarea -->
-      <fwb-textarea class="w-full h-16 sm:h-40 sm:w-120 text-dimGray text-sm justify-start" :rows="2" label=""
-        v-model.lazy="localDescription"
-         placeholder="Describe an image you want to create or upload a reference ..." @input="handleInput" 
-          style="font-family: 'Inter', sans-serif;"/>
-    </div>
-  </fwb-card>
+  <!-- Textarea -->
+  <!-- <fwb-textarea class="w-full h-16 sm:h-40 sm:w-120 text-dimGray text-sm justify-start" :rows="2" label=""
+    v-model.lazy="localDescription" placeholder="Add image or describe your image in detail
+ or learn" @input="handleInput" style="font-family: 'Inter', sans-serif;" /> -->
+  <fwb-textarea class="w-full h-16 sm:h-40 sm:w-120 text-dimGray text-sm justify-start bg-lotion" :rows="2" label=""
+    v-model.lazy="localDescription" placeholder="Add image or describe your image in detail or 𝗹𝗲𝗮𝗿𝗻"
+    @input="handleInput" style="font-family: 'Inter', sans-serif;" />
+
+  <!-- </fwb-card> -->
 </template>

@@ -1,12 +1,16 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
 import DemoForKonva from '@/konvaJsDemo/DemoForKonva.vue';
 import DefaultLayout from '@/layout/DefaultLayout.vue';
-import genAiService from '@/services/gen-ai'
-import { imageUrl } from '@/utils/utils'
+import genAiService from '@/services/gen-ai';
+import { imageUrl } from '@/utils/utils';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute()
 
 const media = ref([])
 
+const showBadge = computed(() => route.path !== '/editorPage')
 
 
 const fetchMedia = async () => {
@@ -28,7 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <DefaultLayout>
+  <DefaultLayout :showBadge="showBadge">
     <div class="grid grid-cols-12 gap-3 h-screen overflow-hidden">
       <!-- Left Section (Image Grid) -->
       <div class="col-span-2 h-full pt-4">
@@ -43,7 +47,7 @@ onMounted(() => {
                 v-lazy="imageUrl() + item.content" :alt="'Media ' + index" class="h-full max-w-full w-full" :class="[
                   item.orientation === 'P' ? 'aspect-[3/4]' : 'aspect-[16/9]',
                   'object-cover',
-                ]"/>
+                ]" />
             </div>
           </div>
         </div>

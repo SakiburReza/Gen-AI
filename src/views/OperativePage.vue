@@ -623,41 +623,44 @@ const openSaveBoard = (mediaUrl) => {
 const closeSaveBoard = () => {
   isSaveBoardOpen.value = false
 }
+const showBadge = computed(() => route.path !== '/operativepage')
+
 </script>
 
 <template>
-  <DefaultLayout>
+  <DefaultLayout :showBadge="showBadge">
     <div class="flex flex-col md:flex-row flex-1 h-full">
       <!-- Left Section: Facility Card and Dynamic Content -->
 
-      <div class="w-full sm:w-[30%] p-2 flex-shrink-0">
+      <div class="w-full sm:w-[30%] pt-0.5 flex-shrink-0 border ">
         <!-- Floating Buttons Section -->
-        <div class="flex flex-row items-center justify-center mb-5">
+        <div class="flex flex-row items-center justify-center gap-2 py-1 border-b-2">
           <!-- Image Button -->
           <button @click="setActive('image')" :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
+            'flex items-center px-2 py-1 rounded-md font-medium transition',
 
-            activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            activeMode === 'image' ? 'bg-gray-200 text-black font-bold' : '',
           ]">
-            <span class="material-icons">image</span>
+            <span>Image</span>
           </button>
 
           <!-- Video Button -->
 
           <button @click="setActive('video')" :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
-            activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            'flex items-center px-2 py-1 rounded-md font-medium transition',
+            activeMode === 'video' ? 'bg-gray-200 text-black font-bold' : '',
           ]">
-            <span class="material-icons">videocam</span>
+            <span>Video</span>
           </button>
         </div>
         <!-- Dynamic Content Based on Selected Functionality -->
-        <div class="bg-white ml-6 mr-6 space-y-6 flex-shrink-0">
+        <div class="bg-white ml-6 mr-6 mt-2 space-y-6 flex-shrink-0">
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
-          <CustomizationCard  v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
-            @selectedEffectId="(id) => (selectedEffectId = id)" />
+
+          <CustomizationCard v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
+            @selectedEffectId="(id) => (selectedEffectId = id)" :resetKey="resetKey" />
           <!-- Loader Spinner -->
           <!-- <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-800 z-50">
             <svg class="w-16 h-16 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
@@ -668,7 +671,7 @@ const closeSaveBoard = () => {
           </div> -->
 
           <fwb-button @click="generateAiContent" :disabled="loading"
-            class="float-end bottom-4 right-4 bg-blue-600 px-8 py-1.5 rounded-lg disabled:bg-gray-400 shadow-md sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10">
+            class="float-end bottom-4 right-4 bg-darkLiver px-8 py-1.5 rounded-lg disabled:bg-gray-400 shadow-md sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10">
             Zeuxis
           </fwb-button>
         </div>
@@ -700,14 +703,13 @@ const closeSaveBoard = () => {
 
             <!-- Render Video -->
             <img v-else-if="filteredMedia[index] && filteredMedia[index].type === 'video'"
-            v-lazy="videoUrl() + filteredMedia[index].url" class="w-full h-full object-cover max-w-full aspect-[16/9]"
+              v-lazy="videoUrl() + filteredMedia[index].url" class="w-full h-full object-cover max-w-full aspect-[16/9]"
               @click="openPreviewModal(item)"></img>
-              <div v-if="filteredMedia[index].type === 'video'"
-                class="absolute inset-0 flex items-center justify-center bg-black/40 "
-                @click="openPreviewModal(item)"
-              ><img src="/images/icon/videoPlayButton.svg" alt="">
+            <div v-if="filteredMedia[index].type === 'video'"
+              class="absolute inset-0 flex items-center justify-center bg-black/40 " @click="openPreviewModal(item)">
+              <img src="/images/icon/videoPlayButton.svg" alt="">
 
-              </div>
+            </div>
 
             <!-- Floating Social Buttons -->
             <div v-if="filteredMedia[index]"

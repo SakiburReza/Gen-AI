@@ -10,7 +10,7 @@ export default {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      satoshi: ['Satoshi','sans-serif'],
+      satoshi: ['Satoshi', 'sans-serif'],
       montserrat: ['Montserrat', 'sans-serif'],
       gordita: ['Gordita', 'sans-serif'],
       inter: ['Inter', 'sans-serif'],
@@ -29,6 +29,9 @@ export default {
         primary: '#01AAC1',
         secondary: '#D8F4F8',
         tertiary: '#DEDEDE',
+        brightGray: '#EDEDED',
+        lotion: '#FAFAFA',
+        darkLiver: '#4F4F4F',
         coal: {
           200: '#adadad',
           500: '#454546',
@@ -36,8 +39,8 @@ export default {
           800: '#232323',
           900: '#111111'
         },
-        blue:{
-          600:'#3526E1',
+        blue: {
+          600: '#3526E1',
         },
 
         // Color Code added by Abeer 22/12/2024
@@ -54,7 +57,7 @@ export default {
         // Color Code added by Abeer 22/12/2024
 
 
-        lightBg:'#FBF9FA',
+        lightBg: '#FBF9FA',
         cardBg: 'var(--cardBg)',
         bodyColor: 'var(--bodyColor)',
         // -------------
@@ -70,7 +73,7 @@ export default {
         transparent: 'transparent',
         white: '#FFFFFF',
         black: '#1C2434',
-        parrot:'#2CE126',
+        parrot: '#2CE126',
         red: '#E12629',
         'black-2': '#010101',
         body: '#64748B',
