@@ -36,7 +36,7 @@ watch(
   <!-- <fwb-textarea class="w-full h-16 sm:h-40 sm:w-120 text-dimGray text-sm justify-start" :rows="2" label=""
     v-model.lazy="localDescription" placeholder="Add image or describe your image in detail
  or learn" @input="handleInput" style="font-family: 'Inter', sans-serif;" /> -->
-  <fwb-textarea class="w-full h-16 sm:h-40 sm:w-120 text-dimGray text-sm justify-start" :rows="2" label=""
+  <fwb-textarea class="w-full h-16 sm:h-40 sm:w-120 text-dimGray text-sm justify-start bg-lotion" :rows="2" label=""
     v-model.lazy="localDescription" placeholder="Add image or describe your image in detail or 𝗹𝗲𝗮𝗿𝗻"
     @input="handleInput" style="font-family: 'Inter', sans-serif;" />
 

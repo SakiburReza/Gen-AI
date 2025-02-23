@@ -71,7 +71,7 @@ const handleDragOver = (event) => {
 
     <!-- Image Input Block -->
     <div
-      class="relative  w-full text-sm  rounded-lg h-48 sm:h-56 cursor-pointer bg-tertiary flex items-center justify-center overflow-hidden"
+      class="relative  w-full text-sm  rounded-lg h-48 sm:h-56 cursor-pointer bg-brightGray flex items-center justify-center overflow-hidden"
       @dragover="handleDragOver" @drop="handleDrop">
       <!-- File Input -->
       <input type="file" accept="image/*" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
