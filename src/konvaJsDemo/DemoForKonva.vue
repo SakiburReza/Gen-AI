@@ -19,11 +19,6 @@ const selectedCircleName = ref('');
 const selectedOvalName = ref('');
 const selectedTextName = ref('');
 
-// Text editing state
-const isEditingText = ref(false);
-const textValue = ref('Edit Text');
-const editingTextPosition = reactive({ x: 0, y: 0 }); // Position of the text being edited
-
 const transformer = ref(null);
 const transformerForImage = ref(null);
 const transformerForCircle = ref(null);
@@ -150,7 +145,6 @@ const handleStageMouseDown = (e) => {
     selectedCircleName.value = '';
     selectedOvalName.value = '';
     selectedTextName.value = '';
-    isEditingText.value = false;
     updateTransformer();
     updateTransformerForImage();
     updateTransformerForCircle();
@@ -194,11 +188,6 @@ const handleStageMouseDown = (e) => {
     selectedImageName.value = '';
     selectedCircleName.value = '';
     selectedOvalName.value = '';
-    isEditingText.value = true;
-    textValue.value = e.target.text();
-    editingTextPosition.x = e.target.x();
-    editingTextPosition.y = e.target.y();
-    startTextEditing(e.target); // Start text editing
   } else {
     selectedShapeName.value = '';
     selectedImageName.value = '';
@@ -212,52 +201,6 @@ const handleStageMouseDown = (e) => {
   updateTransformerForCircle();
   updateTransformerForOval();
   updateTransformerForText();
-};
-
-// Start text editing
-const startTextEditing = (textNode) => {
-  const stage = textNode.getStage();
-  const textPosition = textNode.absolutePosition();
-
-  // Create an HTML input element
-  const textarea = document.createElement('textarea');
-  textarea.value = textNode.text();
-  textarea.style.position = 'absolute';
-  textarea.style.top = `${textPosition.y}px`;
-  textarea.style.left = `${textPosition.x}px`;
-  textarea.style.width = `${textNode.width() - textNode.padding() * 2}px`;
-  textarea.style.height = `${textNode.height() - textNode.padding() * 2 + 5}px`;
-  textarea.style.fontSize = `${textNode.fontSize()}px`;
-  textarea.style.border = 'none';
-  textarea.style.padding = '0px';
-  textarea.style.margin = '0px';
-  textarea.style.overflow = 'hidden';
-  textarea.style.background = 'none';
-  textarea.style.outline = 'none';
-  textarea.style.resize = 'none';
-  textarea.style.lineHeight = textNode.lineHeight();
-  textarea.style.fontFamily = textNode.fontFamily();
-  textarea.style.transformOrigin = 'left top';
-  textarea.style.textAlign = textNode.align();
-  textarea.style.color = textNode.fill();
-  textarea.style.transform = `rotate(${textNode.rotation()}deg)`;
-
-  // Append the textarea to the stage container
-  stage.container().appendChild(textarea);
-  textarea.focus();
-
-  // Handle textarea input
-  textarea.addEventListener('input', () => {
-    textNode.text(textarea.value);
-    textNode.width(textarea.scrollWidth); // Adjust width to fit text
-  });
-
-  // Handle textarea blur (save changes)
-  textarea.addEventListener('blur', () => {
-    textNode.text(textarea.value);
-    stage.container().removeChild(textarea);
-    isEditingText.value = false;
-  });
 };
 
 // Update transformer for shapes
@@ -395,7 +338,7 @@ const loadImages = (event) => {
 // Add a text node
 const addTextNode = () => {
   textNodes.value.push({
-    text: textValue.value,
+    text: 'Edit Text',
     x: 100,
     y: 100,
     fontSize: 30,
@@ -495,17 +438,18 @@ const addShape = () => {
             <!-- Circles -->
             <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" draggable
                       @transformend="handleTransformEndForCircle" />
-            <!-- Ovals -->
+            <!-- Oval -->
             <v-ellipse v-for="(oval, index) in ovals" :key="index" :config="oval" draggable
                        @transformend="handleTransformEndForOval" />
             <!-- Text Nodes -->
             <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable
-                    @transformend="handleTransformEndForText" />
+                    @transformend="handleTransformEndForText"
+                    @dblclick="(e) => e.target.setAttr('editable', true)" />
 
             <!-- Images -->
             <v-image v-for="(image, index) in images" :key="index"
                      :config="{ ...image, image: image.image }" draggable
-                     @transformend="handleTransformEndForImage(index)" />
+                     @transformend="handleTransformEndForImage(event, index)" />
             <!-- Transformer -->
             <v-transformer ref="transformer" />
             <v-transformer ref="transformerForImage" />
