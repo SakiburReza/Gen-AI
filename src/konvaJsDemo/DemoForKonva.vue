@@ -21,7 +21,6 @@ const selectedTextName = ref('');
 
 // Text editing state
 const isEditingText = ref(false);
-const isAddingText = ref(false); // Track if adding new text
 const textValue = ref('Edit Text');
 const editingTextPosition = reactive({ x: 0, y: 0 }); // Position of the text being edited
 
@@ -152,7 +151,6 @@ const handleStageMouseDown = (e) => {
     selectedOvalName.value = '';
     selectedTextName.value = '';
     isEditingText.value = false;
-    isAddingText.value = false;
     updateTransformer();
     updateTransformerForImage();
     updateTransformerForCircle();
@@ -200,6 +198,7 @@ const handleStageMouseDown = (e) => {
     textValue.value = e.target.text();
     editingTextPosition.x = e.target.x();
     editingTextPosition.y = e.target.y();
+    startTextEditing(e.target); // Start text editing
   } else {
     selectedShapeName.value = '';
     selectedImageName.value = '';
@@ -213,6 +212,52 @@ const handleStageMouseDown = (e) => {
   updateTransformerForCircle();
   updateTransformerForOval();
   updateTransformerForText();
+};
+
+// Start text editing
+const startTextEditing = (textNode) => {
+  const stage = textNode.getStage();
+  const textPosition = textNode.absolutePosition();
+
+  // Create an HTML input element
+  const textarea = document.createElement('textarea');
+  textarea.value = textNode.text();
+  textarea.style.position = 'absolute';
+  textarea.style.top = `${textPosition.y}px`;
+  textarea.style.left = `${textPosition.x}px`;
+  textarea.style.width = `${textNode.width() - textNode.padding() * 2}px`;
+  textarea.style.height = `${textNode.height() - textNode.padding() * 2 + 5}px`;
+  textarea.style.fontSize = `${textNode.fontSize()}px`;
+  textarea.style.border = 'none';
+  textarea.style.padding = '0px';
+  textarea.style.margin = '0px';
+  textarea.style.overflow = 'hidden';
+  textarea.style.background = 'none';
+  textarea.style.outline = 'none';
+  textarea.style.resize = 'none';
+  textarea.style.lineHeight = textNode.lineHeight();
+  textarea.style.fontFamily = textNode.fontFamily();
+  textarea.style.transformOrigin = 'left top';
+  textarea.style.textAlign = textNode.align();
+  textarea.style.color = textNode.fill();
+  textarea.style.transform = `rotate(${textNode.rotation()}deg)`;
+
+  // Append the textarea to the stage container
+  stage.container().appendChild(textarea);
+  textarea.focus();
+
+  // Handle textarea input
+  textarea.addEventListener('input', () => {
+    textNode.text(textarea.value);
+    textNode.width(textarea.scrollWidth); // Adjust width to fit text
+  });
+
+  // Handle textarea blur (save changes)
+  textarea.addEventListener('blur', () => {
+    textNode.text(textarea.value);
+    stage.container().removeChild(textarea);
+    isEditingText.value = false;
+  });
 };
 
 // Update transformer for shapes
@@ -349,42 +394,17 @@ const loadImages = (event) => {
 
 // Add a text node
 const addTextNode = () => {
-  isAddingText.value = true;
-  textValue.value = 'Edit Text';
+  textNodes.value.push({
+    text: textValue.value,
+    x: 100,
+    y: 100,
+    fontSize: 30,
+    fontFamily: 'Calibri',
+    fill: 'green',
+    draggable: true,
+    name: `text-${textNodes.value.length}`,
+  });
 };
-
-// Confirm and add the text node
-const confirmAddTextNode = () => {
-  if (textValue.value.trim()) {
-    textNodes.value.push({
-      text: textValue.value,
-      x: editingTextPosition.x,
-      y: editingTextPosition.y,
-      fontSize: 30,
-      fontFamily: 'Calibri',
-      fill: 'green',
-      draggable: true,
-      name: `text-${textNodes.value.length}`,
-    });
-    isAddingText.value = false;
-  }
-};
-
-// Update the selected text node
-const updateTextNode = () => {
-  const index = textNodes.value.findIndex((t) => t.name === selectedTextName.value);
-  if (index !== -1) {
-    textNodes.value[index].text = textValue.value;
-    isEditingText.value = false;
-  }
-};
-
-// Function to delete the selected text node
-const deleteTextNode = () => {
-  textNodes.value = textNodes.value.filter((t) => t.name !== selectedTextName.value);
-  isEditingText.value = false;
-};
-
 
 // Upload an image from the device
 const uploadFile = (event) => {
@@ -434,21 +454,10 @@ const addShape = () => {
   <div class="flex h-screen bg-gray-100 p-5">
     <!-- Left Sidebar -->
     <div class="flex flex-col space-y-5 font-bold bg-white p-6 w-64 rounded-lg shadow-md max-h-screen">
-      <!--            <button class="flex items-center space-x-2" @click="addTemplate">-->
-      <!--                <img src="/images/icon/templates.svg" alt="Templates" class="w-5 h-5">-->
-      <!--                <span>Templates</span>-->
-      <!--            </button>-->
-
-
       <button class="flex items-center space-x-2" @click="addTextNode">
         <img src="/images/icon/copyIcon.svg" alt="Text" class="w-5 h-5">
         <span>Text</span>
       </button>
-
-      <!--            <button class="flex items-center space-x-2" @click="loadImages">-->
-      <!--                <img src="/images/icon/image-to-image.svg" alt="Photos" class="w-5 h-5">-->
-      <!--                <span>Photos</span>-->
-      <!--            </button>-->
 
       <button class="flex items-center space-x-2" @click="addShape">
         <img src="/images/icon/explore.svg" alt="Add Shape" class="w-5 h-5">
@@ -469,21 +478,6 @@ const addShape = () => {
         <img src="/images/icon/upload.svg" alt="Upload" class="w-5 h-5">
         <span>Upload Image</span>
       </label>
-
-      <!--            <button class="flex items-center space-x-2" @click="changeBackground">-->
-      <!--                <img src="/images/icon/square.svg" alt="Background" class="w-5 h-5">-->
-      <!--                <span>Background</span>-->
-      <!--            </button>-->
-
-      <!--            <button class="flex items-center space-x-2" @click="manageLayers">-->
-      <!--                <img src="/images/icon/dataIcon.svg" alt="Layers" class="w-5 h-5">-->
-      <!--                <span>Layers</span>-->
-      <!--            </button>-->
-
-      <!--            <button class="flex items-center space-x-2" @click="resizeCanvas">-->
-      <!--                <img src="/images/icon/resize.svg" alt="Resize" class="w-5 h-5">-->
-      <!--                <span>Resize</span>-->
-      <!--            </button>-->
     </div>
 
     <!-- Canvas Container -->
@@ -501,17 +495,17 @@ const addShape = () => {
             <!-- Circles -->
             <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" draggable
                       @transformend="handleTransformEndForCircle" />
-            <!-- Oval -->
+            <!-- Ovals -->
             <v-ellipse v-for="(oval, index) in ovals" :key="index" :config="oval" draggable
                        @transformend="handleTransformEndForOval" />
             <!-- Text Nodes -->
             <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable
-                    @transformend="handleTransformEndForText"/>
+                    @transformend="handleTransformEndForText" />
 
             <!-- Images -->
             <v-image v-for="(image, index) in images" :key="index"
                      :config="{ ...image, image: image.image }" draggable
-                     @transformend="handleTransformEndForImage(event, index)" />
+                     @transformend="handleTransformEndForImage(index)" />
             <!-- Transformer -->
             <v-transformer ref="transformer" />
             <v-transformer ref="transformerForImage" />
@@ -520,71 +514,6 @@ const addShape = () => {
             <v-transformer ref="transformerForText" />
           </v-layer>
         </v-stage>
-
-        <!-- Text Input on Canvas -->
-        <div
-          v-if="isAddingText"
-          class="absolute bg-white p-4 rounded-lg shadow-lg flex flex-col space-y-2"
-          :style="{ left: '100px', top: '100px' }"
-        >
-          <div class="relative">
-            <input
-              v-model="textValue"
-              class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none p-2 pr-8 rounded-md w-full"
-              placeholder="Enter text"
-            />
-            <button
-              v-if="textValue"
-              @click="textValue = ''"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
-            >
-              ✕
-            </button>
-          </div>
-          <button
-            @click="confirmAddTextNode"
-            class="bg-blue-500 text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition"
-          >
-            Add
-          </button>
-        </div>
-
-        <!-- Text Editor on Canvas -->
-        <div
-          v-if="isEditingText"
-          class="absolute bg-white p-4 rounded-lg shadow-lg flex flex-col space-y-4"
-          :style="{ left: `${editingTextPosition.x}px`, top: `${editingTextPosition.y}px` }"
-        >
-          <!-- Close (X) Button in Top Right -->
-          <button
-            @click="deleteTextNode"
-            class="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition"
-          >
-            ✕
-          </button>
-
-          <div class="relative">
-            <input
-              v-model="textValue"
-              class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none p-2 pr-8 rounded-md w-full"
-              placeholder="Enter text"
-            />
-            <button
-              v-if="textValue"
-              @click="textValue = ''"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
-            >
-              ✕
-            </button>
-          </div>
-          <button
-            @click="updateTextNode"
-            class="bg-blue-500 text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition"
-          >
-            Update
-          </button>
-        </div>
-
       </div>
     </div>
   </div>
