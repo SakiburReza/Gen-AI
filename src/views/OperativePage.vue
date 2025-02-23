@@ -104,7 +104,7 @@ const media = ref<
   }[]
 >([])
 
-const updateBoardName = ({ imageKey, boardName }) => {  
+const updateBoardName = ({ imageKey, boardName }) => {
   media.value = media.value.map(item =>
     item.url === imageKey ? { ...item, board: boardName } : item
   );
@@ -156,7 +156,7 @@ function initializeFromQueryParams() {
     : route.query.functionality
 
   // Fallback to default functionality
-  
+
   const mode = queryMode || localStorage.getItem('mode') || 'image'
   functionality =
     functionality ||
@@ -307,7 +307,7 @@ const fetchLikedMedia = async (label) => {
   try {
     const { data: response } = await genAiService.getLikedMedia(label)
 
-    if (response.status && Array.isArray(response.data)) {      
+    if (response.status && Array.isArray(response.data)) {
       media.value = response.data.map((item) => ({
         url: item.content,
         type:
@@ -627,7 +627,7 @@ const closeSaveBoard = () => {
 
 <template>
   <DefaultLayout>
-    <div class="flex flex-col md:flex-row flex-1 h-screen">
+    <div class="flex flex-col md:flex-row flex-1 h-full">
       <!-- Left Section: Facility Card and Dynamic Content -->
 
       <div class="w-full sm:w-[30%] p-2 flex-shrink-0">
@@ -656,7 +656,7 @@ const closeSaveBoard = () => {
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
-          <CustomizationCard  v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)" 
+          <CustomizationCard  v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectedEffectId="(id) => (selectedEffectId = id)" />
           <!-- Loader Spinner -->
           <!-- <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-800 z-50">
