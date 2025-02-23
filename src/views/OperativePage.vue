@@ -634,23 +634,23 @@ const showBadge = computed(() => route.path !== '/operativepage')
 
       <div class="w-full sm:w-[30%] p-2 flex-shrink-0">
         <!-- Floating Buttons Section -->
-        <div class="flex flex-row items-center justify-center mb-5">
+        <div class="flex flex-row items-center justify-center mb-5 gap-1">
           <!-- Image Button -->
           <button @click="setActive('image')" :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
+            'flex items-center px-2 py-1 rounded-md font-medium transition',
 
-            activeMode === 'image' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            activeMode === 'image' ? 'bg-gray-200 text-black font-bold' : '',
           ]">
-            <span class="material-icons">image</span>
+            <span>Image</span>
           </button>
 
           <!-- Video Button -->
 
           <button @click="setActive('video')" :class="[
-            'flex items-center px-4 py-2 rounded-lg font-medium transition',
-            activeMode === 'video' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500',
+            'flex items-center px-2 py-1 rounded-md font-medium transition',
+            activeMode === 'video' ? 'bg-gray-200 text-black font-bold' : '',
           ]">
-            <span class="material-icons">videocam</span>
+            <span >Video</span>
           </button>
         </div>
         <!-- Dynamic Content Based on Selected Functionality -->
