@@ -632,9 +632,9 @@ const showBadge = computed(() => route.path !== '/operativepage')
     <div class="flex flex-col md:flex-row flex-1 h-screen">
       <!-- Left Section: Facility Card and Dynamic Content -->
 
-      <div class="w-full sm:w-[30%] p-2 flex-shrink-0">
+      <div class="w-full sm:w-[30%] pt-0.5 flex-shrink-0 border ">
         <!-- Floating Buttons Section -->
-        <div class="flex flex-row items-center justify-center mb-5 gap-1">
+        <div class="flex flex-row items-center justify-center gap-2 py-1 border-b-2">
           <!-- Image Button -->
           <button @click="setActive('image')" :class="[
             'flex items-center px-2 py-1 rounded-md font-medium transition',
@@ -650,14 +650,15 @@ const showBadge = computed(() => route.path !== '/operativepage')
             'flex items-center px-2 py-1 rounded-md font-medium transition',
             activeMode === 'video' ? 'bg-gray-200 text-black font-bold' : '',
           ]">
-            <span >Video</span>
+            <span>Video</span>
           </button>
         </div>
         <!-- Dynamic Content Based on Selected Functionality -->
-        <div class="bg-white ml-6 mr-6 space-y-6 flex-shrink-0">
+        <div class="bg-white ml-6 mr-6 mt-2 space-y-6 flex-shrink-0">
           <!-- Modify ImageInputCard to bind the selected images -->
           <ImageInputCard title="Insert Image" @input="(file) => (referenceImage = file)" :resetKey="resetKey" />
           <DescriptionCard @input="(value) => (description = value)" :resetKey="resetKey" />
+          
           <CustomizationCard v-if="activeMode === 'image'" @selectRatio="(ratio) => (selectedRatio = ratio)"
             @selectedEffectId="(id) => (selectedEffectId = id)" />
           <!-- Loader Spinner -->
