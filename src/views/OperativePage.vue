@@ -670,7 +670,7 @@ const showBadge = computed(() => route.path !== '/operativepage')
           </div> -->
 
           <fwb-button @click="generateAiContent" :disabled="loading"
-            class="float-end bottom-4 right-4 bg-blue-600 px-8 py-1.5 rounded-lg disabled:bg-gray-400 shadow-md sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10">
+            class="float-end bottom-4 right-4 bg-darkLiver px-8 py-1.5 rounded-lg disabled:bg-gray-400 shadow-md sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10">
             Zeuxis
           </fwb-button>
         </div>
