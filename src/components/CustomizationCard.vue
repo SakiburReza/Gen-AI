@@ -187,26 +187,10 @@ const ratioImages = [
           </div>
         </div>
       </div>
-
-      <div class="mt-3 flex flex-wrap gap-2">
-        <div class="relative">
-          <!-- Portrait Button -->
-          <button
-            @click="toggleDropdown"
-            class="py-2 px-6 rounded-xl font-semibold flex items-center border transition-colors duration-200 bg-white text-black-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
-          >
-            <img
-              :src="selectedRatioIcon"
-              alt="Selected Ratio"
-              class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
-            />
-            <span class="text-xs sm:text-sm">{{ selectedRatioText }}</span>
-          </button>
-
-          <!-- Dropdown Menu -->
+      <!-- Dropdown Menu -->
           <div
             v-if="isDropdownOpen"
-            class="absolute bottom-full mb-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-10"
+            class="mb-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-10"
           >
             <div
               v-for="ratio in ratios"
@@ -227,6 +211,23 @@ const ratioImages = [
               />
             </div>
           </div>
+
+      <div class="mt-3 flex flex-wrap gap-2">
+        <div class="">
+          <!-- toggle Button -->
+          <button
+            @click="toggleDropdown"
+            class="py-2 px-6 rounded-xl font-semibold flex items-center border transition-colors duration-200 bg-white text-black-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+          >
+            <img
+              :src="selectedRatioIcon"
+              alt="Selected Ratio"
+              class="mr-1.5 w-4 h-4 sm:w-5 sm:h-5"
+            />
+            <span class="text-xs sm:text-sm">{{ selectedRatioText }}</span>
+          </button>
+
+          
         </div>
         <button
           @click="openEffects"
