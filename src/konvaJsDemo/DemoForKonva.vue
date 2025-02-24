@@ -24,6 +24,8 @@ const transformerForImage = ref(null);
 const transformerForCircle = ref(null);
 const transformerForOval = ref(null);
 const transformerForText = ref(null);
+const colorPicker = ref(false);
+const selectedColor = ref('green'); 
 
 // Handle transform end for shapes
 const handleTransformEnd = (e) => {
@@ -204,8 +206,64 @@ const handleStageMouseDown = (e) => {
   updateTransformerForText();
 };
 
+
+
+// Watch for changes in selected color
+watch(selectedColor, (newColor) => {
+  if (selectedTextName.value) {
+    const textIndex = textNodes.value.findIndex(
+      (text) => text.name === selectedTextName.value
+    );
+
+    if (textIndex !== -1) {
+      textNodes.value[textIndex] = {
+        ...textNodes.value[textIndex],
+        fill: newColor,
+      };
+    }
+  }
+  if(selectedShapeName.value) {
+    const shapeIndex = shapes.value.findIndex(
+      (shape) => shape.name === selectedShapeName.value
+    );
+
+    if (shapeIndex !== -1) {
+      shapes.value[shapeIndex] = {
+        ...shapes.value[shapeIndex],
+        fill: newColor,
+      };
+    }
+  }
+  if(selectedCircleName.value) {
+    const circleIndex = circles.value.findIndex(
+      (circle) => circle.name === selectedCircleName.value
+    );
+
+    if (circleIndex !== -1) {
+      circles.value[circleIndex] = {
+        ...circles.value[circleIndex],
+        fill: newColor,
+      };
+    }
+  }
+  if(selectedOvalName.value) {
+    const ovalIndex = ovals.value.findIndex(
+      (oval) => oval.name === selectedOvalName.value
+    );
+
+    if (ovalIndex !== -1) {
+      ovals.value[ovalIndex] = {
+        ...ovals.value[ovalIndex],
+        fill: newColor,
+      };
+    }
+  }
+});
+
+
 // Start text editing
 const startTextEditing = (textNode) => {
+  colorPicker.value = true;
   // Set the text node to be editable
   textNode.setAttr('editable', true);
 
@@ -247,6 +305,7 @@ const startTextEditing = (textNode) => {
 
 // Update transformer for shapes
 const updateTransformer = () => {
+  colorPicker.value = true;
   if (!transformer.value) return;
 
   const transformerNode = transformer.value.getNode();
@@ -333,7 +392,7 @@ const addCircle = () => {
     x: 100,
     y: 100,
     radius: 50,
-    fill: 'blue',
+    fill: selectedColor.value,
     draggable: true,
     name: `circle-${circles.value.length}`,
   });
@@ -346,7 +405,7 @@ const addOval = () => {
     y: 100,
     radiusX: 70,
     radiusY: 50,
-    fill: 'Orange',
+    fill: selectedColor.value,
     draggable: true,
     name: `oval-${ovals.value.length}`,
   });
@@ -376,6 +435,9 @@ const loadImages = (event) => {
     images.value = [...images.value];
   };
 };
+const handleTextColorChange = (e) => {
+  colorPicker.value = false;
+};
 
 // Add a text node
 const addTextNode = () => {
@@ -385,7 +447,7 @@ const addTextNode = () => {
     y: 100,
     fontSize: 30,
     fontFamily: 'Calibri',
-    fill: 'green',
+    fill: selectedColor.value,
     draggable: true,
     name: `text-${textNodes.value.length}`,
   });
@@ -428,7 +490,7 @@ const addShape = () => {
     height: 100,
     scaleX: 1,
     scaleY: 1,
-    fill: 'red',
+    fill: selectedColor.value,
     name: `rect-${shapes.value.length}`,
     draggable: true,
   });
@@ -463,6 +525,7 @@ const addShape = () => {
         <img src="/images/icon/upload.svg" alt="Upload" class="w-5 h-5">
         <span>Upload Image</span>
       </label>
+      <span v-if="colorPicker" class="flex"> Color: <input type="color" v-model="selectedColor" @input="handleTextColorChange"/></span>
     </div>
 
     <!-- Canvas Container -->
