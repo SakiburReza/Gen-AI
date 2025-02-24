@@ -188,6 +188,7 @@ const handleStageMouseDown = (e) => {
     selectedImageName.value = '';
     selectedCircleName.value = '';
     selectedOvalName.value = '';
+    startTextEditing(e.target); // Start text editing
   } else {
     selectedShapeName.value = '';
     selectedImageName.value = '';
@@ -201,6 +202,47 @@ const handleStageMouseDown = (e) => {
   updateTransformerForCircle();
   updateTransformerForOval();
   updateTransformerForText();
+};
+
+// Start text editing
+const startTextEditing = (textNode) => {
+  // Set the text node to be editable
+  textNode.setAttr('editable', true);
+
+  // Create a temporary input element
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = textNode.text();
+  input.style.position = 'absolute';
+  input.style.top = `${textNode.absolutePosition().y}px`;
+  input.style.left = `${textNode.absolutePosition().x}px`;
+  input.style.fontSize = `${textNode.fontSize()}px`;
+  input.style.fontFamily = textNode.fontFamily();
+  input.style.color = textNode.fill();
+  input.style.transform = `rotate(${textNode.rotation()}deg)`;
+  input.style.outline = 'none';
+  input.style.border = '1px solid #000'; // Optional: Add a border for better visibility
+
+  // Append the input to the stage container
+  const stage = textNode.getStage();
+  stage.container().appendChild(input);
+  input.focus();
+
+  // Handle input blur (save changes)
+  input.addEventListener('blur', () => {
+    textNode.text(input.value); // Update the text node
+    stage.container().removeChild(input); // Remove the input element
+    textNode.setAttr('editable', false); // Disable editing mode
+  });
+
+  // Handle Enter key to save changes
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      textNode.text(input.value); // Update the text node
+      stage.container().removeChild(input); // Remove the input element
+      textNode.setAttr('editable', false); // Disable editing mode
+    }
+  });
 };
 
 // Update transformer for shapes
@@ -444,7 +486,7 @@ const addShape = () => {
             <!-- Text Nodes -->
             <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable
                     @transformend="handleTransformEndForText"
-                    @dblclick="(e) => e.target.setAttr('editable', true)" />
+                    @dblclick="(e) => startTextEditing(e.target)" />
 
             <!-- Images -->
             <v-image v-for="(image, index) in images" :key="index"
