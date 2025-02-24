@@ -221,7 +221,7 @@ const startTextEditing = (textNode) => {
   input.style.color = textNode.fill();
   input.style.transform = `rotate(${textNode.rotation()}deg)`;
   input.style.outline = 'none';
-  input.style.border = '1px solid #000'; // Optional: Add a border for better visibility
+  // input.style.border = '0.5px solid #000'; // Optional: Add a border for better visibility
 
   // Append the input to the stage container
   const stage = textNode.getStage();
