@@ -117,6 +117,18 @@ const handleTransformEndForText = (t) => {
 };
 
 // Handle keydown events (e.g., delete key)
+// const handleKeyDown = (event) => {
+//   if (event.key === 'Delete') {
+//     if (selectedImageName.value) {
+//       images.value = images.value.filter(img => img.name !== selectedImageName.value);
+//       selectedImageName.value = '';
+//     } else if (selectedTextName.value) {
+//       textNodes.value = textNodes.value.filter(text => text.name !== selectedTextName.value);
+//       selectedTextName.value = '';
+//     }
+//   }
+// };
+
 const handleKeyDown = (event) => {
   if (event.key === 'Delete') {
     if (selectedImageName.value) {
@@ -125,9 +137,38 @@ const handleKeyDown = (event) => {
     } else if (selectedTextName.value) {
       textNodes.value = textNodes.value.filter(text => text.name !== selectedTextName.value);
       selectedTextName.value = '';
+    } else if (selectedShapeName.value) {
+      shapes.value = shapes.value.filter(shape => shape.name !== selectedShapeName.value);
+      selectedShapeName.value = '';
+    } else if (selectedCircleName.value) {
+      circles.value = circles.value.filter(circle => circle.name !== selectedCircleName.value);
+      selectedCircleName.value = '';
+    } else if (selectedOvalName.value) {
+      ovals.value = ovals.value.filter(oval => oval.name !== selectedOvalName.value);
+      selectedOvalName.value = '';
     }
   }
 };
+
+const deleteSelectedItem = () => {
+  if (selectedImageName.value) {
+    images.value = images.value.filter(img => img.name !== selectedImageName.value);
+    selectedImageName.value = '';
+  } else if (selectedTextName.value) {
+    textNodes.value = textNodes.value.filter(text => text.name !== selectedTextName.value);
+    selectedTextName.value = '';
+  } else if (selectedShapeName.value) {
+    shapes.value = shapes.value.filter(shape => shape.name !== selectedShapeName.value);
+    selectedShapeName.value = '';
+  } else if (selectedCircleName.value) {
+    circles.value = circles.value.filter(circle => circle.name !== selectedCircleName.value);
+    selectedCircleName.value = '';
+  } else if (selectedOvalName.value) {
+    ovals.value = ovals.value.filter(oval => oval.name !== selectedOvalName.value);
+    selectedOvalName.value = '';
+  }
+};
+
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
@@ -391,10 +432,21 @@ const addShape = () => {
     draggable: true,
   });
 };
+const deleteImage = (index) => {
+  images.value.splice(index, 1);
+} 
 </script>
 
 <template>
+
+  <!-- topbar for another editin stuff -->
+  <div class="bg-tertiary border-gray-300 w-full text-black h-12 pl-1 flex items-center">
+    <button class="bg-black hover:bg-blue-600 p-2 rounded-lg" @click="deleteSelectedItem(index)">
+      <img src="/images/icon/delete-icon.svg" alt="Delete" height="20px" width="20px">
+    </button>
+  </div>
   <div class="flex h-screen bg-gray-100 p-5">
+
     <!-- Left Sidebar -->
     <div class="flex flex-col space-y-5 font-bold bg-white p-6 w-64 rounded-lg shadow-md max-h-screen">
       <button class="flex items-center space-x-2" @click="addTextNode">
@@ -424,32 +476,32 @@ const addShape = () => {
     </div>
 
     <!-- Canvas Container -->
+
     <div class="flex justify-center p-6 w-screen" @drop="loadImages" @dragover.prevent>
+
       <div class="relative bg-white shadow-md rounded-sm border-gray-600"
-           :style="{ width: stageSize.width + 'px', height: stageSize.height + 'px' }">
+        :style="{ width: stageSize.width + 'px', height: stageSize.height + 'px' }">
+
         <!-- Canvas Background -->
-        <div class="absolute inset-0 bg-white border-gray-300 rounded-lg"></div>
+        <div class=" bg-white border-gray-300 rounded-lg"></div>
 
         <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown">
           <v-layer ref="layer">
             <!-- Rectangles -->
-            <v-rect v-for="item in shapes" :key="item.id" :config="item"
-                    @transformend="handleTransformEnd" />
+            <v-rect v-for="item in shapes" :key="item.id" :config="item" @transformend="handleTransformEnd" />
             <!-- Circles -->
             <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" draggable
-                      @transformend="handleTransformEndForCircle" />
+              @transformend="handleTransformEndForCircle" />
             <!-- Oval -->
             <v-ellipse v-for="(oval, index) in ovals" :key="index" :config="oval" draggable
-                       @transformend="handleTransformEndForOval" />
+              @transformend="handleTransformEndForOval" />
             <!-- Text Nodes -->
             <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable
-                    @transformend="handleTransformEndForText"
-                    @dblclick="(e) => e.target.setAttr('editable', true)" />
+              @transformend="handleTransformEndForText" @dblclick="(e) => e.target.setAttr('editable', true)" />
 
             <!-- Images -->
-            <v-image v-for="(image, index) in images" :key="index"
-                     :config="{ ...image, image: image.image }" draggable
-                     @transformend="handleTransformEndForImage(event, index)" />
+            <v-image v-for="(image, index) in images" :key="index" :config="{ ...image, image: image.image }" draggable
+              @transformend="handleTransformEndForImage(event, index)" />
             <!-- Transformer -->
             <v-transformer ref="transformer" />
             <v-transformer ref="transformerForImage" />
@@ -460,5 +512,7 @@ const addShape = () => {
         </v-stage>
       </div>
     </div>
+
+
   </div>
 </template>
