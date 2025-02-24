@@ -137,7 +137,7 @@ onUnmounted(() => {
       </router-link>
       <!-- Text -->
 
-      <fwb-badge v-if="props.showBadge && isAuthenticatedUser"
+      <!-- <fwb-badge v-if="props.showBadge && isAuthenticatedUser"
         :class="`flex items-center justify-between border mt-3 rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition duration-200`"
         size="xl" @click="toggleAccountCard">
         <p class="mr-2">Account</p>
@@ -154,11 +154,11 @@ onUnmounted(() => {
           </defs>
         </svg>
         <p class="ml-2">{{ credits }}</p>
-      </fwb-badge>
+      </fwb-badge> -->
     </div>
 
     <!-- Sidebar -->
-    <div :class="['sidebar border mt-14 fixed left-0 h-screen  flex flex-col justify-between items-center py-2 bg-white',
+    <div :class="['sidebar border mt-14 fixed left-0 h-screen z-10 flex flex-col justify-between items-center py-2 bg-white',
       !expandSidebar ? 'w-[45px]' : 'w-[150px]',
     ]">
       <div class="flex flex-col items-center gap-1  group p-2 rounded-lg
