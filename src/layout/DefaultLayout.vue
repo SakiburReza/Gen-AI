@@ -272,7 +272,7 @@ onUnmounted(() => {
           ]">
             <div class="flex items
             -center">
-              <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
+              <img src="/images/icon/star.svg" alt="dataIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Editor</span>
             </div>
           </div>
