@@ -137,7 +137,7 @@ onUnmounted(() => {
       </router-link>
       <!-- Text -->
 
-      <fwb-badge v-if="props.showBadge && isAuthenticatedUser"
+      <!-- <fwb-badge v-if="props.showBadge && isAuthenticatedUser"
         :class="`flex items-center justify-between border mt-3 rounded-md ${isClicked ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-black-2 border-gray-300'} rounded-full px-4 py-2 cursor-pointer shadow-sm transition duration-200`"
         size="xl" @click="toggleAccountCard">
         <p class="mr-2">Account</p>
@@ -154,16 +154,16 @@ onUnmounted(() => {
           </defs>
         </svg>
         <p class="ml-2">{{ credits }}</p>
-      </fwb-badge>
+      </fwb-badge> -->
     </div>
 
     <!-- Sidebar -->
-    <div :class="['sidebar border mt-14 fixed left-0 h-screen  flex flex-col justify-between items-center py-2 bg-white',
+    <div :class="['sidebar border mt-14 fixed left-0 h-screen z-10 flex flex-col justify-between items-center py-2 bg-white',
       !expandSidebar ? 'w-[45px]' : 'w-[150px]',
     ]">
       <div class="flex flex-col items-center gap-1  group p-2 rounded-lg
       transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md" @click="goToProfilePage">
-        <div class="flex items-center">
+        <div class="flex items-center cursor-pointer">
           <img src="/images/icon/avatarIcon.svg" alt="avatarIcon" class="cursor-pointer" />
           <span v-if="expandSidebar" class="ml-2">My Profile</span>
         </div>
@@ -189,7 +189,7 @@ onUnmounted(() => {
             'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
             selectedMenu === '/' ? 'bg-[#D9D9D9]' : '',
           ]">
-            <div class="flex items-center">
+            <div class="flex items-center cursor-pointer">
               <img src="/images/icon/homeIcon.svg" alt="homeIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Home</span>
             </div>
@@ -202,7 +202,7 @@ onUnmounted(() => {
               'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
               selectedMenu === 'operativepage' ? 'bg-[#D9D9D9]' : '',
             ]">
-              <div class="flex items-center">
+              <div class="flex items-center ">
                 <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
                 <span v-if="expandSidebar" class="ml-2">Create</span>
               </div>
@@ -215,8 +215,7 @@ onUnmounted(() => {
             'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
             selectedMenu === 'operativepage' ? 'bg-[#D9D9D9]' : '',
           ]">
-            <div class="flex items
-            -center">
+            <div class="flex items-center cursor-pointer">
               <img src="/images/icon/plusIcon.svg" alt="plusIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Create</span>
             </div>
@@ -241,8 +240,7 @@ onUnmounted(() => {
             'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
             selectedMenu === 'gallerypage' ? 'bg-[#D9D9D9]' : '',
           ]">
-            <div class="flex items
-            -center">
+            <div class="flex items-center cursor-pointer">
               <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Boards</span>
             </div>
@@ -256,23 +254,23 @@ onUnmounted(() => {
               'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
               selectedMenu === 'editorPage' ? 'bg-[#D9D9D9]' : '',
             ]">
-              <div class="flex items-center" @click="goToEditorPage">
+                <div class="flex items-center">
                 <img src="/images/icon/star.svg" alt="dataIcon" class="cursor-pointer" />
                 <span v-if="expandSidebar" class="ml-2">Editor</span>
-              </div>
+                </div>
             </div>
           </template>
           <template #content> Editor </template>
         </fwb-tooltip>
 
         <template v-else>
-          <div :class="[
+            <div @click="selectMenuAndNavigate('editoPage', goToEditorPage)" 
+          :class="[
             'group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md',
-            selectedMenu === 'gallerypage' ? 'bg-[#D9D9D9]' : '',
+            selectedMenu === 'editoPage' ? 'bg-[#D9D9D9]' : '',
           ]">
-            <div class="flex items
-            -center">
-              <img src="/images/icon/dataIcon.svg" alt="dataIcon" class="cursor-pointer" />
+            <div class="flex items-center cursor-pointer gap-1">
+              <img src="/images/icon/star.svg" alt="starIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Editor</span>
             </div>
           </div>
@@ -298,7 +296,7 @@ onUnmounted(() => {
         <FwbDropdown placement="right" align-to-end>
           <template #trigger>
             <div
-              class="flex items-center group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md">
+              class="flex items-center cursor-pointer group p-2 rounded-lg transition duration-200 hover:bg-[#D9D9D9] hover:shadow-md">
               <img src="/images/icon/burgerIcon.svg" alt="burgerIcon" class="cursor-pointer" />
               <span v-if="expandSidebar" class="ml-2">Menu</span>
             </div>
