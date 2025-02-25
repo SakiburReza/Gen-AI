@@ -8,6 +8,8 @@ const stageSize = reactive({
 });
 
 const shapes = ref([]);
+const dashed = ref([]);
+const dotteds = ref([]);
 const images = ref([]);
 const circles = ref([]);
 const ovals = ref([]);
@@ -18,14 +20,18 @@ const selectedImageName = ref('');
 const selectedCircleName = ref('');
 const selectedOvalName = ref('');
 const selectedTextName = ref('');
+const selectedDashedLine = ref('');
+const selectedDottedLine = ref('');
 
 const transformer = ref(null);
 const transformerForImage = ref(null);
 const transformerForCircle = ref(null);
 const transformerForOval = ref(null);
 const transformerForText = ref(null);
+const transformerForDashedLine = ref(null);
+const transformerForDottedLine = ref(null);
 const colorPicker = ref(false);
-const selectedColor = ref('green'); 
+const selectedColor = ref('green');
 
 // Handle transform end for shapes
 const handleTransformEnd = (e) => {
@@ -117,19 +123,40 @@ const handleTransformEndForText = (t) => {
     };
   }
 };
+// Handle transform end for DashedLine
+const handleTransformEndForDashedLine = (d) => {
+  const dashIndex = dashed.value.findIndex(
+    (dash) => dash.name === selectedDashedLine.value
+  );
 
-// Handle keydown events (e.g., delete key)
-// const handleKeyDown = (event) => {
-//   if (event.key === 'Delete') {
-//     if (selectedImageName.value) {
-//       images.value = images.value.filter(img => img.name !== selectedImageName.value);
-//       selectedImageName.value = '';
-//     } else if (selectedTextName.value) {
-//       textNodes.value = textNodes.value.filter(text => text.name !== selectedTextName.value);
-//       selectedTextName.value = '';
-//     }
-//   }
-// };
+  if (dashIndex !== -1) {
+    dashed.value[dashIndex] = {
+      ...dashed.value[dashIndex],
+      x: d.target.x(),
+      y: d.target.y(),
+      rotation: d.target.rotation(),
+      scaleX: d.target.scaleX(),
+      scaleY: d.target.scaleY(),
+    };
+  }
+};
+// Handle transform end for DashedLine
+const handleTransformEndForDottedLine = (dt) => {
+  const dottedIndex = dotted.value.findIndex(
+    (dotted) => dotted.name === selectedDottedLine.value
+  );
+
+  if (dottedIndex !== -1) {
+    dotteds.value[dottedIndex] = {
+      ...dotteds.value[dottedIndex],
+      x: dt.target.x(),
+      y: dt.target.y(),
+      rotation: dt.target.rotation(),
+      scaleX: dt.target.scaleX(),
+      scaleY: dt.target.scaleY(),
+    };
+  }
+};
 
 const handleKeyDown = (event) => {
   if (event.key === 'Delete') {
@@ -148,6 +175,13 @@ const handleKeyDown = (event) => {
     } else if (selectedOvalName.value) {
       ovals.value = ovals.value.filter(oval => oval.name !== selectedOvalName.value);
       selectedOvalName.value = '';
+    } else if (selectedDashedLine.value) {
+      dashed.value = dashed.value.filter(dash => dash.name !== selectedDashedLine.value);
+
+    }
+    else if (selectedDottedLine.value) {
+      dotteds.value = dotteds.value.filter(dotted => dotted.name !== selectedDottedLine.value);
+
     }
   }
 };
@@ -168,6 +202,13 @@ const deleteSelectedItem = () => {
   } else if (selectedOvalName.value) {
     ovals.value = ovals.value.filter(oval => oval.name !== selectedOvalName.value);
     selectedOvalName.value = '';
+  } else if (selectedDashedLine.value) {
+    dashed.value = dashed.value.filter(dash => dash.name !== selectedDashedLine.value);
+    selectedDashedLine.value = '';
+  }
+  else if (selectedDottedLine.value) {
+    dotteds.value = dotteds.value.filter(dotted => dotted.name !== selectedDottedLine.value);
+    selectedDottedLine.value = '';
   }
 };
 
@@ -188,11 +229,15 @@ const handleStageMouseDown = (e) => {
     selectedCircleName.value = '';
     selectedOvalName.value = '';
     selectedTextName.value = '';
+    selectedDashedLine.value = '';
+    selectedDottedLine.value = '';
     updateTransformer();
     updateTransformerForImage();
     updateTransformerForCircle();
     updateTransformerForOval();
     updateTransformerForText();
+    updateTransformerForDashedLine();
+    updateTransformerForDottedLine();
     return;
   }
 
@@ -231,13 +276,31 @@ const handleStageMouseDown = (e) => {
     selectedImageName.value = '';
     selectedCircleName.value = '';
     selectedOvalName.value = '';
-    startTextEditing(e.target); // Start text editing
-  } else {
+    startTextEditing(e.target);
+  } else if (dashed.value.some((d) => d.name === name)) {
+    selectedDashedLine.value = name;
+    selectedTextName.value = '';
+    selectedShapeName.value = '';
+    selectedImageName.value = '';
+    selectedCircleName.value = '';
+    selectedOvalName.value = '';
+  } else if (dotteds.value.some((dt) => dt.name === name)) {
+    selectedDottedLine.value = name;
+    selectedDashedLine.value = '';
+    selectedTextName.value = '';
+    selectedShapeName.value = '';
+    selectedImageName.value = '';
+    selectedCircleName.value = '';
+    selectedOvalName.value = '';
+  }
+  else {
     selectedShapeName.value = '';
     selectedImageName.value = '';
     selectedCircleName.value = '';
     selectedOvalName.value = '';
     selectedTextName.value = '';
+    selectedDashedLine.value = '';
+    selectedDottedLine.value = '';
   }
 
   updateTransformer();
@@ -245,6 +308,8 @@ const handleStageMouseDown = (e) => {
   updateTransformerForCircle();
   updateTransformerForOval();
   updateTransformerForText();
+  updateTransformerForDashedLine();
+  updateTransformerForDottedLine();
 };
 
 
@@ -263,7 +328,7 @@ watch(selectedColor, (newColor) => {
       };
     }
   }
-  if(selectedShapeName.value) {
+  if (selectedShapeName.value) {
     const shapeIndex = shapes.value.findIndex(
       (shape) => shape.name === selectedShapeName.value
     );
@@ -275,7 +340,7 @@ watch(selectedColor, (newColor) => {
       };
     }
   }
-  if(selectedCircleName.value) {
+  if (selectedCircleName.value) {
     const circleIndex = circles.value.findIndex(
       (circle) => circle.name === selectedCircleName.value
     );
@@ -287,7 +352,7 @@ watch(selectedColor, (newColor) => {
       };
     }
   }
-  if(selectedOvalName.value) {
+  if (selectedOvalName.value) {
     const ovalIndex = ovals.value.findIndex(
       (oval) => oval.name === selectedOvalName.value
     );
@@ -299,6 +364,31 @@ watch(selectedColor, (newColor) => {
       };
     }
   }
+  if (selectedDashedLine.value) {
+    const dashIndex = dashed.value.findIndex(
+      (dash) => dash.name === selectedDashedLine.value
+    );
+
+    if (dashIndex !== -1) {
+      dashed.value[dashIndex] = {
+        ...dashed.value[dashIndex],
+        stroke: newColor,
+      };
+    }
+  }
+  if (selectedDottedLine.value) {
+    const dottedIndex = dotteds.value.findIndex(
+      (dotted) => dotted.name === selectedDottedLine.value
+    );
+
+    if (dottedIndex !== -1) {
+      dotteds.value[dottedIndex] = {
+        ...dotteds.value[dottedIndex],
+        stroke: newColor,
+      };
+    }
+  }
+
 });
 
 
@@ -420,12 +510,44 @@ const updateTransformerForText = () => {
   }
 };
 
+// Update transformer for DashedLine
+const updateTransformerForDashedLine = () => {
+  if (!transformerForDashedLine.value) return;
+
+  const transformerNode = transformerForDashedLine.value.getNode();
+  const stage = transformerNode.getStage();
+  const selectedNode = stage.findOne(`.${selectedDashedLine.value}`);
+
+  if (selectedNode) {
+    transformerNode.nodes([selectedNode]);
+  } else {
+    transformerNode.nodes([]);
+  }
+};
+
+// Update transformer for DashedLine
+const updateTransformerForDottedLine = () => {
+  if (!transformerForDottedLine.value) return;
+
+  const transformerNode = transformerForDottedLine.value.getNode();
+  const stage = transformerNode.getStage();
+  const selectedNode = stage.findOne(`.${selectedDottedLine.value}`);
+
+  if (selectedNode) {
+    transformerNode.nodes([selectedNode]);
+  } else {
+    transformerNode.nodes([]);
+  }
+};
+
 // Watch for changes in selected items and update transformers
 watch(selectedShapeName, updateTransformer);
 watch(selectedImageName, updateTransformerForImage);
 watch(selectedCircleName, updateTransformerForCircle);
 watch(selectedOvalName, updateTransformerForOval);
 watch(selectedTextName, updateTransformerForText);
+watch(selectedDashedLine, updateTransformerForDashedLine);
+watch(selectedDottedLine, updateTransformerForDottedLine);
 
 // Add a circle
 const addCircle = () => {
@@ -536,9 +658,29 @@ const addShape = () => {
     draggable: true,
   });
 };
-const deleteImage = (index) => {
-  images.value.splice(index, 1);
-} 
+const dashedLine = () => {
+  dashed.value.push({
+    points: [50, 100, 300, 100],
+    strokeWidth: 5,
+    lineCap: 'round',
+    lineJoin: 'round',
+    draggable: true,
+    stroke: selectedColor.value,
+    name: `dash-${dashed.value.length}`,
+  });
+};
+const dottedLine = () => {
+  dotteds.value.push({
+    points: [50, 100, 300, 100],
+    strokeWidth: 5,
+    lineCap: 'round',
+    lineJoin: 'round',
+    draggable: true,
+    stroke: selectedColor.value,
+    name: `dotted-${dotteds.value.length}`,
+    dash: [2, 10]
+  });
+};
 </script>
 
 <template>
@@ -571,13 +713,22 @@ const deleteImage = (index) => {
         <img src="/images/icon/explore.svg" alt="Add Oval" class="w-5 h-5">
         <span>Add Oval</span>
       </button>
+      <button class="flex items-center space-x-2" @click="dashedLine">
+        <img src="/images/icon/explore.svg" alt="Add Dashed Line" class="w-5 h-5">
+        <span>Dashed Line</span>
+      </button>
+      <button class="flex items-center space-x-2" @click="dottedLine">
+        <img src="/images/icon/explore.svg" alt="Add Dotted Line" class="w-5 h-5">
+        <span>Dotted Line</span>
+      </button>
 
       <input type="file" @change="uploadFile" class="hidden" id="fileInput" />
       <label for="fileInput" class="flex items-center space-x-2 cursor-pointer">
         <img src="/images/icon/upload.svg" alt="Upload" class="w-5 h-5">
         <span>Upload Image</span>
       </label>
-      <span v-if="colorPicker" class="flex"> Color: <input type="color" v-model="selectedColor" @input="handleTextColorChange"/></span>
+      <span v-if="colorPicker" class="flex"> Color: <input type="color" v-model="selectedColor"
+          @input="handleTextColorChange" /></span>
     </div>
 
     <!-- Canvas Container -->
@@ -602,9 +753,13 @@ const deleteImage = (index) => {
               @transformend="handleTransformEndForOval" />
             <!-- Text Nodes -->
             <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable
-                    @transformend="handleTransformEndForText"
-                    @dblclick="(e) => startTextEditing(e.target)" />
-
+              @transformend="handleTransformEndForText" @dblclick="(e) => startTextEditing(e.target)" />
+            <!-- Dashed Line -->
+            <v-line v-for="(dashed, index) in dashed" :key="index" :config="dashed" draggable
+              @transformend="handleTransformEndForDashedLine" />
+            <!-- Dotted Line -->
+            <v-line v-for="(dotted, index) in dotteds" :key="index" :config="dotted" draggable
+              @transformend="handleTransformEndForDottedLine" />
             <!-- Images -->
             <v-image v-for="(image, index) in images" :key="index" :config="{ ...image, image: image.image }" draggable
               @transformend="handleTransformEndForImage(event, index)" />
@@ -614,6 +769,8 @@ const deleteImage = (index) => {
             <v-transformer ref="transformerForCircle" />
             <v-transformer ref="transformerForOval" />
             <v-transformer ref="transformerForText" />
+            <v-transformer ref="transformerForDashedLine" />
+            <v-transformer ref="transformerForDottedLine" />
           </v-layer>
         </v-stage>
       </div>
