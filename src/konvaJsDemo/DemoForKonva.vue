@@ -481,7 +481,7 @@ const handleTextUnderlineBtns = () => {
 // Add a Text Node
 const addTextNode = () => {
   textNodes.value.push({
-    text: 'Edit Text',
+    text: 'textbox',
     x: 100,
     y: 100,
     fontSize: 30,
