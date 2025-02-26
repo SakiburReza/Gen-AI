@@ -634,7 +634,7 @@ const showBadge = computed(() => route.path !== '/operativepage')
 
       <div class="w-full sm:w-[30%] pt-0.5 flex-shrink-0 border ">
         <!-- Floating Buttons Section -->
-        <div class="flex flex-row items-center justify-center gap-2 py-1 border-b-2">
+        <div class="flex flex-row items-center justify-center gap-1 py-1 border-b-2">
           <!-- Image Button -->
           <button @click="setActive('image')" :class="[
             'flex items-center px-2 py-1 rounded-md font-medium transition',
@@ -671,7 +671,7 @@ const showBadge = computed(() => route.path !== '/operativepage')
           </div> -->
 
           <fwb-button @click="generateAiContent" :disabled="loading"
-            class="float-end bottom-4 right-4 bg-darkLiver px-8 py-1.5 rounded-lg disabled:bg-gray-400 shadow-md sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10">
+            class="float-end bottom-4 right-4 bg-darkLiver px-8 py-1 rounded-lg disabled:bg-gray-400 shadow-md sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-10">
             Zeuxis
           </fwb-button>
         </div>
