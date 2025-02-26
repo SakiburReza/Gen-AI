@@ -14,6 +14,8 @@ const images = ref([]);
 const circles = ref([]);
 const ovals = ref([]);
 const textNodes = ref([]);
+const textFontBtns = ref(false)
+
 
 const selectedShapeName = ref('');
 const selectedImageName = ref('');
@@ -306,56 +308,51 @@ const handleStageMouseDown = (e) => {
 // Watch for changes in selected color
 watch(selectedColor, (newColor) => {
   if (selectedTextName.value) {
-    const textIndex = textNodes.value.findIndex((text) => text.name === selectedTextName.value)
+    const textIndex = textNodes.value.findIndex((text) => text.name === selectedTextName.value);
 
     if (textIndex !== -1) {
       textNodes.value[textIndex] = {
         ...textNodes.value[textIndex],
         fill: newColor,
-      }
+      };
     }
   }
+
   if (selectedShapeName.value) {
-    const shapeIndex = shapes.value.findIndex(
-      (shape) => shape.name === selectedShapeName.value
-    );
+    const shapeIndex = shapes.value.findIndex((shape) => shape.name === selectedShapeName.value);
 
     if (shapeIndex !== -1) {
       shapes.value[shapeIndex] = {
         ...shapes.value[shapeIndex],
         fill: newColor,
-      }
+      };
     }
   }
+
   if (selectedCircleName.value) {
-  if (selectedCircleName.value) {
-    const circleIndex = circles.value.findIndex(
-      (circle) => circle.name === selectedCircleName.value,
-    )
+    const circleIndex = circles.value.findIndex((circle) => circle.name === selectedCircleName.value);
 
     if (circleIndex !== -1) {
       circles.value[circleIndex] = {
         ...circles.value[circleIndex],
         fill: newColor,
-      }
+      };
     }
   }
+
   if (selectedOvalName.value) {
-    const ovalIndex = ovals.value.findIndex(
-      (oval) => oval.name === selectedOvalName.value
-    );
+    const ovalIndex = ovals.value.findIndex((oval) => oval.name === selectedOvalName.value);
 
     if (ovalIndex !== -1) {
       ovals.value[ovalIndex] = {
         ...ovals.value[ovalIndex],
         fill: newColor,
-      }
+      };
     }
   }
+
   if (selectedDashedLine.value) {
-    const dashIndex = dashed.value.findIndex(
-      (dash) => dash.name === selectedDashedLine.value
-    );
+    const dashIndex = dashed.value.findIndex((dash) => dash.name === selectedDashedLine.value);
 
     if (dashIndex !== -1) {
       dashed.value[dashIndex] = {
@@ -364,10 +361,9 @@ watch(selectedColor, (newColor) => {
       };
     }
   }
+
   if (selectedDottedLine.value) {
-    const dottedIndex = dotteds.value.findIndex(
-      (dotted) => dotted.name === selectedDottedLine.value
-    );
+    const dottedIndex = dotteds.value.findIndex((dotted) => dotted.name === selectedDottedLine.value);
 
     if (dottedIndex !== -1) {
       dotteds.value[dottedIndex] = {
@@ -376,8 +372,8 @@ watch(selectedColor, (newColor) => {
       };
     }
   }
-
 });
+
 
 
 // Start text editing
@@ -404,16 +400,16 @@ const startTextEditing = (textNode) => {
   input.focus()
 
   input.addEventListener('blur', () => {
-    textNode.text(input.value) 
-    stage.container().removeChild(input) 
-    textNode.setAttr('editable', false) 
+    textNode.text(input.value)
+    stage.container().removeChild(input)
+    textNode.setAttr('editable', false)
   })
 
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      textNode.text(input.value) 
-      stage.container().removeChild(input) 
-      textNode.setAttr('editable', false) 
+      textNode.text(input.value)
+      stage.container().removeChild(input)
+      textNode.setAttr('editable', false)
     }
   })
 }
@@ -721,11 +717,11 @@ const dottedLine = () => {
         <span>Add Oval</span>
       </button>
       <button class="flex items-center space-x-2" @click="dashedLine">
-        <img src="/images/icon/explore.svg" alt="Add Dashed Line" class="w-5 h-5">
+        <img src="/images/icon/explore.svg" alt="Add Dashed Line" class="w-5 h-5" />
         <span>Dashed Line</span>
       </button>
       <button class="flex items-center space-x-2" @click="dottedLine">
-        <img src="/images/icon/explore.svg" alt="Add Dotted Line" class="w-5 h-5">
+        <img src="/images/icon/explore.svg" alt="Add Dotted Line" class="w-5 h-5" />
         <span>Dotted Line</span>
       </button>
 
@@ -785,14 +781,30 @@ const dottedLine = () => {
               @transformend="handleTransformEndForOval"
             />
             <!-- Text Nodes -->
-            <v-text v-for="(text, index) in textNodes" :key="index" :config="text" draggable
-              @transformend="handleTransformEndForText" @dblclick="(e) => startTextEditing(e.target)" />
+            <v-text
+              v-for="(text, index) in textNodes"
+              :key="index"
+              :config="text"
+              draggable
+              @transformend="handleTransformEndForText"
+              @dblclick="(e) => startTextEditing(e.target)"
+            />
             <!-- Dashed Line -->
-            <v-line v-for="(dashed, index) in dashed" :key="index" :config="dashed" draggable
-              @transformend="handleTransformEndForDashedLine" />
+            <v-line
+              v-for="(dashed, index) in dashed"
+              :key="index"
+              :config="dashed"
+              draggable
+              @transformend="handleTransformEndForDashedLine"
+            />
             <!-- Dotted Line -->
-            <v-line v-for="(dotted, index) in dotteds" :key="index" :config="dotted" draggable
-              @transformend="handleTransformEndForDottedLine" />
+            <v-line
+              v-for="(dotted, index) in dotteds"
+              :key="index"
+              :config="dotted"
+              draggable
+              @transformend="handleTransformEndForDottedLine"
+            />
             <!-- Images -->
             <v-image
               v-for="(image, index) in images"
